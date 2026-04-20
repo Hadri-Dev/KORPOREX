@@ -1,70 +1,87 @@
 import Link from "next/link";
-import { ArrowRight, FileText, Shield, TrendingUp, Star } from "lucide-react";
+import { ArrowRight, Clock, Laptop, ShieldCheck, BadgeDollarSign, Star, CheckCircle } from "lucide-react";
 
-const stats = [
-  { value: "50+", label: "Founders Advised" },
-  { value: "$500M+", label: "In Transactions Supported" },
-  { value: "10+", label: "Years of Advisory Experience" },
-  { value: "95%", label: "Client Retention Rate" },
+const featuredServices = [
+  {
+    jurisdiction: "Federal",
+    subtitle: "Operate Anywhere in Canada",
+    description: "Incorporate under the Canada Business Corporations Act. Protect your name coast to coast and operate in any province.",
+    from: "$499",
+    href: "/incorporate?jurisdiction=federal",
+  },
+  {
+    jurisdiction: "Ontario",
+    subtitle: "Ontario Provincial Corporation",
+    description: "Incorporate under the Ontario Business Corporations Act. Ideal for businesses operating primarily in Ontario.",
+    from: "$399",
+    href: "/incorporate?jurisdiction=ontario",
+    featured: true,
+  },
+  {
+    jurisdiction: "British Columbia",
+    subtitle: "BC Provincial Corporation",
+    description: "Incorporate under the BC Business Corporations Act. The preferred choice for entrepreneurs in British Columbia.",
+    from: "$449",
+    href: "/incorporate?jurisdiction=bc",
+  },
 ];
 
-const features = [
+const steps = [
   {
-    icon: FileText,
-    title: "Commercial Clarity",
-    description:
-      "Navigate contracts, commercial agreements, and business relationships with confidence. We identify risk, protect your interests, and structure deals that work in your favour.",
+    number: "01",
+    title: "Choose Your Service",
+    description: "Select the jurisdiction and incorporation type that fits your business. Not sure? Our FAQ covers the key differences.",
   },
   {
-    icon: Shield,
-    title: "Governance That Scales",
-    description:
-      "Build the corporate frameworks and governance structures that allow your business to grow without growing pains — from board advisory to shareholder matters.",
+    number: "02",
+    title: "Complete the Online Form",
+    description: "Answer a few questions about your business, directors, and shareholders. Takes about 10 minutes. No lawyer required.",
   },
   {
-    icon: TrendingUp,
-    title: "Growth & Transaction Support",
-    description:
-      "Whether raising capital, acquiring a business, or preparing for an exit — we provide the advisory backbone to get transactions done and protect your position.",
+    number: "03",
+    title: "We File Within 24 Hours",
+    description: "Our team reviews your application and submits it to the government. Your incorporation documents arrive by email.",
+  },
+];
+
+const whyUs = [
+  {
+    icon: Clock,
+    title: "24-Hour Turnaround",
+    description: "Most orders are processed and submitted to the government within 24 hours of completion.",
+  },
+  {
+    icon: Laptop,
+    title: "100% Online",
+    description: "No office visits. No paper forms. Complete your entire incorporation from your phone or laptop.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Government-Compliant",
+    description: "Every filing follows current government requirements and is reviewed by our team before submission.",
+  },
+  {
+    icon: BadgeDollarSign,
+    title: "Transparent Pricing",
+    description: "No hidden fees. Our prices include all government filing fees. The price you see is the price you pay.",
   },
 ];
 
 const testimonials = [
   {
-    quote:
-      "Korporex gave us the strategic clarity we were missing. Their advice on our shareholder structure saved us significant complexity down the line.",
-    name: "Sarah M.",
-    title: "Founder, Series A Tech Company",
+    quote: "Incorporated my business in less than a day. The process was completely straightforward and the team was incredibly responsive.",
+    name: "Michael R.",
+    location: "Toronto, ON",
   },
   {
-    quote:
-      "Working with Korporex was like having a seasoned commercial advisor in our corner — without the costs and formality of a traditional firm.",
-    name: "James T.",
-    title: "CEO, Mid-Market Distribution Group",
-  },
-];
-
-const pricingPreview = [
-  {
-    tier: "Starter",
-    price: "$499",
-    period: "/month",
-    tagline: "For early-stage founders getting the basics right.",
-    featured: false,
+    quote: "I was dreading the incorporation process but Korporex made it completely painless. Highly recommended for any Canadian entrepreneur.",
+    name: "Jennifer L.",
+    location: "Vancouver, BC",
   },
   {
-    tier: "Growth",
-    price: "$1,499",
-    period: "/month",
-    tagline: "For scaling businesses with active advisory needs.",
-    featured: true,
-  },
-  {
-    tier: "Enterprise",
-    price: "Custom",
-    period: "",
-    tagline: "Bespoke advisory for complex, high-growth businesses.",
-    featured: false,
+    quote: "Used Korporex for our federal incorporation and annual filings. Fast, reliable, and exceptional value for money.",
+    name: "David K.",
+    location: "Ottawa, ON",
   },
 ];
 
@@ -74,78 +91,153 @@ export default function HomePage() {
       {/* Hero */}
       <section className="bg-navy-900 text-white py-28 md:py-36 px-6">
         <div className="max-w-5xl mx-auto">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-6">
-            Advisory Services for Business Founders
-          </p>
-          <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-8 max-w-4xl">
-            Strategic Counsel for Every Stage of{" "}
-            <span className="text-gold-500">Growth</span>
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 mb-8">
+            <span className="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
+            <span className="text-xs text-gray-300 tracking-widest uppercase font-medium">
+              Fast · Online · Affordable
+            </span>
+          </div>
+          <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] mb-8 max-w-4xl">
+            Business Incorporation.{" "}
+            <span className="text-gold-400">Easy. Fast.<br />Affordable.</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed mb-10">
-            Korporex delivers expert corporate and commercial advisory to
-            entrepreneurs and mid-market founders — helping you structure your
-            business, manage risk, and unlock the next stage of growth.
+            Incorporate your business in Canada in as little as 24 hours. 100% online,
+            government-compliant filings, transparent pricing — no lawyers required.
           </p>
           <div className="flex flex-wrap gap-4">
             <Link
-              href="/services"
-              className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-gold-600 transition-colors"
+              href="/incorporate"
+              className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors"
             >
-              Explore Services
+              Incorporate Now
               <ArrowRight size={16} />
             </Link>
             <Link
               href="/pricing"
-              className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
+              className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
             >
               View Pricing
+            </Link>
+          </div>
+          <div className="mt-12 flex flex-wrap gap-6 text-sm text-gray-400">
+            <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Government fees included</span>
+            <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Documents in 24 hours</span>
+            <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Expert team review</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Services */}
+      <section className="bg-white py-24 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
+              Jurisdictions
+            </p>
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-navy-900">
+              Choose Your Jurisdiction
+            </h2>
+            <p className="text-gray-600 mt-4 max-w-xl mx-auto">
+              We support federal and provincial incorporations across Canada. Not sure which to choose?{" "}
+              <Link href="/faq" className="text-navy-900 underline underline-offset-2">See our FAQ.</Link>
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {featuredServices.map(({ jurisdiction, subtitle, description, from, href, featured }) => (
+              <div
+                key={jurisdiction}
+                className={`flex flex-col p-8 border ${featured ? "border-navy-900 ring-1 ring-navy-900" : "border-gray-200"}`}
+              >
+                {featured && (
+                  <p className="text-xs font-semibold tracking-widest uppercase text-gold-500 mb-3">
+                    Most Popular
+                  </p>
+                )}
+                <p className="font-serif text-2xl font-bold text-navy-900 mb-1">{jurisdiction}</p>
+                <p className="text-sm text-gray-500 mb-4">{subtitle}</p>
+                <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-1">{description}</p>
+                <div className="flex items-end justify-between mt-auto">
+                  <div>
+                    <p className="text-xs text-gray-500 mb-0.5">Starting from</p>
+                    <p className="font-serif text-3xl font-bold text-navy-900">{from}</p>
+                  </div>
+                  <Link
+                    href={href}
+                    className="inline-flex items-center gap-1.5 bg-navy-900 text-white text-sm font-medium px-5 py-2.5 hover:bg-navy-800 transition-colors"
+                  >
+                    Start <ArrowRight size={14} />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Link href="/services" className="text-sm text-navy-900 underline underline-offset-2 hover:text-navy-700">
+              View all services including registrations, amendments &amp; compliance filings →
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="bg-white border-b border-gray-100 py-12 px-6">
-        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map(({ value, label }) => (
-            <div key={label} className="text-center">
-              <p className="font-serif text-3xl md:text-4xl font-bold text-navy-900">
-                {value}
-              </p>
-              <p className="text-sm text-gray-500 mt-1 leading-snug">{label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Features */}
+      {/* How It Works */}
       <section className="bg-cream-50 py-24 px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
-              What We Deliver
+              Simple Process
             </p>
             <h2 className="font-serif text-4xl md:text-5xl font-bold text-navy-900">
-              Advisory That Moves
-              <br />
-              Your Business Forward
+              Get Incorporated in 3 Steps
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            {features.map(({ icon: Icon, title, description }) => (
-              <div
-                key={title}
-                className="bg-white p-8 border border-gray-100 hover:shadow-md transition-shadow"
-              >
-                <div className="w-12 h-12 bg-navy-50 flex items-center justify-center mb-6">
+            {steps.map(({ number, title, description }, idx) => (
+              <div key={number} className="relative">
+                {idx < steps.length - 1 && (
+                  <div className="hidden md:block absolute top-6 left-[calc(50%+2rem)] right-[-calc(50%-2rem)] h-px bg-gray-200" />
+                )}
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-12 h-12 bg-navy-900 text-white flex items-center justify-center font-serif font-bold text-lg mb-5 shrink-0">
+                    {number}
+                  </div>
+                  <h3 className="font-serif text-xl font-bold text-navy-900 mb-3">{title}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-12">
+            <Link
+              href="/incorporate"
+              className="inline-flex items-center gap-2 bg-navy-900 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-navy-800 transition-colors"
+            >
+              Start Your Incorporation
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Korporex */}
+      <section className="bg-white py-24 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
+              Why Korporex
+            </p>
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-navy-900">
+              Built for Canadian Entrepreneurs
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {whyUs.map(({ icon: Icon, title, description }) => (
+              <div key={title} className="text-center">
+                <div className="w-12 h-12 bg-navy-50 flex items-center justify-center mx-auto mb-5">
                   <Icon size={22} className="text-navy-900" />
                 </div>
-                <h3 className="font-serif text-xl font-bold text-navy-900 mb-3">
-                  {title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {description}
-                </p>
+                <h3 className="font-serif text-lg font-bold text-navy-900 mb-2">{title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
               </div>
             ))}
           </div>
@@ -153,110 +245,33 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="bg-white py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
-              Client Perspectives
-            </p>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-navy-900">
-              Trusted by Founders
-              <br />
-              Who Value Clarity
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-8">
-            {testimonials.map(({ quote, name, title }) => (
-              <div
-                key={name}
-                className="bg-cream-50 p-8 border-l-4 border-gold-500"
-              >
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      size={14}
-                      className="text-gold-500 fill-gold-500"
-                    />
-                  ))}
-                </div>
-                <p className="text-gray-700 leading-relaxed italic mb-6">
-                  &ldquo;{quote}&rdquo;
-                </p>
-                <div>
-                  <p className="font-semibold text-navy-900 text-sm">{name}</p>
-                  <p className="text-gray-500 text-xs">{title}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Preview */}
       <section className="bg-cream-50 py-24 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
-              Transparent Pricing
+              What Our Clients Say
             </p>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-navy-900">
-              Simple, Predictable Plans
+            <h2 className="font-serif text-4xl font-bold text-navy-900">
+              Trusted by Thousands of Canadian Entrepreneurs
             </h2>
-            <p className="text-gray-600 mt-4 max-w-xl mx-auto">
-              No billable hours. No surprises. Choose the advisory level that
-              fits your business.
-            </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {pricingPreview.map(({ tier, price, period, tagline, featured }) => (
-              <div
-                key={tier}
-                className={`p-8 ${
-                  featured
-                    ? "bg-navy-900 text-white"
-                    : "bg-white border border-gray-100"
-                }`}
-              >
-                <p
-                  className={`text-xs font-semibold tracking-[0.15em] uppercase mb-4 ${
-                    featured ? "text-gold-500" : "text-gray-500"
-                  }`}
-                >
-                  {tier}
+            {testimonials.map(({ quote, name, location }) => (
+              <div key={name} className="bg-white p-8 border border-gray-100">
+                <div className="flex gap-0.5 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={14} className="text-gold-500 fill-gold-500" />
+                  ))}
+                </div>
+                <p className="text-gray-700 text-sm leading-relaxed italic mb-6">
+                  &ldquo;{quote}&rdquo;
                 </p>
-                <p
-                  className={`font-serif text-4xl font-bold ${
-                    featured ? "text-white" : "text-navy-900"
-                  }`}
-                >
-                  {price}
-                  <span
-                    className={`text-sm font-sans font-normal ${
-                      featured ? "text-gray-300" : "text-gray-500"
-                    }`}
-                  >
-                    {period}
-                  </span>
-                </p>
-                <p
-                  className={`text-sm mt-3 leading-relaxed ${
-                    featured ? "text-gray-300" : "text-gray-600"
-                  }`}
-                >
-                  {tagline}
-                </p>
+                <div>
+                  <p className="font-semibold text-navy-900 text-sm">{name}</p>
+                  <p className="text-gray-500 text-xs">{location}</p>
+                </div>
               </div>
             ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link
-              href="/pricing"
-              className="inline-flex items-center gap-2 border border-navy-900 text-navy-900 font-medium px-7 py-3 text-sm tracking-wide hover:bg-navy-900 hover:text-white transition-colors"
-            >
-              View Full Pricing Details
-              <ArrowRight size={16} />
-            </Link>
           </div>
         </div>
       </section>
@@ -265,17 +280,17 @@ export default function HomePage() {
       <section className="bg-navy-900 py-24 px-6 text-center text-white">
         <div className="max-w-2xl mx-auto">
           <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">
-            Ready to Work with Korporex?
+            Start Your Incorporation Today
           </h2>
           <p className="text-gray-300 text-lg leading-relaxed mb-10">
-            Book a consultation and discover how strategic advisory can
-            strengthen your commercial position and accelerate your growth.
+            Join thousands of Canadian entrepreneurs who&apos;ve simplified their
+            business registration with Korporex. Get incorporated in as little as 24 hours.
           </p>
           <Link
-            href="/contact"
+            href="/incorporate"
             className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors"
           >
-            Book a Consultation
+            Get Started Now
             <ArrowRight size={16} />
           </Link>
         </div>

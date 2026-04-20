@@ -6,24 +6,23 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
           <div className="col-span-2 md:col-span-1">
-            <span className="font-serif text-xl font-bold tracking-[0.15em] text-white">
-              KORPOREX
-            </span>
-            <p className="mt-4 text-sm text-gray-400 leading-relaxed max-w-xs">
-              Strategic corporate and commercial advisory for business founders
-              and mid-market entrepreneurs.
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-8 h-8 bg-navy-900 flex items-center justify-center shrink-0">
+                <span className="font-serif font-bold text-gold-500 text-lg leading-none">K</span>
+              </div>
+              <span className="font-serif text-lg font-bold tracking-[0.12em] text-white">
+                KORPOREX
+              </span>
+            </div>
+            <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
+              Canada&apos;s online business incorporation platform. Fast, affordable,
+              fully online.
             </p>
             <div className="mt-6 flex gap-4">
-              <a
-                href="#"
-                className="text-sm text-gray-400 hover:text-gold-500 transition-colors"
-              >
+              <a href="#" className="text-sm text-gray-400 hover:text-gold-500 transition-colors">
                 LinkedIn
               </a>
-              <a
-                href="#"
-                className="text-sm text-gray-400 hover:text-gold-500 transition-colors"
-              >
+              <a href="#" className="text-sm text-gray-400 hover:text-gold-500 transition-colors">
                 Twitter
               </a>
             </div>
@@ -40,14 +39,12 @@ export default function Footer() {
                   ["/about", "About Us"],
                   ["/services", "Services"],
                   ["/pricing", "Pricing"],
+                  ["/faq", "FAQ"],
                   ["/contact", "Contact"],
                 ] as [string, string][]
               ).map(([href, label]) => (
                 <li key={href}>
-                  <Link
-                    href={href}
-                    className="text-sm text-gray-400 hover:text-white transition-colors"
-                  >
+                  <Link href={href} className="text-sm text-gray-400 hover:text-white transition-colors">
                     {label}
                   </Link>
                 </li>
@@ -61,17 +58,16 @@ export default function Footer() {
             </p>
             <ul className="space-y-3">
               {[
-                "Contract Advisory",
-                "Corporate Governance",
-                "Transaction Support",
-                "Strategic Advisory",
-              ].map((s) => (
-                <li key={s}>
-                  <Link
-                    href="/services"
-                    className="text-sm text-gray-400 hover:text-white transition-colors"
-                  >
-                    {s}
+                ["Federal Incorporation", "/services"],
+                ["Ontario Incorporation", "/services"],
+                ["BC Incorporation", "/services"],
+                ["Business Name Registration", "/services"],
+                ["Annual Returns", "/services"],
+                ["Dissolve a Business", "/services"],
+              ].map(([label, href]) => (
+                <li key={label}>
+                  <Link href={href} className="text-sm text-gray-400 hover:text-white transition-colors">
+                    {label}
                   </Link>
                 </li>
               ))}
@@ -83,31 +79,32 @@ export default function Footer() {
               Contact
             </p>
             <ul className="space-y-3 text-sm text-gray-400">
-              <li>contact@korporex.com</li>
-              <li>+1 (888) 000-0000</li>
-              <li className="leading-relaxed">
-                123 Business Avenue
-                <br />
-                Suite 400, New York, NY
+              <li>
+                <a href="mailto:support@korporex.com" className="hover:text-white transition-colors">
+                  support@korporex.com
+                </a>
               </li>
+              <li>+1 (888) 000-0000</li>
+              <li className="leading-relaxed">Toronto, Ontario, Canada</li>
             </ul>
+            <div className="mt-6">
+              <Link
+                href="/incorporate"
+                className="inline-block bg-gold-500 text-white text-sm font-medium px-4 py-2 hover:bg-gold-600 transition-colors"
+              >
+                Incorporate Now
+              </Link>
+            </div>
           </div>
         </div>
 
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-600">
-            © 2025 Korporex Advisory Ltd. All rights reserved.
+            © 2025 Korporex Technologies Inc. All rights reserved. Korporex is not a law firm and does not provide legal advice.
           </p>
           <div className="flex gap-6 text-xs text-gray-600">
-            <a href="#" className="hover:text-gray-400 transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#" className="hover:text-gray-400 transition-colors">
-              Terms of Service
-            </a>
-            <a href="#" className="hover:text-gray-400 transition-colors">
-              Disclaimer
-            </a>
+            <a href="#" className="hover:text-gray-400 transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-gray-400 transition-colors">Terms of Service</a>
           </div>
         </div>
       </div>

@@ -1,57 +1,76 @@
 import Link from "next/link";
-import { ArrowRight, FileText, Shield, TrendingUp, Briefcase, CheckCircle } from "lucide-react";
+import { ArrowRight, Building2, FileText, Edit3, ClipboardCheck, RefreshCw } from "lucide-react";
 
-const services = [
+type Service = { name: string; from: string; href: string };
+type Category = {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  services: Service[];
+};
+
+const categories: Category[] = [
+  {
+    icon: Building2,
+    title: "Incorporation",
+    description: "Incorporate your business federally or provincially. Choose from standard, professional, holding, or non-profit corporations.",
+    services: [
+      { name: "Federal Incorporation — Standard Corp", from: "$499", href: "/incorporate?jurisdiction=federal&type=standard" },
+      { name: "Federal Incorporation — Professional Corp", from: "$549", href: "/incorporate?jurisdiction=federal&type=professional" },
+      { name: "Federal Incorporation — Holding Corp", from: "$499", href: "/incorporate?jurisdiction=federal&type=holding" },
+      { name: "Ontario Incorporation — Standard Corp", from: "$399", href: "/incorporate?jurisdiction=ontario&type=standard" },
+      { name: "Ontario Incorporation — Professional Corp", from: "$449", href: "/incorporate?jurisdiction=ontario&type=professional" },
+      { name: "Ontario Incorporation — Non-Profit", from: "$399", href: "/incorporate?jurisdiction=ontario&type=nonprofit" },
+      { name: "Ontario Incorporation — Holding Corp", from: "$399", href: "/incorporate?jurisdiction=ontario&type=holding" },
+      { name: "BC Incorporation — Standard Corp", from: "$449", href: "/incorporate?jurisdiction=bc&type=standard" },
+      { name: "BC Incorporation — Professional Corp", from: "$499", href: "/incorporate?jurisdiction=bc&type=professional" },
+      { name: "BC Incorporation — Non-Profit", from: "$449", href: "/incorporate?jurisdiction=bc&type=nonprofit" },
+      { name: "BC Incorporation — Holding Corp", from: "$449", href: "/incorporate?jurisdiction=bc&type=holding" },
+    ],
+  },
   {
     icon: FileText,
-    title: "Contract & Commercial Advisory",
-    description:
-      "Your commercial contracts define your business relationships, protect your revenue, and determine your exposure. We work with you to review, negotiate, and structure agreements that hold up when it matters.",
-    items: [
-      "Commercial contract review and negotiation",
-      "Supply chain and supplier agreement structuring",
-      "Client and partner agreement frameworks",
-      "Terms of business and standard-form contracts",
-      "Dispute risk identification and mitigation",
+    title: "Registrations",
+    description: "Register a sole proprietorship, business name, or expand your existing corporation to operate in a new province.",
+    services: [
+      { name: "Sole Proprietorship Registration — Ontario", from: "$99", href: "/services" },
+      { name: "Sole Proprietorship Registration — BC", from: "$99", href: "/services" },
+      { name: "Business Name Registration — Ontario", from: "$79", href: "/services" },
+      { name: "Business Name Registration — BC", from: "$79", href: "/services" },
+      { name: "Extra-Provincial Registration", from: "$199", href: "/services" },
     ],
   },
   {
-    icon: Shield,
-    title: "Corporate Governance & Compliance",
-    description:
-      "Growth businesses that neglect governance create unnecessary risk for founders and investors alike. We help you build frameworks that scale — without the bureaucracy.",
-    items: [
-      "Shareholders' agreement structuring and review",
-      "Board composition and governance frameworks",
-      "Equity and incentive scheme advisory",
-      "Regulatory compliance positioning",
-      "Director duties and fiduciary responsibilities",
+    icon: Edit3,
+    title: "Changes & Amendments",
+    description: "Update your corporation's directors, officers, address, or articles after incorporation.",
+    services: [
+      { name: "Change of Director / Officer", from: "$149", href: "/services" },
+      { name: "Change of Shareholder", from: "$149", href: "/services" },
+      { name: "Corporation Address Change", from: "$99", href: "/services" },
+      { name: "Articles of Amendment", from: "$199", href: "/services" },
     ],
   },
   {
-    icon: TrendingUp,
-    title: "Venture & Transaction Support",
-    description:
-      "Transactions are high-stakes and time-pressured. We provide the advisory backbone to help you navigate fundraising, acquisitions, and strategic partnerships with clarity.",
-    items: [
-      "Pre-fundraise commercial readiness",
-      "Term sheet review and negotiation support",
-      "Acquisition and disposal advisory",
-      "Due diligence coordination and support",
-      "Post-transaction integration advisory",
+    icon: ClipboardCheck,
+    title: "Compliance Filings",
+    description: "Stay in good standing with required government filings for Ontario and federal corporations.",
+    services: [
+      { name: "Initial Return (Ontario)", from: "$99", href: "/services" },
+      { name: "Annual Return — Ontario", from: "$149", href: "/services" },
+      { name: "Annual Return — Federal", from: "$149", href: "/services" },
+      { name: "Notice of Change", from: "$129", href: "/services" },
     ],
   },
   {
-    icon: Briefcase,
-    title: "Strategic Business Advisory",
-    description:
-      "Beyond legal and governance matters, we work as a strategic sounding board for founders navigating complex business decisions — from pricing strategy to market entry to key hires.",
-    items: [
-      "Commercial strategy and positioning",
-      "Partnership and joint venture structuring",
-      "Market entry and expansion advisory",
-      "Business model and revenue structure review",
-      "Ongoing strategic retainer advisory",
+    icon: RefreshCw,
+    title: "Business Updates",
+    description: "Dissolve, revive, amalgamate, or continue your corporation between jurisdictions.",
+    services: [
+      { name: "Dissolve a Business", from: "$199", href: "/services" },
+      { name: "Revive a Business", from: "$249", href: "/services" },
+      { name: "Amalgamation", from: "$499", href: "/services" },
+      { name: "Continuance Between Jurisdictions", from: "$349", href: "/services" },
     ],
   },
 ];
@@ -63,56 +82,52 @@ export default function ServicesPage() {
       <section className="bg-cream-50 py-20 px-6 border-b border-gray-100">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
-            What We Do
+            All Services
           </p>
           <h1 className="font-serif text-5xl md:text-6xl font-bold text-navy-900 leading-tight mb-6">
-            Advisory Services Built
+            Everything Your Business
             <br />
-            for Business Founders
+            Needs to Stay Compliant
           </h1>
           <p className="text-lg text-gray-600 leading-relaxed max-w-2xl">
-            Korporex offers four core advisory disciplines — each designed to
-            address the most critical commercial and strategic challenges facing
-            growing businesses.
+            From your first incorporation to ongoing compliance filings, Korporex handles
+            every government filing your business needs — fast, online, and at a fixed price.
           </p>
         </div>
       </section>
 
-      {/* Services */}
-      <section className="bg-white py-20 px-6">
-        <div className="max-w-6xl mx-auto space-y-20">
-          {services.map(({ icon: Icon, title, description, items }, idx) => (
-            <div
-              key={title}
-              className={`grid md:grid-cols-2 gap-12 items-start ${
-                idx % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""
-              }`}
-            >
-              <div>
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-navy-50 mb-6">
-                  <Icon size={22} className="text-navy-900" />
+      {/* Service Categories */}
+      <section className="bg-white py-16 px-6">
+        <div className="max-w-6xl mx-auto space-y-16">
+          {categories.map(({ icon: Icon, title, description, services }) => (
+            <div key={title}>
+              <div className="flex items-start gap-4 mb-8">
+                <div className="w-11 h-11 bg-navy-50 flex items-center justify-center shrink-0 mt-0.5">
+                  <Icon size={20} className="text-navy-900" />
                 </div>
-                <h2 className="font-serif text-3xl font-bold text-navy-900 mb-4">
-                  {title}
-                </h2>
-                <p className="text-gray-600 leading-relaxed">{description}</p>
+                <div>
+                  <h2 className="font-serif text-2xl font-bold text-navy-900 mb-1">{title}</h2>
+                  <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
+                </div>
               </div>
-              <div className="bg-cream-50 p-8 border border-gray-100">
-                <p className="text-xs font-semibold tracking-[0.15em] uppercase text-gray-500 mb-5">
-                  What&apos;s included
-                </p>
-                <ul className="space-y-3">
-                  {items.map((item) => (
-                    <li key={item} className="flex items-start gap-3">
-                      <CheckCircle
-                        size={16}
-                        className="text-gold-500 shrink-0 mt-0.5"
-                      />
-                      <span className="text-gray-700 text-sm">{item}</span>
-                    </li>
-                  ))}
-                </ul>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 ml-0 md:ml-15">
+                {services.map(({ name, from, href }) => (
+                  <Link
+                    key={name}
+                    href={href}
+                    className="flex items-center justify-between bg-cream-50 border border-gray-100 px-5 py-4 hover:border-navy-900 hover:bg-white group transition-colors"
+                  >
+                    <div>
+                      <p className="text-sm font-medium text-gray-800 group-hover:text-navy-900 transition-colors">
+                        {name}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">From {from}</p>
+                    </div>
+                    <ArrowRight size={14} className="text-gray-400 group-hover:text-navy-900 shrink-0 ml-3 transition-colors" />
+                  </Link>
+                ))}
               </div>
+              <div className="border-b border-gray-100 mt-14" />
             </div>
           ))}
         </div>
@@ -125,16 +140,25 @@ export default function ServicesPage() {
             Not Sure Where to Start?
           </h2>
           <p className="text-gray-300 mb-8">
-            Book a free discovery call and we&apos;ll help identify the right
-            advisory support for your business.
+            Most businesses start with a federal or provincial incorporation. If you&apos;re
+            unsure which is right for you, check our FAQ or start the incorporation flow
+            and we&apos;ll guide you.
           </p>
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-gold-600 transition-colors"
-          >
-            Book a Discovery Call
-            <ArrowRight size={16} />
-          </Link>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link
+              href="/incorporate"
+              className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-gold-600 transition-colors"
+            >
+              Incorporate Now
+              <ArrowRight size={16} />
+            </Link>
+            <Link
+              href="/faq"
+              className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
+            >
+              Read the FAQ
+            </Link>
+          </div>
         </div>
       </section>
     </>

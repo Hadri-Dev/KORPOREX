@@ -9,18 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // "navy" classes now map to deep forest green — keeps all existing classnames working
         navy: {
-          50: "#f0f4f9",
-          100: "#d9e4f0",
-          200: "#b3c9e1",
-          300: "#7da4cb",
-          400: "#4d7fb5",
-          500: "#2d5f9e",
-          600: "#1f4a82",
-          700: "#183a6a",
-          800: "#152e55",
-          900: "#1B2B4B",
-          950: "#0d1a2e",
+          50: "#f0f8f5",
+          100: "#d4ede1",
+          200: "#a9dbc3",
+          300: "#74c3a1",
+          400: "#3da87b",
+          500: "#228b5f",
+          600: "#1a704b",
+          700: "#165b3c",
+          800: "#124930",
+          900: "#1B4332",
+          950: "#0c2218",
         },
         gold: {
           300: "#e8d099",

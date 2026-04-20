@@ -9,8 +9,19 @@ const links = [
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
   { href: "/pricing", label: "Pricing" },
+  { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
 ];
+
+function KLogo() {
+  return (
+    <div className="w-9 h-9 bg-navy-900 flex items-center justify-center shrink-0">
+      <span className="font-serif font-bold text-gold-500 text-xl leading-none select-none">
+        K
+      </span>
+    </div>
+  );
+}
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -18,14 +29,14 @@ export default function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 h-[72px]">
       <nav className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
-        <Link
-          href="/"
-          className="font-serif text-[1.35rem] font-bold text-navy-900 tracking-[0.15em] shrink-0"
-        >
-          KORPOREX
+        <Link href="/" className="flex items-center gap-2.5 shrink-0">
+          <KLogo />
+          <span className="font-serif text-[1.2rem] font-bold text-navy-900 tracking-[0.12em] hidden sm:block">
+            KORPOREX
+          </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-7">
           {links.map(({ href, label }) => (
             <Link
               key={href}
@@ -37,17 +48,17 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <Link
-            href="/pricing"
+            href="/incorporate"
             className="inline-flex items-center bg-navy-900 text-white text-sm font-medium px-5 py-2.5 tracking-wide hover:bg-navy-800 transition-colors"
           >
-            Get Started
+            Incorporate Now
           </Link>
         </div>
 
         <button
-          className="md:hidden text-gray-700 p-1"
+          className="lg:hidden text-gray-700 p-1"
           onClick={() => setOpen(!open)}
           aria-label="Toggle navigation"
         >
@@ -56,7 +67,7 @@ export default function Navbar() {
       </nav>
 
       {open && (
-        <div className="md:hidden absolute inset-x-0 top-[72px] bg-white border-b border-gray-100 px-6 py-6 shadow-lg">
+        <div className="lg:hidden absolute inset-x-0 top-[72px] bg-white border-b border-gray-100 px-6 py-6 shadow-lg z-50">
           {links.map(({ href, label }) => (
             <Link
               key={href}
@@ -68,11 +79,11 @@ export default function Navbar() {
             </Link>
           ))}
           <Link
-            href="/pricing"
+            href="/incorporate"
             onClick={() => setOpen(false)}
             className="block mt-4 bg-navy-900 text-white text-sm font-medium px-5 py-3 tracking-wide text-center"
           >
-            Get Started
+            Incorporate Now
           </Link>
         </div>
       )}

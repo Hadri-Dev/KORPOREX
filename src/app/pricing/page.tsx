@@ -1,84 +1,174 @@
+"use client";
+
 import Link from "next/link";
 import { CheckCircle, ArrowRight } from "lucide-react";
+import { useState } from "react";
 
-const tiers = [
-  {
-    name: "Starter",
-    price: "$499",
-    period: "per month",
-    description:
-      "For early-stage founders who need commercial guidance as they build the foundations of their business.",
-    features: [
-      "2 hours of advisory per month",
-      "Contract review (up to 2 per month)",
-      "Email support within 48 hours",
-      "Access to Korporex document library",
-      "Monthly advisory check-in call",
-      "Governance starter framework",
-    ],
-    cta: "Get Started",
-    featured: false,
-  },
-  {
-    name: "Growth",
-    price: "$1,499",
-    period: "per month",
-    description:
-      "For scaling businesses with active advisory needs — transactions, governance, and commercial strategy.",
-    features: [
-      "6 hours of advisory per month",
-      "Unlimited contract reviews",
-      "Priority response within 24 hours",
-      "Full Korporex document library access",
-      "Weekly strategic advisory calls",
-      "Transaction and deal support (ad hoc)",
-      "Board and governance advisory",
-      "Dedicated advisory relationship",
-    ],
-    cta: "Get Started",
-    featured: true,
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    period: "tailored to your business",
-    description:
-      "For established or high-growth businesses requiring comprehensive, embedded advisory across all commercial matters.",
-    features: [
-      "Unlimited advisory hours",
-      "Full commercial and governance advisory",
-      "On-call access to senior advisors",
-      "Transaction support included",
-      "Custom document and framework development",
-      "Board attendance and advisory",
-      "Dedicated advisory team",
-      "Monthly strategic review sessions",
-    ],
-    cta: "Contact Us",
-    featured: false,
-  },
+type Jurisdiction = "federal" | "ontario" | "bc";
+
+const jurisdictions = [
+  { id: "federal" as Jurisdiction, label: "Federal", subtitle: "Canada Business Corporations Act" },
+  { id: "ontario" as Jurisdiction, label: "Ontario", subtitle: "Ontario Business Corporations Act" },
+  { id: "bc" as Jurisdiction, label: "British Columbia", subtitle: "BC Business Corporations Act" },
 ];
 
-const faqs = [
-  {
-    q: "Is Korporex a law firm?",
-    a: "No. Korporex is a non-legal commercial advisory firm. We do not provide legal advice. Where legal advice is required, we work alongside your legal counsel or can refer you to appropriate specialists.",
-  },
-  {
-    q: "Can I change plans as my business grows?",
-    a: "Yes. You can upgrade or downgrade your plan at any time. We're designed to grow with your business and our team will proactively recommend the right tier as your advisory needs evolve.",
-  },
-  {
-    q: "What happens if I need more hours than my plan includes?",
-    a: "Additional advisory hours are available on an ad hoc basis. Growth and Enterprise clients also have the option to roll over unused hours from the previous month.",
-  },
-  {
-    q: "Do you offer a free consultation?",
-    a: "Yes. We offer a complimentary 30-minute discovery call to understand your business and determine whether Korporex is the right fit for your advisory needs.",
-  },
+const pricingData: Record<Jurisdiction, {
+  name: string;
+  price: string;
+  description: string;
+  features: string[];
+  featured: boolean;
+}[]> = {
+  federal: [
+    {
+      name: "Basic",
+      price: "$499",
+      description: "Everything you need to get incorporated federally, including government fees.",
+      featured: false,
+      features: [
+        "Articles of Incorporation filing",
+        "NUANS name search included",
+        "Federal corporate bylaws",
+        "Certificate of Incorporation",
+        "Digital document delivery",
+        "Expert team review",
+      ],
+    },
+    {
+      name: "Standard",
+      price: "$699",
+      description: "Complete incorporation package with your full corporate minute book.",
+      featured: true,
+      features: [
+        "Everything in Basic",
+        "Corporate minute book",
+        "Share certificates",
+        "Organizational resolutions",
+        "Banking resolution",
+        "Registered office (1 month)",
+        "Post-filing support",
+      ],
+    },
+    {
+      name: "Premium",
+      price: "$999",
+      description: "Full-service incorporation with ongoing compliance support for year one.",
+      featured: false,
+      features: [
+        "Everything in Standard",
+        "1-year registered office address",
+        "First annual return filing",
+        "Priority 12-hour processing",
+        "Dedicated account support",
+        "Annual return reminder service",
+      ],
+    },
+  ],
+  ontario: [
+    {
+      name: "Basic",
+      price: "$399",
+      description: "Everything you need to get incorporated in Ontario, including government fees.",
+      featured: false,
+      features: [
+        "Articles of Incorporation filing",
+        "Ontario Business Identifier (OBI)",
+        "Corporate bylaws",
+        "Certificate of Incorporation",
+        "Digital document delivery",
+        "Expert team review",
+      ],
+    },
+    {
+      name: "Standard",
+      price: "$599",
+      description: "Complete incorporation package with your full corporate minute book.",
+      featured: true,
+      features: [
+        "Everything in Basic",
+        "Corporate minute book",
+        "Share certificates",
+        "Organizational resolutions",
+        "Banking resolution",
+        "Registered office (1 month)",
+        "Post-filing support",
+      ],
+    },
+    {
+      name: "Premium",
+      price: "$899",
+      description: "Full-service incorporation with ongoing compliance support for year one.",
+      featured: false,
+      features: [
+        "Everything in Standard",
+        "1-year registered office address",
+        "Initial Return filing (Ontario)",
+        "First Annual Return filing",
+        "Priority 12-hour processing",
+        "Annual filing reminder service",
+      ],
+    },
+  ],
+  bc: [
+    {
+      name: "Basic",
+      price: "$449",
+      description: "Everything you need to get incorporated in British Columbia, including government fees.",
+      featured: false,
+      features: [
+        "Certificate and Articles of Incorporation",
+        "BC Company registration number",
+        "Corporate bylaws",
+        "BC Business Registry filing",
+        "Digital document delivery",
+        "Expert team review",
+      ],
+    },
+    {
+      name: "Standard",
+      price: "$649",
+      description: "Complete incorporation package with your full corporate minute book.",
+      featured: true,
+      features: [
+        "Everything in Basic",
+        "Corporate minute book",
+        "Share certificates",
+        "Organizational resolutions",
+        "Banking resolution",
+        "Registered office (1 month)",
+        "Post-filing support",
+      ],
+    },
+    {
+      name: "Premium",
+      price: "$949",
+      description: "Full-service incorporation with ongoing compliance support for year one.",
+      featured: false,
+      features: [
+        "Everything in Standard",
+        "1-year registered office address",
+        "First annual report filing",
+        "Priority 12-hour processing",
+        "Dedicated account support",
+        "Annual report reminder service",
+      ],
+    },
+  ],
+};
+
+const everythingIncluded = [
+  "All government filing fees (no hidden costs)",
+  "Expert team review before every submission",
+  "Digital document delivery within 24 hours",
+  "Secure document storage in your Korporex account",
+  "Post-filing Q&A support by email",
+  "Filing confirmation and tracking",
 ];
 
 export default function PricingPage() {
+  const [jurisdiction, setJurisdiction] = useState<Jurisdiction>("federal");
+  const tiers = pricingData[jurisdiction];
+
   return (
     <>
       {/* Hero */}
@@ -88,20 +178,39 @@ export default function PricingPage() {
             Pricing
           </p>
           <h1 className="font-serif text-5xl md:text-6xl font-bold text-navy-900 mb-6">
-            Simple, Transparent Plans
+            Simple, Transparent Pricing
           </h1>
           <p className="text-lg text-gray-600 max-w-xl mx-auto">
-            No billable hours. No surprise invoices. Choose the advisory level
-            that fits your business today — and scale as you grow.
+            All prices include government filing fees. No billable hours, no surprise invoices.
+            Pick a package and get incorporated in as little as 24 hours.
           </p>
         </div>
       </section>
 
-      {/* Pricing Cards */}
-      <section className="bg-white py-20 px-6">
+      {/* Jurisdiction Tabs */}
+      <section className="bg-white py-16 px-6">
         <div className="max-w-6xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-2 mb-12">
+            {jurisdictions.map(({ id, label, subtitle }) => (
+              <button
+                key={id}
+                onClick={() => setJurisdiction(id)}
+                className={`px-6 py-3 text-sm font-medium border transition-colors ${
+                  jurisdiction === id
+                    ? "bg-navy-900 text-white border-navy-900"
+                    : "bg-white text-gray-700 border-gray-200 hover:border-navy-900 hover:text-navy-900"
+                }`}
+              >
+                {label}
+                <span className={`block text-xs mt-0.5 ${jurisdiction === id ? "text-gray-300" : "text-gray-400"}`}>
+                  {subtitle}
+                </span>
+              </button>
+            ))}
+          </div>
+
           <div className="grid md:grid-cols-3 gap-6 items-start">
-            {tiers.map(({ name, price, period, description, features, cta, featured }) => (
+            {tiers.map(({ name, price, description, features, featured }) => (
               <div
                 key={name}
                 className={`flex flex-col p-8 ${
@@ -111,68 +220,39 @@ export default function PricingPage() {
                 }`}
               >
                 {featured && (
-                  <p className="text-xs font-semibold tracking-[0.15em] uppercase text-gold-500 mb-3">
+                  <p className="text-xs font-semibold tracking-[0.15em] uppercase text-gold-400 mb-3">
                     Most Popular
                   </p>
                 )}
-                <p
-                  className={`text-xs font-semibold tracking-[0.15em] uppercase mb-3 ${
-                    featured ? "text-gray-400" : "text-gray-500"
-                  }`}
-                >
+                <p className={`text-xs font-semibold tracking-[0.15em] uppercase mb-3 ${featured ? "text-gray-400" : "text-gray-500"}`}>
                   {name}
                 </p>
-                <p
-                  className={`font-serif text-5xl font-bold mb-1 ${
-                    featured ? "text-white" : "text-navy-900"
-                  }`}
-                >
+                <p className={`font-serif text-5xl font-bold mb-1 ${featured ? "text-white" : "text-navy-900"}`}>
                   {price}
                 </p>
-                <p
-                  className={`text-sm mb-5 ${
-                    featured ? "text-gray-400" : "text-gray-500"
-                  }`}
-                >
-                  {period}
+                <p className={`text-xs mb-5 ${featured ? "text-gray-400" : "text-gray-500"}`}>
+                  all fees included · CAD
                 </p>
-                <p
-                  className={`text-sm leading-relaxed mb-8 ${
-                    featured ? "text-gray-300" : "text-gray-600"
-                  }`}
-                >
+                <p className={`text-sm leading-relaxed mb-8 ${featured ? "text-gray-300" : "text-gray-600"}`}>
                   {description}
                 </p>
                 <ul className="space-y-3 mb-10 flex-1">
                   {features.map((f) => (
                     <li key={f} className="flex items-start gap-3">
-                      <CheckCircle
-                        size={15}
-                        className="text-gold-500 shrink-0 mt-0.5"
-                      />
-                      <span
-                        className={`text-sm ${
-                          featured ? "text-gray-200" : "text-gray-700"
-                        }`}
-                      >
-                        {f}
-                      </span>
+                      <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
+                      <span className={`text-sm ${featured ? "text-gray-200" : "text-gray-700"}`}>{f}</span>
                     </li>
                   ))}
                 </ul>
                 <Link
-                  href={
-                    cta === "Contact Us"
-                      ? "/contact"
-                      : `/contact?plan=${name.toLowerCase()}`
-                  }
+                  href={`/incorporate?jurisdiction=${jurisdiction}&package=${name.toLowerCase()}`}
                   className={`inline-flex items-center justify-center gap-2 py-3 px-6 text-sm font-medium tracking-wide transition-colors ${
                     featured
                       ? "bg-gold-500 text-white hover:bg-gold-600"
                       : "border border-navy-900 text-navy-900 hover:bg-navy-900 hover:text-white"
                   }`}
                 >
-                  {cta}
+                  Get Started
                   <ArrowRight size={15} />
                 </Link>
               </div>
@@ -181,24 +261,20 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* FAQs */}
-      <section className="bg-cream-50 py-20 px-6">
-        <div className="max-w-3xl mx-auto">
-          <div className="mb-12">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
-              FAQ
-            </p>
-            <h2 className="font-serif text-4xl font-bold text-navy-900">
-              Common Questions
-            </h2>
-          </div>
-          <div className="space-y-8">
-            {faqs.map(({ q, a }) => (
-              <div key={q} className="border-b border-gray-200 pb-8">
-                <h3 className="font-serif text-lg font-bold text-navy-900 mb-3">
-                  {q}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{a}</p>
+      {/* What's included in every package */}
+      <section className="bg-cream-50 py-16 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
+            Included in Every Package
+          </p>
+          <h2 className="font-serif text-3xl font-bold text-navy-900 mb-10">
+            Standard Across All Korporex Orders
+          </h2>
+          <div className="grid sm:grid-cols-2 gap-4 text-left">
+            {everythingIncluded.map((item) => (
+              <div key={item} className="flex items-start gap-3 bg-white border border-gray-100 px-5 py-4">
+                <CheckCircle size={16} className="text-navy-900 shrink-0 mt-0.5" />
+                <span className="text-sm text-gray-700">{item}</span>
               </div>
             ))}
           </div>
@@ -208,20 +284,25 @@ export default function PricingPage() {
       {/* CTA */}
       <section className="bg-navy-900 py-20 px-6 text-center text-white">
         <div className="max-w-xl mx-auto">
-          <h2 className="font-serif text-4xl font-bold mb-4">
-            Start With a Free Call
-          </h2>
+          <h2 className="font-serif text-4xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-gray-300 mb-8">
-            Not sure which plan is right for you? Book a 30-minute discovery
-            call — no commitment, no hard sell.
+            Select a package above and complete your incorporation in about 10 minutes.
+            Have questions first? Check our FAQ.
           </p>
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-gold-600 transition-colors"
-          >
-            Book a Free Discovery Call
-            <ArrowRight size={16} />
-          </Link>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link
+              href="/incorporate"
+              className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-gold-600 transition-colors"
+            >
+              Incorporate Now <ArrowRight size={16} />
+            </Link>
+            <Link
+              href="/faq"
+              className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
+            >
+              Read the FAQ
+            </Link>
+          </div>
         </div>
       </section>
     </>
