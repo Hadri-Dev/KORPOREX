@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Clock, Laptop, ShieldCheck, BadgeDollarSign, Star, CheckCircle } from "lucide-react";
+import HeroContactForm from "@/components/HeroContactForm";
 
 const featuredServices = [
   {
@@ -89,41 +90,49 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy-900 text-white py-28 md:py-36 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
-            <span className="text-xs text-gray-300 tracking-widest uppercase font-medium">
-              Fast · Online · Affordable
-            </span>
+      <section className="bg-navy-900 text-white py-20 md:py-28 px-6">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Left — copy */}
+          <div>
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 mb-8">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
+              <span className="text-xs text-gray-300 tracking-widest uppercase font-medium">
+                Fast · Online · Affordable
+              </span>
+            </div>
+            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] mb-8">
+              Business Incorporation.{" "}
+              <span className="text-gold-400">Easy. Fast.<br />Affordable.</span>
+            </h1>
+            <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-10">
+              Incorporate your business in Canada in as little as 24 hours. 100% online,
+              government-compliant filings, transparent pricing — no lawyers required.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="/incorporate"
+                className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors"
+              >
+                Incorporate Now
+                <ArrowRight size={16} />
+              </Link>
+              <Link
+                href="/pricing"
+                className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
+              >
+                View Pricing
+              </Link>
+            </div>
+            <div className="mt-12 flex flex-wrap gap-6 text-sm text-gray-400">
+              <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Government fees included</span>
+              <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Documents in 24 hours</span>
+              <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Expert team review</span>
+            </div>
           </div>
-          <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] mb-8 max-w-4xl">
-            Business Incorporation.{" "}
-            <span className="text-gold-400">Easy. Fast.<br />Affordable.</span>
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed mb-10">
-            Incorporate your business in Canada in as little as 24 hours. 100% online,
-            government-compliant filings, transparent pricing — no lawyers required.
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href="/incorporate"
-              className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors"
-            >
-              Incorporate Now
-              <ArrowRight size={16} />
-            </Link>
-            <Link
-              href="/pricing"
-              className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
-            >
-              View Pricing
-            </Link>
-          </div>
-          <div className="mt-12 flex flex-wrap gap-6 text-sm text-gray-400">
-            <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Government fees included</span>
-            <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Documents in 24 hours</span>
-            <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Expert team review</span>
+
+          {/* Right — contact form */}
+          <div className="w-full">
+            <HeroContactForm />
           </div>
         </div>
       </section>

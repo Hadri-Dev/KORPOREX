@@ -2,12 +2,23 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+**Inherits from** [`../CLAUDE.md`](../CLAUDE.md) — the universal development guidelines (project structure, tracking files, hard rules, session workflow). Read both at session start.
+
+## Tracking Files
+
+- [`progress.md`](progress.md) — current state, recent edits, next steps (update after every edit)
+- [`known-issues.md`](known-issues.md) — open bugs, deferred decisions, technical debt (read before editing nearby code)
+
+If either file is missing, create it from the templates in [`../CLAUDE.md`](../CLAUDE.md) before doing other work.
+
 ## Quick Start
 
 - **Dev server**: `npm run dev` — runs on `http://localhost:3000`
 - **Build**: `npm run build` — builds for production
-- **Lint**: `npm lint` — runs ESLint
+- **Lint**: `npm run lint` — runs ESLint (Next.js config)
 - **Production server**: `npm start` — after building
+
+TypeScript is in **strict mode** (`tsconfig.json`) — no implicit `any`, strict null checks. Resolve type errors at the source; do not use `as any` or `// @ts-ignore` to silence them.
 
 ## Tech Stack
 

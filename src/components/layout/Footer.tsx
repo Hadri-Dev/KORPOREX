@@ -35,11 +35,11 @@ export default function Footer() {
             <ul className="space-y-3">
               {(
                 [
-                  ["/", "Home"],
                   ["/about", "About Us"],
                   ["/services", "Services"],
                   ["/pricing", "Pricing"],
                   ["/faq", "FAQ"],
+                  ["/resources", "Resources"],
                   ["/contact", "Contact"],
                 ] as [string, string][]
               ).map(([href, label]) => (
