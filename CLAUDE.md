@@ -20,6 +20,14 @@ If either file is missing, create it from the templates in [`../CLAUDE.md`](../C
 
 TypeScript is in **strict mode** (`tsconfig.json`) — no implicit `any`, strict null checks. Resolve type errors at the source; do not use `as any` or `// @ts-ignore` to silence them.
 
+## Environment Variables
+
+Copy `.env.local.example` to `.env.local` (gitignored) and fill in. For Vercel, add the same variables in the project dashboard under **Settings → Environment Variables**, or via `vercel env add <NAME>` if the project is linked with `vercel link`.
+
+| Variable | Required | Purpose |
+|---|---|---|
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | No (feature-gated) | Enables Google Places address autocomplete in the incorporation wizard. Without it, address inputs fall back to plain text (the wizard still works). The `NEXT_PUBLIC_` prefix exposes the key to the browser — it must be HTTP-referrer restricted and API-scoped to Maps JavaScript + Places in Google Cloud Console. See `.env.local.example` for setup steps. |
+
 ## Tech Stack
 
 - **Framework**: Next.js 14 (App Router) with TypeScript
