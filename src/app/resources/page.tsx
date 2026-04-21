@@ -1,13 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, FileText, HelpCircle } from "lucide-react";
-
-type Article = {
-  slug: string;
-  category: string;
-  title: string;
-  excerpt: string;
-  readTime: string;
-};
+import { articles } from "./articles";
 
 type ResourceCategory = {
   icon: React.ElementType;
@@ -30,57 +23,6 @@ const categories: ResourceCategory[] = [
     icon: HelpCircle,
     title: "Jurisdiction Comparisons",
     description: "Federal vs. Ontario vs. BC — understand the differences before you choose.",
-  },
-];
-
-const articles: Article[] = [
-  {
-    slug: "#",
-    category: "Incorporation Guides",
-    title: "Federal vs. Provincial Incorporation: Which Is Right for Your Business?",
-    excerpt:
-      "Choosing between a federal and provincial corporation is one of the first decisions you'll make. We break down the key differences, costs, and trade-offs so you can choose with confidence.",
-    readTime: "6 min read",
-  },
-  {
-    slug: "#",
-    category: "Incorporation Guides",
-    title: "What Is a NUANS Name Search — and Do You Need One?",
-    excerpt:
-      "If you're incorporating federally or in certain provinces, a NUANS search is mandatory. Learn what it is, how it works, and what happens if your first-choice name is unavailable.",
-    readTime: "4 min read",
-  },
-  {
-    slug: "#",
-    category: "Compliance & Maintenance",
-    title: "Corporate Annual Returns in Canada: A Complete Guide",
-    excerpt:
-      "Every Canadian corporation must file an annual return. Deadlines, fees, and consequences of missing a filing differ by jurisdiction. Here's everything you need to know.",
-    readTime: "5 min read",
-  },
-  {
-    slug: "#",
-    category: "Compliance & Maintenance",
-    title: "What Is a Corporate Minute Book and Why Does Your Corporation Need One?",
-    excerpt:
-      "Canadian corporations are legally required to maintain a minute book. We explain what goes in it, who is responsible for keeping it, and what happens if you don't have one.",
-    readTime: "4 min read",
-  },
-  {
-    slug: "#",
-    category: "Jurisdiction Comparisons",
-    title: "Incorporating in Ontario: Everything You Need to Know",
-    excerpt:
-      "Ontario is home to the majority of Canadian small businesses. This guide walks through the Ontario Business Corporations Act, costs, timelines, and what you'll receive after filing.",
-    readTime: "7 min read",
-  },
-  {
-    slug: "#",
-    category: "Jurisdiction Comparisons",
-    title: "Incorporating in BC: A Step-by-Step Overview",
-    excerpt:
-      "British Columbia uses the BC Business Corporations Act and the BC Business Registry. Learn what makes BC incorporation unique and whether it's the right choice for your business.",
-    readTime: "6 min read",
   },
 ];
 
@@ -134,8 +76,8 @@ export default function ResourcesPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {articles.map(({ slug, category, title, excerpt, readTime }) => (
               <Link
-                key={title}
-                href={slug}
+                key={slug}
+                href={`/resources/${slug}`}
                 className="group flex flex-col border border-gray-100 hover:border-navy-900 transition-colors bg-cream-50 hover:bg-white"
               >
                 <div className="p-6 flex flex-col flex-1">

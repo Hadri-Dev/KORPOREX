@@ -16,11 +16,11 @@
 - **Why not fixed yet**: Payment integration depends on backend decisions (per issue above) and business setup (merchant account, pricing finalization).
 - **Logged**: 2026-04-21
 
-### [Severity: medium] Resources article links are placeholder anchors
-- **Where**: `src/app/resources/page.tsx` — every `Article.slug` is `"#"`.
-- **Symptom**: Clicking "Read more" on any article does nothing (jumps to top of page).
-- **Impact**: Visitors hit dead ends; SEO loses any potential article-page indexing.
-- **Why not fixed yet**: Article content not yet written; individual article pages not built.
+### [Severity: medium] No custom domain or professional email addresses yet
+- **Where**: Site-wide — currently deployed on Vercel's `*.vercel.app` subdomain; no `@korporex.*` email.
+- **Symptom**: Marketing site and (future) form-submission flow have no branded domain or email identity.
+- **Impact**: Credibility cost on a professional service site; can't launch form backend (receiving/sending email) until mailboxes exist.
+- **Why not fixed yet**: Domain registration and Google Workspace / Zoho setup are user-action steps, not code. Recommended starter mailboxes: `hello@`, `support@`, `noreply@`.
 - **Logged**: 2026-04-21
 
 ### [Severity: medium] No automated tests
@@ -37,13 +37,9 @@
 - **Why not fixed yet**: Renaming requires editing every `className` across the codebase. Documented in `CLAUDE.md` as a deliberate naming choice. Defer until a larger styling pass.
 - **Logged**: 2026-04-21
 
-### [Severity: low] Old project folder still on disk
-- **Where**: `C:\Users\marke\OneDrive\Documents\Korporex Website\` (separate from this `Projects\Korporex Website\`).
-- **Symptom**: Two clones of the same repo; risk of editing the wrong one.
-- **Impact**: Confusion, wasted disk space.
-- **Why not fixed yet**: Pending verification that latest commits push successfully to GitHub before old folder is deleted.
-- **Logged**: 2026-04-21
-
 ## Resolved
 
+- **2026-04-21** — Resources article links were placeholder `#` anchors — Built dynamic article pages at `/resources/[slug]` with full content for all six articles (see `src/app/resources/articles.ts` and `src/app/resources/[slug]/page.tsx`).
+- **2026-04-21** — Old project folder duplicate on disk — Verified uncommitted changes were identical to committed state in the active folder, then deleted `C:\Users\marke\OneDrive\Documents\Korporex Website\`.
+- **2026-04-21** — Site metadata used banned "advisory" language — Rewrote title and description in `src/app/layout.tsx` to incorporation-focused copy.
 - **2026-04-21** — `.claude/settings.local.json` was tracked in git — Untracked via `git rm --cached` and added `.claude/` to `.gitignore` (commit `d9a6aad`).
