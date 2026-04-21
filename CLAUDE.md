@@ -20,7 +20,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Context
 
-**Korporex** is an online business incorporation platform for Canadian entrepreneurs. It handles federal and provincial (Ontario, BC) incorporation with a modern, design-forward web experience. The business model is a service platform, NOT a law firm — never mention "legal advice" or "advisory" in content.
+**Korporex** is an online business incorporation platform for Canadian entrepreneurs. It handles federal and provincial (Ontario, BC) incorporation with a modern, design-forward web experience.
+
+⚠️ **CRITICAL: Korporex is NOT a law firm and does NOT provide legal advice.** This is non-negotiable. Never frame Korporex as providing legal services, consulting, or advisory. The platform is a document preparation and filing service only. All content must make this distinction clear.
+
+**Korporex is completely separate from Hadri Law.** They are independent entities with no affiliation. Do not confuse or combine the two brands.
 
 ## Key Design Decisions
 
@@ -123,10 +127,13 @@ src/
 
 ## Content Guidelines
 
-- **Zero legal language** — never mention lawyers, legal advice, consulting, or advisory services
+- **NOT a law firm** — Korporex is a document preparation and filing service. Never frame services as legal advice, legal consulting, or legal assistance. Banned phrases: "legal advice", "legal services", "legal consulting", "advisory", "lawyer", "attorney", "counsel"
+- **What we ARE** — "online incorporation platform", "document preparation service", "filing service", "business registration platform"
+- **Zero legal language** — never imply legal expertise or professional legal judgment
 - **Focus on simplicity and speed** — "24 hours", "100% online", "no lawyer required" are key themes
 - **Canadian context** — always reference Canadian jurisdictions, NUANS searches, corporate minute books, etc.
 - **Tone** — professional but approachable; speak to entrepreneurs
+- **Disclaimer** — footer includes: "Korporex is not a law firm and does not provide legal advice"
 
 ## Git & Deployment
 
