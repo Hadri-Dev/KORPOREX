@@ -5,7 +5,7 @@ const nextSteps = [
   {
     icon: Clock,
     title: "Filing in Progress",
-    body: "Our team is reviewing your application and will file it with the appropriate government registry within 24 hours (12 hours for Premium orders).",
+    body: "Your application will be submitted to the appropriate government registry within 24 hours (12 hours for Premium orders).",
   },
   {
     icon: Mail,

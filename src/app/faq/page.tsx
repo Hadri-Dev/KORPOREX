@@ -13,15 +13,15 @@ const categories: Category[] = [
     items: [
       {
         q: "What is Korporex?",
-        a: "Korporex is an online business incorporation and registration platform for Canadian entrepreneurs. We make it simple to incorporate your business, register a business name, file compliance documents, and more — all online, without the need for a lawyer.",
+        a: "Korporex is an online business incorporation and registration platform. We make it simple to incorporate a Canadian business, register a business name, and file compliance documents — all online. We serve Canadian entrepreneurs as well as international founders who want to incorporate a Canadian corporation.",
       },
       {
         q: "Who is Korporex for?",
-        a: "Korporex is designed for entrepreneurs, freelancers, small business owners, and startups who want to incorporate or register their business quickly and affordably. Whether you're a first-time founder or an experienced operator, our platform guides you through every step.",
+        a: "Korporex is designed for entrepreneurs, freelancers, small business owners, startups, and international founders who want to incorporate or register a Canadian business quickly. Whether you're a first-time founder based in Canada or an overseas founder setting up a Canadian entity, our platform guides you through every step.",
       },
       {
         q: "Is Korporex a law firm?",
-        a: "No. Korporex is a technology company and document preparation and filing service. We are not a law firm and do not provide legal advice. If you require legal advice specific to your situation, we recommend consulting a licensed lawyer. For the vast majority of standard incorporations, however, legal advice is not required.",
+        a: "No. Korporex is a technology company and document preparation and filing service. We are not a law firm and do not provide legal advice. If you require legal advice specific to your situation, we recommend consulting a licensed lawyer.",
       },
       {
         q: "Is my personal information secure?",
@@ -34,15 +34,15 @@ const categories: Category[] = [
     items: [
       {
         q: "What's the difference between federal and provincial incorporation?",
-        a: "A federal corporation (incorporated under the Canada Business Corporations Act) can operate anywhere in Canada under the same name and provides national name protection. A provincial corporation (such as Ontario or BC) is registered under provincial law and has the right to operate in that province. If you plan to operate in multiple provinces or want Canada-wide name protection, federal incorporation may be more appropriate. For businesses operating primarily in one province, provincial incorporation is typically simpler and more cost-effective.",
+        a: "A federal corporation (incorporated under the Canada Business Corporations Act) has its name protected nationwide and can carry on business in any province, subject to extra-provincial registration in each one. A provincial corporation (such as Ontario or BC) is created under provincial law and is automatically authorized to carry on business in the incorporating province, with name protection limited to that province. Each route produces a valid corporation — the practical differences are name-protection scope, government fees, and ongoing filings.",
       },
       {
         q: "Which jurisdiction should I choose?",
-        a: "For most businesses that operate primarily in one province, provincial incorporation is the right choice. It's simpler, often less expensive, and sufficient for the vast majority of businesses. Choose federal incorporation if you want Canada-wide name protection, plan to operate in multiple provinces, or have investors or partners who prefer a federal corporation. If you're genuinely unsure, starting with provincial is a safe choice — you can continue to a different jurisdiction later if needed.",
+        a: "There is no universally best jurisdiction — the right choice depends on your specific needs. Federal, Ontario, and British Columbia incorporations are each a valid path, and the decision typically comes down to where you plan to operate, how important nationwide name protection is, and your budget. Our Resources section has dedicated guides on each jurisdiction, and our wizard captures the information needed for any of the three.",
       },
       {
         q: "What is a NUANS name search?",
-        a: "NUANS (Newly Upgraded Automated Name Search) is a government-required database search for federal incorporations (and some provincial ones) that checks your proposed business name against existing registered corporations and trademarks. A NUANS report confirms whether your proposed name is available to use. Korporex handles the NUANS search on your behalf as part of our incorporation packages — no need to do this separately.",
+        a: "NUANS (Newly Upgraded Automated Name Search) is a government database search that checks your proposed corporation name against existing registered corporations and trademarks. It is required for federal, Ontario, and several other named provincial incorporations. If you incorporate as a numbered corporation (e.g., 1234567 Canada Inc.), no NUANS search is required. Korporex coordinates the NUANS search for you when needed, but the NUANS report fee is not included in our package price and is charged separately.",
       },
       {
         q: "What types of corporations can I incorporate?",
@@ -70,8 +70,8 @@ const categories: Category[] = [
         a: "Yes. Directors, shareholders, addresses, and other details can be updated through government filings after incorporation. Some changes (such as a corporate name change or changes to share structure) require Articles of Amendment. Korporex offers all common post-incorporation changes as separate services — you can find them on our Services page.",
       },
       {
-        q: "Do I need a lawyer to incorporate?",
-        a: "No. Our platform is specifically designed so that the vast majority of standard incorporations can be completed without a lawyer. However, if your situation involves complex shareholder arrangements, professional licensing requirements, or if you have specific legal questions about your business structure, we recommend consulting a qualified lawyer before proceeding.",
+        q: "Do I need a lawyer to use Korporex?",
+        a: "Korporex is a document preparation and filing service — using our platform does not require engaging a lawyer. That said, if your situation involves complex shareholder arrangements, professional licensing requirements, tax planning, or other questions that require legal or tax judgement, we recommend consulting a qualified professional in addition to using our service.",
       },
     ],
   },
@@ -92,7 +92,11 @@ const categories: Category[] = [
       },
       {
         q: "Do prices include taxes?",
-        a: "All prices are displayed in Canadian dollars (CAD) and exclude applicable federal and provincial taxes (HST/GST). The applicable tax amount will be shown clearly at checkout before you confirm your payment.",
+        a: "No. All prices are displayed in Canadian dollars (CAD) and exclude applicable Canadian federal and provincial taxes (GST/HST/QST). The applicable tax amount is calculated live as you fill out the incorporation form based on your billing address and shown clearly at checkout. International clients (billing outside Canada) are generally not charged Canadian sales tax.",
+      },
+      {
+        q: "Are NUANS fees included?",
+        a: "No. Government-mandated NUANS name-search report fees are not included in our package prices. If your incorporation requires a NUANS report (federal, Ontario, and certain other named provincial corporations), the report fee is charged separately. You can avoid the NUANS fee entirely by choosing a numbered corporation.",
       },
     ],
   },

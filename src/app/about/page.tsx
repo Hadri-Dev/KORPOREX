@@ -15,12 +15,12 @@ const values = [
   {
     icon: ShieldCheck,
     title: "Reliability",
-    description: "Every filing is reviewed by our experienced team before submission. We don't just process forms — we make sure they're correct the first time.",
+    description: "Every filing follows current federal and provincial corporate-registry requirements. We build checks into the platform so your application is filed correctly the first time.",
   },
   {
     icon: Globe,
     title: "Accessibility",
-    description: "Incorporation shouldn't require a lawyer or a trip to a government office. We've made it as simple as shopping online — available to any entrepreneur, anywhere.",
+    description: "Incorporation shouldn't require a trip to a government office. We've made it as simple as shopping online — available to Canadian and international founders alike.",
   },
 ];
 
@@ -41,14 +41,14 @@ export default function AboutPage() {
             About Korporex
           </p>
           <h1 className="font-serif text-5xl md:text-6xl font-bold text-navy-900 leading-tight mb-6">
-            Making Incorporation Simple
+            Making Canadian Incorporation
             <br />
-            for Every Canadian
+            Simple for Everyone
           </h1>
           <p className="text-lg text-gray-600 leading-relaxed max-w-2xl">
             Korporex is a Canadian technology company that makes it simple for entrepreneurs
-            to incorporate and manage their businesses entirely online — fast, affordable,
-            and without the need for a lawyer.
+            to incorporate and manage their businesses entirely online — fast, transparent,
+            and accessible to Canadian and international founders alike.
           </p>
         </div>
       </section>
@@ -59,22 +59,20 @@ export default function AboutPage() {
           <div className="md:col-span-3 space-y-5 text-gray-700 leading-relaxed">
             <h2 className="font-serif text-3xl font-bold text-navy-900 mb-6">Our Story</h2>
             <p>
-              Korporex was founded by a team of Canadian entrepreneurs and technologists who
-              had experienced firsthand how unnecessarily complicated and expensive incorporating
-              a business could be. Too often, founders were paying thousands of dollars to lawyers
-              for what amounted to a straightforward government filing — or worse, delaying
-              incorporation altogether because the process felt too daunting.
+              Korporex was built to make Canadian business incorporation straightforward and
+              affordable. Too often, founders delayed incorporation altogether because the process
+              felt daunting, or paid more than they needed to for what is, for most businesses, a
+              standard government filing.
             </p>
             <p>
-              We set out to change that. By combining technology with deep knowledge of Canadian
-              corporate registration requirements, we built a platform that allows any entrepreneur
-              — regardless of their background — to incorporate and manage their business entirely
-              online, in a fraction of the time and cost.
+              By combining technology with practical knowledge of Canadian corporate-registration
+              requirements, we built a platform that lets any founder — based in Canada or
+              internationally — incorporate and manage a Canadian business entirely online, in a
+              fraction of the time and cost of the traditional route.
             </p>
             <p>
-              Our mission is simple: make business incorporation as easy as opening a bank account.
-              Today, thousands of Canadian entrepreneurs from coast to coast have used Korporex
-              to get incorporated quickly, stay compliant, and grow with confidence.
+              Our mission is simple: make Canadian business incorporation as easy as opening a
+              bank account, for anyone who wants to start a business here.
             </p>
           </div>
           <div className="md:col-span-2">
@@ -120,8 +118,8 @@ export default function AboutPage() {
             <p className="text-sm text-gray-600 leading-relaxed">
               <strong className="text-gray-800">Important notice:</strong> Korporex is a document preparation
               and filing service. We are not a law firm and do not provide legal advice. For questions specific
-              to your business structure or legal obligations, we recommend consulting a licensed lawyer.
-              For the vast majority of standard incorporations, legal advice is not required to use our services.
+              to your business structure, tax position, or legal obligations, we recommend consulting a
+              qualified professional.
             </p>
           </div>
         </div>

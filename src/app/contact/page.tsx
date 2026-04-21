@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MapPin, Mail, Phone, MessageSquare } from "lucide-react";
+import { Mail, MessageSquare } from "lucide-react";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -101,25 +101,12 @@ export default function ContactPage() {
                   <Mail size={18} className="text-gold-500 shrink-0 mt-0.5" />
                   <div>
                     <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase mb-1">Email</p>
-                    <a href="mailto:support@korporex.com" className="text-sm text-gray-700 hover:text-navy-900">
-                      support@korporex.com
+                    <a href="mailto:contact@korporex.com" className="text-sm text-gray-700 hover:text-navy-900">
+                      contact@korporex.com
                     </a>
-                  </div>
-                </li>
-                <li className="flex items-start gap-4">
-                  <Phone size={18} className="text-gold-500 shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase mb-1">Phone</p>
-                    <a href="tel:+18880000000" className="text-sm text-gray-700 hover:text-navy-900">
-                      +1 (888) 000-0000
-                    </a>
-                  </div>
-                </li>
-                <li className="flex items-start gap-4">
-                  <MapPin size={18} className="text-gold-500 shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase mb-1">Office</p>
-                    <p className="text-sm text-gray-700">Toronto, Ontario, Canada</p>
+                    <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                      All enquiries — general questions, incorporation orders, and support.
+                    </p>
                   </div>
                 </li>
               </ul>
@@ -144,8 +131,8 @@ export default function ContactPage() {
 
             <div className="border-l-4 border-gold-500 pl-5">
               <p className="text-sm text-gray-600 italic leading-relaxed">
-                &ldquo;We respond to all enquiries within one business day. For urgent matters,
-                please call our office directly.&rdquo;
+                &ldquo;We respond to every message within one business day. Korporex is 100% online — we serve
+                Canadian entrepreneurs and international clients from anywhere.&rdquo;
               </p>
             </div>
           </div>

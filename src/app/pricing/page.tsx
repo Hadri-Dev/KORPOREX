@@ -31,7 +31,7 @@ const pricingData: Record<Jurisdiction, {
         "Federal corporate bylaws",
         "Certificate of Incorporation",
         "Digital document delivery",
-        "Expert team review",
+        "Digital document storage in your account",
       ],
     },
     {
@@ -76,7 +76,7 @@ const pricingData: Record<Jurisdiction, {
         "Corporate bylaws",
         "Certificate of Incorporation",
         "Digital document delivery",
-        "Expert team review",
+        "Digital document storage in your account",
       ],
     },
     {
@@ -121,7 +121,7 @@ const pricingData: Record<Jurisdiction, {
         "Corporate bylaws",
         "BC Business Registry filing",
         "Digital document delivery",
-        "Expert team review",
+        "Digital document storage in your account",
       ],
     },
     {
@@ -158,11 +158,11 @@ const pricingData: Record<Jurisdiction, {
 
 const everythingIncluded = [
   "All government filing fees (no hidden costs)",
-  "Expert team review before every submission",
   "Digital document delivery within 24 hours",
   "Secure document storage in your Korporex account",
   "Post-filing Q&A support by email",
   "Filing confirmation and tracking",
+  "Available to Canadian and international founders",
 ];
 
 export default function PricingPage() {
@@ -181,8 +181,8 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="text-lg text-gray-600 max-w-xl mx-auto">
-            All prices include government filing fees. No billable hours, no surprise invoices.
-            Pick a package and get incorporated in as little as 24 hours.
+            All prices are in Canadian dollars and include government filing fees.
+            Applicable taxes and NUANS name-search fees are not included and will be shown separately at checkout.
           </p>
         </div>
       </section>

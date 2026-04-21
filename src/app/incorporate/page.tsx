@@ -1,34 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, FormProvider, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
 import { Check, Plus, Trash2, ChevronLeft } from "lucide-react";
+import NaicsCombobox from "@/components/NaicsCombobox";
+import AddressAutocomplete, { type ParsedAddress } from "@/components/AddressAutocomplete";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
 type Jurisdiction = "federal" | "ontario" | "bc";
 type Pkg = "basic" | "standard" | "premium";
+type CorpNameType = "named" | "numbered";
+
+interface Address {
+  street: string;
+  city: string;
+  region: string;
+  postalCode: string;
+  country: string;
+}
 
 interface Director {
   firstName: string; lastName: string; email: string;
-  address: string; city: string; province: string;
-  postalCode: string; dateOfBirth: string; isCanadianResident: boolean;
+  dateOfBirth: string; isCanadianResident: boolean;
+  address: Address;
 }
 interface Shareholder {
   firstName: string; lastName: string;
-  address: string; city: string; province: string;
   shareClass: string; numberOfShares: string;
+  address: Address;
 }
 interface WizardData {
   jurisdiction: Jurisdiction; pkg: Pkg;
-  businessName: string; needsNuans: boolean;
-  businessActivity: string; fiscalYearEnd: string;
-  directors: Director[]; shareholders: Shareholder[];
-  regAddress: string; regCity: string; regProvince: string; regPostalCode: string;
+  corpNameType: CorpNameType;
+  businessName: string;
+  naicsCode: string;
+  businessActivity: string;
+  fiscalYearEndMonth: string;
+  fiscalYearEndDay: string;
+  directors: Director[];
+  shareholders: Shareholder[];
+  regOffice: Address;
+  billingName: string;
+  billingAddress: Address;
 }
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -40,20 +58,84 @@ const PRICES: Record<Jurisdiction, Record<Pkg, number>> = {
 };
 
 const PKG_FEATURES: Record<Pkg, string[]> = {
-  basic:    ["Articles of Incorporation", "NUANS search (federal)", "Corporate bylaws", "Certificate of Incorporation", "Digital document delivery"],
+  basic:    ["Articles of Incorporation", "Corporate bylaws", "Certificate of Incorporation", "Digital document delivery", "Digital document storage"],
   standard: ["Everything in Basic", "Corporate minute book", "Share certificates", "Banking resolution", "Registered office (1 month)"],
   premium:  ["Everything in Standard", "1-year registered office", "First annual return filing", "Priority 12-hour turnaround", "Dedicated account support"],
 };
 
-const PROVINCES = ["AB","BC","MB","NB","NL","NS","NT","NU","ON","PE","QC","SK","YT"];
-const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+// NUANS / name-search pass-through fee. Applies to federal and Ontario named
+// corporations; BC uses a separate Name Approval process not billed here.
+// Adjust when actual NUANS pass-through pricing is finalized.
+const NUANS_FEE = 45;
+
+const CA_PROVINCES = [
+  { code: "AB", name: "Alberta" },
+  { code: "BC", name: "British Columbia" },
+  { code: "MB", name: "Manitoba" },
+  { code: "NB", name: "New Brunswick" },
+  { code: "NL", name: "Newfoundland and Labrador" },
+  { code: "NS", name: "Nova Scotia" },
+  { code: "NT", name: "Northwest Territories" },
+  { code: "NU", name: "Nunavut" },
+  { code: "ON", name: "Ontario" },
+  { code: "PE", name: "Prince Edward Island" },
+  { code: "QC", name: "Quebec" },
+  { code: "SK", name: "Saskatchewan" },
+  { code: "YT", name: "Yukon" },
+];
+
+const US_STATES = [
+  "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD",
+  "MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
+  "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","DC",
+];
+
+// Short list of common countries; the free-text fallback keeps anywhere supported.
+const COUNTRIES = [
+  { code: "CA", name: "Canada" },
+  { code: "US", name: "United States" },
+  { code: "GB", name: "United Kingdom" },
+  { code: "AU", name: "Australia" },
+  { code: "IN", name: "India" },
+  { code: "DE", name: "Germany" },
+  { code: "FR", name: "France" },
+  { code: "IE", name: "Ireland" },
+  { code: "NZ", name: "New Zealand" },
+  { code: "SG", name: "Singapore" },
+  { code: "AE", name: "United Arab Emirates" },
+  { code: "OTHER", name: "Other / not listed" },
+];
+
+const MONTHS = [
+  { name: "January", days: 31 }, { name: "February", days: 28 }, { name: "March", days: 31 },
+  { name: "April", days: 30 }, { name: "May", days: 31 }, { name: "June", days: 30 },
+  { name: "July", days: 31 }, { name: "August", days: 31 }, { name: "September", days: 30 },
+  { name: "October", days: 31 }, { name: "November", days: 30 }, { name: "December", days: 31 },
+];
+
 const SHARE_CLASSES = ["Common","Preferred","Class A","Class B"];
 const STEP_LABELS = ["Jurisdiction","Package","Business Info","Directors","Shareholders","Office Address","Review & Pay"];
 
+// Non-superiority-language jurisdiction descriptions (each is a valid choice).
 const JURISDICTION_INFO = [
-  { id: "federal" as Jurisdiction, label: "Federal", sub: "Canada Business Corporations Act", desc: "Operate anywhere in Canada. National name protection. Preferred by investors and multi-province businesses." },
-  { id: "ontario" as Jurisdiction, label: "Ontario", sub: "Ontario Business Corporations Act", desc: "Best for businesses based primarily in Ontario. Fast processing, straightforward filings." },
-  { id: "bc" as Jurisdiction, label: "British Columbia", sub: "BC Business Corporations Act", desc: "Best for businesses based primarily in British Columbia. Modern corporate legislation." },
+  {
+    id: "federal" as Jurisdiction,
+    label: "Federal",
+    sub: "Canada Business Corporations Act",
+    desc: "Country-wide name protection. You can carry on business in any province with extra-provincial registration.",
+  },
+  {
+    id: "ontario" as Jurisdiction,
+    label: "Ontario",
+    sub: "Ontario Business Corporations Act",
+    desc: "Provincial corporation created under Ontario law. Automatic authorization to carry on business in Ontario.",
+  },
+  {
+    id: "bc" as Jurisdiction,
+    label: "British Columbia",
+    sub: "BC Business Corporations Act",
+    desc: "Provincial corporation under BC's modern corporate legislation; fully online filing system.",
+  },
 ];
 
 const PKG_INFO: { id: Pkg; label: string; desc: string }[] = [
@@ -62,66 +144,84 @@ const PKG_INFO: { id: Pkg; label: string; desc: string }[] = [
   { id: "premium",  label: "Premium",  desc: "Complete package with 1-year registered office and annual return." },
 ];
 
-// ─── Zod Schemas ─────────────────────────────────────────────────────────────
+// Canadian sales-tax rates (indicative — GST/HST only; PST registrations not yet held).
+// Used for live tax calculation on checkout based on the billing address.
+const CA_TAX_RATES: Record<string, number> = {
+  ON: 0.13,
+  NB: 0.15, NS: 0.15, PE: 0.15, NL: 0.15,
+  BC: 0.05, AB: 0.05, MB: 0.05, SK: 0.05, NT: 0.05, YT: 0.05, NU: 0.05,
+  QC: 0.14975,
+};
+function getTaxRate(country: string, region: string): number {
+  if (country !== "CA") return 0;
+  return CA_TAX_RATES[region] ?? 0;
+}
 
-const postalRx = /^[A-Za-z]\d[A-Za-z][ ]?\d[A-Za-z]\d$/;
+// ─── Schemas ─────────────────────────────────────────────────────────────────
+
+const addressSchema = z.object({
+  street: z.string().min(1, "Required"),
+  city: z.string().min(1, "Required"),
+  region: z.string().min(1, "Required"),
+  postalCode: z.string().min(3, "Required").max(12),
+  country: z.string().min(2, "Required"),
+});
 
 const directorSchema = z.object({
   firstName: z.string().min(1, "Required"),
   lastName: z.string().min(1, "Required"),
   email: z.string().email("Valid email required"),
-  address: z.string().min(1, "Required"),
-  city: z.string().min(1, "Required"),
-  province: z.string().min(1, "Required"),
-  postalCode: z.string().regex(postalRx, "Valid Canadian postal code (e.g. M5V 3A8)"),
   dateOfBirth: z.string().min(1, "Required"),
   isCanadianResident: z.boolean(),
+  address: addressSchema,
 });
 
 const shareholderSchema = z.object({
   firstName: z.string().min(1, "Required"),
   lastName: z.string().min(1, "Required"),
-  address: z.string().min(1, "Required"),
-  city: z.string().min(1, "Required"),
-  province: z.string().min(1, "Required"),
   shareClass: z.string().min(1, "Required"),
   numberOfShares: z.string().min(1, "Required").refine(
     (v) => !isNaN(Number(v)) && Number(v) > 0,
     "Must be a positive number"
   ),
+  address: addressSchema,
 });
 
 const s3 = z.object({
-  businessName: z.string().min(2, "At least 2 characters required").max(120),
-  needsNuans: z.boolean(),
-  businessActivity: z.string().min(10, "Please describe your business activity"),
-  fiscalYearEnd: z.string().min(1, "Please select a fiscal year end"),
-});
+  corpNameType: z.enum(["named", "numbered"]),
+  businessName: z.string().max(120),
+  naicsCode: z.string().min(4, "Please select an industry classification"),
+  businessActivity: z.string().min(10, "Describe your business activity in at least a sentence"),
+  fiscalYearEndMonth: z.string().min(1, "Select a month"),
+  fiscalYearEndDay: z.string().min(1, "Select a day"),
+}).refine(
+  (v) => v.corpNameType === "numbered" || v.businessName.length >= 2,
+  { message: "At least 2 characters required", path: ["businessName"] }
+);
+
 const s4 = z.object({ directors: z.array(directorSchema).min(1) });
 const s5 = z.object({ shareholders: z.array(shareholderSchema).min(1) });
-const s6 = z.object({
-  regAddress: z.string().min(1, "Required"),
-  regCity: z.string().min(1, "Required"),
-  regProvince: z.string().min(1, "Required"),
-  regPostalCode: z.string().regex(postalRx, "Valid Canadian postal code required"),
-});
+const s6 = z.object({ regOffice: addressSchema });
 const s7 = z.object({
+  billingName: z.string().min(1, "Required"),
+  billingAddress: addressSchema,
   cardholderName: z.string().min(1, "Required"),
   cardNumber: z.string().min(13, "Valid card number required").max(19),
   expiry: z.string().regex(/^\d{2}\/\d{2}$/, "Format: MM/YY"),
   cvc: z.string().length(3, "Must be 3 digits"),
 });
 
-// ─── Reusable UI ──────────────────────────────────────────────────────────────
+// ─── Shared UI ───────────────────────────────────────────────────────────────
 
 const iCls = "w-full border border-gray-200 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors";
 const sCls = "w-full border border-gray-200 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-navy-900 bg-white transition-colors appearance-none";
 
-function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+function Field({ label, error, hint, children }: { label: string; error?: string; hint?: string; children: React.ReactNode }) {
   return (
     <div>
       <label className="block text-xs font-semibold tracking-[0.1em] uppercase text-gray-500 mb-1.5">{label}</label>
       {children}
+      {hint && !error && <p className="text-xs text-gray-500 mt-1">{hint}</p>}
       {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
     </div>
   );
@@ -144,13 +244,155 @@ function NextBtn({ label = "Continue", disabled = false }: { label?: string; dis
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getErr(errors: any, path: string): string | undefined {
+  return path.split(".").reduce((acc, k) => acc?.[k], errors)?.message;
+}
+
+// ─── AddressFields ───────────────────────────────────────────────────────────
+
+type AddressFieldsProps = {
+  prefix: string;
+  countryLock?: string;
+  regionLock?: string;
+  regionAllow?: string[];
+  labelPrefix?: string;
+};
+// Renders a structured address subform bound to the surrounding react-hook-form
+// context at `${prefix}.{street|city|region|postalCode|country}`. Uses
+// AddressAutocomplete for the street input; falls back to a plain input if the
+// Google Maps key is absent.
+function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPrefix }: AddressFieldsProps) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { register, watch, setValue, formState: { errors } } = useFormContext<any>();
+  const country: string = countryLock ?? watch(`${prefix}.country`) ?? "CA";
+  const region: string = watch(`${prefix}.region`) ?? "";
+  const street: string = watch(`${prefix}.street`) ?? "";
+  const L = labelPrefix ? `${labelPrefix} ` : "";
+
+  function applyParsed(p: ParsedAddress) {
+    if (p.street) setValue(`${prefix}.street`, p.street, { shouldValidate: true });
+    if (p.city) setValue(`${prefix}.city`, p.city, { shouldValidate: true });
+    if (p.postalCode) setValue(`${prefix}.postalCode`, p.postalCode, { shouldValidate: true });
+    if (!countryLock && p.country) setValue(`${prefix}.country`, p.country, { shouldValidate: true });
+    if (!regionLock && p.region) {
+      const effectiveCountry = countryLock ?? p.country;
+      if (effectiveCountry === "CA" && CA_PROVINCES.some((x) => x.code === p.region)) {
+        setValue(`${prefix}.region`, p.region, { shouldValidate: true });
+      } else if (effectiveCountry === "US" && US_STATES.includes(p.region)) {
+        setValue(`${prefix}.region`, p.region, { shouldValidate: true });
+      } else if (effectiveCountry !== "CA" && effectiveCountry !== "US") {
+        setValue(`${prefix}.region`, p.regionLong || p.region, { shouldValidate: true });
+      }
+    }
+  }
+
+  const countryRestrict = countryLock === "CA" ? ["ca"] : undefined;
+
+  let regionInput: React.ReactNode;
+  if (regionLock) {
+    regionInput = (
+      <>
+        <input type="hidden" {...register(`${prefix}.region`)} value={regionLock} />
+        <input value={regionLock} disabled className={`${iCls} bg-gray-50 text-gray-500`} />
+      </>
+    );
+  } else if (country === "CA") {
+    const allowed = regionAllow
+      ? CA_PROVINCES.filter((p) => regionAllow.includes(p.code))
+      : CA_PROVINCES;
+    regionInput = (
+      <select {...register(`${prefix}.region`)} className={sCls}>
+        <option value="">Select province…</option>
+        {allowed.map((p) => <option key={p.code} value={p.code}>{p.code} — {p.name}</option>)}
+      </select>
+    );
+  } else if (country === "US") {
+    regionInput = (
+      <select {...register(`${prefix}.region`)} className={sCls}>
+        <option value="">Select state…</option>
+        {US_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
+      </select>
+    );
+  } else {
+    regionInput = (
+      <input
+        {...register(`${prefix}.region`)}
+        placeholder="State / province / region"
+        className={iCls}
+      />
+    );
+  }
+
+  const postalPlaceholder =
+    country === "CA" ? "M5V 3A8" :
+    country === "US" ? "94103" :
+    country === "GB" ? "SW1A 1AA" :
+    "Postal / ZIP code";
+
+  return (
+    <div className="space-y-4">
+      <Field label={`${L}Street Address *`} error={getErr(errors, `${prefix}.street`)}>
+        <AddressAutocomplete
+          value={street}
+          onChange={(v) => setValue(`${prefix}.street`, v, { shouldValidate: true })}
+          onAddressSelected={applyParsed}
+          countryRestrict={countryRestrict}
+          className={iCls}
+        />
+      </Field>
+
+      <div className="grid grid-cols-2 gap-4">
+        <Field label={`${L}City *`} error={getErr(errors, `${prefix}.city`)}>
+          <input {...register(`${prefix}.city`)} className={iCls} />
+        </Field>
+        <Field
+          label={`${L}${country === "US" ? "State" : country === "CA" ? "Province" : "Region"} *`}
+          error={getErr(errors, `${prefix}.region`)}
+        >
+          {regionInput}
+        </Field>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <Field label={`${L}Postal / ZIP *`} error={getErr(errors, `${prefix}.postalCode`)}>
+          <input {...register(`${prefix}.postalCode`)} placeholder={postalPlaceholder} className={iCls} />
+        </Field>
+        <Field label={`${L}Country *`} error={getErr(errors, `${prefix}.country`)}>
+          {countryLock ? (
+            <>
+              <input type="hidden" {...register(`${prefix}.country`)} value={countryLock} />
+              <input
+                value={COUNTRIES.find((c) => c.code === countryLock)?.name ?? countryLock}
+                disabled
+                className={`${iCls} bg-gray-50 text-gray-500`}
+              />
+            </>
+          ) : (
+            <select {...register(`${prefix}.country`)} className={sCls}
+              onChange={(e) => {
+                setValue(`${prefix}.country`, e.target.value, { shouldValidate: true });
+                // Reset region when country changes so the selector matches the new list.
+                if ((e.target.value !== country) && region) {
+                  setValue(`${prefix}.region`, "", { shouldValidate: false });
+                }
+              }}
+            >
+              {COUNTRIES.map((c) => <option key={c.code} value={c.code}>{c.name}</option>)}
+            </select>
+          )}
+        </Field>
+      </div>
+    </div>
+  );
+}
+
 // ─── Progress Bar ─────────────────────────────────────────────────────────────
 
 function ProgressBar({ current }: { current: number }) {
   return (
     <div className="bg-white border-b border-gray-100 px-6 py-4 sticky top-[72px] z-40">
       <div className="max-w-4xl mx-auto">
-        {/* Mobile */}
         <div className="flex md:hidden items-center justify-between mb-2">
           <span className="text-sm font-medium text-navy-900">Step {current} of {STEP_LABELS.length}</span>
           <span className="text-sm text-gray-500 font-medium">{STEP_LABELS[current - 1]}</span>
@@ -158,7 +400,6 @@ function ProgressBar({ current }: { current: number }) {
         <div className="md:hidden w-full bg-gray-100 h-1.5 rounded-full">
           <div className="bg-navy-900 h-1.5 rounded-full transition-all" style={{ width: `${(current / STEP_LABELS.length) * 100}%` }} />
         </div>
-        {/* Desktop */}
         <div className="hidden md:flex items-center gap-0">
           {STEP_LABELS.map((label, idx) => {
             const num = idx + 1;
@@ -194,7 +435,10 @@ function Step1({ value, onChange, onNext }: { value: Jurisdiction; onChange: (v:
   return (
     <div className="max-w-xl mx-auto px-6 py-12">
       <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Choose Your Jurisdiction</h2>
-      <p className="text-gray-500 text-sm mb-8">Where will your business primarily operate?</p>
+      <p className="text-gray-500 text-sm mb-8">
+        Each of the three Canadian jurisdictions we support is a valid incorporation route. The right
+        choice depends on where you plan to operate, the name-protection scope you need, and your budget.
+      </p>
       <div className="space-y-3 mb-6">
         {JURISDICTION_INFO.map(({ id, label, sub, desc }) => (
           <button key={id} onClick={() => onChange(id)}
@@ -213,7 +457,7 @@ function Step1({ value, onChange, onNext }: { value: Jurisdiction; onChange: (v:
         ))}
       </div>
       <p className="text-xs text-gray-500 mb-5">
-        Not sure which to choose?{" "}
+        Still weighing the options?{" "}
         <Link href="/faq" className="underline underline-offset-2 text-navy-900" target="_blank">Read our FAQ</Link>
       </p>
       <button onClick={onNext}
@@ -275,286 +519,489 @@ function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
 // ─── Step 3 — Business Info ───────────────────────────────────────────────────
 
 type S3 = z.infer<typeof s3>;
-function Step3({ jurisdiction, def, onNext, onBack }: { jurisdiction: Jurisdiction; def: Partial<S3>; onNext: (d: S3) => void; onBack: () => void }) {
-  const { register, handleSubmit, formState: { errors } } = useForm<S3>({
+
+function Step3({ jurisdiction, def, onNext, onBack }: {
+  jurisdiction: Jurisdiction;
+  def: Partial<S3>;
+  onNext: (d: S3) => void;
+  onBack: () => void;
+}) {
+  const form = useForm<S3>({
     resolver: zodResolver(s3),
-    defaultValues: { needsNuans: jurisdiction === "federal", ...def },
+    defaultValues: {
+      corpNameType: "named",
+      businessName: "",
+      naicsCode: "",
+      businessActivity: "",
+      fiscalYearEndMonth: "",
+      fiscalYearEndDay: "",
+      ...def,
+    },
   });
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = form;
+  const corpNameType = watch("corpNameType");
+  const month = watch("fiscalYearEndMonth");
+  const naicsCode = watch("naicsCode");
+
+  const dayOptions = useMemo(() => {
+    const rec = MONTHS.find((m) => m.name === month);
+    if (!rec) return [] as number[];
+    return Array.from({ length: rec.days }, (_, i) => i + 1);
+  }, [month]);
+
+  const nameSearchLabel =
+    jurisdiction === "federal" ? "NUANS name search" :
+    jurisdiction === "ontario" ? "Ontario name search" :
+    "BC name approval";
+
+  const nameSearchApplies = jurisdiction === "federal" || jurisdiction === "ontario";
+
   return (
-    <div className="max-w-xl mx-auto px-6 py-12">
-      <BackBtn onClick={onBack} />
-      <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Business Details</h2>
-      <p className="text-gray-500 text-sm mb-8">Tell us about the business you&apos;re incorporating.</p>
-      <form onSubmit={handleSubmit(onNext)} className="space-y-5">
-        <Field label="Proposed Corporation Name *" error={errors.businessName?.message}>
-          <input {...register("businessName")} placeholder='e.g. "Acme Technologies Inc."' className={iCls} />
-          <p className="text-xs text-gray-500 mt-1">Must include a legal ending: Inc., Ltd., Corp., or Limited.</p>
-        </Field>
-        {jurisdiction === "federal" && (
-          <div className="flex items-start gap-3 bg-cream-50 border border-gray-200 p-4">
-            <input type="checkbox" id="nuans" {...register("needsNuans")} className="mt-0.5 shrink-0 accent-navy-900" />
-            <label htmlFor="nuans" className="text-sm text-gray-700 cursor-pointer leading-snug">
-              <span className="font-medium">Include NUANS name search</span> — Required for federal incorporations.
-              Confirms your proposed name is available. <span className="text-navy-900 font-medium">(Included in your package)</span>
-            </label>
+    <FormProvider {...form}>
+      <div className="max-w-xl mx-auto px-6 py-12">
+        <BackBtn onClick={onBack} />
+        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Business Details</h2>
+        <p className="text-gray-500 text-sm mb-8">Tell us about the business you&apos;re incorporating.</p>
+        <form onSubmit={handleSubmit(onNext)} className="space-y-5">
+          {/* Corporation name type */}
+          <Field label="Corporation Name Type *" error={errors.corpNameType?.message}>
+            <div className="grid grid-cols-2 gap-3">
+              {(["named", "numbered"] as const).map((t) => (
+                <button
+                  type="button"
+                  key={t}
+                  onClick={() => setValue("corpNameType", t, { shouldValidate: true })}
+                  className={`border px-4 py-3 text-left transition-colors ${
+                    corpNameType === t
+                      ? "border-navy-900 bg-navy-50"
+                      : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <p className="text-sm font-semibold text-navy-900">
+                    {t === "named" ? "Named" : "Numbered"}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {t === "named"
+                      ? "Pick your own corporate name (e.g. Acme Inc.)"
+                      : "Government-assigned (e.g. 1234567 Canada Inc.)"}
+                  </p>
+                </button>
+              ))}
+            </div>
+            <input type="hidden" {...register("corpNameType")} />
+          </Field>
+
+          {corpNameType === "named" ? (
+            <Field
+              label="Proposed Corporation Name *"
+              error={errors.businessName?.message}
+              hint="Must include a legal ending: Inc., Ltd., Corp., or Limited."
+            >
+              <input {...register("businessName")} placeholder='e.g. "Acme Technologies Inc."' className={iCls} />
+            </Field>
+          ) : (
+            <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-700 leading-relaxed">
+              <strong className="text-gray-800">Numbered corporation:</strong> A unique number will be assigned
+              by the government at incorporation. No name search is required, so no NUANS fee applies. You can
+              later file Articles of Amendment to adopt a name if you choose.
+            </div>
+          )}
+
+          {nameSearchApplies && corpNameType === "named" && (
+            <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-700 leading-relaxed">
+              <strong className="text-gray-800">{nameSearchLabel} required.</strong> A ${NUANS_FEE} report fee
+              applies and is shown separately at checkout. Choose a numbered corporation above to skip this fee.
+            </div>
+          )}
+          {!nameSearchApplies && (
+            <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-700 leading-relaxed">
+              British Columbia uses its own name-approval process rather than NUANS. We handle the Name Request
+              submission as part of your incorporation — no separate NUANS fee.
+            </div>
+          )}
+
+          {/* NAICS */}
+          <Field
+            label="Industry (NAICS Code) *"
+            error={errors.naicsCode?.message}
+            hint="Search by code, activity, or sector. This is required for several government registrations."
+          >
+            <NaicsCombobox
+              value={naicsCode}
+              onChange={(code) => setValue("naicsCode", code, { shouldValidate: true })}
+              error={errors.naicsCode?.message}
+            />
+          </Field>
+
+          {/* Business activity description */}
+          <Field label="Business Activity Description *" error={errors.businessActivity?.message} hint="A brief description of what your corporation will do.">
+            <textarea {...register("businessActivity")} rows={3}
+              placeholder="e.g. Software development and IT consulting for small businesses."
+              className={`${iCls} resize-none`} />
+          </Field>
+
+          {/* Fiscal year end: month + day */}
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Fiscal Year End — Month *" error={errors.fiscalYearEndMonth?.message}>
+              <select {...register("fiscalYearEndMonth")} className={sCls}
+                onChange={(e) => {
+                  setValue("fiscalYearEndMonth", e.target.value, { shouldValidate: true });
+                  // Reset day if it is now out of range for the new month.
+                  const rec = MONTHS.find((m) => m.name === e.target.value);
+                  const currentDay = Number(watch("fiscalYearEndDay"));
+                  if (rec && currentDay > rec.days) {
+                    setValue("fiscalYearEndDay", "", { shouldValidate: false });
+                  }
+                }}
+              >
+                <option value="">Month…</option>
+                {MONTHS.map((m) => <option key={m.name} value={m.name}>{m.name}</option>)}
+              </select>
+            </Field>
+            <Field label="Fiscal Year End — Day *" error={errors.fiscalYearEndDay?.message}>
+              <select {...register("fiscalYearEndDay")} className={sCls} disabled={!month}>
+                <option value="">{month ? "Day…" : "Select month first"}</option>
+                {dayOptions.map((d) => <option key={d} value={String(d)}>{d}</option>)}
+              </select>
+            </Field>
           </div>
-        )}
-        <Field label="Business Activity Description *" error={errors.businessActivity?.message}>
-          <textarea {...register("businessActivity")} rows={3} placeholder="e.g. Software development and IT consulting services for small businesses." className={`${iCls} resize-none`} />
-          <p className="text-xs text-gray-500 mt-1">A brief description of what your corporation will do.</p>
-        </Field>
-        <Field label="Fiscal Year End (Month) *" error={errors.fiscalYearEnd?.message}>
-          <select {...register("fiscalYearEnd")} className={sCls}>
-            <option value="">Select month...</option>
-            {MONTHS.map((m) => <option key={m} value={m}>{m}</option>)}
-          </select>
-          <p className="text-xs text-gray-500 mt-1">Most businesses choose December.</p>
-        </Field>
-        <NextBtn />
-      </form>
-    </div>
+          <p className="text-xs text-gray-500 -mt-3">Many corporations pick December 31; any date works.</p>
+
+          <NextBtn />
+        </form>
+      </div>
+    </FormProvider>
   );
 }
 
 // ─── Step 4 — Directors ───────────────────────────────────────────────────────
 
 type S4 = z.infer<typeof s4>;
-const emptyDir: Director = { firstName:"", lastName:"", email:"", address:"", city:"", province:"", postalCode:"", dateOfBirth:"", isCanadianResident: true };
+const emptyAddress: Address = { street: "", city: "", region: "", postalCode: "", country: "CA" };
+const emptyDir: Director = {
+  firstName: "", lastName: "", email: "",
+  dateOfBirth: "", isCanadianResident: true,
+  address: { ...emptyAddress },
+};
 
 function Step4({ def, onNext, onBack }: { def: Partial<S4>; onNext: (d: S4) => void; onBack: () => void }) {
-  const { register, handleSubmit, control, formState: { errors } } = useForm<S4>({
+  const form = useForm<S4>({
     resolver: zodResolver(s4),
     defaultValues: { directors: def.directors?.length ? def.directors : [emptyDir] },
   });
+  const { register, handleSubmit, control, formState: { errors } } = form;
   const { fields, append, remove } = useFieldArray({ control, name: "directors" });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const de = (errors.directors as any) ?? [];
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-12">
-      <BackBtn onClick={onBack} />
-      <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Directors</h2>
-      <p className="text-gray-500 text-sm mb-8">At least one director is required. Directors must be 18 or older.</p>
-      <form onSubmit={handleSubmit(onNext)} className="space-y-6">
-        {fields.map((field, i) => (
-          <div key={field.id} className="border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-5">
-              <p className="font-serif font-bold text-navy-900 text-base">Director {i + 1}</p>
-              {fields.length > 1 && (
-                <button type="button" onClick={() => remove(i)} className="text-xs text-red-500 flex items-center gap-1 hover:text-red-600">
-                  <Trash2 size={13} /> Remove
-                </button>
-              )}
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <Field label="First Name *" error={de[i]?.firstName?.message}><input {...register(`directors.${i}.firstName`)} className={iCls} /></Field>
-              <Field label="Last Name *" error={de[i]?.lastName?.message}><input {...register(`directors.${i}.lastName`)} className={iCls} /></Field>
-              <Field label="Email Address *" error={de[i]?.email?.message}><input type="email" {...register(`directors.${i}.email`)} className={iCls} /></Field>
-              <Field label="Date of Birth *" error={de[i]?.dateOfBirth?.message}><input type="date" {...register(`directors.${i}.dateOfBirth`)} className={iCls} /></Field>
-            </div>
-            <div className="mt-4 space-y-4">
-              <Field label="Street Address *" error={de[i]?.address?.message}><input {...register(`directors.${i}.address`)} placeholder="123 Main Street" className={iCls} /></Field>
-              <div className="grid grid-cols-3 gap-4">
-                <Field label="City *" error={de[i]?.city?.message}><input {...register(`directors.${i}.city`)} className={iCls} /></Field>
-                <Field label="Province *" error={de[i]?.province?.message}>
-                  <select {...register(`directors.${i}.province`)} className={sCls}>
-                    <option value="">Select...</option>
-                    {PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
-                  </select>
-                </Field>
-                <Field label="Postal Code *" error={de[i]?.postalCode?.message}><input {...register(`directors.${i}.postalCode`)} placeholder="M5V 3A8" className={iCls} /></Field>
+    <FormProvider {...form}>
+      <div className="max-w-2xl mx-auto px-6 py-12">
+        <BackBtn onClick={onBack} />
+        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Directors</h2>
+        <p className="text-gray-500 text-sm mb-8">At least one director is required. Directors must be 18 or older. International directors are supported — residency requirements vary by jurisdiction.</p>
+        <form onSubmit={handleSubmit(onNext)} className="space-y-6">
+          {fields.map((field, i) => (
+            <div key={field.id} className="border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-5">
+                <p className="font-serif font-bold text-navy-900 text-base">Director {i + 1}</p>
+                {fields.length > 1 && (
+                  <button type="button" onClick={() => remove(i)} className="text-xs text-red-500 flex items-center gap-1 hover:text-red-600">
+                    <Trash2 size={13} /> Remove
+                  </button>
+                )}
               </div>
-              <div className="flex items-center gap-3">
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <Field label="First Name *" error={de[i]?.firstName?.message}><input {...register(`directors.${i}.firstName`)} className={iCls} /></Field>
+                <Field label="Last Name *" error={de[i]?.lastName?.message}><input {...register(`directors.${i}.lastName`)} className={iCls} /></Field>
+                <Field label="Email Address *" error={de[i]?.email?.message}><input type="email" {...register(`directors.${i}.email`)} className={iCls} /></Field>
+                <Field label="Date of Birth *" error={de[i]?.dateOfBirth?.message}><input type="date" {...register(`directors.${i}.dateOfBirth`)} className={iCls} /></Field>
+              </div>
+              <AddressFields prefix={`directors.${i}.address`} />
+              <div className="flex items-center gap-3 mt-4">
                 <input type="checkbox" id={`resident-${i}`} {...register(`directors.${i}.isCanadianResident`)} className="shrink-0 accent-navy-900" />
                 <label htmlFor={`resident-${i}`} className="text-sm text-gray-700 cursor-pointer">Canadian resident</label>
               </div>
             </div>
-          </div>
-        ))}
-        <button type="button" onClick={() => append(emptyDir)}
-          className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
-          <Plus size={14} /> Add Another Director
-        </button>
-        <NextBtn />
-      </form>
-    </div>
+          ))}
+          <button type="button" onClick={() => append(emptyDir)}
+            className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
+            <Plus size={14} /> Add Another Director
+          </button>
+          <NextBtn />
+        </form>
+      </div>
+    </FormProvider>
   );
 }
 
 // ─── Step 5 — Shareholders ────────────────────────────────────────────────────
 
 type S5 = z.infer<typeof s5>;
-const emptySH: Shareholder = { firstName:"", lastName:"", address:"", city:"", province:"", shareClass:"Common", numberOfShares:"100" };
+const emptySH: Shareholder = {
+  firstName: "", lastName: "",
+  shareClass: "Common", numberOfShares: "100",
+  address: { ...emptyAddress },
+};
 
 function Step5({ def, onNext, onBack }: { def: Partial<S5>; onNext: (d: S5) => void; onBack: () => void }) {
-  const { register, handleSubmit, control, formState: { errors } } = useForm<S5>({
+  const form = useForm<S5>({
     resolver: zodResolver(s5),
     defaultValues: { shareholders: def.shareholders?.length ? def.shareholders : [emptySH] },
   });
+  const { register, handleSubmit, control, formState: { errors } } = form;
   const { fields, append, remove } = useFieldArray({ control, name: "shareholders" });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const se = (errors.shareholders as any) ?? [];
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-12">
-      <BackBtn onClick={onBack} />
-      <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Shareholders</h2>
-      <p className="text-gray-500 text-sm mb-8">List all initial shareholders of the corporation.</p>
-      <form onSubmit={handleSubmit(onNext)} className="space-y-6">
-        {fields.map((field, i) => (
-          <div key={field.id} className="border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-5">
-              <p className="font-serif font-bold text-navy-900 text-base">Shareholder {i + 1}</p>
-              {fields.length > 1 && (
-                <button type="button" onClick={() => remove(i)} className="text-xs text-red-500 flex items-center gap-1 hover:text-red-600">
-                  <Trash2 size={13} /> Remove
-                </button>
-              )}
+    <FormProvider {...form}>
+      <div className="max-w-2xl mx-auto px-6 py-12">
+        <BackBtn onClick={onBack} />
+        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Shareholders</h2>
+        <p className="text-gray-500 text-sm mb-8">List all initial shareholders of the corporation. International shareholders are supported.</p>
+        <form onSubmit={handleSubmit(onNext)} className="space-y-6">
+          {fields.map((field, i) => (
+            <div key={field.id} className="border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-5">
+                <p className="font-serif font-bold text-navy-900 text-base">Shareholder {i + 1}</p>
+                {fields.length > 1 && (
+                  <button type="button" onClick={() => remove(i)} className="text-xs text-red-500 flex items-center gap-1 hover:text-red-600">
+                    <Trash2 size={13} /> Remove
+                  </button>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <Field label="First Name *" error={se[i]?.firstName?.message}><input {...register(`shareholders.${i}.firstName`)} className={iCls} /></Field>
+                <Field label="Last Name *" error={se[i]?.lastName?.message}><input {...register(`shareholders.${i}.lastName`)} className={iCls} /></Field>
+                <Field label="Share Class *" error={se[i]?.shareClass?.message}>
+                  <select {...register(`shareholders.${i}.shareClass`)} className={sCls}>
+                    {SHARE_CLASSES.map((c) => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </Field>
+                <Field label="Number of Shares *" error={se[i]?.numberOfShares?.message}>
+                  <input type="number" min="1" {...register(`shareholders.${i}.numberOfShares`)} className={iCls} />
+                </Field>
+              </div>
+              <AddressFields prefix={`shareholders.${i}.address`} />
             </div>
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <Field label="First Name *" error={se[i]?.firstName?.message}><input {...register(`shareholders.${i}.firstName`)} className={iCls} /></Field>
-              <Field label="Last Name *" error={se[i]?.lastName?.message}><input {...register(`shareholders.${i}.lastName`)} className={iCls} /></Field>
-              <Field label="Share Class *" error={se[i]?.shareClass?.message}>
-                <select {...register(`shareholders.${i}.shareClass`)} className={sCls}>
-                  {SHARE_CLASSES.map((c) => <option key={c} value={c}>{c}</option>)}
-                </select>
-              </Field>
-              <Field label="Number of Shares *" error={se[i]?.numberOfShares?.message}>
-                <input type="number" min="1" {...register(`shareholders.${i}.numberOfShares`)} className={iCls} />
-              </Field>
-            </div>
-            <Field label="Street Address *" error={se[i]?.address?.message}><input {...register(`shareholders.${i}.address`)} placeholder="123 Main Street" className={iCls} /></Field>
-            <div className="grid grid-cols-3 gap-4 mt-4">
-              <Field label="City *" error={se[i]?.city?.message}><input {...register(`shareholders.${i}.city`)} className={iCls} /></Field>
-              <Field label="Province *" error={se[i]?.province?.message}>
-                <select {...register(`shareholders.${i}.province`)} className={sCls}>
-                  <option value="">Select...</option>
-                  {PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
-                </select>
-              </Field>
-              <div />
-            </div>
-          </div>
-        ))}
-        <button type="button" onClick={() => append(emptySH)}
-          className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
-          <Plus size={14} /> Add Another Shareholder
-        </button>
-        <NextBtn />
-      </form>
-    </div>
+          ))}
+          <button type="button" onClick={() => append(emptySH)}
+            className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
+            <Plus size={14} /> Add Another Shareholder
+          </button>
+          <NextBtn />
+        </form>
+      </div>
+    </FormProvider>
   );
 }
 
 // ─── Step 6 — Registered Office ───────────────────────────────────────────────
 
 type S6 = z.infer<typeof s6>;
-function Step6({ jurisdiction, def, onNext, onBack }: { jurisdiction: Jurisdiction; def: Partial<S6>; onNext: (d: S6) => void; onBack: () => void }) {
-  const { register, handleSubmit, formState: { errors } } = useForm<S6>({ resolver: zodResolver(s6), defaultValues: def });
-  const jurisLabel = jurisdiction === "federal" ? "any Canadian province" : jurisdiction === "ontario" ? "Ontario" : "British Columbia";
+function Step6({ jurisdiction, def, onNext, onBack }: {
+  jurisdiction: Jurisdiction;
+  def: Partial<S6>;
+  onNext: (d: S6) => void;
+  onBack: () => void;
+}) {
+  const regionLock = jurisdiction === "ontario" ? "ON" : jurisdiction === "bc" ? "BC" : undefined;
+  const regionAllow = jurisdiction === "federal" ? CA_PROVINCES.map((p) => p.code) : undefined;
+
+  const form = useForm<S6>({
+    resolver: zodResolver(s6),
+    defaultValues: {
+      regOffice: {
+        street: def.regOffice?.street ?? "",
+        city: def.regOffice?.city ?? "",
+        region: def.regOffice?.region ?? (regionLock ?? ""),
+        postalCode: def.regOffice?.postalCode ?? "",
+        country: "CA",
+      },
+    },
+  });
+  const { handleSubmit } = form;
+
+  const jurisLabel = jurisdiction === "federal" ? "any Canadian province or territory" : jurisdiction === "ontario" ? "Ontario" : "British Columbia";
+
   return (
-    <div className="max-w-xl mx-auto px-6 py-12">
-      <BackBtn onClick={onBack} />
-      <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Registered Office</h2>
-      <p className="text-gray-500 text-sm mb-8">Must be a physical address in {jurisLabel} — not a P.O. Box.</p>
-      <form onSubmit={handleSubmit(onNext)} className="space-y-5">
-        <Field label="Street Address *" error={errors.regAddress?.message}>
-          <input {...register("regAddress")} placeholder="123 Business Street" className={iCls} />
-        </Field>
-        <div className="grid grid-cols-2 gap-4">
-          <Field label="City *" error={errors.regCity?.message}><input {...register("regCity")} className={iCls} /></Field>
-          <Field label="Province *" error={errors.regProvince?.message}>
-            <select {...register("regProvince")} className={sCls}>
-              <option value="">Select...</option>
-              {PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
-            </select>
-          </Field>
-        </div>
-        <Field label="Postal Code *" error={errors.regPostalCode?.message}>
-          <input {...register("regPostalCode")} placeholder="M5V 3A8" className={`${iCls} max-w-[200px]`} />
-        </Field>
-        <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-600 leading-relaxed">
-          <strong className="text-gray-800">Standard &amp; Premium packages</strong> include a registered office address,
-          so you can use our address if you don&apos;t have a physical office location in the jurisdiction.
-        </div>
-        <NextBtn label="Continue to Review" />
-      </form>
-    </div>
+    <FormProvider {...form}>
+      <div className="max-w-xl mx-auto px-6 py-12">
+        <BackBtn onClick={onBack} />
+        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Registered Office</h2>
+        <p className="text-gray-500 text-sm mb-8">Must be a physical address in {jurisLabel} — not a P.O. Box.</p>
+        <form onSubmit={handleSubmit(onNext)} className="space-y-5">
+          <AddressFields
+            prefix="regOffice"
+            countryLock="CA"
+            regionLock={regionLock}
+            regionAllow={regionAllow}
+          />
+          <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-600 leading-relaxed">
+            <strong className="text-gray-800">Standard &amp; Premium packages</strong> include a registered
+            office address, so international founders and anyone without a physical office in the jurisdiction
+            can use ours.
+          </div>
+          <NextBtn label="Continue to Review" />
+        </form>
+      </div>
+    </FormProvider>
   );
 }
 
 // ─── Step 7 — Review & Pay ────────────────────────────────────────────────────
 
 type S7 = z.infer<typeof s7>;
-function Step7({ data, onBack, onPay }: { data: WizardData; onBack: () => void; onPay: () => void }) {
-  const { register, handleSubmit, formState: { errors } } = useForm<S7>({ resolver: zodResolver(s7) });
+function Step7({ data, onBack, onPay }: {
+  data: WizardData;
+  onBack: () => void;
+  onPay: (billing: { billingName: string; billingAddress: Address }) => void;
+}) {
+  const form = useForm<S7>({
+    resolver: zodResolver(s7),
+    defaultValues: {
+      billingName: data.billingName || "",
+      billingAddress: {
+        street: data.billingAddress.street || "",
+        city: data.billingAddress.city || "",
+        region: data.billingAddress.region || "",
+        postalCode: data.billingAddress.postalCode || "",
+        country: data.billingAddress.country || "CA",
+      },
+      cardholderName: "",
+      cardNumber: "",
+      expiry: "",
+      cvc: "",
+    },
+  });
+  const { register, handleSubmit, watch, formState: { errors } } = form;
+
+  const country = watch("billingAddress.country") || "CA";
+  const region = watch("billingAddress.region") || "";
+
   const price = PRICES[data.jurisdiction][data.pkg];
+  const nameSearchApplies =
+    (data.jurisdiction === "federal" || data.jurisdiction === "ontario") &&
+    data.corpNameType === "named";
+  const nuansFee = nameSearchApplies ? NUANS_FEE : 0;
+  const subtotal = price + nuansFee;
+  const taxRate = getTaxRate(country, region);
+  const tax = Math.round(subtotal * taxRate * 100) / 100;
+  const total = Math.round((subtotal + tax) * 100) / 100;
+
   const jurisLabel = { federal: "Federal (Canada)", ontario: "Ontario", bc: "British Columbia" }[data.jurisdiction];
   const pkgLabel = { basic: "Basic", standard: "Standard", premium: "Premium" }[data.pkg];
+  const corpName =
+    data.corpNameType === "numbered"
+      ? `Numbered corporation (${jurisLabel})`
+      : data.businessName || "—";
+
+  const submit = handleSubmit((d) => {
+    onPay({ billingName: d.billingName, billingAddress: d.billingAddress });
+  });
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-12">
-      <BackBtn onClick={onBack} />
-      <h2 className="font-serif text-3xl font-bold text-navy-900 mb-8">Review &amp; Pay</h2>
+    <FormProvider {...form}>
+      <div className="max-w-2xl mx-auto px-6 py-12">
+        <BackBtn onClick={onBack} />
+        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-8">Review &amp; Pay</h2>
 
-      {/* Order Summary */}
-      <div className="bg-cream-50 border border-gray-200 p-6 mb-8">
-        <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-4">Order Summary</p>
-        <div className="space-y-2.5 text-sm">
-          {[
-            ["Jurisdiction", jurisLabel],
-            ["Package", pkgLabel],
-            ["Corporation Name", data.businessName || "—"],
-            ["Directors", String(data.directors.length)],
-            ["Shareholders", String(data.shareholders.length)],
-            ["Registered Office", data.regCity ? `${data.regCity}, ${data.regProvince}` : "—"],
-          ].map(([k, v]) => (
-            <div key={k} className="flex justify-between">
-              <span className="text-gray-500">{k}</span>
-              <span className="font-medium text-gray-800 text-right">{v}</span>
-            </div>
-          ))}
-          <div className="border-t border-gray-300 pt-3 mt-1 flex justify-between items-baseline">
-            <span className="font-semibold text-gray-800">Total (excl. tax)</span>
-            <span className="font-serif text-3xl font-bold text-navy-900">${price}</span>
+        {/* Order Summary */}
+        <div className="bg-cream-50 border border-gray-200 p-6 mb-8">
+          <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-4">Order Summary</p>
+          <div className="space-y-2.5 text-sm">
+            {[
+              ["Jurisdiction", jurisLabel],
+              ["Package", pkgLabel],
+              ["Corporation", corpName],
+              ["Directors", String(data.directors.length)],
+              ["Shareholders", String(data.shareholders.length)],
+              ["Registered Office", data.regOffice.city ? `${data.regOffice.city}, ${data.regOffice.region}` : "—"],
+            ].map(([k, v]) => (
+              <div key={k} className="flex justify-between">
+                <span className="text-gray-500">{k}</span>
+                <span className="font-medium text-gray-800 text-right">{v}</span>
+              </div>
+            ))}
           </div>
-          <p className="text-xs text-gray-500">All government filing fees included. No hidden charges.</p>
+
+          <div className="border-t border-gray-300 mt-4 pt-3 space-y-1.5 text-sm">
+            <div className="flex justify-between">
+              <span className="text-gray-600">{pkgLabel} package ({jurisLabel})</span>
+              <span className="text-gray-800">${price.toFixed(2)}</span>
+            </div>
+            {nameSearchApplies && (
+              <div className="flex justify-between">
+                <span className="text-gray-600">NUANS name-search report</span>
+                <span className="text-gray-800">${nuansFee.toFixed(2)}</span>
+              </div>
+            )}
+            <div className="flex justify-between text-gray-600 pt-1 border-t border-dashed border-gray-200">
+              <span>Subtotal</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between text-gray-600">
+              <span>
+                {country === "CA"
+                  ? region
+                    ? `Tax (${(taxRate * 100).toFixed(taxRate === 0.14975 ? 3 : 0)}% — ${region})`
+                    : "Tax (select region below)"
+                  : "Tax (international — $0)"}
+              </span>
+              <span>${tax.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between items-baseline pt-2 border-t border-gray-300">
+              <span className="font-semibold text-gray-800">Total (CAD)</span>
+              <span className="font-serif text-3xl font-bold text-navy-900">${total.toFixed(2)}</span>
+            </div>
+            <p className="text-xs text-gray-500 pt-1">
+              Government filing fees are included in the package price. Taxes update live based on your
+              billing address below.
+            </p>
+          </div>
+        </div>
+
+        {/* Billing + payment */}
+        <div className="border border-gray-200 p-6">
+          <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-5">Billing Details</p>
+          <form onSubmit={submit} className="space-y-4">
+            <Field label="Billing Name *" error={errors.billingName?.message}>
+              <input {...register("billingName")} placeholder="Jane Smith or Acme Ltd." className={iCls} />
+            </Field>
+            <AddressFields prefix="billingAddress" labelPrefix="Billing" />
+
+            <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 pt-6 pb-1">Payment</p>
+            <Field label="Cardholder Name *" error={errors.cardholderName?.message}>
+              <input {...register("cardholderName")} placeholder="Jane Smith" className={iCls} />
+            </Field>
+            <Field label="Card Number *" error={errors.cardNumber?.message}>
+              <input {...register("cardNumber")} placeholder="1234 5678 9012 3456" maxLength={19} className={iCls} />
+            </Field>
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="Expiry (MM/YY) *" error={errors.expiry?.message}>
+                <input {...register("expiry")} placeholder="09/27" maxLength={5} className={iCls} />
+              </Field>
+              <Field label="CVC *" error={errors.cvc?.message}>
+                <input {...register("cvc")} placeholder="123" maxLength={3} className={iCls} />
+              </Field>
+            </div>
+            <p className="text-xs text-gray-400 flex items-center gap-1.5 mt-1">
+              🔒 Encrypted &amp; secure. Card details are never stored by Korporex.
+            </p>
+            <button type="submit"
+              className="w-full bg-gold-500 text-white font-medium py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors mt-2">
+              Pay ${total.toFixed(2)} — Submit Incorporation
+            </button>
+          </form>
+          <p className="text-xs text-gray-400 text-center mt-4">
+            By submitting you agree to our{" "}
+            <Link href="#" className="underline underline-offset-2">Terms of Service</Link> and{" "}
+            <Link href="#" className="underline underline-offset-2">Privacy Policy</Link>.
+          </p>
         </div>
       </div>
-
-      {/* Payment (stub) */}
-      <div className="border border-gray-200 p-6">
-        <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-5">Payment Details</p>
-        <form onSubmit={handleSubmit(onPay)} className="space-y-4">
-          <Field label="Cardholder Name *" error={errors.cardholderName?.message}>
-            <input {...register("cardholderName")} placeholder="Jane Smith" className={iCls} />
-          </Field>
-          <Field label="Card Number *" error={errors.cardNumber?.message}>
-            <input {...register("cardNumber")} placeholder="1234 5678 9012 3456" maxLength={19} className={iCls} />
-          </Field>
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="Expiry (MM/YY) *" error={errors.expiry?.message}>
-              <input {...register("expiry")} placeholder="09/27" maxLength={5} className={iCls} />
-            </Field>
-            <Field label="CVC *" error={errors.cvc?.message}>
-              <input {...register("cvc")} placeholder="123" maxLength={3} className={iCls} />
-            </Field>
-          </div>
-          <p className="text-xs text-gray-400 flex items-center gap-1.5 mt-1">
-            🔒 Encrypted &amp; secure. Card details are never stored by Korporex.
-          </p>
-          <button type="submit"
-            className="w-full bg-gold-500 text-white font-medium py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors mt-2">
-            Pay ${price} — Submit Incorporation
-          </button>
-        </form>
-        <p className="text-xs text-gray-400 text-center mt-4">
-          By submitting you agree to our{" "}
-          <Link href="#" className="underline underline-offset-2">Terms of Service</Link> and{" "}
-          <Link href="#" className="underline underline-offset-2">Privacy Policy</Link>.
-        </p>
-      </div>
-    </div>
+    </FormProvider>
   );
 }
 
@@ -562,9 +1009,15 @@ function Step7({ data, onBack, onPay }: { data: WizardData; onBack: () => void; 
 
 const init: WizardData = {
   jurisdiction: "ontario", pkg: "standard",
-  businessName: "", needsNuans: false, businessActivity: "", fiscalYearEnd: "",
+  corpNameType: "named",
+  businessName: "",
+  naicsCode: "",
+  businessActivity: "",
+  fiscalYearEndMonth: "", fiscalYearEndDay: "",
   directors: [], shareholders: [],
-  regAddress: "", regCity: "", regProvince: "", regPostalCode: "",
+  regOffice: { street: "", city: "", region: "", postalCode: "", country: "CA" },
+  billingName: "",
+  billingAddress: { street: "", city: "", region: "", postalCode: "", country: "CA" },
 };
 
 export default function IncorporatePage() {
@@ -580,15 +1033,34 @@ export default function IncorporatePage() {
       <div className="pb-20">
         {step === 1 && <Step1 value={data.jurisdiction} onChange={(jurisdiction) => patch({ jurisdiction })} onNext={() => setStep(2)} />}
         {step === 2 && <Step2 jurisdiction={data.jurisdiction} value={data.pkg} onChange={(pkg) => patch({ pkg })} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
-        {step === 3 && <Step3 jurisdiction={data.jurisdiction}
-          def={{ businessName: data.businessName, needsNuans: data.needsNuans, businessActivity: data.businessActivity, fiscalYearEnd: data.fiscalYearEnd }}
-          onNext={(d) => { patch(d); setStep(4); }} onBack={() => setStep(2)} />}
+        {step === 3 && <Step3
+          jurisdiction={data.jurisdiction}
+          def={{
+            corpNameType: data.corpNameType,
+            businessName: data.businessName,
+            naicsCode: data.naicsCode,
+            businessActivity: data.businessActivity,
+            fiscalYearEndMonth: data.fiscalYearEndMonth,
+            fiscalYearEndDay: data.fiscalYearEndDay,
+          }}
+          onNext={(d) => {
+            // Clear name for numbered corps so review screen reflects accurately.
+            const next = { ...d, businessName: d.corpNameType === "numbered" ? "" : d.businessName ?? "" };
+            patch(next);
+            setStep(4);
+          }}
+          onBack={() => setStep(2)}
+        />}
         {step === 4 && <Step4 def={{ directors: data.directors }} onNext={(d) => { patch(d); setStep(5); }} onBack={() => setStep(3)} />}
         {step === 5 && <Step5 def={{ shareholders: data.shareholders }} onNext={(d) => { patch(d); setStep(6); }} onBack={() => setStep(4)} />}
         {step === 6 && <Step6 jurisdiction={data.jurisdiction}
-          def={{ regAddress: data.regAddress, regCity: data.regCity, regProvince: data.regProvince, regPostalCode: data.regPostalCode }}
+          def={{ regOffice: data.regOffice }}
           onNext={(d) => { patch(d); setStep(7); }} onBack={() => setStep(5)} />}
-        {step === 7 && <Step7 data={data} onBack={() => setStep(6)} onPay={() => router.push("/incorporate/confirmation")} />}
+        {step === 7 && <Step7
+          data={data}
+          onBack={() => setStep(6)}
+          onPay={(billing) => { patch(billing); router.push("/incorporate/confirmation"); }}
+        />}
       </div>
     </div>
   );

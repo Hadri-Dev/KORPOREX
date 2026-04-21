@@ -18,9 +18,30 @@
 
 ### [Severity: medium] No custom domain or professional email addresses yet
 - **Where**: Site-wide — currently deployed on Vercel's `*.vercel.app` subdomain; no `@korporex.*` email.
-- **Symptom**: Marketing site and (future) form-submission flow have no branded domain or email identity.
-- **Impact**: Credibility cost on a professional service site; can't launch form backend (receiving/sending email) until mailboxes exist.
-- **Why not fixed yet**: Domain registration and Google Workspace / Zoho setup are user-action steps, not code. Recommended starter mailboxes: `hello@`, `support@`, `noreply@`.
+- **Symptom**: Marketing site and (future) form-submission flow have no branded domain or email identity. The site currently exposes `contact@korporex.com` as the enquiry address, but the mailbox doesn't exist yet.
+- **Impact**: Credibility cost on a professional service site; any message sent to `contact@korporex.com` bounces today; can't launch form backend (receiving/sending email) until mailboxes exist.
+- **Why not fixed yet**: Domain registration and Google Workspace / Zoho setup are user-action steps, not code. Recommended starter mailboxes: `contact@` (live, listed), `support@`, `noreply@`.
+- **Logged**: 2026-04-21
+
+### [Severity: medium] Address autofill is inactive until Google Maps key configured
+- **Where**: `src/components/AddressAutocomplete.tsx`; all address inputs in the incorporation wizard (`src/app/incorporate/page.tsx`).
+- **Symptom**: `AddressAutocomplete` falls back to a plain text input unless `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` is set. Users currently type the full address manually and fill city/region/postal code fields themselves.
+- **Impact**: No UX regression vs. the old wizard (fields always were manual), but the autofill feature ships inert until the key is added to Vercel env.
+- **Why not fixed yet**: Needs a Google Cloud project + Maps JavaScript API + Places API enabled + restricted browser key. User-action step.
+- **Logged**: 2026-04-21
+
+### [Severity: low] NUANS pass-through fee is a placeholder
+- **Where**: `src/app/incorporate/page.tsx` — `NUANS_FEE = 45`.
+- **Symptom**: Review step shows a $45 NUANS line item for federal and Ontario named corporations. This is an indicative number, not a confirmed pass-through price.
+- **Impact**: Customer-facing price may differ from actual NUANS report cost + handling once finalized.
+- **Why not fixed yet**: Pricing decision is pending. Constant is documented in a code comment so it's a one-line adjustment when final.
+- **Logged**: 2026-04-21
+
+### [Severity: low] Canadian sales-tax rates cover GST/HST only (no PST)
+- **Where**: `src/app/incorporate/page.tsx` — `CA_TAX_RATES` / `getTaxRate()`.
+- **Symptom**: Tax is charged as 5% in BC / SK / MB (GST-only) instead of the province-specific combined rate, because Korporex isn't currently registered to collect PST in any province.
+- **Impact**: Under-collects tax in PST provinces *if* Korporex ever registers to collect there. Correct today while unregistered.
+- **Why not fixed yet**: Accurate today given registration status. Revisit when/if PST registrations are obtained.
 - **Logged**: 2026-04-21
 
 ### [Severity: medium] No automated tests

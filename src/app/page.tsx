@@ -5,23 +5,22 @@ import HeroContactForm from "@/components/HeroContactForm";
 const featuredServices = [
   {
     jurisdiction: "Federal",
-    subtitle: "Operate Anywhere in Canada",
-    description: "Incorporate under the Canada Business Corporations Act. Protect your name coast to coast and operate in any province.",
+    subtitle: "Canada Business Corporations Act",
+    description: "Incorporate federally under the CBCA. Country-wide name protection and operate in any province (with extra-provincial registration).",
     from: "$499",
     href: "/incorporate?jurisdiction=federal",
   },
   {
     jurisdiction: "Ontario",
-    subtitle: "Ontario Provincial Corporation",
-    description: "Incorporate under the Ontario Business Corporations Act. Ideal for businesses operating primarily in Ontario.",
+    subtitle: "Ontario Business Corporations Act",
+    description: "Incorporate provincially in Ontario. Automatic authorization to carry on business throughout the province.",
     from: "$399",
     href: "/incorporate?jurisdiction=ontario",
-    featured: true,
   },
   {
     jurisdiction: "British Columbia",
-    subtitle: "BC Provincial Corporation",
-    description: "Incorporate under the BC Business Corporations Act. The preferred choice for entrepreneurs in British Columbia.",
+    subtitle: "BC Business Corporations Act",
+    description: "Incorporate provincially in British Columbia. Modern corporate legislation and a fully online filing system.",
     from: "$449",
     href: "/incorporate?jurisdiction=bc",
   },
@@ -36,12 +35,12 @@ const steps = [
   {
     number: "02",
     title: "Complete the Online Form",
-    description: "Answer a few questions about your business, directors, and shareholders. Takes about 10 minutes. No lawyer required.",
+    description: "Answer a few questions about your business, directors, and shareholders. Takes about 10 minutes, entirely online.",
   },
   {
     number: "03",
     title: "We File Within 24 Hours",
-    description: "Our team reviews your application and submits it to the government. Your incorporation documents arrive by email.",
+    description: "Your application is submitted to the government and your incorporation documents are delivered by email.",
   },
 ];
 
@@ -59,12 +58,12 @@ const whyUs = [
   {
     icon: ShieldCheck,
     title: "Government-Compliant",
-    description: "Every filing follows current government requirements and is reviewed by our team before submission.",
+    description: "Every filing follows current federal and provincial corporate-registry requirements.",
   },
   {
     icon: BadgeDollarSign,
     title: "Transparent Pricing",
-    description: "No hidden fees. Our prices include all government filing fees. The price you see is the price you pay.",
+    description: "Government filing fees included in our prices. Taxes and NUANS name-search fees are not included and shown separately at checkout.",
   },
 ];
 
@@ -106,7 +105,8 @@ export default function HomePage() {
             </h1>
             <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-10">
               Incorporate your business in Canada in as little as 24 hours. 100% online,
-              government-compliant filings, transparent pricing — no lawyers required.
+              government-compliant filings, and transparent pricing — available to Canadian
+              entrepreneurs and international founders alike.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
@@ -126,7 +126,7 @@ export default function HomePage() {
             <div className="mt-12 flex flex-wrap gap-6 text-sm text-gray-400">
               <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Government fees included</span>
               <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Documents in 24 hours</span>
-              <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Expert team review</span>
+              <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> 100% online filings</span>
             </div>
           </div>
 
@@ -148,21 +148,18 @@ export default function HomePage() {
               Choose Your Jurisdiction
             </h2>
             <p className="text-gray-600 mt-4 max-w-xl mx-auto">
-              We support federal and provincial incorporations across Canada. Not sure which to choose?{" "}
+              Federal, Ontario, and British Columbia — each is a valid choice depending on where you plan to
+              operate, the name-protection scope you need, and your budget. None is superior; the right pick
+              depends on your business.{" "}
               <Link href="/faq" className="text-navy-900 underline underline-offset-2">See our FAQ.</Link>
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {featuredServices.map(({ jurisdiction, subtitle, description, from, href, featured }) => (
+            {featuredServices.map(({ jurisdiction, subtitle, description, from, href }) => (
               <div
                 key={jurisdiction}
-                className={`flex flex-col p-8 border ${featured ? "border-navy-900 ring-1 ring-navy-900" : "border-gray-200"}`}
+                className="flex flex-col p-8 border border-gray-200 hover:border-navy-900 transition-colors"
               >
-                {featured && (
-                  <p className="text-xs font-semibold tracking-widest uppercase text-gold-500 mb-3">
-                    Most Popular
-                  </p>
-                )}
                 <p className="font-serif text-2xl font-bold text-navy-900 mb-1">{jurisdiction}</p>
                 <p className="text-sm text-gray-500 mb-4">{subtitle}</p>
                 <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-1">{description}</p>
