@@ -217,9 +217,14 @@ const iCls = "w-full border border-gray-200 px-4 py-2.5 text-sm text-gray-900 fo
 const sCls = "w-full border border-gray-200 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-navy-900 bg-white transition-colors appearance-none";
 
 function Field({ label, error, hint, children }: { label: string; error?: string; hint?: string; children: React.ReactNode }) {
+  const required = label.endsWith(" *");
+  const baseLabel = required ? label.slice(0, -2) : label;
   return (
     <div>
-      <label className="block text-xs font-semibold tracking-[0.1em] uppercase text-gray-500 mb-1.5">{label}</label>
+      <label className="block text-xs font-semibold tracking-[0.1em] uppercase text-gray-500 mb-1.5">
+        {baseLabel}
+        {required && <span className="text-red-500 ml-0.5">*</span>}
+      </label>
       {children}
       {hint && !error && <p className="text-xs text-gray-500 mt-1">{hint}</p>}
       {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
@@ -571,16 +576,16 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
                   type="button"
                   key={t}
                   onClick={() => setValue("corpNameType", t, { shouldValidate: true })}
-                  className={`border px-4 py-3 text-left transition-colors ${
+                  className={`group border px-4 py-3 text-left transition-colors hover:bg-navy-900 hover:border-navy-900 ${
                     corpNameType === t
                       ? "border-navy-900 bg-navy-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      : "border-gray-200"
                   }`}
                 >
-                  <p className="text-sm font-semibold text-navy-900">
+                  <p className="text-sm font-semibold text-navy-900 transition-colors group-hover:text-white">
                     {t === "named" ? "Named" : "Numbered"}
                   </p>
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p className="text-xs text-gray-500 mt-0.5 transition-colors group-hover:text-gray-300">
                     {t === "named"
                       ? "Pick your own corporate name (e.g. Acme Inc.)"
                       : "Government-assigned (e.g. 1234567 Canada Inc.)"}
