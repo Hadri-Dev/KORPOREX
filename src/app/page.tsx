@@ -158,19 +158,19 @@ export default function HomePage() {
             {featuredServices.map(({ jurisdiction, subtitle, description, from, href }) => (
               <div
                 key={jurisdiction}
-                className="flex flex-col p-8 border border-gray-200 hover:border-navy-900 transition-colors"
+                className="group flex flex-col p-8 border border-gray-200 transition-colors hover:bg-navy-900 hover:border-navy-900"
               >
-                <p className="font-serif text-2xl font-bold text-navy-900 mb-1">{jurisdiction}</p>
-                <p className="text-sm text-gray-500 mb-4">{subtitle}</p>
-                <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-1">{description}</p>
+                <p className="font-serif text-2xl font-bold text-navy-900 mb-1 transition-colors group-hover:text-white">{jurisdiction}</p>
+                <p className="text-sm text-gray-500 mb-4 transition-colors group-hover:text-gray-400">{subtitle}</p>
+                <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-1 transition-colors group-hover:text-gray-300">{description}</p>
                 <div className="flex items-end justify-between mt-auto">
                   <div>
-                    <p className="text-xs text-gray-500 mb-0.5">Starting from</p>
-                    <p className="font-serif text-3xl font-bold text-navy-900">{from}</p>
+                    <p className="text-xs text-gray-500 mb-0.5 transition-colors group-hover:text-gray-400">Starting from</p>
+                    <p className="font-serif text-3xl font-bold text-navy-900 transition-colors group-hover:text-white">{from}</p>
                   </div>
                   <Link
                     href={href}
-                    className="inline-flex items-center gap-1.5 bg-navy-900 text-white text-sm font-medium px-5 py-2.5 hover:bg-navy-800 transition-colors"
+                    className="inline-flex items-center gap-1.5 border border-navy-900 text-navy-900 text-sm font-medium px-5 py-2.5 transition-colors group-hover:bg-gold-500 group-hover:border-gold-500 group-hover:text-white"
                   >
                     Start <ArrowRight size={14} />
                   </Link>
