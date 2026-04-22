@@ -1,11 +1,18 @@
 # Progress
 
 ## Current Focus
-Marketing site + multi-step incorporation wizard. Resources section has real articles. Content cleaned up to remove legal/advisory language, jurisdiction superiority, placeholder phone/address, and "expert team review" phrasing. Wizard upgraded for international founders: numbered-corporation option, international addresses, NAICS picker, Google Places autofill (with no-key fallback), live GST/HST/QST tax calculation, and separate NUANS line item. Next focus: domain + professional email setup, then form-submission backend.
+Marketing site + multi-step incorporation wizard. Resources section has real articles. Content cleaned up to remove legal/advisory language, jurisdiction superiority, placeholder phone/address, and "expert team review" phrasing. Wizard upgraded for international founders: numbered-corporation option, international addresses, NAICS picker, Google Places autofill (now live in production), live GST/HST/QST tax calculation, and separate NUANS line item. Next focus: domain + professional email setup, then form-submission backend.
 
 ## Log
 
 ### 2026-04-21
+- **Google Maps address autofill is now LIVE in production**. Full setup done end-to-end:
+  - Created GCP project; enabled Maps JavaScript API + Places API.
+  - Generated browser key, restricted to HTTP referrers (`localhost:3000`, `*.vercel.app`, `korporex.com`, `korporex.ca`) and scoped to Maps JS + Places APIs only.
+  - Set `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` in Vercel across all environments and redeployed.
+  - Attached a billing profile to the GCP project — without it, Google returned `BillingNotEnabledMapError` on every request even though the key was valid. Free $200/mo Maps credit covers ~70k autocomplete sessions; real billing only triggers well above current traffic.
+  - User verified working: address fields on `/incorporate` return real Google Places suggestions and autofill street/city/region/postal/country on selection.
+  - Note: `korporex.com` currently serves a separate WordPress site (unrelated to this Next.js app). DNS cutover to point at Vercel is a future decision — not blocking anything today since the Vercel URL works and the API key's referrer list already includes the domain for whenever it switches over.
 - **Wizard upgrade** — Full rewrite of `src/app/incorporate/page.tsx`:
   - Step 3: toggle between **named** and **numbered** corporation (numbered skips NUANS fee).
   - Step 3: added **NAICS industry combobox** (`src/components/NaicsCombobox.tsx` backed by `src/lib/naics.ts` with ~420 curated Canadian NAICS 2022 codes + `searchNaics()` scoring).

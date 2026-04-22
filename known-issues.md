@@ -23,13 +23,6 @@
 - **Why not fixed yet**: Domain registration and Google Workspace / Zoho setup are user-action steps, not code. Recommended starter mailboxes: `contact@` (live, listed), `support@`, `noreply@`.
 - **Logged**: 2026-04-21
 
-### [Severity: medium] Address autofill is inactive until Google Maps key configured
-- **Where**: `src/components/AddressAutocomplete.tsx`; all address inputs in the incorporation wizard (`src/app/incorporate/page.tsx`).
-- **Symptom**: `AddressAutocomplete` falls back to a plain text input unless `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` is set. Users currently type the full address manually and fill city/region/postal code fields themselves.
-- **Impact**: No UX regression vs. the old wizard (fields always were manual), but the autofill feature ships inert until the key is added to Vercel env.
-- **Why not fixed yet**: Needs a Google Cloud project + Maps JavaScript API + Places API enabled + restricted browser key. User-action step.
-- **Logged**: 2026-04-21
-
 ### [Severity: low] NUANS pass-through fee is a placeholder
 - **Where**: `src/app/incorporate/page.tsx` — `NUANS_FEE = 45`.
 - **Symptom**: Review step shows a $45 NUANS line item for federal and Ontario named corporations. This is an indicative number, not a confirmed pass-through price.
@@ -60,6 +53,7 @@
 
 ## Resolved
 
+- **2026-04-21** — Address autofill was inactive on the deployed wizard — Created a Google Cloud project, enabled Maps JavaScript API + Places API, generated an HTTP-referrer + API-restricted browser key, set `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` in Vercel (all environments), redeployed, and attached a billing profile to the GCP project (required for the APIs to serve requests — free $200/mo Maps credit applies). Verified live on production: `/incorporate` address fields now return Google Places suggestions and autofill street / city / region / postal / country.
 - **2026-04-21** — Resources article links were placeholder `#` anchors — Built dynamic article pages at `/resources/[slug]` with full content for all six articles (see `src/app/resources/articles.ts` and `src/app/resources/[slug]/page.tsx`).
 - **2026-04-21** — Old project folder duplicate on disk — Verified uncommitted changes were identical to committed state in the active folder, then deleted `C:\Users\marke\OneDrive\Documents\Korporex Website\`.
 - **2026-04-21** — Site metadata used banned "advisory" language — Rewrote title and description in `src/app/layout.tsx` to incorporation-focused copy.
