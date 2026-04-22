@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="89mm" height="51mm" viewBox="0 0 89 51" role="img" aria-label="Korporex business card — front">
+  <title>Korporex — front</title>
+
+  <rect width="89" height="51" fill="#1B4332"/>
+
+  <rect x="3" y="3" width="83" height="45" fill="none" stroke="#C5A35A" stroke-width="0.12" opacity="0.55"/>
+
+  <text x="44.5" y="27" text-anchor="middle"
+        font-family="'Playfair Display', Georgia, 'Times New Roman', serif"
+        font-weight="700" font-size="22" fill="#C5A35A">K</text>
+
+  <text x="44.5" y="36" text-anchor="middle"
+        font-family="'Playfair Display', Georgia, 'Times New Roman', serif"
+        font-weight="700" font-size="4.2" fill="#C5A35A" letter-spacing="0.5">KORPOREX</text>
+
+  <line x1="41" y1="39" x2="48" y2="39" stroke="#C5A35A" stroke-width="0.15"/>
+
+  <text x="44.5" y="43" text-anchor="middle"
+        font-family="Inter, system-ui, -apple-system, sans-serif"
+        font-size="2" fill="#FAFAF8" letter-spacing="0.35" opacity="0.82">CANADIAN INCORPORATION · 100% ONLINE</text>
+</svg>

@@ -5,15 +5,34 @@ import { Mail, MessageSquare } from "lucide-react";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", email: "", company: "", message: "" });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
+    setError(null);
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...form, source: "contact-page" }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.error || "Send failed");
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error && err.message !== "Send failed" ? err.message : "Something went wrong. Please try again or email us at contact@korporex.com.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -83,9 +102,15 @@ export default function ContactPage() {
                     placeholder="Tell us about your business and what you need help with..."
                     className="w-full border border-gray-200 px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors resize-none" />
                 </div>
+                {error && (
+                  <p className="text-sm text-red-700 bg-red-50 border border-red-200 px-4 py-3" role="alert">
+                    {error}
+                  </p>
+                )}
                 <button type="submit"
-                  className="bg-navy-900 text-white font-medium px-8 py-3.5 text-sm tracking-wide hover:bg-navy-800 transition-colors">
-                  Send Message
+                  disabled={submitting}
+                  className="bg-navy-900 text-white font-medium px-8 py-3.5 text-sm tracking-wide hover:bg-navy-800 transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+                  {submitting ? "Sending…" : "Send Message"}
                 </button>
               </form>
             )}

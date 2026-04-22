@@ -17,14 +17,12 @@ const pricingData: Record<Jurisdiction, {
   price: string;
   description: string;
   features: string[];
-  featured: boolean;
 }[]> = {
   federal: [
     {
       name: "Basic",
       price: "$499",
       description: "Everything you need to get incorporated federally, including government fees.",
-      featured: false,
       features: [
         "Articles of Incorporation filing",
         "NUANS name search included",
@@ -38,7 +36,6 @@ const pricingData: Record<Jurisdiction, {
       name: "Standard",
       price: "$699",
       description: "Complete incorporation package with your full corporate minute book.",
-      featured: true,
       features: [
         "Everything in Basic",
         "Corporate minute book",
@@ -53,7 +50,6 @@ const pricingData: Record<Jurisdiction, {
       name: "Premium",
       price: "$999",
       description: "Full-service incorporation with ongoing compliance support for year one.",
-      featured: false,
       features: [
         "Everything in Standard",
         "1-year registered office address",
@@ -69,7 +65,6 @@ const pricingData: Record<Jurisdiction, {
       name: "Basic",
       price: "$399",
       description: "Everything you need to get incorporated in Ontario, including government fees.",
-      featured: false,
       features: [
         "Articles of Incorporation filing",
         "Ontario Business Identifier (OBI)",
@@ -83,7 +78,6 @@ const pricingData: Record<Jurisdiction, {
       name: "Standard",
       price: "$599",
       description: "Complete incorporation package with your full corporate minute book.",
-      featured: true,
       features: [
         "Everything in Basic",
         "Corporate minute book",
@@ -98,7 +92,6 @@ const pricingData: Record<Jurisdiction, {
       name: "Premium",
       price: "$899",
       description: "Full-service incorporation with ongoing compliance support for year one.",
-      featured: false,
       features: [
         "Everything in Standard",
         "1-year registered office address",
@@ -114,7 +107,6 @@ const pricingData: Record<Jurisdiction, {
       name: "Basic",
       price: "$449",
       description: "Everything you need to get incorporated in British Columbia, including government fees.",
-      featured: false,
       features: [
         "Certificate and Articles of Incorporation",
         "BC Company registration number",
@@ -128,7 +120,6 @@ const pricingData: Record<Jurisdiction, {
       name: "Standard",
       price: "$649",
       description: "Complete incorporation package with your full corporate minute book.",
-      featured: true,
       features: [
         "Everything in Basic",
         "Corporate minute book",
@@ -143,7 +134,6 @@ const pricingData: Record<Jurisdiction, {
       name: "Premium",
       price: "$949",
       description: "Full-service incorporation with ongoing compliance support for year one.",
-      featured: false,
       features: [
         "Everything in Standard",
         "1-year registered office address",
@@ -210,47 +200,34 @@ export default function PricingPage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 items-start">
-            {tiers.map(({ name, price, description, features, featured }) => (
+            {tiers.map(({ name, price, description, features }) => (
               <div
                 key={name}
-                className={`flex flex-col p-8 ${
-                  featured
-                    ? "bg-navy-900 text-white ring-2 ring-gold-500"
-                    : "bg-white border border-gray-200"
-                }`}
+                className="group flex flex-col p-8 bg-white border border-gray-200 transition-colors hover:bg-navy-900 hover:border-navy-900"
               >
-                {featured && (
-                  <p className="text-xs font-semibold tracking-[0.15em] uppercase text-gold-400 mb-3">
-                    Most Popular
-                  </p>
-                )}
-                <p className={`text-xs font-semibold tracking-[0.15em] uppercase mb-3 ${featured ? "text-gray-400" : "text-gray-500"}`}>
+                <p className="text-xs font-semibold tracking-[0.15em] uppercase mb-3 text-gray-500 transition-colors group-hover:text-gray-400">
                   {name}
                 </p>
-                <p className={`font-serif text-5xl font-bold mb-1 ${featured ? "text-white" : "text-navy-900"}`}>
+                <p className="font-serif text-5xl font-bold mb-1 text-navy-900 transition-colors group-hover:text-white">
                   {price}
                 </p>
-                <p className={`text-xs mb-5 ${featured ? "text-gray-400" : "text-gray-500"}`}>
+                <p className="text-xs mb-5 text-gray-500 transition-colors group-hover:text-gray-400">
                   all fees included · CAD
                 </p>
-                <p className={`text-sm leading-relaxed mb-8 ${featured ? "text-gray-300" : "text-gray-600"}`}>
+                <p className="text-sm leading-relaxed mb-8 text-gray-600 transition-colors group-hover:text-gray-300">
                   {description}
                 </p>
                 <ul className="space-y-3 mb-10 flex-1">
                   {features.map((f) => (
                     <li key={f} className="flex items-start gap-3">
                       <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
-                      <span className={`text-sm ${featured ? "text-gray-200" : "text-gray-700"}`}>{f}</span>
+                      <span className="text-sm text-gray-700 transition-colors group-hover:text-gray-200">{f}</span>
                     </li>
                   ))}
                 </ul>
                 <Link
                   href={`/incorporate?jurisdiction=${jurisdiction}&package=${name.toLowerCase()}`}
-                  className={`inline-flex items-center justify-center gap-2 py-3 px-6 text-sm font-medium tracking-wide transition-colors ${
-                    featured
-                      ? "bg-gold-500 text-white hover:bg-gold-600"
-                      : "border border-navy-900 text-navy-900 hover:bg-navy-900 hover:text-white"
-                  }`}
+                  className="inline-flex items-center justify-center gap-2 py-3 px-6 text-sm font-medium tracking-wide transition-colors border border-navy-900 text-navy-900 group-hover:bg-gold-500 group-hover:border-gold-500 group-hover:text-white"
                 >
                   Get Started
                   <ArrowRight size={15} />

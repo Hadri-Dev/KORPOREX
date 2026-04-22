@@ -16,6 +16,9 @@
 # production
 /build
 
+# local build / preview scratch (e.g., Chrome headless render wrappers)
+/build-tmp
+
 # misc
 .DS_Store
 *.pem

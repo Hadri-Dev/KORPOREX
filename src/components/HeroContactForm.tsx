@@ -5,10 +5,34 @@ import { ArrowRight } from "lucide-react";
 
 export default function HeroContactForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", email: "", service: "", message: "" });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...form, source: "hero" }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.error || "Send failed");
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error && err.message !== "Send failed" ? err.message : "Something went wrong. Please try again or email us at contact@korporex.com.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (submitted) {
@@ -29,7 +53,7 @@ export default function HeroContactForm() {
       <p className="font-serif text-xl font-bold text-navy-900 mb-1">Have a Question?</p>
       <p className="text-xs text-gray-500 mb-6">We respond within one business day.</p>
 
-      <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-xs font-semibold tracking-[0.1em] uppercase text-gray-500 mb-1.5">
             Full Name *
@@ -81,11 +105,18 @@ export default function HeroContactForm() {
           />
         </div>
 
+        {error && (
+          <p className="text-sm text-red-700 bg-red-50 border border-red-200 px-3 py-2" role="alert">
+            {error}
+          </p>
+        )}
+
         <button
           type="submit"
-          className="w-full inline-flex items-center justify-center gap-2 bg-navy-900 text-white font-medium py-3 text-sm tracking-wide hover:bg-navy-800 transition-colors"
+          disabled={submitting}
+          className="w-full inline-flex items-center justify-center gap-2 bg-navy-900 text-white font-medium py-3 text-sm tracking-wide hover:bg-navy-800 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Send Message <ArrowRight size={15} />
+          {submitting ? "Sending…" : (<>Send Message <ArrowRight size={15} /></>)}
         </button>
       </form>
     </div>

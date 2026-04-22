@@ -2,12 +2,12 @@
 
 ## Open
 
-### [Severity: high] No backend integration on any form
-- **Where**: `src/components/HeroContactForm.tsx`, `src/app/incorporate/page.tsx`, contact page
-- **Symptom**: Form submissions set local `submitted: true` and show a thank-you state, but data is never sent or stored anywhere.
-- **Impact**: Cannot collect leads, contact requests, or incorporation orders in production. The site is a brochure with no functional intake.
-- **Why not fixed yet**: Backend / form-submission destination (email, CRM, database) not yet decided or built.
-- **Logged**: 2026-04-21
+### [Severity: high] Incorporation wizard intake is not emailed / stored
+- **Where**: `src/app/incorporate/page.tsx` step-7 submit handler, `src/app/incorporate/confirmation/page.tsx`.
+- **Symptom**: The wizard still sets local `submitted: true` and navigates to the confirmation page; the 8 steps of collected data (applicant, directors, shareholders, registered office, billing, etc.) are never sent or stored anywhere.
+- **Impact**: If a visitor completes the wizard, we have no way to see what they submitted. Hero and contact-page forms are fine (they now email `contact@korporex.com` via `/api/contact`); the wizard is the remaining gap.
+- **Why not fixed yet**: Deferred in this pass — wizard payload is larger and tightly bound to the payment-processing issue below. Fastest unblock: add a `/api/incorporate` route that emails the full payload to `contact@korporex.com` *before* wiring Stripe, so orders are captured even without live payment.
+- **Logged**: 2026-04-21 (narrowed to wizard on 2026-04-22 after contact forms were wired)
 
 ### [Severity: high] Incorporation wizard does not process payments
 - **Where**: `src/app/incorporate/page.tsx`, `src/app/incorporate/confirmation/page.tsx`
@@ -16,12 +16,6 @@
 - **Why not fixed yet**: Payment integration depends on backend decisions (per issue above) and business setup (merchant account, pricing finalization).
 - **Logged**: 2026-04-21
 
-### [Severity: medium] No custom domain or professional email addresses yet
-- **Where**: Site-wide — currently deployed on Vercel's `*.vercel.app` subdomain; no `@korporex.*` email.
-- **Symptom**: Marketing site and (future) form-submission flow have no branded domain or email identity. The site currently exposes `contact@korporex.com` as the enquiry address, but the mailbox doesn't exist yet.
-- **Impact**: Credibility cost on a professional service site; any message sent to `contact@korporex.com` bounces today; can't launch form backend (receiving/sending email) until mailboxes exist.
-- **Why not fixed yet**: Domain registration and Google Workspace / Zoho setup are user-action steps, not code. Recommended starter mailboxes: `contact@` (live, listed), `support@`, `noreply@`.
-- **Logged**: 2026-04-21
 
 ### [Severity: low] NUANS pass-through fee is a placeholder
 - **Where**: `src/app/incorporate/page.tsx` — `NUANS_FEE = 45`.
@@ -53,6 +47,8 @@
 
 ## Resolved
 
+- **2026-04-22** — Hero + contact-page forms were stub-only — Built `/api/contact` (Next.js route handler in `src/app/api/contact/route.ts`) that validates with Zod and posts to Brevo's Transactional Email API, sending a branded HTML notification to `contact@korporex.com` with the submitter's email in `replyTo`. Wired `HeroContactForm` and the contact page form with submitting / error states. Gracefully no-ops when `BREVO_API_KEY` is unset (logs submission to server console) so local dev isn't blocked. Requires user to generate a Brevo API key (SMTP & API → API keys tab) and add `BREVO_API_KEY` to Vercel env vars for Prod/Preview/Development before deploying.
+- **2026-04-22** — Email infrastructure for `contact@korporex.com` — Registered `korporex.com`; Cloudflare DNS + Email Routing forwards inbound to owner's Gmail (inbound live). Provisioned Brevo account, generated dedicated SMTP key `gmail-send-as`, merged `include:spf.brevo.com` into the existing SPF TXT on `korporex.com`, configured Gmail "Send mail as" via `smtp-relay.brevo.com:587` (TLS) with Brevo's auto-generated SMTP login, clicked forwarded verification link, and confirmed with a live send test. `contact@korporex.com` is now bidirectional. Scope note: `korporex.ca`, `support@`, and `noreply@` are explicitly deferred.
 - **2026-04-21** — Address autofill was inactive on the deployed wizard — Created a Google Cloud project, enabled Maps JavaScript API + Places API, generated an HTTP-referrer + API-restricted browser key, set `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` in Vercel (all environments), redeployed, and attached a billing profile to the GCP project (required for the APIs to serve requests — free $200/mo Maps credit applies). Verified live on production: `/incorporate` address fields now return Google Places suggestions and autofill street / city / region / postal / country.
 - **2026-04-21** — Resources article links were placeholder `#` anchors — Built dynamic article pages at `/resources/[slug]` with full content for all six articles (see `src/app/resources/articles.ts` and `src/app/resources/[slug]/page.tsx`).
 - **2026-04-21** — Old project folder duplicate on disk — Verified uncommitted changes were identical to committed state in the active folder, then deleted `C:\Users\marke\OneDrive\Documents\Korporex Website\`.

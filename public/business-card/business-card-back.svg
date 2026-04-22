@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="89mm" height="51mm" viewBox="0 0 89 51" role="img" aria-label="Korporex business card — back">
+  <title>Korporex — back</title>
+
+  <rect width="89" height="51" fill="#FAFAF8"/>
+
+  <rect x="5" y="5" width="10" height="10" fill="#1B4332"/>
+  <text x="10" y="13" text-anchor="middle"
+        font-family="'Playfair Display', Georgia, 'Times New Roman', serif"
+        font-weight="700" font-size="7.5" fill="#C5A35A">K</text>
+
+  <text x="18" y="12"
+        font-family="'Playfair Display', Georgia, 'Times New Roman', serif"
+        font-weight="700" font-size="3.6" fill="#1B4332" letter-spacing="0.42">KORPOREX</text>
+
+  <text x="5" y="26"
+        font-family="'Playfair Display', Georgia, 'Times New Roman', serif"
+        font-weight="700" font-size="5" fill="#1B4332">YOUR NAME</text>
+
+  <text x="5" y="31"
+        font-family="Inter, system-ui, -apple-system, sans-serif"
+        font-size="2.4" fill="#C5A35A" letter-spacing="0.42">YOUR TITLE</text>
+
+  <line x1="5" y1="35" x2="22" y2="35" stroke="#C5A35A" stroke-width="0.2"/>
+
+  <text x="5" y="40"
+        font-family="Inter, system-ui, -apple-system, sans-serif"
+        font-size="2.6" fill="#1B4332">contact@korporex.com</text>
+  <text x="5" y="44.5"
+        font-family="Inter, system-ui, -apple-system, sans-serif"
+        font-size="2.6" fill="#1B4332">korporex.com</text>
+</svg>
