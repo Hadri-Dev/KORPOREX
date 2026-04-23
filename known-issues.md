@@ -16,6 +16,13 @@
 - **Why not fixed yet**: Waiting on user to provide the real physical address(es) we'll use for the service. Once provided, it's a one-line-per-field change in `REG_OFFICE_ADDON`.
 - **Logged**: 2026-04-23
 
+### [Severity: low] Stripe webhook endpoint still uses Vercel's `.vercel.app` alias
+- **Where**: Stripe Dashboard (live mode) → Developers → Webhooks → "Korporex production — checkout" destination. URL: `https://korporex.vercel.app/api/stripe-webhook`.
+- **Symptom**: The webhook endpoint URL reveals the hosting provider (Vercel) and is inconsistent with the rest of the site, which is now served at `https://korporex.com` after the 2026-04-23 DNS cutover.
+- **Impact**: Cosmetic/branding only. Webhook delivery works identically — the `.vercel.app` alias is a permanent Vercel project alias and will continue resolving to the production deployment indefinitely, regardless of DNS cutover state.
+- **Why not fixed yet**: Zero customer impact and any in-place URL change risks missing events during the switch. Recommended cleanup path when ready: create a **second** webhook destination at `https://korporex.com/api/stripe-webhook`, observe both deliver successfully for 24–48 hours, then delete the `.vercel.app` one. No urgency.
+- **Logged**: 2026-04-23
+
 ### [Severity: low] `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` not set for Vercel Preview scope
 - **Where**: Vercel project `youness-7473s-projects/korporex`, env var `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` — Production is set, Preview is not.
 - **Symptom**: Any future Preview deployment (PR branch, staging URL) would render `/incorporate` without Google Places autocomplete.
