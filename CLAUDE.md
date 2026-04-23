@@ -83,7 +83,7 @@ The Tailwind config uses the class name `navy-` for forest green (#1B4332) for h
 
 ### Navigation Structure
 
-**Navbar tabs** (in order): About, Services, Pricing, FAQ, Resources, Contact
+**Navbar tabs** (in order): Services, Pricing, About, FAQ, Resources, Contact
 - The K logo links home
 - "Incorporate Now" button in nav always points to `/incorporate`
 - Removed "Home" tab because the logo provides home navigation
@@ -149,7 +149,7 @@ src/
 
 1. Edit `src/components/layout/Navbar.tsx` — update the `links` array
 2. Edit `src/components/layout/Footer.tsx` — update the company links array
-3. Keep tabs in this order: About, Services, Pricing, FAQ, Resources, Contact
+3. Keep tabs in this order: Services, Pricing, About, FAQ, Resources, Contact
 
 ### Add Form Validation
 
