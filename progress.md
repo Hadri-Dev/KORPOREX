@@ -1,9 +1,25 @@
 # Progress
 
 ## Current Focus
-Stripe test-mode flow fully verified end-to-end (2026-04-23, `KPX-20260423-4BA8` round-trip). Matching [PENDING]/[PAID] subjects landed. Registered-office add-on is **built and wired through the full stack** (pricing module → wizard Step 6 radio → Step 7 review → Stripe line item → PENDING/PAID email bodies → `/pricing` marketing section → FAQ update). **Blocked from go-live by placeholder physical addresses** in `src/lib/pricing.ts` — user must provide the real Basic (any Ontario city) and Premium (Toronto financial district) addresses before enabling the feature for paying customers. Add-on is functional today for testing.
+Stripe is now **configured for live-mode production payments** on Vercel (deploy `korporex-jrtiyr0zg`, Ready 2026-04-23). All four env vars (`STRIPE_SECRET_KEY` sk_live_*, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` pk_live_*, `STRIPE_WEBHOOK_SECRET` whsec_*, `NEXT_PUBLIC_SITE_URL` = `https://korporex.vercel.app`) are in Production scope only. Stripe Dashboard has a live-mode webhook destination "Korporex production — checkout" pointing at `https://korporex.vercel.app/api/stripe-webhook` subscribing to `checkout.session.completed` + async variants. **Still pending**: (1) a real-card verification run on production to confirm the live flow end-to-end before customers are sent to it, (2) registered-office placeholder addresses still need real values before the add-on can go live, (3) DNS cutover from WordPress to Vercel (when it happens, the Stripe webhook URL will need to be updated or supplemented). Test-mode flow remains fully verified (local `KPX-20260423-4BA8` round-trip earlier today).
 
 ## Log
+
+### 2026-04-23 (Stripe production switch)
+- **Stripe production is live on Vercel.** Discovered via `vercel env ls` that no `STRIPE_*` env vars existed in Vercel before this session — the production deploy was silently dropping into the dev-fallback path in `src/lib/stripe.ts` (no actual payment collection). Walked the user through activating and configuring live mode step by step.
+- **Webhook endpoint created in Stripe Dashboard (live mode)**: name `Korporex production — checkout`, URL `https://korporex.vercel.app/api/stripe-webhook` (using Vercel's stable `*.vercel.app` alias because DNS is not yet cut over), subscribing to `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`. API version `2025-09-30.clover`. Signing secret generated and stored in Vercel.
+- **Added four env vars to Vercel (Production scope only, Preview/Development unchecked)**:
+  - `STRIPE_SECRET_KEY` — `sk_live_...` (sensitive)
+  - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` — `pk_live_...` (not sensitive, client-exposed by design)
+  - `STRIPE_WEBHOOK_SECRET` — `whsec_...` (sensitive, this is the live-mode secret from the new endpoint, NOT the `stripe listen` local secret)
+  - `NEXT_PUBLIC_SITE_URL` — `https://korporex.vercel.app`
+- **Triggered production redeploy** (`vercel deploy --prod --yes`) so the `NEXT_PUBLIC_*` vars bake into the bundle. New deploy `korporex-jrtiyr0zg` finished Ready in 40s. Both the latest deploy and the previous `korporex-p1y5y2snj` are now in Production; aliases (`korporex.vercel.app`, `korporex-youness-7473s-projects.vercel.app`, `www.korporex.com`, `korporex.com`) point at the newest Ready deploy.
+- **DNS finding surfaced during Stripe setup**: `korporex.com` is in Vercel's domain list (and aliased to the latest deploy) but DNS resolution is still pointing at WordPress for the apex — a curl of `https://korporex.com/terms` returns 404 HTML containing "WordPress" while `https://korporex.vercel.app/terms` returns the Next.js page at 200. Webhook URL therefore uses the `.vercel.app` alias; when DNS cutover happens, Stripe webhook endpoint URL must be updated (either add a second destination at the new URL or edit the existing one).
+- **Still pending before real customers can be directed to production**:
+  1. **Verification run**: complete one real-card incorporation on `https://korporex.vercel.app/incorporate` (smallest order, e.g., Basic Ontario numbered = $399) to confirm live keys + webhook + [PENDING]/[PAID] emails all work together. Stripe Dashboard → Payments will show the charge; Dashboard → Webhooks → the destination will show a 200 OK delivery.
+  2. Replace placeholder registered-office addresses in `src/lib/pricing.ts` before the add-on can be sold.
+  3. DNS cutover and corresponding Stripe-webhook URL update.
+- **Scope note**: live-mode Preview scope is intentionally empty for Stripe. If preview deploys become active, we'd want to create a separate Stripe account or test-mode-only webhook endpoint for preview scope rather than sharing live keys with branch deploys.
 
 ### 2026-04-23 (after initial push — legal-entity + no-refund updates)
 - **Legal entity name locked in**: `Korporex Business Solutions Inc.` — a Canadian corporation incorporated under the Canada Business Corporations Act with its head office in Ontario. Updated:
