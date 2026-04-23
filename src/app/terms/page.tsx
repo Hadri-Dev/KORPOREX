@@ -8,13 +8,14 @@ export const metadata: Metadata = {
 };
 
 // NOTE TO REVIEWERS:
-// This is a draft Terms of Service prepared for the Korporex incorporation
-// platform. It reflects industry-standard structure for a Canadian online
-// document-preparation service and references Korporex's actual service
-// offerings as implemented in the codebase. Review by qualified legal counsel
-// is required before deployment. The legal entity name "Korporex" should be
-// replaced with the actual incorporated entity's full legal name (e.g.,
-// "Korporex Inc." or equivalent) prior to launch.
+// This is a living draft Terms of Service for the Korporex platform. Legal
+// entity name has been set to "Korporex Business Solutions Inc." (a Canadian
+// corporation incorporated under the CBCA with head office in Ontario).
+// Structure follows Canadian SaaS / document-preparation-service patterns and
+// references Korporex's actual implemented service offerings. This document
+// should be revised as operational processes solidify (real registered-office
+// addresses, confirmed filing timelines, any future user-account features,
+// etc.). Review by qualified legal counsel is required before deployment.
 
 const EFFECTIVE_DATE = "April 23, 2026";
 
@@ -53,16 +54,22 @@ export default function TermsPage() {
 
           <Section n="1" title="About Korporex">
             <p>
+              The Site and the Services are operated by <strong>Korporex Business Solutions Inc.</strong>,
+              a Canadian corporation incorporated under the <em>Canada Business Corporations Act</em>
+              with its head office in the Province of Ontario. Throughout these Terms,
+              &ldquo;<strong>Korporex</strong>&rdquo;, &ldquo;<strong>we</strong>&rdquo;,
+              &ldquo;<strong>us</strong>&rdquo;, and &ldquo;<strong>our</strong>&rdquo; refer to
+              Korporex Business Solutions Inc. and its affiliates; &ldquo;<strong>you</strong>&rdquo;
+              and &ldquo;<strong>your</strong>&rdquo; refer to the individual or entity using
+              the Services.
+            </p>
+            <p>
               Korporex is a Canadian online platform that prepares and files business
               incorporation documents with federal and provincial corporate registries in Canada
               (currently Corporations Canada, the Ontario Business Registry, and the BC
               Corporate Registry). We also coordinate optional pass-through services such as
               NUANS name searches and provide an optional registered office address service in
-              Ontario. Throughout these Terms, &ldquo;<strong>Korporex</strong>&rdquo;,
-              &ldquo;<strong>we</strong>&rdquo;, &ldquo;<strong>us</strong>&rdquo;, and
-              &ldquo;<strong>our</strong>&rdquo; refer to Korporex and its affiliates;
-              &ldquo;<strong>you</strong>&rdquo; and &ldquo;<strong>your</strong>&rdquo;
-              refer to the individual or entity using the Services.
+              Ontario.
             </p>
           </Section>
 
@@ -164,48 +171,32 @@ export default function TermsPage() {
             </p>
           </Section>
 
-          <Section n="6" title="Refunds and Cancellations">
+          <Section n="6" title="No Refunds">
             <p>
-              Because incorporation filings involve non-refundable government fees and
-              time-sensitive third-party services, the following refund terms apply:
+              Incorporation orders involve government filing fees, time-sensitive third-party
+              services, and work that is commenced immediately upon payment. Accordingly,{" "}
+              <strong>all fees are non-refundable once payment has been submitted.</strong>{" "}
+              This includes package fees, NUANS pass-through fees, registered office service
+              fees, and applicable taxes, whether or not filing has been completed at the time
+              a cancellation is requested.
             </p>
-            <ul className="list-disc list-inside space-y-2 ml-4 my-4 text-gray-700">
-              <li>
-                <strong>Before documents are submitted to the registry or third parties:</strong>{" "}
-                You may cancel your order by emailing{" "}
-                <a href="mailto:contact@korporex.com" className="text-navy-900 underline">
-                  contact@korporex.com
-                </a>{" "}
-                and we will refund amounts paid, less any transaction-processing fees charged
-                by Stripe and any third-party fees already incurred on your behalf (including
-                any NUANS report already ordered, which is non-refundable once issued).
-              </li>
-              <li>
-                <strong>After documents are submitted to the registry:</strong> Government
-                filing fees are non-recoverable and will not be refunded. The portion of our
-                service fee attributable to work not yet performed may be refunded at our
-                discretion on a case-by-case basis.
-              </li>
-              <li>
-                <strong>Registered office service:</strong> Because this is a prepaid annual
-                service that reserves capacity at our office, fees are non-refundable once
-                the corporation has been filed with the registry listing our address.
-              </li>
-              <li>
-                <strong>Errors caused by Korporex:</strong> If a filing is rejected or requires
-                resubmission solely because of an error by Korporex (and not because of
-                information you provided), we will re-file at no additional service cost. We
-                cannot, however, refund government fees charged for the initial submission if
-                those fees are retained by the registry.
-              </li>
-            </ul>
             <p>
-              To request a refund or cancellation, email{" "}
+              <strong>Korporex-caused errors.</strong> If a filing is rejected or requires
+              resubmission solely because of an error by Korporex (and not because of
+              information you provided), we will re-file at no additional service cost. This
+              is a rectification of our work, not a refund. Government fees retained by the
+              registry in connection with the initial submission cannot be refunded by us.
+            </p>
+            <p>
+              <strong>Exceptional circumstances.</strong> If you believe your circumstances
+              warrant special consideration, you may email{" "}
               <a href="mailto:contact@korporex.com" className="text-navy-900 underline">
                 contact@korporex.com
               </a>{" "}
               with your order reference (the <code>KPX-</code> number shown on your
-              confirmation page and emailed receipts).
+              confirmation page and in your emailed receipts). We may review these requests
+              on a case-by-case basis but are under no obligation to issue a refund and
+              reserve the right to decline.
             </p>
           </Section>
 

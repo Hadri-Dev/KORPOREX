@@ -2,12 +2,12 @@
 
 ## Open
 
-### [Severity: high] Terms of Service and Privacy Policy are unreviewed drafts
+### [Severity: medium] Terms of Service and Privacy Policy are living drafts pending legal review
 - **Where**: `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`.
-- **Symptom**: Both pages were drafted by Claude based on Canadian SaaS industry patterns and PIPEDA structure, not by qualified legal counsel. Placeholder legal-entity name ("Korporex") still needs to be replaced with the actual incorporated entity's full legal name.
-- **Impact**: **Blocks go-live.** User is a commercial lawyer and has acknowledged the review-before-deploy expectation. Refund policy, limitation-of-liability cap ($100 floor), governing law (Ontario), and registered-office service clauses in particular warrant a review pass.
-- **Why not fixed yet**: Waiting on user's legal review pass. Drafts are structurally complete and wired into the site (Footer + wizard Step 7 links now resolve to the real pages).
-- **Logged**: 2026-04-23
+- **Symptom**: Both pages are structurally complete and now reference the correct legal entity (Korporex Business Solutions Inc., CBCA / Ontario HQ) with a confirmed no-refund policy, but have not yet been reviewed by qualified legal counsel.
+- **Impact**: Lowered from high to medium because the main substantive unknowns (entity name, refund policy) are now resolved. Still blocks final go-live until user's review pass confirms limitation-of-liability cap (CAD $100 floor), governing-law choice (Ontario), registered-office-service clauses, and any other jurisdiction-specific language.
+- **Why not fixed yet**: Waiting on user's legal review pass. Drafts are marked as "living" — both files carry a `NOTE TO REVIEWERS` comment indicating they should be revised as operational processes solidify.
+- **Logged**: 2026-04-23 (updated later same day — entity + refund policy resolved)
 
 ### [Severity: high] Registered-office add-on uses placeholder physical addresses
 - **Where**: `src/lib/pricing.ts` — `REG_OFFICE_ADDON.basic.address` and `REG_OFFICE_ADDON.premium.address`.

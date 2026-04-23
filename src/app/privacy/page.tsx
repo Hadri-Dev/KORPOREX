@@ -8,15 +8,16 @@ export const metadata: Metadata = {
 };
 
 // NOTE TO REVIEWERS:
-// This is a draft Privacy Policy prepared for the Korporex incorporation
-// platform. It is structured to address PIPEDA (Personal Information Protection
-// and Electronic Documents Act) obligations and documents the actual third-
-// party data flows implemented in the codebase (Stripe, Brevo, Google Maps
-// Platform, Cloudflare, Vercel, federal/provincial registries). Review by
-// qualified legal counsel is required before deployment. The legal entity
-// name "Korporex" should be replaced with the actual incorporated entity's
-// full legal name before launch, and the Privacy Officer contact should be
-// verified.
+// This is a living draft Privacy Policy for the Korporex platform. Legal
+// entity name has been set to "Korporex Business Solutions Inc." (a Canadian
+// corporation incorporated under the CBCA with head office in Ontario).
+// Structure is aligned with PIPEDA obligations and documents the actual
+// third-party data flows implemented in the codebase (Stripe, Brevo, Google
+// Maps Platform, Cloudflare, Vercel, federal/provincial registries). Should
+// be revised as operational processes solidify (analytics, user accounts,
+// data exports, any additional processors). Review by qualified legal counsel
+// is required before deployment. The Privacy Officer designation at
+// contact@korporex.com should also be verified before launch.
 
 const EFFECTIVE_DATE = "April 23, 2026";
 
@@ -42,10 +43,14 @@ export default function PrivacyPage() {
       <section className="bg-white py-16 px-6">
         <div className="max-w-3xl mx-auto text-gray-700 leading-relaxed">
           <p className="mb-8">
-            Korporex operates an online platform at <strong>korporex.com</strong> that prepares
-            and files business incorporation documents with Canadian federal and provincial
-            corporate registries and offers related services, including an optional registered
-            office address service. This Privacy Policy describes what personal information we
+            <strong>Korporex Business Solutions Inc.</strong> (&ldquo;<strong>Korporex</strong>&rdquo;,
+            &ldquo;<strong>we</strong>&rdquo;, &ldquo;<strong>us</strong>&rdquo;, or
+            &ldquo;<strong>our</strong>&rdquo;), a Canadian corporation incorporated under the{" "}
+            <em>Canada Business Corporations Act</em> with its head office in Ontario, operates
+            an online platform at <strong>korporex.com</strong> that prepares and files
+            business incorporation documents with Canadian federal and provincial corporate
+            registries and offers related services, including an optional registered office
+            address service. This Privacy Policy describes what personal information we
             collect, how we use and share it, how long we keep it, and the rights you have
             over it. It applies to individuals in Canada and elsewhere who interact with
             Korporex through the Site or as a named director, officer, or shareholder in an
