@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import { useState } from "react";
+import { REG_OFFICE_ADDON } from "@/lib/pricing";
 
 type Jurisdiction = "federal" | "ontario" | "bc";
 
@@ -42,7 +43,6 @@ const pricingData: Record<Jurisdiction, {
         "Share certificates",
         "Organizational resolutions",
         "Banking resolution",
-        "Registered office (1 month)",
         "Post-filing support",
       ],
     },
@@ -52,7 +52,6 @@ const pricingData: Record<Jurisdiction, {
       description: "Full-service incorporation with ongoing compliance support for year one.",
       features: [
         "Everything in Standard",
-        "1-year registered office address",
         "First annual return filing",
         "Priority 12-hour processing",
         "Dedicated account support",
@@ -84,7 +83,6 @@ const pricingData: Record<Jurisdiction, {
         "Share certificates",
         "Organizational resolutions",
         "Banking resolution",
-        "Registered office (1 month)",
         "Post-filing support",
       ],
     },
@@ -94,7 +92,6 @@ const pricingData: Record<Jurisdiction, {
       description: "Full-service incorporation with ongoing compliance support for year one.",
       features: [
         "Everything in Standard",
-        "1-year registered office address",
         "Initial Return filing (Ontario)",
         "First Annual Return filing",
         "Priority 12-hour processing",
@@ -126,7 +123,6 @@ const pricingData: Record<Jurisdiction, {
         "Share certificates",
         "Organizational resolutions",
         "Banking resolution",
-        "Registered office (1 month)",
         "Post-filing support",
       ],
     },
@@ -136,7 +132,6 @@ const pricingData: Record<Jurisdiction, {
       description: "Full-service incorporation with ongoing compliance support for year one.",
       features: [
         "Everything in Standard",
-        "1-year registered office address",
         "First annual report filing",
         "Priority 12-hour processing",
         "Dedicated account support",
@@ -255,6 +250,83 @@ export default function PricingPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Registered Office add-on */}
+      <section className="bg-white py-16 px-6 border-t border-gray-100">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
+              Optional Add-on
+            </p>
+            <h2 className="font-serif text-3xl font-bold text-navy-900 mb-3">
+              Registered Office Address Service
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Don&rsquo;t have a physical address for your corporation? Use ours. Available
+              at checkout for federal and Ontario incorporations. Mail received is scanned and
+              emailed to you once per month.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="border border-gray-200 p-8">
+              <p className="text-xs font-semibold tracking-[0.15em] uppercase text-gray-500 mb-3">
+                {REG_OFFICE_ADDON.basic.label}
+              </p>
+              <p className="font-serif text-4xl font-bold text-navy-900 mb-1">
+                ${REG_OFFICE_ADDON.basic.monthly.toFixed(2)}
+                <span className="text-lg text-gray-500 font-sans font-normal">/mo</span>
+              </p>
+              <p className="text-xs text-gray-500 mb-5">
+                billed annually at ${REG_OFFICE_ADDON.basic.annual.toFixed(2)} + HST
+              </p>
+              <ul className="space-y-3 text-sm text-gray-700">
+                <li className="flex items-start gap-3">
+                  <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
+                  <span>Registered office address in Ontario (city of our choice)</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
+                  <span>Monthly mail scans emailed to you</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
+                  <span>Address listed on your Articles of Incorporation</span>
+                </li>
+              </ul>
+            </div>
+            <div className="border border-navy-900 p-8 bg-cream-50">
+              <p className="text-xs font-semibold tracking-[0.15em] uppercase text-gold-500 mb-3">
+                {REG_OFFICE_ADDON.premium.label}
+              </p>
+              <p className="font-serif text-4xl font-bold text-navy-900 mb-1">
+                ${REG_OFFICE_ADDON.premium.monthly.toFixed(2)}
+                <span className="text-lg text-gray-500 font-sans font-normal">/mo</span>
+              </p>
+              <p className="text-xs text-gray-500 mb-5">
+                billed annually at ${REG_OFFICE_ADDON.premium.annual.toFixed(2)} + HST
+              </p>
+              <ul className="space-y-3 text-sm text-gray-700">
+                <li className="flex items-start gap-3">
+                  <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
+                  <span>Prestigious Toronto financial-district address</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
+                  <span>Monthly mail scans emailed to you</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
+                  <span>Address listed on your Articles of Incorporation</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 text-center mt-6">
+            Available for federal and Ontario incorporations. BC incorporations require a BC registered office —
+            email <a href="mailto:contact@korporex.com" className="text-navy-900 underline">contact@korporex.com</a> for BC.
+          </p>
         </div>
       </section>
 

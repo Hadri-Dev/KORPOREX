@@ -1,5 +1,18 @@
 import Link from "next/link";
 import { CheckCircle, ArrowRight, Mail, Clock, FileText, Building2 } from "lucide-react";
+import { stripe } from "@/lib/stripe";
+
+// Render on demand so we can verify the Stripe session when the user arrives
+// from a successful checkout redirect.
+export const dynamic = "force-dynamic";
+
+type SearchParams = {
+  session_id?: string | string[];
+  ref?: string | string[];
+  dev?: string | string[];
+};
+
+type PageProps = { searchParams?: SearchParams };
 
 const nextSteps = [
   {
@@ -10,7 +23,7 @@ const nextSteps = [
   {
     icon: Mail,
     title: "Check Your Email",
-    body: "You'll receive a confirmation email shortly. Once your documents are ready, we'll send them as PDF attachments to the email address you provided.",
+    body: "You'll receive a Stripe receipt immediately. Once your incorporation documents are ready, we'll send them as PDF attachments to the email address you provided.",
   },
   {
     icon: FileText,
@@ -24,7 +37,36 @@ const nextSteps = [
   },
 ];
 
-export default function ConfirmationPage() {
+function firstParam(v: string | string[] | undefined): string | undefined {
+  if (Array.isArray(v)) return v[0];
+  return v;
+}
+
+export default async function ConfirmationPage({ searchParams }: PageProps) {
+  const sessionId = firstParam(searchParams?.session_id);
+  const refFromUrl = firstParam(searchParams?.ref);
+  const isDev = firstParam(searchParams?.dev) === "1";
+
+  let displayRef = refFromUrl;
+  let amountPaid: string | null = null;
+  let paid = false;
+
+  if (sessionId && stripe) {
+    try {
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      paid = session.payment_status === "paid";
+      displayRef = session.metadata?.orderRef || refFromUrl || displayRef;
+      if (session.amount_total != null) {
+        amountPaid = `$${(session.amount_total / 100).toFixed(2)} ${(session.currency ?? "cad").toUpperCase()}`;
+      }
+    } catch (err) {
+      console.error("[confirmation] failed to retrieve Stripe session:", err);
+    }
+  } else if (isDev) {
+    // Dev fallback path — Stripe is not configured locally.
+    paid = true;
+  }
+
   return (
     <>
       <section className="bg-cream-50 py-20 px-6 border-b border-gray-100">
@@ -35,7 +77,7 @@ export default function ConfirmationPage() {
             </div>
           </div>
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
-            Order Confirmed
+            {paid ? "Payment Confirmed" : "Order Received"}
           </p>
           <h1 className="font-serif text-5xl md:text-6xl font-bold text-navy-900 leading-tight mb-6">
             Your Incorporation
@@ -46,6 +88,23 @@ export default function ConfirmationPage() {
             Thank you — your application has been received. You&apos;ll receive your
             incorporation documents within 24 hours.
           </p>
+          {(displayRef || amountPaid) && (
+            <div className="mt-8 inline-block bg-white border border-gray-200 px-6 py-4 text-left">
+              {displayRef && (
+                <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-1">
+                  Order Reference
+                </p>
+              )}
+              {displayRef && (
+                <p className="font-mono text-sm font-semibold text-navy-900">{displayRef}</p>
+              )}
+              {amountPaid && (
+                <p className="text-xs text-gray-500 mt-2">
+                  Amount paid: <span className="font-medium text-gray-800">{amountPaid}</span>
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
@@ -90,6 +149,11 @@ export default function ConfirmationPage() {
                 <Link href="/faq" className="text-navy-900 underline underline-offset-2">
                   browse the FAQ
                 </Link>
+                {displayRef && (
+                  <>
+                    {" "}— please quote <span className="font-mono text-navy-900">{displayRef}</span>
+                  </>
+                )}
                 .
               </p>
             </div>

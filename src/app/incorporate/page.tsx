@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm, useFieldArray, FormProvider, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -9,11 +8,21 @@ import Link from "next/link";
 import { Check, Plus, Trash2, ChevronLeft } from "lucide-react";
 import NaicsCombobox from "@/components/NaicsCombobox";
 import AddressAutocomplete, { type ParsedAddress } from "@/components/AddressAutocomplete";
+import {
+  PRICES,
+  NUANS_FEE,
+  JURISDICTION_LABELS,
+  PKG_LABELS,
+  REG_OFFICE_ADDON,
+  regOfficeAddonAvailable,
+  computePricing,
+  type Jurisdiction,
+  type Pkg,
+  type RegOfficeAddon,
+} from "@/lib/pricing";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
-type Jurisdiction = "federal" | "ontario" | "bc";
-type Pkg = "basic" | "standard" | "premium";
 type CorpNameType = "named" | "numbered";
 
 interface Address {
@@ -45,28 +54,22 @@ interface WizardData {
   directors: Director[];
   shareholders: Shareholder[];
   regOffice: Address;
+  regOfficeAddon: RegOfficeAddon;
   billingName: string;
   billingAddress: Address;
 }
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
-const PRICES: Record<Jurisdiction, Record<Pkg, number>> = {
-  federal: { basic: 499, standard: 699, premium: 999 },
-  ontario: { basic: 399, standard: 599, premium: 899 },
-  bc:      { basic: 449, standard: 649, premium: 949 },
-};
+// Pricing, NUANS fee, and tax rates live in `@/lib/pricing` so the API route
+// can recalculate totals from the same source. PRICES and NUANS_FEE are
+// imported above; kept inline references below read from those.
 
 const PKG_FEATURES: Record<Pkg, string[]> = {
   basic:    ["Articles of Incorporation", "Corporate bylaws", "Certificate of Incorporation", "Digital document delivery", "Digital document storage"],
-  standard: ["Everything in Basic", "Corporate minute book", "Share certificates", "Banking resolution", "Registered office (1 month)"],
-  premium:  ["Everything in Standard", "1-year registered office", "First annual return filing", "Priority 12-hour turnaround", "Dedicated account support"],
+  standard: ["Everything in Basic", "Corporate minute book", "Share certificates", "Banking resolution"],
+  premium:  ["Everything in Standard", "First annual return filing", "Priority 12-hour turnaround", "Dedicated account support"],
 };
-
-// NUANS / name-search pass-through fee. Applies to federal and Ontario named
-// corporations; BC uses a separate Name Approval process not billed here.
-// Adjust when actual NUANS pass-through pricing is finalized.
-const NUANS_FEE = 45;
 
 const CA_PROVINCES = [
   { code: "AB", name: "Alberta" },
@@ -141,21 +144,8 @@ const JURISDICTION_INFO = [
 const PKG_INFO: { id: Pkg; label: string; desc: string }[] = [
   { id: "basic",    label: "Basic",    desc: "Essential incorporation documents. Government fees included." },
   { id: "standard", label: "Standard", desc: "Full package with minute book, share certificates, and more." },
-  { id: "premium",  label: "Premium",  desc: "Complete package with 1-year registered office and annual return." },
+  { id: "premium",  label: "Premium",  desc: "Complete package with first annual return filing and priority turnaround." },
 ];
-
-// Canadian sales-tax rates (indicative — GST/HST only; PST registrations not yet held).
-// Used for live tax calculation on checkout based on the billing address.
-const CA_TAX_RATES: Record<string, number> = {
-  ON: 0.13,
-  NB: 0.15, NS: 0.15, PE: 0.15, NL: 0.15,
-  BC: 0.05, AB: 0.05, MB: 0.05, SK: 0.05, NT: 0.05, YT: 0.05, NU: 0.05,
-  QC: 0.14975,
-};
-function getTaxRate(country: string, region: string): number {
-  if (country !== "CA") return 0;
-  return CA_TAX_RATES[region] ?? 0;
-}
 
 // ─── Schemas ─────────────────────────────────────────────────────────────────
 
@@ -201,14 +191,13 @@ const s3 = z.object({
 
 const s4 = z.object({ directors: z.array(directorSchema).min(1) });
 const s5 = z.object({ shareholders: z.array(shareholderSchema).min(1) });
-const s6 = z.object({ regOffice: addressSchema });
+const s6 = z.object({
+  regOffice: addressSchema,
+  regOfficeAddon: z.enum(["none", "basic", "premium"]),
+});
 const s7 = z.object({
   billingName: z.string().min(1, "Required"),
   billingAddress: addressSchema,
-  cardholderName: z.string().min(1, "Required"),
-  cardNumber: z.string().min(13, "Valid card number required").max(19),
-  expiry: z.string().regex(/^\d{2}\/\d{2}$/, "Format: MM/YY"),
-  cvc: z.string().length(3, "Must be 3 digits"),
 });
 
 // ─── Shared UI ───────────────────────────────────────────────────────────────
@@ -813,20 +802,44 @@ function Step6({ jurisdiction, def, onNext, onBack }: {
 }) {
   const regionLock = jurisdiction === "ontario" ? "ON" : jurisdiction === "bc" ? "BC" : undefined;
   const regionAllow = jurisdiction === "federal" ? CA_PROVINCES.map((p) => p.code) : undefined;
+  const addonEligible = regOfficeAddonAvailable(jurisdiction);
 
   const form = useForm<S6>({
     resolver: zodResolver(s6),
     defaultValues: {
+      regOfficeAddon: def.regOfficeAddon ?? "none",
       regOffice: {
         street: def.regOffice?.street ?? "",
         city: def.regOffice?.city ?? "",
-        region: def.regOffice?.region ?? (regionLock ?? ""),
+        region: def.regOffice?.region || regionLock || "",
         postalCode: def.regOffice?.postalCode ?? "",
         country: "CA",
       },
     },
   });
-  const { handleSubmit } = form;
+  const { handleSubmit, watch, setValue } = form;
+  const selectedAddon = watch("regOfficeAddon");
+
+  // When an add-on is selected, mirror Korporex's address into the regOffice
+  // fields so the intake email and downstream filings show the actual address
+  // being used. When the user switches back to "none", blank the fields so
+  // they can enter their own.
+  const applyAddonAddress = (addon: RegOfficeAddon) => {
+    if (addon === "none") {
+      setValue("regOffice.street", "");
+      setValue("regOffice.city", "");
+      setValue("regOffice.region", regionLock ?? "");
+      setValue("regOffice.postalCode", "");
+      setValue("regOffice.country", "CA");
+      return;
+    }
+    const a = REG_OFFICE_ADDON[addon].address;
+    setValue("regOffice.street", a.street, { shouldValidate: true });
+    setValue("regOffice.city", a.city, { shouldValidate: true });
+    setValue("regOffice.region", a.region, { shouldValidate: true });
+    setValue("regOffice.postalCode", a.postalCode, { shouldValidate: true });
+    setValue("regOffice.country", a.country, { shouldValidate: true });
+  };
 
   const jurisLabel = jurisdiction === "federal" ? "any Canadian province or territory" : jurisdiction === "ontario" ? "Ontario" : "British Columbia";
 
@@ -837,21 +850,113 @@ function Step6({ jurisdiction, def, onNext, onBack }: {
         <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Registered Office</h2>
         <p className="text-gray-500 text-sm mb-8">Must be a physical address in {jurisLabel} — not a P.O. Box.</p>
         <form onSubmit={handleSubmit(onNext)} className="space-y-5">
-          <AddressFields
-            prefix="regOffice"
-            countryLock="CA"
-            regionLock={regionLock}
-            regionAllow={regionAllow}
-          />
-          <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-600 leading-relaxed">
-            <strong className="text-gray-800">Standard &amp; Premium packages</strong> include a registered
-            office address, so international founders and anyone without a physical office in the jurisdiction
-            can use ours.
-          </div>
+          {addonEligible && (
+            <div className="space-y-3">
+              <p className="text-xs font-semibold tracking-[0.1em] uppercase text-gray-500">
+                How will you provide an address?
+              </p>
+              <AddonOption
+                value="none"
+                selected={selectedAddon === "none"}
+                onSelect={() => { setValue("regOfficeAddon", "none"); applyAddonAddress("none"); }}
+                title="I'll provide my own registered office address"
+                subtitle="Enter an address you control in the fields below."
+              />
+              <AddonOption
+                value="basic"
+                selected={selectedAddon === "basic"}
+                onSelect={() => { setValue("regOfficeAddon", "basic"); applyAddonAddress("basic"); }}
+                title="Korporex Registered Office — Basic"
+                subtitle="Our Ontario address. Monthly mail scans emailed to you."
+                price={`$${REG_OFFICE_ADDON.basic.monthly.toFixed(2)}/mo`}
+                priceSub={`billed annually at $${REG_OFFICE_ADDON.basic.annual.toFixed(2)} + HST`}
+              />
+              <AddonOption
+                value="premium"
+                selected={selectedAddon === "premium"}
+                onSelect={() => { setValue("regOfficeAddon", "premium"); applyAddonAddress("premium"); }}
+                title="Korporex Registered Office — Premium"
+                subtitle="Toronto financial-district address. Monthly mail scans emailed to you."
+                price={`$${REG_OFFICE_ADDON.premium.monthly.toFixed(2)}/mo`}
+                priceSub={`billed annually at $${REG_OFFICE_ADDON.premium.annual.toFixed(2)} + HST`}
+              />
+            </div>
+          )}
+
+          {selectedAddon === "none" && (
+            <AddressFields
+              prefix="regOffice"
+              countryLock="CA"
+              regionLock={regionLock}
+              regionAllow={regionAllow}
+            />
+          )}
+          {selectedAddon !== "none" && (
+            <div className="bg-navy-50 border border-navy-900 p-4 text-sm text-navy-900 leading-relaxed">
+              <p className="font-semibold mb-1">{REG_OFFICE_ADDON[selectedAddon].label} — {REG_OFFICE_ADDON[selectedAddon].locationLabel}</p>
+              <p className="text-gray-700">
+                {REG_OFFICE_ADDON[selectedAddon].address.street}, {REG_OFFICE_ADDON[selectedAddon].address.city}, {REG_OFFICE_ADDON[selectedAddon].address.region} {REG_OFFICE_ADDON[selectedAddon].address.postalCode}
+              </p>
+              <p className="text-xs text-gray-600 mt-2">
+                This address will appear on your Articles of Incorporation and in the public corporate registry.
+                Mail received here is scanned and emailed to you once per month.
+              </p>
+            </div>
+          )}
+
+          {!addonEligible && (
+            <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-600 leading-relaxed">
+              British Columbia requires a BC registered office. If you don&rsquo;t have a physical address in BC,
+              email{" "}
+              <a href="mailto:contact@korporex.com" className="text-navy-900 underline">contact@korporex.com</a>{" "}
+              and we&rsquo;ll help.
+            </div>
+          )}
+          {addonEligible && selectedAddon === "none" && (
+            <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-600 leading-relaxed">
+              Don&rsquo;t have a physical address in {jurisLabel}? Pick one of the Korporex options above instead.
+            </div>
+          )}
+
           <NextBtn label="Continue to Review" />
         </form>
       </div>
     </FormProvider>
+  );
+}
+
+function AddonOption({ selected, onSelect, title, subtitle, price, priceSub }: {
+  value: string;
+  selected: boolean;
+  onSelect: () => void;
+  title: string;
+  subtitle: string;
+  price?: string;
+  priceSub?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      className={`w-full text-left border p-4 transition-colors ${
+        selected
+          ? "border-navy-900 bg-navy-50"
+          : "border-gray-200 bg-white hover:border-navy-900"
+      }`}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1">
+          <p className={`font-medium text-sm ${selected ? "text-navy-900" : "text-gray-900"}`}>{title}</p>
+          <p className="text-xs text-gray-500 mt-1 leading-relaxed">{subtitle}</p>
+        </div>
+        {price && (
+          <div className="text-right flex-shrink-0">
+            <p className={`text-sm font-semibold ${selected ? "text-navy-900" : "text-gray-900"}`}>{price}</p>
+            {priceSub && <p className="text-[11px] text-gray-500 mt-0.5">{priceSub}</p>}
+          </div>
+        )}
+      </div>
+    </button>
   );
 }
 
@@ -861,7 +966,7 @@ type S7 = z.infer<typeof s7>;
 function Step7({ data, onBack, onPay }: {
   data: WizardData;
   onBack: () => void;
-  onPay: (billing: { billingName: string; billingAddress: Address }) => void;
+  onPay: (billing: { billingName: string; billingAddress: Address }) => Promise<void>;
 }) {
   const form = useForm<S7>({
     resolver: zodResolver(s7),
@@ -874,36 +979,49 @@ function Step7({ data, onBack, onPay }: {
         postalCode: data.billingAddress.postalCode || "",
         country: data.billingAddress.country || "CA",
       },
-      cardholderName: "",
-      cardNumber: "",
-      expiry: "",
-      cvc: "",
     },
   });
   const { register, handleSubmit, watch, formState: { errors } } = form;
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const country = watch("billingAddress.country") || "CA";
   const region = watch("billingAddress.region") || "";
 
-  const price = PRICES[data.jurisdiction][data.pkg];
-  const nameSearchApplies =
-    (data.jurisdiction === "federal" || data.jurisdiction === "ontario") &&
-    data.corpNameType === "named";
-  const nuansFee = nameSearchApplies ? NUANS_FEE : 0;
-  const subtotal = price + nuansFee;
-  const taxRate = getTaxRate(country, region);
-  const tax = Math.round(subtotal * taxRate * 100) / 100;
-  const total = Math.round((subtotal + tax) * 100) / 100;
+  const { price, nuansFee, regOfficeFee, subtotal, taxRate, tax, total } = computePricing({
+    jurisdiction: data.jurisdiction,
+    pkg: data.pkg,
+    corpNameType: data.corpNameType,
+    billingCountry: country,
+    billingRegion: region,
+    regOfficeAddon: data.regOfficeAddon,
+  });
+  const nameSearchApplies = nuansFee > 0;
+  const addonApplies = regOfficeFee > 0 && data.regOfficeAddon !== "none";
+  const addonLabel = addonApplies
+    ? `Registered office — ${REG_OFFICE_ADDON[data.regOfficeAddon as Exclude<RegOfficeAddon, "none">].label} (12 mo)`
+    : "";
 
-  const jurisLabel = { federal: "Federal (Canada)", ontario: "Ontario", bc: "British Columbia" }[data.jurisdiction];
-  const pkgLabel = { basic: "Basic", standard: "Standard", premium: "Premium" }[data.pkg];
+  const jurisLabel = JURISDICTION_LABELS[data.jurisdiction];
+  const pkgLabel = PKG_LABELS[data.pkg];
   const corpName =
     data.corpNameType === "numbered"
       ? `Numbered corporation (${jurisLabel})`
       : data.businessName || "—";
 
-  const submit = handleSubmit((d) => {
-    onPay({ billingName: d.billingName, billingAddress: d.billingAddress });
+  const submit = handleSubmit(async (d) => {
+    setSubmitError(null);
+    setSubmitting(true);
+    try {
+      await onPay({ billingName: d.billingName, billingAddress: d.billingAddress });
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error && err.message
+          ? err.message
+          : "Something went wrong. Please try again or email us at contact@korporex.com."
+      );
+      setSubmitting(false);
+    }
   });
 
   return (
@@ -922,7 +1040,12 @@ function Step7({ data, onBack, onPay }: {
               ["Corporation", corpName],
               ["Directors", String(data.directors.length)],
               ["Shareholders", String(data.shareholders.length)],
-              ["Registered Office", data.regOffice.city ? `${data.regOffice.city}, ${data.regOffice.region}` : "—"],
+              [
+                "Registered Office",
+                data.regOfficeAddon !== "none"
+                  ? `Korporex ${REG_OFFICE_ADDON[data.regOfficeAddon as Exclude<RegOfficeAddon, "none">].label} — ${REG_OFFICE_ADDON[data.regOfficeAddon as Exclude<RegOfficeAddon, "none">].address.city}, ON`
+                  : data.regOffice.city ? `${data.regOffice.city}, ${data.regOffice.region}` : "—",
+              ],
             ].map(([k, v]) => (
               <div key={k} className="flex justify-between">
                 <span className="text-gray-500">{k}</span>
@@ -940,6 +1063,12 @@ function Step7({ data, onBack, onPay }: {
               <div className="flex justify-between">
                 <span className="text-gray-600">NUANS name-search report</span>
                 <span className="text-gray-800">${nuansFee.toFixed(2)}</span>
+              </div>
+            )}
+            {addonApplies && (
+              <div className="flex justify-between">
+                <span className="text-gray-600">{addonLabel}</span>
+                <span className="text-gray-800">${regOfficeFee.toFixed(2)}</span>
               </div>
             )}
             <div className="flex justify-between text-gray-600 pt-1 border-t border-dashed border-gray-200">
@@ -967,7 +1096,7 @@ function Step7({ data, onBack, onPay }: {
           </div>
         </div>
 
-        {/* Billing + payment */}
+        {/* Billing */}
         <div className="border border-gray-200 p-6">
           <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-5">Billing Details</p>
           <form onSubmit={submit} className="space-y-4">
@@ -976,33 +1105,25 @@ function Step7({ data, onBack, onPay }: {
             </Field>
             <AddressFields prefix="billingAddress" labelPrefix="Billing" />
 
-            <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 pt-6 pb-1">Payment</p>
-            <Field label="Cardholder Name *" error={errors.cardholderName?.message}>
-              <input {...register("cardholderName")} placeholder="Jane Smith" className={iCls} />
-            </Field>
-            <Field label="Card Number *" error={errors.cardNumber?.message}>
-              <input {...register("cardNumber")} placeholder="1234 5678 9012 3456" maxLength={19} className={iCls} />
-            </Field>
-            <div className="grid grid-cols-2 gap-4">
-              <Field label="Expiry (MM/YY) *" error={errors.expiry?.message}>
-                <input {...register("expiry")} placeholder="09/27" maxLength={5} className={iCls} />
-              </Field>
-              <Field label="CVC *" error={errors.cvc?.message}>
-                <input {...register("cvc")} placeholder="123" maxLength={3} className={iCls} />
-              </Field>
-            </div>
-            <p className="text-xs text-gray-400 flex items-center gap-1.5 mt-1">
-              🔒 Encrypted &amp; secure. Card details are never stored by Korporex.
+            <p className="text-xs text-gray-500 bg-cream-50 border border-gray-200 px-3 py-2.5 mt-2 leading-relaxed">
+              You&apos;ll be redirected to <span className="font-semibold">Stripe</span> to complete payment securely.
+              Card details are entered on stripe.com — never on Korporex.
             </p>
+            {submitError && (
+              <p className="text-sm text-red-700 bg-red-50 border border-red-200 px-3 py-2" role="alert">
+                {submitError}
+              </p>
+            )}
             <button type="submit"
-              className="w-full bg-gold-500 text-white font-medium py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors mt-2">
-              Pay ${total.toFixed(2)} — Submit Incorporation
+              disabled={submitting}
+              className="w-full bg-gold-500 text-white font-medium py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
+              {submitting ? "Redirecting to Stripe…" : `Continue to Payment — $${total.toFixed(2)}`}
             </button>
           </form>
           <p className="text-xs text-gray-400 text-center mt-4">
-            By submitting you agree to our{" "}
-            <Link href="#" className="underline underline-offset-2">Terms of Service</Link> and{" "}
-            <Link href="#" className="underline underline-offset-2">Privacy Policy</Link>.
+            By continuing you agree to our{" "}
+            <Link href="/terms" className="underline underline-offset-2">Terms of Service</Link> and{" "}
+            <Link href="/privacy" className="underline underline-offset-2">Privacy Policy</Link>.
           </p>
         </div>
       </div>
@@ -1021,12 +1142,12 @@ const init: WizardData = {
   fiscalYearEndMonth: "", fiscalYearEndDay: "",
   directors: [], shareholders: [],
   regOffice: { street: "", city: "", region: "", postalCode: "", country: "CA" },
+  regOfficeAddon: "none",
   billingName: "",
   billingAddress: { street: "", city: "", region: "", postalCode: "", country: "CA" },
 };
 
 export default function IncorporatePage() {
-  const router = useRouter();
   const [step, setStep] = useState(1);
   const [data, setData] = useState<WizardData>(init);
 
@@ -1059,12 +1180,44 @@ export default function IncorporatePage() {
         {step === 4 && <Step4 def={{ directors: data.directors }} onNext={(d) => { patch(d); setStep(5); }} onBack={() => setStep(3)} />}
         {step === 5 && <Step5 def={{ shareholders: data.shareholders }} onNext={(d) => { patch(d); setStep(6); }} onBack={() => setStep(4)} />}
         {step === 6 && <Step6 jurisdiction={data.jurisdiction}
-          def={{ regOffice: data.regOffice }}
+          def={{ regOffice: data.regOffice, regOfficeAddon: data.regOfficeAddon }}
           onNext={(d) => { patch(d); setStep(7); }} onBack={() => setStep(5)} />}
         {step === 7 && <Step7
           data={data}
           onBack={() => setStep(6)}
-          onPay={(billing) => { patch(billing); router.push("/incorporate/confirmation"); }}
+          onPay={async (billing) => {
+            patch(billing);
+            const payload = {
+              jurisdiction: data.jurisdiction,
+              pkg: data.pkg,
+              corpNameType: data.corpNameType,
+              businessName: data.businessName,
+              naicsCode: data.naicsCode,
+              businessActivity: data.businessActivity,
+              fiscalYearEndMonth: data.fiscalYearEndMonth,
+              fiscalYearEndDay: data.fiscalYearEndDay,
+              directors: data.directors,
+              shareholders: data.shareholders,
+              regOffice: data.regOffice,
+              regOfficeAddon: data.regOfficeAddon,
+              billingName: billing.billingName,
+              billingAddress: billing.billingAddress,
+            };
+            const res = await fetch("/api/incorporate", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            if (!res.ok) {
+              const body = await res.json().catch(() => ({}));
+              throw new Error(body?.error || "Submission failed");
+            }
+            const { url } = (await res.json()) as { url?: string };
+            if (!url) throw new Error("Checkout session did not return a URL");
+            // Full-page redirect to Stripe Checkout. After payment, Stripe
+            // redirects back to /incorporate/confirmation with session_id.
+            window.location.href = url;
+          }}
         />}
       </div>
     </div>

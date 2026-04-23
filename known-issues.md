@@ -2,20 +2,26 @@
 
 ## Open
 
-### [Severity: high] Incorporation wizard intake is not emailed / stored
-- **Where**: `src/app/incorporate/page.tsx` step-7 submit handler, `src/app/incorporate/confirmation/page.tsx`.
-- **Symptom**: The wizard still sets local `submitted: true` and navigates to the confirmation page; the 8 steps of collected data (applicant, directors, shareholders, registered office, billing, etc.) are never sent or stored anywhere.
-- **Impact**: If a visitor completes the wizard, we have no way to see what they submitted. Hero and contact-page forms are fine (they now email `contact@korporex.com` via `/api/contact`); the wizard is the remaining gap.
-- **Why not fixed yet**: Deferred in this pass — wizard payload is larger and tightly bound to the payment-processing issue below. Fastest unblock: add a `/api/incorporate` route that emails the full payload to `contact@korporex.com` *before* wiring Stripe, so orders are captured even without live payment.
-- **Logged**: 2026-04-21 (narrowed to wizard on 2026-04-22 after contact forms were wired)
+### [Severity: high] Terms of Service and Privacy Policy are unreviewed drafts
+- **Where**: `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`.
+- **Symptom**: Both pages were drafted by Claude based on Canadian SaaS industry patterns and PIPEDA structure, not by qualified legal counsel. Placeholder legal-entity name ("Korporex") still needs to be replaced with the actual incorporated entity's full legal name.
+- **Impact**: **Blocks go-live.** User is a commercial lawyer and has acknowledged the review-before-deploy expectation. Refund policy, limitation-of-liability cap ($100 floor), governing law (Ontario), and registered-office service clauses in particular warrant a review pass.
+- **Why not fixed yet**: Waiting on user's legal review pass. Drafts are structurally complete and wired into the site (Footer + wizard Step 7 links now resolve to the real pages).
+- **Logged**: 2026-04-23
 
-### [Severity: high] Incorporation wizard does not process payments
-- **Where**: `src/app/incorporate/page.tsx`, `src/app/incorporate/confirmation/page.tsx`
-- **Symptom**: Wizard collects 8 steps of data then navigates to a confirmation page; no payment processor (Stripe/etc) integration.
-- **Impact**: Cannot actually incorporate anyone. Confirmation page is misleading until this is fixed or until copy makes the stub status clear.
-- **Why not fixed yet**: Payment integration depends on backend decisions (per issue above) and business setup (merchant account, pricing finalization).
-- **Logged**: 2026-04-21
+### [Severity: high] Registered-office add-on uses placeholder physical addresses
+- **Where**: `src/lib/pricing.ts` — `REG_OFFICE_ADDON.basic.address` and `REG_OFFICE_ADDON.premium.address`.
+- **Symptom**: Customers who select the Basic or Premium add-on get a placeholder Ontario address (Mississauga / 181 Bay Street) on their Articles of Incorporation. These addresses are NOT under Korporex's control.
+- **Impact**: **Blocks go-live of the add-on.** If a customer pays for the service today, their filed corporate record lists an address Korporex doesn't operate — legally invalid and would cause mail delivery failures.
+- **Why not fixed yet**: Waiting on user to provide the real physical address(es) we'll use for the service. Once provided, it's a one-line-per-field change in `REG_OFFICE_ADDON`.
+- **Logged**: 2026-04-23
 
+### [Severity: low] `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` not set for Vercel Preview scope
+- **Where**: Vercel project `youness-7473s-projects/korporex`, env var `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` — Production is set, Preview is not.
+- **Symptom**: Any future Preview deployment (PR branch, staging URL) would render `/incorporate` without Google Places autocomplete.
+- **Impact**: None today (no active preview deploys). Will affect branch-preview deploys once the workflow ramps up.
+- **Why not fixed yet**: Vercel CLI v51.8.0 rejects `vercel env add ... preview --value X --yes` with `git_branch_required` even though the docs say omitting branch = "all preview branches". Dashboard workaround: https://vercel.com/youness-7473s-projects/korporex/settings/environment-variables → Add → `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` → check Preview → paste value.
+- **Logged**: 2026-04-23
 
 ### [Severity: low] NUANS pass-through fee is a placeholder
 - **Where**: `src/app/incorporate/page.tsx` — `NUANS_FEE = 45`.
@@ -47,6 +53,9 @@
 
 ## Resolved
 
+- **2026-04-23** — `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` was empty in Vercel Production — Removed the empty entry (`vercel env rm`), re-added the correct key (`vercel env add`), and triggered a production redeploy (`vercel deploy --prod`). Added `.vercelignore` excluding `build-tmp/` so the scratch folder's locked Chrome files don't break uploads again. Preview scope still pending — blocked by a CLI v51.8.0 quirk and tracked as its own low-sev issue.
+- **2026-04-23** — Incorporation wizard did not process payments — Wired Stripe Checkout (hosted) end-to-end. Step 7 POSTs to `/api/incorporate`, which creates a Checkout Session (package + NUANS + tax as CAD line items, pricing recalculated server-side from `@/lib/pricing`) and returns the URL; the browser full-page redirects to stripe.com. Card fields removed from the wizard UI (PCI stays on stripe.com). On payment success, `/api/stripe-webhook` (signature-verified via raw body) sends a "[PAID]" follow-up email to `contact@korporex.com` referencing the shared `KPX-YYYYMMDD-XXXX` order ref so operators can cross-reference with the earlier "[PENDING]" intake. Confirmation page is now dynamic and retrieves the Stripe session to surface the order ref + amount paid. Currently wired for test mode (card `4242 4242 4242 4242`); live-mode is a key swap in Vercel.
+- **2026-04-23** — Incorporation wizard intake was not emailed / stored — Built `/api/incorporate` (Next.js route handler in `src/app/api/incorporate/route.ts`) that validates the full wizard payload with Zod, recalculates pricing server-side from the shared `@/lib/pricing` module, and emails a structured HTML summary to `contact@korporex.com` via Brevo with `replyTo` set to the primary director. Step 7 is now async with submitting / error states — on success it navigates to the confirmation page. Card details (`cardNumber` / `expiry` / `cvc` / `cardholderName`) are deliberately excluded from the schema and stripped client-side, so PCI data never reaches the server. Dev fallback without `BREVO_API_KEY` logs submissions to the console. Issue [Severity: high] "Incorporation wizard does not process payments" remains open as the separate Stripe scope.
 - **2026-04-22** — Hero + contact-page forms were stub-only — Built `/api/contact` (Next.js route handler in `src/app/api/contact/route.ts`) that validates with Zod and posts to Brevo's Transactional Email API, sending a branded HTML notification to `contact@korporex.com` with the submitter's email in `replyTo`. Wired `HeroContactForm` and the contact page form with submitting / error states. Gracefully no-ops when `BREVO_API_KEY` is unset (logs submission to server console) so local dev isn't blocked. Requires user to generate a Brevo API key (SMTP & API → API keys tab) and add `BREVO_API_KEY` to Vercel env vars for Prod/Preview/Development before deploying.
 - **2026-04-22** — Email infrastructure for `contact@korporex.com` — Registered `korporex.com`; Cloudflare DNS + Email Routing forwards inbound to owner's Gmail (inbound live). Provisioned Brevo account, generated dedicated SMTP key `gmail-send-as`, merged `include:spf.brevo.com` into the existing SPF TXT on `korporex.com`, configured Gmail "Send mail as" via `smtp-relay.brevo.com:587` (TLS) with Brevo's auto-generated SMTP login, clicked forwarded verification link, and confirmed with a live send test. `contact@korporex.com` is now bidirectional. Scope note: `korporex.ca`, `support@`, and `noreply@` are explicitly deferred.
 - **2026-04-21** — Address autofill was inactive on the deployed wizard — Created a Google Cloud project, enabled Maps JavaScript API + Places API, generated an HTTP-referrer + API-restricted browser key, set `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` in Vercel (all environments), redeployed, and attached a billing profile to the GCP project (required for the APIs to serve requests — free $200/mo Maps credit applies). Verified live on production: `/incorporate` address fields now return Google Places suggestions and autofill street / city / region / postal / country.

@@ -27,6 +27,36 @@ Copy `.env.local.example` to `.env.local` (gitignored) and fill in. For Vercel, 
 | Variable | Required | Purpose |
 |---|---|---|
 | `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | No (feature-gated) | Enables Google Places address autocomplete in the incorporation wizard. Without it, address inputs fall back to plain text (the wizard still works). The `NEXT_PUBLIC_` prefix exposes the key to the browser — it must be HTTP-referrer restricted and API-scoped to Maps JavaScript + Places in Google Cloud Console. See `.env.local.example` for setup steps. |
+| `BREVO_API_KEY` | No (degrades) | Transactional email API key. `/api/contact` (contact + hero forms) and `/api/incorporate` (wizard intake) use it to email submissions to `contact@korporex.com`. Without it, both routes log to the server console and return success — so local dev isn't blocked. |
+| `STRIPE_SECRET_KEY` | No (degrades) | Server-side Stripe key (`sk_test_...` for test mode, `sk_live_...` for live). `/api/incorporate` creates a Checkout Session when set. Without it, the wizard falls back to redirecting straight to `/incorporate/confirmation?dev=1` — useful for local dev, **must not ship to prod without the live key**. |
+| `STRIPE_WEBHOOK_SECRET` | No (degrades) | Signing secret for `/api/stripe-webhook`. Locally, get this from `stripe listen --forward-to localhost:3000/api/stripe-webhook`. In prod, each Stripe Dashboard webhook endpoint has its own `whsec_...`. |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | No (currently unused) | Reserved for future migration to Stripe Elements / Embedded Checkout. Not referenced by current code (hosted Checkout doesn't need it client-side). |
+| `NEXT_PUBLIC_SITE_URL` | No (degrades) | Absolute origin used to build Stripe `success_url` / `cancel_url`. Falls back to `VERCEL_URL` then `http://localhost:3000`. Set explicitly on Vercel once DNS cuts over. |
+
+## Payments — Stripe Checkout
+
+**Flow**: wizard Step 7 → `POST /api/incorporate` → server sends "[PENDING]" email + creates Checkout Session → browser redirects to `session.url` (stripe.com) → Stripe posts to `POST /api/stripe-webhook` on success → webhook sends "[PAID]" follow-up email → Stripe redirects browser to `/incorporate/confirmation?session_id=...&ref=...` which verifies the session and displays the order ref.
+
+**Key architecture decisions**:
+- **Hosted Checkout, not Elements** — zero PCI scope on our server; card data only touches stripe.com. Switching to Embedded Checkout later is a small change (replace redirect with `Stripe.js` mount).
+- **Order reference (`KPX-YYYYMMDD-XXXX`)** is generated in `src/lib/orderRef.ts` and shared between the "[PENDING]" intake email and the "[PAID]" webhook email. It's how the operator cross-references a paid order with its full submission data (which is only in the intake email — Stripe metadata is limited to ~500 chars/value).
+- **Pricing recalculates server-side** in `src/lib/pricing.ts` — do not trust totals from the client. Tax is passed to Stripe as an explicit line item (we don't have Stripe Tax enabled).
+- **Intake email fires before payment**, deliberately. Even abandoned carts are logged so the operator can follow up. The webhook's "[PAID]" email is the signal that money actually moved.
+- **Webhook signature verification uses the raw body** (`req.text()`) — never parse the body as JSON before `stripe.webhooks.constructEvent`.
+- **Card fields are NOT in the wizard UI** — Stripe's hosted page handles them. Step 7 collects billing name + billing address only; these are kept in our system and also passed as Stripe session metadata so the [PAID] email shows who paid.
+
+**Test card**: `4242 4242 4242 4242` with any future expiry and any 3-digit CVC (Stripe test mode only — see `.env.local.example` for keys).
+
+**Local webhook testing**:
+```bash
+# terminal 1
+npm run dev
+# terminal 2
+stripe listen --forward-to localhost:3000/api/stripe-webhook
+# paste the whsec_... it prints into STRIPE_WEBHOOK_SECRET in .env.local, then restart dev
+```
+
+**Production webhook**: add endpoint `https://<domain>/api/stripe-webhook` in Stripe Dashboard → Developers → Webhooks, subscribe to `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`. Copy the endpoint's signing secret into Vercel as `STRIPE_WEBHOOK_SECRET`.
 
 ## Tech Stack
 
@@ -74,7 +104,7 @@ Multi-step forms use:
 1. **React Hook Form** (`useForm`, `useFieldArray`) for state and submission
 2. **Zod schemas** for runtime validation
 3. **Local React state** (`useState`) to track the current step and form data
-4. **No backend integration** — forms are stubbed to navigate to confirmation pages
+4. **Backends**: `/api/contact` (hero + contact-page forms) and `/api/incorporate` (wizard Step 7) — both POST JSON and return `{ ok }` / `{ url }` / `{ error }`. See **Payments — Stripe Checkout** below for the wizard flow.
 
 Example pattern:
 ```tsx
@@ -137,12 +167,12 @@ src/
 
 ## Key Constraints & Patterns
 
-1. **No async/server actions in interactive forms** — forms are client-side with local state, no backend calls
-2. **Contact form submissions are stubbed** — they set `submitted: true` and show a thank-you state; no email integration yet
-3. **Multi-step form navigation** — step state lives in `useState`, data is accumulated in a single object, validated at submit time
-4. **Jurisdiction selection** — always Federal, Ontario, or BC (three supported jurisdictions)
-5. **Postal codes** — Canadian format only (regex: `/^[A-Z]\d[A-Z] ?\d[A-Z]\d$/i`)
-6. **Services page** — 5 categories with multiple services each; links pass jurisdiction/type as query params to `/incorporate`
+1. **Forms POST to API routes** — `/api/contact` for contact/hero, `/api/incorporate` for the wizard. Routes live in `src/app/api/*/route.ts`.
+2. **Multi-step form navigation** — step state lives in `useState`, data is accumulated in a single object, validated at submit time
+3. **Jurisdiction selection** — always Federal, Ontario, or BC (three supported jurisdictions)
+4. **Postal codes** — Canadian format only (regex: `/^[A-Z]\d[A-Z] ?\d[A-Z]\d$/i`)
+5. **Services page** — 5 categories with multiple services each; links pass jurisdiction/type as query params to `/incorporate`
+6. **Payments** — Stripe Checkout (hosted). Never add card fields to the Korporex UI — Stripe's hosted page handles PCI. See **Payments — Stripe Checkout** section above.
 
 ## Content Guidelines
 

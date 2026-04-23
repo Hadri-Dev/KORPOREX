@@ -50,7 +50,7 @@ const categories: Category[] = [
       },
       {
         q: "Do I need a physical office address to incorporate?",
-        a: "Yes — every corporation requires a registered office address in its incorporating jurisdiction. This address must be a physical location (not a P.O. Box) where legal documents can be served. Korporex's Standard and Premium packages include a registered office address for the first month (and the full first year in Premium packages), so you don't need to arrange this separately.",
+        a: "Yes — every corporation requires a registered office address in its incorporating jurisdiction. This address must be a physical location (not a P.O. Box) where official notices and corporate correspondence can be received. If you don't have one, Korporex offers a registered office address service at checkout for federal and Ontario incorporations: Basic ($49.99/mo, billed annually at $599.88 + HST) uses our Ontario address, and Premium ($99.99/mo, billed annually at $1,199.88 + HST) uses our Toronto financial-district address. Both include monthly scanning of received mail to your email. BC incorporations require a BC address — email contact@korporex.com for help.",
       },
     ],
   },
