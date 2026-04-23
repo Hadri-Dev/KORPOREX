@@ -1,9 +1,26 @@
 # Progress
 
 ## Current Focus
-**DNS cutover complete 2026-04-23** — `korporex.com` and `www.korporex.com` now serve the Next.js app from Vercel (deploy `korporex-gjyf4op6d`, Ready at 18:23). Verification: `/`, `/terms`, `/privacy`, `/incorporate` all return HTTP 200 with Next.js-sized payloads; WordPress-string count on home is 0 (clean swap). `NEXT_PUBLIC_SITE_URL` updated to `https://korporex.com` in Vercel Production + production redeployed, so Stripe Checkout success/cancel URLs now use the new domain. Email records (MX, SPF, Brevo DKIM, DMARC) untouched through the cutover — `contact@korporex.com` inbound/outbound both unaffected. Stripe is in live mode end-to-end on Vercel Production but not yet verified with a real-card run. Open follow-ups: (1) user considering whether to gate the live site behind a "coming soon" page or similar until more work is done (conversation in-flight), (2) real-card verification run on production, (3) real registered-office addresses for the add-on, (4) optional Stripe webhook URL migration from `.vercel.app` → `korporex.com`, (5) legal-drafts review pass.
+**DNS reverted 2026-04-23 (same day as the cutover)** — user decided to keep the old WordPress site live at `korporex.com` while finishing more work on the Next.js build. `korporex.com` once again serves WordPress (proxied through Cloudflare to Namecheap IP `162.213.255.25`); `www.korporex.com` 301s to apex as before. The Next.js app remains fully functional at `https://korporex.vercel.app` for continued development and testing — Vercel deployment `korporex-a7hjfeqzn` is Production-tagged with `NEXT_PUBLIC_SITE_URL=https://korporex.vercel.app` so Stripe Checkout success/cancel URLs match the URL dev/test flows use. Email (MX, SPF, DKIM, Brevo, Cloudflare Email Routing) was untouched across the original cutover and the revert. All Stripe live-mode config (keys, webhook endpoint) remains intact and working. Open follow-ups when user is ready to relaunch: (1) flip DNS back (new Cloudflare token needed — previous one revoked), (2) flip `NEXT_PUBLIC_SITE_URL` back to `https://korporex.com` in Vercel + redeploy, (3) real-card verification run, (4) real registered-office addresses for the add-on, (5) optional Stripe webhook URL migration from `.vercel.app` → `korporex.com`, (6) legal-drafts review pass.
 
 ## Log
+
+### 2026-04-23 (DNS revert — back to WordPress while dev continues)
+- **User asked to revert DNS** so `korporex.com` serves the old WordPress site again while they continue finishing the Next.js build, to avoid exposing in-progress work to the public. Created a fresh Cloudflare API token (1-day TTL, same `Zone:DNS:Edit` scope on `korporex.com`), executed the reverse of this morning's cutover, and the user revoked the token immediately after.
+- **Three Cloudflare record changes (reverse of the cutover)**:
+  1. `CNAME www.korporex.com` — content `a2768dd48b0e9d48.vercel-dns-017.com` → `korporex.com`, proxy `false → true`.
+  2. Deleted the apex `CNAME korporex.com → a2768dd48b0e9d48.vercel-dns-017.com`.
+  3. Added `A korporex.com → 162.213.255.25` (Namecheap WordPress shared-hosting IP), proxy `true` (orange cloud). Matches the exact state of the record before the morning's cutover.
+- **Vercel env + redeploy**:
+  - `NEXT_PUBLIC_SITE_URL` in Production scope reverted to `https://korporex.vercel.app`
+  - Triggered production redeploy `korporex-a7hjfeqzn` (Ready, 38s build). Now Stripe Checkout success/cancel URLs match the URL customers use during testing (`.vercel.app`), so no cross-domain bounce after payment.
+- **Verified**:
+  - `https://korporex.com/` → HTTP 200, 428 KB, contains the "WordPress" string (original WordPress home page back in place).
+  - `https://www.korporex.com/` → HTTP 301 redirect (normal WordPress www→apex behaviour).
+  - `https://korporex.vercel.app/terms` → HTTP 200, 67860 bytes (Next.js app fully functional for dev).
+  - Vercel Domains panel will show `korporex.com` and `www.korporex.com` as ⚠️ Invalid Configuration again — harmless, just the flag that DNS isn't pointed here. Kept the domains registered in Vercel so a future re-cutover is a 30-second operation instead of re-adding them.
+- **What still works identically**: live-mode Stripe (keys, webhook at `https://korporex.vercel.app/api/stripe-webhook`, all four env vars), Brevo transactional email, Cloudflare inbound email routing (`contact@korporex.com` → Gmail), Gmail outbound "Send mail as" via Brevo SMTP. The revert touches DNS A/CNAME records only; no email or payment infrastructure disturbed.
+- **To re-launch on `korporex.com` later**: the user creates a fresh Cloudflare token → I re-apply the 2 CNAMEs pointing at `a2768dd48b0e9d48.vercel-dns-017.com` (proxy off), delete the A record, flip `NEXT_PUBLIC_SITE_URL` to `https://korporex.com`, redeploy. Propagation + SSL takes 1–5 minutes. Same process as this morning's cutover but cleaner second time around because nothing else has to be decided.
 
 ### 2026-04-23 (post-cutover — SITE_URL env + verification)
 - **Cutover confirmed live at 18:22:45** by the polling monitor: `https://korporex.com/terms` → HTTP 200 with 67,860-byte Next.js payload (WordPress was ~300 KB, unmistakable diff).
