@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { Building2, FileText, Edit3, ClipboardCheck, RefreshCw, Clock, Mail } from "lucide-react";
 import SoonContactForm from "@/components/SoonContactForm";
 
@@ -23,16 +22,7 @@ export default function SoonPage() {
       {/* Top brand strip */}
       <header className="bg-navy-900 py-5 px-6 border-b border-white/10">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/logo/logo-mark.svg"
-              alt="Korporex"
-              width={36}
-              height={36}
-              priority
-            />
-            <span className="font-serif text-xl font-bold text-white tracking-tight">Korporex</span>
-          </div>
+          <span className="font-serif text-xl font-bold text-white tracking-tight">Korporex</span>
           <a
             href="mailto:contact@korporex.com"
             className="hidden sm:inline-flex items-center gap-2 text-xs text-gray-300 hover:text-gold-400 transition-colors"
