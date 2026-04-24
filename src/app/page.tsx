@@ -134,7 +134,8 @@ export default function HomePage() {
             <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] mb-8">
               <RotatingWords
                 phrases={["Business Incorporation.", "Corporate Services."]}
-              />{" "}
+              />
+              <br />
               <span className="text-gold-400">Easy. Fast.<br />Affordable.</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-10">
