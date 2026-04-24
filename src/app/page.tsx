@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Clock, Laptop, ShieldCheck, BadgeDollarSign, Star, CheckCircle } from "lucide-react";
+import { ArrowRight, Clock, Laptop, ShieldCheck, BadgeDollarSign, Star, CheckCircle, FileText, Edit3, ClipboardCheck, RefreshCw } from "lucide-react";
 import HeroContactForm from "@/components/HeroContactForm";
 
 const featuredServices = [
@@ -23,6 +23,37 @@ const featuredServices = [
     description: "Incorporate provincially in British Columbia. Modern corporate legislation and a fully online filing system.",
     from: "$449",
     href: "/incorporate?jurisdiction=bc",
+  },
+];
+
+const otherServices = [
+  {
+    icon: FileText,
+    title: "Registrations",
+    description: "Sole proprietorships, business names, and extra-provincial registrations.",
+    from: "From $79",
+    items: ["Sole proprietorships", "Business name registration", "Extra-provincial registration"],
+  },
+  {
+    icon: Edit3,
+    title: "Changes & Amendments",
+    description: "Update directors, officers, shareholders, addresses, or articles.",
+    from: "From $99",
+    items: ["Director / officer changes", "Shareholder changes", "Articles of amendment"],
+  },
+  {
+    icon: ClipboardCheck,
+    title: "Compliance Filings",
+    description: "Annual returns and statutory filings to keep your corporation in good standing.",
+    from: "From $99",
+    items: ["Annual returns (federal & Ontario)", "Initial return (Ontario)", "Notice of change"],
+  },
+  {
+    icon: RefreshCw,
+    title: "Business Updates",
+    description: "Dissolve, revive, amalgamate, or continue your corporation across jurisdictions.",
+    from: "From $199",
+    items: ["Dissolution & revival", "Amalgamation", "Continuance between jurisdictions"],
   },
 ];
 
@@ -178,9 +209,66 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-          <div className="text-center mt-8">
-            <Link href="/services" className="text-sm text-navy-900 underline underline-offset-2 hover:text-navy-700">
-              View all services including registrations, amendments &amp; compliance filings →
+        </div>
+      </section>
+
+      {/* Complete Corporate Services — beyond incorporation */}
+      <section className="bg-cream-50 py-24 px-6 border-t border-gray-100">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
+              More Than Incorporation
+            </p>
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-navy-900">
+              Complete Corporate Services
+            </h2>
+            <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
+              Beyond incorporation, Korporex handles the ongoing filings your business needs to
+              grow, change, and stay compliant — all online, all at a fixed price.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {otherServices.map(({ icon: Icon, title, description, from, items }) => (
+              <div
+                key={title}
+                className="group flex flex-col bg-white border border-gray-200 p-7 transition-colors hover:bg-navy-900 hover:border-navy-900"
+              >
+                <div className="w-11 h-11 bg-navy-50 flex items-center justify-center mb-5 transition-colors group-hover:bg-white/10">
+                  <Icon size={20} className="text-navy-900 transition-colors group-hover:text-gold-400" />
+                </div>
+                <h3 className="font-serif text-xl font-bold text-navy-900 mb-2 transition-colors group-hover:text-white">
+                  {title}
+                </h3>
+                <p className="text-sm text-gray-600 leading-relaxed mb-5 transition-colors group-hover:text-gray-300">
+                  {description}
+                </p>
+                <ul className="space-y-2 mb-6 flex-1">
+                  {items.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-2 text-xs text-gray-700 transition-colors group-hover:text-gray-300"
+                    >
+                      <CheckCircle size={12} className="text-gold-500 shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex items-center justify-between pt-5 border-t border-gray-100 transition-colors group-hover:border-white/20">
+                  <p className="text-xs text-gray-500 transition-colors group-hover:text-gray-400">{from}</p>
+                  <span className="text-xs font-medium text-navy-900 transition-colors group-hover:text-gold-400">
+                    Learn more →
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-12">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 border border-navy-900 text-navy-900 font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-navy-900 hover:text-white transition-colors"
+            >
+              Browse All Services
+              <ArrowRight size={16} />
             </Link>
           </div>
         </div>
