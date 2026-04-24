@@ -9,6 +9,18 @@
 
 ## Log
 
+### 2026-04-24 (afternoon polish — /soon header cleanup + homepage hero rotator)
+- **/soon landing page — header cleanup** (two commits):
+  - `c0146d2` Removed the Next.js `<Image>` of `logo-mark.svg` from the header. Was rendering as a broken-image icon because serving SVG through `next/image` requires `images.dangerouslyAllowSVG` in `next.config.mjs`, which this project doesn't set. Simpler to remove the image than enable SVG optimization.
+  - `236230c` Removed the "Korporex" wordmark too per user feedback that it didn't look good. Header is now a minimal strip with only the `contact@korporex.com` mailto link right-aligned. Branding carries through in the hero copy and footer copyright.
+- **Homepage hero — animated rotator between "Business Incorporation." and "Corporate Services."** Sequence: `0e796bf` → `3a6773a` → `f801c55` → `2f2098b` → `9f00dae`. Final behaviour:
+  - Words reveal one at a time with a rise + fade-in (Business → Incorporation. → hold → fade → Corporate → Services. → hold → fade → loop). Timings on the component are `wordStaggerMs=550`, `holdMs=1800`, `fadeMs=450` — all adjustable props on `<RotatingWords>` in `src/app/page.tsx`.
+  - `<br />` between the rotator and the gold "Easy. Fast." / "Affordable." line so the gold line always starts fresh below the rotating phrase (fixes a wrap where "Easy." had crept onto the same line as "Services.").
+  - Word spacing expressed as `mr-[0.25em]` on preceding words rather than `ml-[0.25em]` on trailing words — so when "Incorporation." or "Services." wrap to a second line, they start flush against the container's left edge instead of being indented by the inherited left margin.
+  - New component `src/components/RotatingWords.tsx` (client). Accessible via `aria-live="polite"`, honours `prefers-reduced-motion` (shows first phrase without animating).
+- **Visual verification** via headless Chrome captures from `https://korporex.vercel.app/` at `--virtual-time-budget` of 500 / 1400 / 4100 ms — all three states (first word alone, full first phrase, full second phrase) render correctly; gold "Easy. Fast." / "Affordable." sits on stable lines below throughout.
+- **Tracking-file state**: repository working tree clean at commit `9f00dae` — all homepage + /soon + middleware + DNS work is committed and pushed. `progress.md` now fully reflects the full 2026-04-24 session.
+
 ### 2026-04-24 (DNS cutover — coming-soon page LIVE at korporex.com)
 - **DNS re-cut via Cloudflare API** using a fresh short-lived token (1-day TTL, `Zone:DNS:Edit` scope on korporex.com only, token ID `cda2539d16307cdf0db05a9888347395`). **User should revoke the token now that the cutover is complete.** Three record changes executed on zone `5604175ce607a8a5b093d00251a794c6`:
   1. `PUT` on CNAME `www.korporex.com` (record `7a99e783d42a0f8bf29a92e4640867d5`) — content `korporex.com → a2768dd48b0e9d48.vercel-dns-017.com`, `proxied: true → false`.
