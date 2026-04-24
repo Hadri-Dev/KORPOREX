@@ -13,8 +13,8 @@ type Props = {
 /**
  * Cycles through phrases by revealing each word one at a time (rise + fade in),
  * holding the complete phrase, fading the whole phrase out, then advancing to
- * the next phrase. Hidden words still reserve their horizontal space via
- * `inline-block`, so surrounding content never jitters.
+ * the next. Words are inline-blocks so they participate in normal line-wrapping
+ * and don't overlap surrounding text in the parent heading.
  */
 export default function RotatingWords({
   phrases,
@@ -52,44 +52,28 @@ export default function RotatingWords({
     }
   }, [phase, wordsShown, words.length, phrases.length, wordStaggerMs, holdMs, fadeMs]);
 
-  // Measure the longest phrase so the rotating block never narrows between
-  // rotations. Rendered invisibly; the visible phrase sits on top of it.
-  const widestPhrase = useMemo(
-    () => phrases.reduce((a, b) => (b.length > a.length ? b : a), phrases[0] ?? ""),
-    [phrases]
-  );
-
   return (
     <span
       aria-live="polite"
-      className={`relative inline-block align-baseline ${className}`}
+      style={{ transitionDuration: `${fadeMs}ms` }}
+      className={`transition-opacity motion-reduce:transition-none ${
+        phase === "fading" ? "opacity-0" : "opacity-100"
+      } ${className}`}
     >
-      {/* invisible sizer — keeps the layout stable at the widest phrase */}
-      <span aria-hidden className="invisible whitespace-nowrap">
-        {widestPhrase}
-      </span>
-      {/* visible phrase, absolutely positioned over the sizer */}
-      <span
-        style={{ transitionDuration: `${fadeMs}ms` }}
-        className={`absolute inset-0 transition-opacity motion-reduce:transition-none ${
-          phase === "fading" ? "opacity-0" : "opacity-100"
-        }`}
-      >
-        {words.map((word, i) => (
-          <span
-            key={`${phraseIndex}-${i}`}
-            className={`inline-block transition-all duration-500 ease-out motion-reduce:transition-none ${
-              i > 0 ? "ml-[0.25em]" : ""
-            } ${
-              i < wordsShown
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-3 motion-reduce:translate-y-0 motion-reduce:opacity-100"
-            }`}
-          >
-            {word}
-          </span>
-        ))}
-      </span>
+      {words.map((word, i) => (
+        <span
+          key={`${phraseIndex}-${i}`}
+          className={`inline-block transition-all duration-500 ease-out motion-reduce:transition-none ${
+            i > 0 ? "ml-[0.25em]" : ""
+          } ${
+            i < wordsShown
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-3 motion-reduce:translate-y-0 motion-reduce:opacity-100"
+          }`}
+        >
+          {word}
+        </span>
+      ))}
     </span>
   );
 }
