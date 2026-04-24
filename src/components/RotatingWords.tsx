@@ -64,7 +64,7 @@ export default function RotatingWords({
         <span
           key={`${phraseIndex}-${i}`}
           className={`inline-block transition-all duration-500 ease-out motion-reduce:transition-none ${
-            i > 0 ? "ml-[0.25em]" : ""
+            i < words.length - 1 ? "mr-[0.25em]" : ""
           } ${
             i < wordsShown
               ? "opacity-100 translate-y-0"
