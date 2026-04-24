@@ -1,47 +1,95 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Props = {
-  words: string[];
-  intervalMs?: number;
-  transitionMs?: number;
+  phrases: string[];
+  wordStaggerMs?: number;
+  holdMs?: number;
+  fadeMs?: number;
   className?: string;
 };
 
+/**
+ * Cycles through phrases by revealing each word one at a time (rise + fade in),
+ * holding the complete phrase, fading the whole phrase out, then advancing to
+ * the next phrase. Hidden words still reserve their horizontal space via
+ * `inline-block`, so surrounding content never jitters.
+ */
 export default function RotatingWords({
-  words,
-  intervalMs = 3000,
-  transitionMs = 400,
+  phrases,
+  wordStaggerMs = 550,
+  holdMs = 1800,
+  fadeMs = 450,
   className = "",
 }: Props) {
-  const [index, setIndex] = useState(0);
-  const [phase, setPhase] = useState<"in" | "out">("in");
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [wordsShown, setWordsShown] = useState(1);
+  const [phase, setPhase] = useState<"building" | "holding" | "fading">("building");
+
+  const words = useMemo(() => phrases[phraseIndex].split(" "), [phrases, phraseIndex]);
 
   useEffect(() => {
-    if (words.length <= 1) return;
-    const fadeOut = setTimeout(() => setPhase("out"), intervalMs - transitionMs);
-    const advance = setTimeout(() => {
-      setIndex((prev) => (prev + 1) % words.length);
-      setPhase("in");
-    }, intervalMs);
-    return () => {
-      clearTimeout(fadeOut);
-      clearTimeout(advance);
-    };
-  }, [index, words.length, intervalMs, transitionMs]);
+    if (phase === "building") {
+      if (wordsShown < words.length) {
+        const t = setTimeout(() => setWordsShown((n) => n + 1), wordStaggerMs);
+        return () => clearTimeout(t);
+      }
+      setPhase("holding");
+      return;
+    }
+    if (phase === "holding") {
+      const t = setTimeout(() => setPhase("fading"), holdMs);
+      return () => clearTimeout(t);
+    }
+    if (phase === "fading") {
+      const t = setTimeout(() => {
+        setPhraseIndex((i) => (i + 1) % phrases.length);
+        setWordsShown(1);
+        setPhase("building");
+      }, fadeMs);
+      return () => clearTimeout(t);
+    }
+  }, [phase, wordsShown, words.length, phrases.length, wordStaggerMs, holdMs, fadeMs]);
+
+  // Measure the longest phrase so the rotating block never narrows between
+  // rotations. Rendered invisibly; the visible phrase sits on top of it.
+  const widestPhrase = useMemo(
+    () => phrases.reduce((a, b) => (b.length > a.length ? b : a), phrases[0] ?? ""),
+    [phrases]
+  );
 
   return (
     <span
       aria-live="polite"
-      style={{ transitionDuration: `${transitionMs}ms` }}
-      className={`inline-block align-baseline transition-all ease-out motion-reduce:transition-none ${
-        phase === "in"
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 -translate-y-2 motion-reduce:translate-y-0 motion-reduce:opacity-100"
-      } ${className}`}
+      className={`relative inline-block align-baseline ${className}`}
     >
-      {words[index]}
+      {/* invisible sizer — keeps the layout stable at the widest phrase */}
+      <span aria-hidden className="invisible whitespace-nowrap">
+        {widestPhrase}
+      </span>
+      {/* visible phrase, absolutely positioned over the sizer */}
+      <span
+        style={{ transitionDuration: `${fadeMs}ms` }}
+        className={`absolute inset-0 transition-opacity motion-reduce:transition-none ${
+          phase === "fading" ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        {words.map((word, i) => (
+          <span
+            key={`${phraseIndex}-${i}`}
+            className={`inline-block transition-all duration-500 ease-out motion-reduce:transition-none ${
+              i > 0 ? "ml-[0.25em]" : ""
+            } ${
+              i < wordsShown
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-3 motion-reduce:translate-y-0 motion-reduce:opacity-100"
+            }`}
+          >
+            {word}
+          </span>
+        ))}
+      </span>
     </span>
   );
 }
