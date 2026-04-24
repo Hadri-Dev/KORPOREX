@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Clock, Laptop, ShieldCheck, BadgeDollarSign, Star, CheckCircle, FileText, Edit3, ClipboardCheck, RefreshCw } from "lucide-react";
 import HeroContactForm from "@/components/HeroContactForm";
+import RotatingWords from "@/components/RotatingWords";
 
 const featuredServices = [
   {
@@ -131,7 +132,10 @@ export default function HomePage() {
               </span>
             </div>
             <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] mb-8">
-              Business Incorporation.{" "}
+              <RotatingWords
+                words={["Business Incorporation.", "Corporate Services."]}
+                intervalMs={3200}
+              />{" "}
               <span className="text-gold-400">Easy. Fast.<br />Affordable.</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-10">
