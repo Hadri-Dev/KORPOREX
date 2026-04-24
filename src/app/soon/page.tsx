@@ -19,13 +19,12 @@ const capabilities = [
 export default function SoonPage() {
   return (
     <div className="min-h-screen bg-cream-50 flex flex-col">
-      {/* Top brand strip */}
+      {/* Top contact strip */}
       <header className="bg-navy-900 py-5 px-6 border-b border-white/10">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <span className="font-serif text-xl font-bold text-white tracking-tight">Korporex</span>
+        <div className="max-w-7xl mx-auto flex items-center justify-end">
           <a
             href="mailto:contact@korporex.com"
-            className="hidden sm:inline-flex items-center gap-2 text-xs text-gray-300 hover:text-gold-400 transition-colors"
+            className="inline-flex items-center gap-2 text-xs text-gray-300 hover:text-gold-400 transition-colors"
           >
             <Mail size={14} />
             contact@korporex.com
