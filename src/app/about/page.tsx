@@ -20,7 +20,7 @@ const values = [
   {
     icon: Globe,
     title: "Accessibility",
-    description: "Incorporation shouldn't require a trip to a government office. We've made it as simple as shopping online — available to Canadian and international founders alike.",
+    description: "Incorporation shouldn't require a trip to a government office. We've made it as simple as shopping online — available to Canadian and international founders.",
   },
 ];
 
@@ -48,7 +48,7 @@ export default function AboutPage() {
           <p className="text-lg text-gray-600 leading-relaxed max-w-2xl">
             Korporex is a Canadian technology company that makes it simple for entrepreneurs
             to incorporate and manage their businesses entirely online — fast, transparent,
-            and accessible to Canadian and international founders alike.
+            and accessible to Canadian and international founders.
           </p>
         </div>
       </section>
