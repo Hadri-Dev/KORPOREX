@@ -49,6 +49,7 @@ interface WizardData {
   corpNameType: CorpNameType;
   businessName: string;
   legalEnding: LegalEnding | "";
+  officialEmail: string;
   naicsCode: string;
   businessActivity: string;
   fiscalYearEndMonth: string;
@@ -183,6 +184,7 @@ const s3 = z.object({
   corpNameType: z.enum(["named", "numbered"]),
   businessName: z.string().max(120),
   legalEnding: legalEndingSchema,
+  officialEmail: z.string().email("Valid email required").max(320),
   naicsCode: z.string().min(4, "Please select an industry classification"),
   businessActivity: z.string().min(10, "Describe your business activity in at least a sentence"),
   fiscalYearEndMonth: z.string().min(1, "Select a month"),
@@ -533,6 +535,7 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
       // a "Please select…" placeholder for the empty state and validation
       // surfaces a "Select a legal ending" message before allowing submit.
       legalEnding: "" as LegalEnding,
+      officialEmail: "",
       naicsCode: "",
       businessActivity: "",
       fiscalYearEndMonth: "",
@@ -659,6 +662,21 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
             <textarea {...register("businessActivity")} rows={3}
               placeholder="e.g. Software development and IT consulting for small businesses."
               className={`${iCls} resize-none`} />
+          </Field>
+
+          {/* Official email — corporation's primary contact email for government and Korporex correspondence. */}
+          <Field
+            label="Official Email Address *"
+            error={errors.officialEmail?.message}
+            hint="The corporation's primary contact email for government notices and correspondence."
+          >
+            <input
+              type="email"
+              autoComplete="email"
+              {...register("officialEmail")}
+              placeholder="e.g. contact@yourcompany.com"
+              className={iCls}
+            />
           </Field>
 
           {/* Fiscal year end: month + day */}
@@ -1067,6 +1085,7 @@ function Step7({ data, onBack, onPay }: {
               ["Jurisdiction", jurisLabel],
               ["Package", pkgLabel],
               ["Corporation", corpName],
+              ["Official Email", data.officialEmail || "—"],
               ["Directors", String(data.directors.length)],
               ["Shareholders", String(data.shareholders.length)],
               [
@@ -1167,6 +1186,7 @@ const init: WizardData = {
   corpNameType: "named",
   businessName: "",
   legalEnding: "",
+  officialEmail: "",
   naicsCode: "",
   businessActivity: "",
   fiscalYearEndMonth: "", fiscalYearEndDay: "",
@@ -1195,6 +1215,7 @@ export default function IncorporatePage() {
             corpNameType: data.corpNameType,
             businessName: data.businessName,
             legalEnding: data.legalEnding === "" ? undefined : data.legalEnding,
+            officialEmail: data.officialEmail,
             naicsCode: data.naicsCode,
             businessActivity: data.businessActivity,
             fiscalYearEndMonth: data.fiscalYearEndMonth,
@@ -1224,6 +1245,7 @@ export default function IncorporatePage() {
               corpNameType: data.corpNameType,
               businessName: data.businessName,
               legalEnding: data.legalEnding,
+              officialEmail: data.officialEmail,
               naicsCode: data.naicsCode,
               businessActivity: data.businessActivity,
               fiscalYearEndMonth: data.fiscalYearEndMonth,

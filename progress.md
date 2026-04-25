@@ -9,6 +9,12 @@
 
 ## Log
 
+### 2026-04-24 (Step 3 — Official Email Address field)
+- New required field on Step 3 between Business Activity Description and Fiscal Year End: **Official Email Address**, validated as a real email by Zod (`z.string().email()`).
+- Threaded through end-to-end: `WizardData.officialEmail`, `s3` Zod schema, Step 3 defaults, init, Step 3 → IncorporatePage `def` prop, onPay payload, Step 7 review (new "Official Email" row in the Order Summary), and `/api/incorporate` schema + intake email (new "Official email" row in the Order section of the [PENDING] email).
+- Hint: "The corporation's primary contact email for government notices and correspondence." Placeholder: `e.g. contact@yourcompany.com`.
+- **Verified**: tsc / lint / build all green. Visual screenshot at [build-tmp/step3-verify/03-with-official-email.png](build-tmp/step3-verify/03-with-official-email.png) confirms the field renders between Business Activity and Fiscal Year End with proper styling, placeholder, and hint copy.
+
 ### 2026-04-24 (NAICS field copy tweaks)
 - Step 3 NAICS field: label `Industry (NAICS Code)` → `Primary Activity (NAICS Code)` so the question reads as a direct request rather than a category bucket.
 - Hint trimmed: dropped trailing sentence "This is required for several government registrations." per user direction. Hint now just reads "Search by code, activity, or sector."
