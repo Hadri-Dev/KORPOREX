@@ -9,6 +9,11 @@
 
 ## Log
 
+### 2026-04-24 (homepage copy tweaks)
+- `src/app/page.tsx` hero subtitle: dropped trailing `alike` — now ends "available to Canadian entrepreneurs and international founders."
+- `src/app/page.tsx` "Why Korporex" section heading: `Built for Canadian Entrepreneurs` → `Built for Entrepreneurs Like You`. Reframes from a geographic claim to a more inclusive customer-voice headline (still consistent with the subtitle directly above which references both Canadian + international founders).
+- About page ([about/page.tsx:23](src/app/about/page.tsx) and `:51`) carries similar "Canadian and international founders alike" wording — left untouched since user scoped the change to the home page.
+
 ### 2026-04-24 (registered office add-on — collapsed to single GTA tier, non-refundable)
 - **Decision (from user)**: Eliminate the two-tier (Basic Mississauga / Premium Bay Street) registered-office add-on. Replace with a single option:
   - Either the customer provides their own registered office address, OR

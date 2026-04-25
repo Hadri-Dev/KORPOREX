@@ -141,7 +141,7 @@ export default function HomePage() {
             <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-10">
               Incorporate your business in Canada in as little as 24 hours. 100% online,
               government-compliant filings, and transparent pricing — available to Canadian
-              entrepreneurs and international founders alike.
+              entrepreneurs and international founders.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
@@ -325,7 +325,7 @@ export default function HomePage() {
               Why Korporex
             </p>
             <h2 className="font-serif text-4xl md:text-5xl font-bold text-navy-900">
-              Built for Canadian Entrepreneurs
+              Built for Entrepreneurs Like You
             </h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
