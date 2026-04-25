@@ -30,6 +30,19 @@
   1. The Calendly `event_scheduled` postMessage doesn't reliably include the start time; we currently fall back to "(see Calendly notification)" when absent. If users complain about the friendly time not appearing in the email, we can use the Calendly REST API server-side to fetch the start time given the event URI (Calendly Personal Access Token required).
   2. No automated test for the new flow — same gap as the rest of the wizard. Tracked under the existing "No automated tests" known-issue entry.
 
+### 2026-04-24 (Directors — Citizenship Status + CBCA-resident description)
+- New required field on each director: **Citizenship Status** — radio group with three mutually-exclusive options (Canadian citizen / Permanent resident / Other). Customer must pick one.
+- The existing "Canadian resident" checkbox now has a description below it explaining the CBCA s.2(1) definition: "Per CBCA s.2(1), a 'resident Canadian' is a Canadian citizen who ordinarily lives in Canada, or a permanent resident who ordinarily lives in Canada (and has not been a permanent resident long enough to be eligible for Canadian citizenship). Tick this box only if you meet that definition."
+- **Why two fields**: citizenship status and CBCA "resident Canadian" status are orthogonal — the latter requires both Canadian citizenship/PR AND ordinarily living in Canada. Splitting them lets us capture each cleanly. The CBCA description is faithful to s.2(1) including the one-year-after-citizenship-eligibility caveat for permanent residents.
+- **Implementation**:
+  - New `CitizenshipStatus = "citizen" | "permanent_resident" | "other"` union and a shared `CITIZENSHIP_OPTIONS` const at the top of [src/app/incorporate/page.tsx](src/app/incorporate/page.tsx).
+  - `Director.citizenshipStatus: CitizenshipStatus`; `emptyDir.citizenshipStatus: "" as CitizenshipStatus` (cast pattern matches `legalEnding`).
+  - Wizard's `directorSchema` Zod uses `z.enum([...], { message: "Select citizenship status" })`; same in the API schema.
+  - Step 4 UI: radio group renders as three native `<input type="radio">` elements wrapped in styled labels using Tailwind's `has-[:checked]` variant (Tailwind 3.4+) — semantically correct radios, visually consistent with other selectable cards in the wizard.
+  - The previous default of `isCanadianResident: true` flipped to `false` since customers should now consciously pick.
+  - Intake email director block adds a new "Citizenship" row (rendered as the friendly label) and renames the prior "Canadian resident" row to "CBCA resident Canadian" so the operator sees both signals separately.
+- **Verified**: tsc/lint/build green. Screenshot at [build-tmp/step4-tax-residency/02-citizenship.png](build-tmp/step4-tax-residency/02-citizenship.png) shows the three-up radio group above the Canadian-resident checkbox, with the CBCA description rendered as small grey copy directly underneath.
+
 ### 2026-04-24 (Directors — Country of Tax Residency field)
 - New required field on each director (Step 4) capturing country of tax residency, per user direction.
 - New shared module [src/lib/countries.ts](src/lib/countries.ts) with the full ISO 3166-1 alpha-2 list (249 entries, alphabetized by English short name). Kept separate from the existing 12-entry `COUNTRIES` const used by the address dropdown — that one's intentionally restricted to common countries plus an `Other` fallback; migrating it later is a separate task.

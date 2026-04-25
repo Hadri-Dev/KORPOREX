@@ -32,6 +32,21 @@ import { ALL_COUNTRIES } from "@/lib/countries";
 
 type CorpNameType = "named" | "numbered";
 
+// CBCA s.2(1) defines a "resident Canadian" as a Canadian citizen ordinarily
+// resident in Canada (with some prescribed-class exceptions) or a permanent
+// resident ordinarily resident in Canada (with one-year-after-citizenship-
+// eligibility caveat). We split the data into two orthogonal fields:
+//  - `citizenshipStatus` — what the director IS (citizen / PR / other)
+//  - `isCanadianResident` — whether the director ordinarily lives in Canada
+// The combination of both determines CBCA "resident Canadian" status.
+type CitizenshipStatus = "citizen" | "permanent_resident" | "other";
+
+const CITIZENSHIP_OPTIONS: ReadonlyArray<{ value: CitizenshipStatus; label: string }> = [
+  { value: "citizen", label: "Canadian citizen" },
+  { value: "permanent_resident", label: "Permanent resident" },
+  { value: "other", label: "Other" },
+];
+
 interface Address {
   street: string;
   city: string;
@@ -42,7 +57,9 @@ interface Address {
 
 interface Director {
   firstName: string; lastName: string; email: string;
-  dateOfBirth: string; isCanadianResident: boolean;
+  dateOfBirth: string;
+  citizenshipStatus: CitizenshipStatus;
+  isCanadianResident: boolean;
   taxResidencyCountry: string;
   address: Address;
 }
@@ -182,6 +199,9 @@ const directorSchema = z.object({
   lastName: z.string().min(1, "Required"),
   email: z.string().email("Valid email required"),
   dateOfBirth: z.string().min(1, "Required"),
+  citizenshipStatus: z.enum(["citizen", "permanent_resident", "other"], {
+    message: "Select citizenship status",
+  }),
   isCanadianResident: z.boolean(),
   taxResidencyCountry: z.string().min(2, "Select a country"),
   address: addressSchema,
@@ -746,7 +766,12 @@ type S4 = z.infer<typeof s4>;
 const emptyAddress: Address = { street: "", city: "", region: "", postalCode: "", country: "CA" };
 const emptyDir: Director = {
   firstName: "", lastName: "", email: "",
-  dateOfBirth: "", isCanadianResident: true,
+  dateOfBirth: "",
+  // Cast: empty surfaces as "no option selected" in the radio group;
+  // Zod rejects it at submit time so the customer is forced to pick.
+  // Same pattern used for `legalEnding` on Step 3.
+  citizenshipStatus: "" as CitizenshipStatus,
+  isCanadianResident: false,
   taxResidencyCountry: "",
   address: { ...emptyAddress },
 };
@@ -802,9 +827,44 @@ function Step4({ def, onNext, onBack }: { def: Partial<S4>; onNext: (d: S4) => v
                   </select>
                 </Field>
               </div>
-              <div className="flex items-center gap-3 mt-4">
-                <input type="checkbox" id={`resident-${i}`} {...register(`directors.${i}.isCanadianResident`)} className="shrink-0 accent-navy-900" />
-                <label htmlFor={`resident-${i}`} className="text-sm text-gray-700 cursor-pointer">Canadian resident</label>
+              {/* Citizenship status — required radio group. Mutually
+                  exclusive: Canadian citizen / Permanent resident / Other.
+                  Native radio inputs (semantic) styled to look like the
+                  other selectable cards in the wizard via the `has-[:checked]`
+                  Tailwind variant. */}
+              <div className="mt-4">
+                <Field
+                  label="Citizenship Status *"
+                  error={de[i]?.citizenshipStatus?.message}
+                >
+                  <div className="grid grid-cols-3 gap-3">
+                    {CITIZENSHIP_OPTIONS.map((opt) => (
+                      <label
+                        key={opt.value}
+                        className="flex items-center gap-2 border border-gray-200 px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium"
+                      >
+                        <input
+                          type="radio"
+                          value={opt.value}
+                          {...register(`directors.${i}.citizenshipStatus`)}
+                          className="accent-navy-900"
+                        />
+                        {opt.label}
+                      </label>
+                    ))}
+                  </div>
+                </Field>
+              </div>
+              <div className="mt-4">
+                <div className="flex items-center gap-3">
+                  <input type="checkbox" id={`resident-${i}`} {...register(`directors.${i}.isCanadianResident`)} className="shrink-0 accent-navy-900" />
+                  <label htmlFor={`resident-${i}`} className="text-sm text-gray-700 cursor-pointer">Canadian resident</label>
+                </div>
+                <p className="text-xs text-gray-500 mt-1.5 leading-relaxed">
+                  Per CBCA s.2(1), a &ldquo;resident Canadian&rdquo; is a Canadian citizen who ordinarily lives in Canada,
+                  or a permanent resident who ordinarily lives in Canada (and has not been a permanent resident long enough
+                  to be eligible for Canadian citizenship). Tick this box only if you meet that definition.
+                </p>
               </div>
             </div>
           ))}

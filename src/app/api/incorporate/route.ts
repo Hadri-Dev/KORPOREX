@@ -33,6 +33,7 @@ const directorSchema = z.object({
   lastName: z.string().trim().min(1).max(100),
   email: z.string().trim().email().max(320),
   dateOfBirth: z.string().trim().min(1).max(20),
+  citizenshipStatus: z.enum(["citizen", "permanent_resident", "other"]),
   isCanadianResident: z.boolean(),
   taxResidencyCountry: z.string().trim().min(2).max(10),
   address: addressSchema,
@@ -394,11 +395,18 @@ function buildHtmlBody(
     d.directors.map((x) => {
       const country = ALL_COUNTRIES.find((c) => c.code === x.taxResidencyCountry);
       const taxRes = country ? `${country.name} (${country.code})` : x.taxResidencyCountry || "—";
+      const citizenshipLabel =
+        x.citizenshipStatus === "citizen"
+          ? "Canadian citizen"
+          : x.citizenshipStatus === "permanent_resident"
+            ? "Permanent resident"
+            : "Other";
       return {
         Name: `${x.firstName} ${x.lastName}`,
         Email: x.email,
         "Date of birth": x.dateOfBirth,
-        "Canadian resident": x.isCanadianResident ? "Yes" : "No",
+        Citizenship: citizenshipLabel,
+        "CBCA resident Canadian": x.isCanadianResident ? "Yes" : "No",
         "Tax residency": taxRes,
         Address: formatAddress(x.address),
       };
