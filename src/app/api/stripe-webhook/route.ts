@@ -97,15 +97,17 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const jurisdiction = session.metadata?.jurisdiction ?? "(unknown)";
   const pkg = session.metadata?.pkg ?? "(unknown)";
   const regOfficeAddon = (session.metadata?.regOfficeAddon ?? "none") as RegOfficeAddon;
+  const legalEnding = session.metadata?.legalEnding ?? "";
 
   const jurisLabel = JURISDICTION_LABELS[jurisdiction as Jurisdiction] ?? jurisdiction;
   const pkgLabel = PKG_LABELS[pkg as Pkg] ?? pkg;
+  const endingSuffix = legalEnding ? ` ${legalEnding}` : "";
   const displayName =
     corpNameType === "numbered"
-      ? `Numbered ${jurisLabel}`
+      ? `Numbered ${jurisLabel}${endingSuffix}`
       : businessName && businessName !== "(numbered)"
-        ? businessName
-        : `Unnamed ${jurisLabel}`;
+        ? `${businessName}${endingSuffix}`
+        : `Unnamed ${jurisLabel}${endingSuffix}`;
 
   const subject = `[PAID] ${orderRef} — ${displayName} — ${pkgLabel} — $${amountTotal} ${currency}`;
   const html = buildPaidBody({
@@ -117,6 +119,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     businessName: displayName,
     jurisdiction: jurisLabel,
     pkg: pkgLabel,
+    legalEnding,
     regOfficeAddon,
     sessionId: session.id,
     paymentIntent:
@@ -134,14 +137,16 @@ async function handleCheckoutFailed(session: Stripe.Checkout.Session) {
   const corpNameType = session.metadata?.corpNameType ?? "";
   const jurisdiction = session.metadata?.jurisdiction ?? "(unknown)";
   const pkg = session.metadata?.pkg ?? "(unknown)";
+  const legalEnding = session.metadata?.legalEnding ?? "";
   const jurisLabel = JURISDICTION_LABELS[jurisdiction as Jurisdiction] ?? jurisdiction;
   const pkgLabel = PKG_LABELS[pkg as Pkg] ?? pkg;
+  const endingSuffix = legalEnding ? ` ${legalEnding}` : "";
   const displayName =
     corpNameType === "numbered"
-      ? `Numbered ${jurisLabel}`
+      ? `Numbered ${jurisLabel}${endingSuffix}`
       : businessName && businessName !== "(numbered)"
-        ? businessName
-        : `Unnamed ${jurisLabel}`;
+        ? `${businessName}${endingSuffix}`
+        : `Unnamed ${jurisLabel}${endingSuffix}`;
   const subject = `[PAYMENT FAILED] ${orderRef} — ${displayName} — ${pkgLabel}`;
   const html = `<p>Async payment for order <strong>${escapeHtml(orderRef)}</strong> failed. Customer may retry from the confirmation page or a recovery email.</p><p>Stripe session: ${escapeHtml(session.id)}</p>`;
   await sendBrevoEmail(subject, html);
@@ -202,6 +207,7 @@ function buildPaidBody(d: {
   businessName: string;
   jurisdiction: string;
   pkg: string;
+  legalEnding: string;
   regOfficeAddon: RegOfficeAddon;
   sessionId: string;
   paymentIntent: string;
@@ -213,6 +219,9 @@ function buildPaidBody(d: {
           `${REG_OFFICE_ADDON.label} — ${REG_OFFICE_ADDON.locationLabel} (12 months, non-refundable)`,
         ]
       : null;
+  const legalEndingRow: [string, string] | null = d.legalEnding
+    ? ["Legal ending", d.legalEnding]
+    : null;
 
   const rows = ([
     ["Order reference", d.orderRef],
@@ -220,6 +229,7 @@ function buildPaidBody(d: {
     ["Corporation", d.businessName],
     ["Jurisdiction", d.jurisdiction],
     ["Package", d.pkg],
+    ...(legalEndingRow ? [legalEndingRow] : []),
     ...(regOfficeRow ? [regOfficeRow] : []),
     ["Amount paid", `$${d.amountTotal} ${d.currency}`],
     ["Stripe session", d.sessionId],

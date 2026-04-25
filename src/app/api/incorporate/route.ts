@@ -8,6 +8,7 @@ import {
   type Jurisdiction,
   type Pkg,
 } from "@/lib/pricing";
+import { legalEndingSchema } from "@/lib/legalEndings";
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
 
@@ -52,6 +53,7 @@ const schema = z.object({
   pkg: z.enum(["basic", "standard", "premium"]),
   corpNameType: z.enum(["named", "numbered"]),
   businessName: z.string().trim().max(120).optional().or(z.literal("")),
+  legalEnding: legalEndingSchema,
   naicsCode: z.string().trim().min(4).max(10),
   businessActivity: z.string().trim().min(10).max(2000),
   fiscalYearEndMonth: z.string().trim().min(1).max(20),
@@ -114,8 +116,10 @@ export async function POST(req: Request) {
   const pkgLabel = PKG_LABELS[payload.pkg as Pkg];
   const corpDesc =
     payload.corpNameType === "numbered"
-      ? `Numbered corporation (${jurisLabel})`
-      : payload.businessName || `Unnamed corporation (${jurisLabel})`;
+      ? `Numbered corporation (${jurisLabel}) — ending: ${payload.legalEnding}`
+      : payload.businessName
+        ? `${payload.businessName} ${payload.legalEnding}`
+        : `Unnamed corporation (${jurisLabel}) — ending: ${payload.legalEnding}`;
 
   const lineItems: Array<{
     price_data: {
@@ -195,6 +199,7 @@ export async function POST(req: Request) {
         pkg: payload.pkg,
         corpNameType: payload.corpNameType,
         businessName: payload.businessName || "(numbered)",
+        legalEnding: payload.legalEnding,
         regOfficeAddon: payload.regOfficeAddon,
         primaryDirectorEmail: primaryDirector.email,
         primaryDirectorName:
@@ -273,8 +278,10 @@ function buildSubject(d: Submission, total: number, orderRef: string) {
   const pkgLabel = PKG_LABELS[d.pkg as Pkg];
   const name =
     d.corpNameType === "numbered"
-      ? `Numbered ${jurisLabel}`
-      : d.businessName || `Unnamed ${jurisLabel}`;
+      ? `Numbered ${jurisLabel} ${d.legalEnding}`
+      : d.businessName
+        ? `${d.businessName} ${d.legalEnding}`
+        : `Unnamed ${jurisLabel} ${d.legalEnding}`;
   return `[PENDING] ${orderRef} — ${name} — ${pkgLabel} — $${total.toFixed(2)} CAD`;
 }
 
@@ -327,14 +334,17 @@ function buildHtmlBody(
   const pkgLabel = PKG_LABELS[d.pkg as Pkg];
   const corpName =
     d.corpNameType === "numbered"
-      ? `Numbered corporation (${jurisLabel})`
-      : d.businessName || "—";
+      ? `Numbered corporation (${jurisLabel}) — ${d.legalEnding}`
+      : d.businessName
+        ? `${d.businessName} ${d.legalEnding}`
+        : "—";
 
   const orderRows = [
     row("Order reference", orderRef),
     row("Jurisdiction", jurisLabel),
     row("Package", pkgLabel),
     row("Corporation", corpName),
+    row("Legal ending", d.legalEnding),
     row("NAICS code", d.naicsCode),
     row("Business activity", d.businessActivity),
     row("Fiscal year end", `${d.fiscalYearEndMonth} ${d.fiscalYearEndDay}`),

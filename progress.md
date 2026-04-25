@@ -9,6 +9,29 @@
 
 ## Log
 
+### 2026-04-24 (incorporation wizard — required Legal Ending dropdown on Step 3)
+- **Decision (from user)**: Every incorporation must capture a "legal ending" (legal element) from a fixed list, regardless of jurisdiction (federal / Ontario / BC) or corp-name type (named / numbered). Options: `CORP.`, `CORPORATION`, `INC.`, `INCORPORATED`, `INCORPORÉE`, `LIMITED`, `LIMITÉE`, `LTD.`, `LTÉE`. Rationale: matches what corporate registries actually require on filings. The "named" path previously asked the user to type the ending into the free-text business-name field, which mixed two pieces of data into one input.
+- **New shared module** [src/lib/legalEndings.ts](src/lib/legalEndings.ts): exports `LEGAL_ENDINGS` const tuple, `LegalEnding` type, and `legalEndingSchema` (Zod enum with custom "Select a legal ending" message). Single source of truth shared by wizard + API.
+- **Wizard Step 3 (`src/app/incorporate/page.tsx`)**:
+  - `WizardData.legalEnding: LegalEnding | ""` (empty allowed in init; Zod refines to a non-empty enum value at validate).
+  - `s3` Zod schema now requires `legalEnding`.
+  - For "named" corps: the proposed-name field's placeholder dropped the trailing `Inc.` (was `e.g. "Acme Technologies Inc."`, now `e.g. "Acme Technologies"`); hint changed to "Enter the distinctive part of the name only — the legal ending is selected separately below."
+  - For "numbered" corps: explainer blurb updated to say "combined with your selected legal ending below (e.g. *1234567 Canada INC.*)".
+  - **NEW Legal Ending `<select>`** rendered for both name types, with `-- Please Select --` placeholder and a contextual hint based on name type.
+  - Step 7 (Review) Corporation row now shows the full filed name (named: `${businessName} ${ending}`) or the numbered template (`Numbered corporation (${jurisLabel}) — ${ending}`).
+  - Wizard payload sent to `/api/incorporate` now includes `legalEnding`.
+- **`/api/incorporate` (`src/app/api/incorporate/route.ts`)**:
+  - Zod payload schema requires `legalEnding`.
+  - Stripe Checkout line-item description now uses `${businessName} ${legalEnding}` (named) or `Numbered corporation (Federal) — ending: INC.` (numbered).
+  - Stripe session metadata includes `legalEnding`, so the webhook can surface it on the [PAID] email.
+  - Intake email subject and body now include the legal ending: subject reads e.g. `[PENDING] KPX-... — Acme Technologies INC. — Standard — $704.97 CAD`. New "Legal ending" row added to the Order section of the [PENDING] email body.
+- **`/api/stripe-webhook` (`src/app/api/stripe-webhook/route.ts`)**: reads `legalEnding` from session metadata; surfaces it in the [PAID] subject (`Numbered Federal INC.` / `Acme Technologies INC.`), and adds a "Legal ending" row to the email body. Same handling for the `[PAYMENT FAILED]` async path.
+- **Verified**: `npx tsc --noEmit` clean, `npm run lint` clean, `npm run build` green. Routes still 24. `/incorporate` bundle 60.7 kB → 61 kB (+0.3 kB for the new dropdown). Visual walkthrough on `localhost:3000/incorporate`:
+  1. **Named, default** ([build-tmp/step3-verify/01-named-default.png](build-tmp/step3-verify/01-named-default.png)): Named tile selected, "Proposed Corporation Name" with new placeholder + hint, **Legal Ending dropdown showing "-- Please Select --"** with the explanatory hint, NUANS callout still present, all downstream fields (NAICS, business activity, fiscal year) intact.
+  2. **Numbered** ([build-tmp/step3-verify/02-numbered.png](build-tmp/step3-verify/02-numbered.png)): Numbered tile selected, name field hidden, updated explainer blurb, Legal Ending dropdown still visible with its numbered-specific hint.
+  3. **Dropdown content** verified by curl: all 9 endings present in the rendered HTML in the exact order requested (CORP. / CORPORATION / INC. / INCORPORATED / INCORPORÉE / LIMITED / LIMITÉE / LTD. / LTÉE).
+- **Backwards-compat consideration**: existing in-flight Stripe sessions (none expected — live mode hasn't been used by real customers yet) wouldn't carry the `legalEnding` metadata key. The webhook handles the absent-key case by emitting an empty suffix and skipping the "Legal ending" row. Subject lines on those legacy sessions look the same as before. No defensive code paths needed in pricing or schema.
+
 ### 2026-04-24 (homepage copy tweaks)
 - `src/app/page.tsx` hero subtitle: dropped trailing `alike` — now ends "available to Canadian entrepreneurs and international founders."
 - `src/app/page.tsx` "Why Korporex" section heading: `Built for Canadian Entrepreneurs` → `Built for Entrepreneurs Like You`. Reframes from a geographic claim to a more inclusive customer-voice headline (still consistent with the subtitle directly above which references both Canadian + international founders).

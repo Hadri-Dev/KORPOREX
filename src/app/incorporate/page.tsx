@@ -20,6 +20,7 @@ import {
   type Pkg,
   type RegOfficeAddon,
 } from "@/lib/pricing";
+import { LEGAL_ENDINGS, legalEndingSchema, type LegalEnding } from "@/lib/legalEndings";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -47,6 +48,7 @@ interface WizardData {
   jurisdiction: Jurisdiction; pkg: Pkg;
   corpNameType: CorpNameType;
   businessName: string;
+  legalEnding: LegalEnding | "";
   naicsCode: string;
   businessActivity: string;
   fiscalYearEndMonth: string;
@@ -180,6 +182,7 @@ const shareholderSchema = z.object({
 const s3 = z.object({
   corpNameType: z.enum(["named", "numbered"]),
   businessName: z.string().max(120),
+  legalEnding: legalEndingSchema,
   naicsCode: z.string().min(4, "Please select an industry classification"),
   businessActivity: z.string().min(10, "Describe your business activity in at least a sentence"),
   fiscalYearEndMonth: z.string().min(1, "Select a month"),
@@ -525,6 +528,11 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
     defaultValues: {
       corpNameType: "named",
       businessName: "",
+      // Cast: the wizard's WizardData allows "" for unset, but the Zod schema
+      // (and therefore S3) restricts to the LegalEnding union. The UI shows
+      // a "Please select…" placeholder for the empty state and validation
+      // surfaces a "Select a legal ending" message before allowing submit.
+      legalEnding: "" as LegalEnding,
       naicsCode: "",
       businessActivity: "",
       fiscalYearEndMonth: "",
@@ -589,17 +597,36 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
             <Field
               label="Proposed Corporation Name *"
               error={errors.businessName?.message}
-              hint="Must include a legal ending: Inc., Ltd., Corp., or Limited."
+              hint="Enter the distinctive part of the name only — the legal ending is selected separately below."
             >
-              <input {...register("businessName")} placeholder='e.g. "Acme Technologies Inc."' className={iCls} />
+              <input {...register("businessName")} placeholder='e.g. "Acme Technologies"' className={iCls} />
             </Field>
           ) : (
             <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-700 leading-relaxed">
               <strong className="text-gray-800">Numbered corporation:</strong> A unique number will be assigned
-              by the government at incorporation. No name search is required, so no NUANS fee applies. You can
+              by the government at incorporation and combined with your selected legal ending below
+              (e.g. <em>1234567 Canada INC.</em>). No name search is required, so no NUANS fee applies. You can
               later file Articles of Amendment to adopt a name if you choose.
             </div>
           )}
+
+          {/* Legal ending — required for both named and numbered, all jurisdictions. */}
+          <Field
+            label="Legal Ending *"
+            error={errors.legalEnding?.message}
+            hint={
+              corpNameType === "named"
+                ? "Appears at the end of your full corporate name (e.g. Acme Technologies INC.)."
+                : "Combined with the government-assigned number to form your full corporate name."
+            }
+          >
+            <select {...register("legalEnding")} className={sCls}>
+              <option value="">-- Please Select --</option>
+              {LEGAL_ENDINGS.map((e) => (
+                <option key={e} value={e}>{e}</option>
+              ))}
+            </select>
+          </Field>
 
           {nameSearchApplies && corpNameType === "named" && (
             <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-700 leading-relaxed">
@@ -1003,10 +1030,13 @@ function Step7({ data, onBack, onPay }: {
 
   const jurisLabel = JURISDICTION_LABELS[data.jurisdiction];
   const pkgLabel = PKG_LABELS[data.pkg];
+  const endingLabel = data.legalEnding || "";
   const corpName =
     data.corpNameType === "numbered"
-      ? `Numbered corporation (${jurisLabel})`
-      : data.businessName || "—";
+      ? `Numbered corporation (${jurisLabel})${endingLabel ? ` — ${endingLabel}` : ""}`
+      : data.businessName
+        ? `${data.businessName}${endingLabel ? ` ${endingLabel}` : ""}`
+        : "—";
 
   const submit = handleSubmit(async (d) => {
     setSubmitError(null);
@@ -1136,6 +1166,7 @@ const init: WizardData = {
   jurisdiction: "ontario", pkg: "standard",
   corpNameType: "named",
   businessName: "",
+  legalEnding: "",
   naicsCode: "",
   businessActivity: "",
   fiscalYearEndMonth: "", fiscalYearEndDay: "",
@@ -1163,6 +1194,7 @@ export default function IncorporatePage() {
           def={{
             corpNameType: data.corpNameType,
             businessName: data.businessName,
+            legalEnding: data.legalEnding === "" ? undefined : data.legalEnding,
             naicsCode: data.naicsCode,
             businessActivity: data.businessActivity,
             fiscalYearEndMonth: data.fiscalYearEndMonth,
@@ -1191,6 +1223,7 @@ export default function IncorporatePage() {
               pkg: data.pkg,
               corpNameType: data.corpNameType,
               businessName: data.businessName,
+              legalEnding: data.legalEnding,
               naicsCode: data.naicsCode,
               businessActivity: data.businessActivity,
               fiscalYearEndMonth: data.fiscalYearEndMonth,
