@@ -9,6 +9,10 @@
 
 ## Log
 
+### 2026-04-24 (NAICS field copy tweaks)
+- Step 3 NAICS field: label `Industry (NAICS Code)` → `Primary Activity (NAICS Code)` so the question reads as a direct request rather than a category bucket.
+- Hint trimmed: dropped trailing sentence "This is required for several government registrations." per user direction. Hint now just reads "Search by code, activity, or sector."
+
 ### 2026-04-24 (NUANS / name-search fee — per-jurisdiction)
 - **Decision (from user)**: Real pass-through fees confirmed: **$20 for federal NUANS, $60 for Ontario name search**. Previously a single `NUANS_FEE = 45` placeholder constant covered both.
 - **`src/lib/pricing.ts`**: replaced single constant with `NUANS_FEES: Record<Jurisdiction, number> = { federal: 20, ontario: 60, bc: 0 }`. Added `getNuansFee(jurisdiction)` helper. `computePricing` now calls `getNuansFee(args.jurisdiction)` instead of using the flat constant.

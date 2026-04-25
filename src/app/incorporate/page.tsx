@@ -643,9 +643,9 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
 
           {/* NAICS */}
           <Field
-            label="Industry (NAICS Code) *"
+            label="Primary Activity (NAICS Code) *"
             error={errors.naicsCode?.message}
-            hint="Search by code, activity, or sector. This is required for several government registrations."
+            hint="Search by code, activity, or sector."
           >
             <NaicsCombobox
               value={naicsCode}
