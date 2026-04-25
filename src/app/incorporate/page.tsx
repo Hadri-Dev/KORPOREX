@@ -66,6 +66,7 @@ interface Director {
 interface Shareholder {
   firstName: string; lastName: string;
   shareClass: string; numberOfShares: string;
+  pricePerShare: string;
   address: Address;
 }
 interface Officer {
@@ -214,6 +215,10 @@ const shareholderSchema = z.object({
   numberOfShares: z.string().min(1, "Required").refine(
     (v) => !isNaN(Number(v)) && Number(v) > 0,
     "Must be a positive number"
+  ),
+  pricePerShare: z.string().min(1, "Required").refine(
+    (v) => !isNaN(Number(v)) && Number(v) > 0,
+    "Must be a positive amount"
   ),
   address: addressSchema,
 });
@@ -885,6 +890,7 @@ type S5 = z.infer<typeof s5>;
 const emptySH: Shareholder = {
   firstName: "", lastName: "",
   shareClass: "Common", numberOfShares: "100",
+  pricePerShare: "1.00",
   address: { ...emptyAddress },
 };
 
@@ -926,7 +932,37 @@ function Step5({ def, onNext, onBack }: { def: Partial<S5>; onNext: (d: S5) => v
                 <Field label="Number of Shares *" error={se[i]?.numberOfShares?.message}>
                   <input type="number" min="1" {...register(`shareholders.${i}.numberOfShares`)} className={iCls} />
                 </Field>
+                <Field label="Price per Share (CAD) *" error={se[i]?.pricePerShare?.message}>
+                  {/* Currency-prefixed input. The `$` is a presentational
+                      adornment; the underlying value is the numeric string
+                      RHF registers — so the API still receives just the
+                      number. `pl-8` leaves room for the prefix. */}
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-500 pointer-events-none">$</span>
+                    <input
+                      type="number"
+                      min="0.01"
+                      step="0.01"
+                      placeholder="1.00"
+                      {...register(`shareholders.${i}.pricePerShare`)}
+                      className={`${iCls} pl-8`}
+                    />
+                  </div>
+                </Field>
               </div>
+              {/* Informational note. Deliberately definitional / illustrative
+                  — describes what the field *is*, with arithmetic example.
+                  Does NOT cite typical or common practice and is NOT advice. */}
+              <p className="text-xs text-gray-500 mb-4 leading-relaxed">
+                Enter any positive dollar amount per share — the price can be{" "}
+                <span className="font-medium text-gray-700">$1.00</span>. The total subscription amount equals
+                price per share × number of shares (for example,{" "}
+                <span className="font-medium text-gray-700">100 shares × $1.00 = $100.00 total</span>). This is a numeric
+                example only. Korporex does not provide legal or tax advice on share pricing — if you&rsquo;re unsure,{" "}
+                <Link href="/legal-consultation" className="text-navy-900 underline underline-offset-2">
+                  speak with a corporate lawyer
+                </Link>.
+              </p>
               <AddressFields prefix={`shareholders.${i}.address`} />
             </div>
           ))}
@@ -1447,6 +1483,22 @@ export default function IncorporatePage() {
             window.location.href = url;
           }}
         />}
+        {/* Persistent across-step lawyer-referral link. Sits below every
+            step's primary form so customers can opt out of self-serve at
+            any time without losing what they've entered (the link
+            navigates to /legal-consultation; closing the wizard tab
+            preserves nothing — that's an existing trade-off, not a
+            regression introduced here). */}
+        <div className="border-t border-gray-100 mt-4">
+          <div className="max-w-2xl mx-auto px-6 py-6 text-center">
+            <Link
+              href="/legal-consultation"
+              className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-navy-900 transition-colors"
+            >
+              Not sure? <span className="underline underline-offset-2">Speak with a lawyer</span>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

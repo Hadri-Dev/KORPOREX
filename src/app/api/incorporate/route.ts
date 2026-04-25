@@ -49,6 +49,12 @@ const shareholderSchema = z.object({
     .min(1)
     .max(20)
     .refine((v) => !isNaN(Number(v)) && Number(v) > 0, "Positive number required"),
+  pricePerShare: z
+    .string()
+    .trim()
+    .min(1)
+    .max(20)
+    .refine((v) => !isNaN(Number(v)) && Number(v) > 0, "Positive amount required"),
   address: addressSchema,
 });
 
@@ -415,12 +421,19 @@ function buildHtmlBody(
 
   const shareholders = personBlock(
     "Shareholder",
-    d.shareholders.map((x) => ({
-      Name: `${x.firstName} ${x.lastName}`,
-      "Share class": x.shareClass,
-      Shares: x.numberOfShares,
-      Address: formatAddress(x.address),
-    }))
+    d.shareholders.map((x) => {
+      const shares = Number(x.numberOfShares);
+      const price = Number(x.pricePerShare);
+      const subscription = isFinite(shares * price) ? (shares * price).toFixed(2) : "—";
+      return {
+        Name: `${x.firstName} ${x.lastName}`,
+        "Share class": x.shareClass,
+        Shares: x.numberOfShares,
+        "Price per share": `$${Number(x.pricePerShare).toFixed(2)} CAD`,
+        "Subscription total": `$${subscription} CAD`,
+        Address: formatAddress(x.address),
+      };
+    })
   );
 
   const officers = personBlock(

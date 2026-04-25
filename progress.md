@@ -30,6 +30,23 @@
   1. The Calendly `event_scheduled` postMessage doesn't reliably include the start time; we currently fall back to "(see Calendly notification)" when absent. If users complain about the friendly time not appearing in the email, we can use the Calendly REST API server-side to fetch the start time given the event URI (Calendly Personal Access Token required).
   2. No automated test for the new flow — same gap as the rest of the wizard. Tracked under the existing "No automated tests" known-issue entry.
 
+### 2026-04-25 (Shareholders — Price per Share + persistent lawyer link in wizard)
+**Two changes per user direction:**
+
+1. **New required Price per Share field on Step 5** (Shareholders).
+   - `Shareholder.pricePerShare: string`; Zod refines to a positive numeric.
+   - Default `1.00` in `emptySH`.
+   - UI: text-prefixed currency input (`$` adornment + `pl-8`), labeled `Price per Share (CAD) *`.
+   - Non-advice note rendered below the field: "Enter any positive dollar amount per share — the price can be $1.00. The total subscription amount equals price per share × number of shares (for example, 100 shares × $1.00 = $100.00 total). This is a numeric example only. Korporex does not provide legal or tax advice on share pricing — if you're unsure, speak with a corporate lawyer." Phrasing is deliberately definitional/illustrative; avoids any "many corporations choose..." or "typically founders set..." framing per user direction. The "speak with a corporate lawyer" link points to `/legal-consultation`.
+   - `/api/incorporate` `shareholderSchema` mirrors. Intake email's shareholder block now shows two new rows: `Price per share` (formatted `$1.00 CAD`) and `Subscription total` (computed `shares × price`, formatted `$100.00 CAD`).
+
+2. **Persistent "Not sure? Speak with a lawyer" link below every wizard step.**
+   - Implemented once at the page level in `IncorporatePage` — sits below the step content inside the wizard's `pb-20` container, separated by a top border. Appears across all 8 steps without per-step duplication.
+   - Subtle styling (small grey text, only the action phrase underlined) so it doesn't compete with the primary `Continue` / `Continue to Payment` CTAs. Links to `/legal-consultation`.
+   - Confirmed via curl that "Not sure? Speak with a lawyer" copy is rendered on Step 1 (default), and visually verified on Step 5 ([build-tmp/step5-shareholders-pps/01-step5.png](build-tmp/step5-shareholders-pps/01-step5.png)).
+
+Build/tsc/lint green.
+
 ### 2026-04-24 (Directors — Citizenship Status + CBCA-resident description)
 - New required field on each director: **Citizenship Status** — radio group with three mutually-exclusive options (Canadian citizen / Permanent resident / Other). Customer must pick one.
 - The existing "Canadian resident" checkbox now has a description below it explaining the CBCA s.2(1) definition: "Per CBCA s.2(1), a 'resident Canadian' is a Canadian citizen who ordinarily lives in Canada, or a permanent resident who ordinarily lives in Canada (and has not been a permanent resident long enough to be eligible for Canadian citizenship). Tick this box only if you meet that definition."
