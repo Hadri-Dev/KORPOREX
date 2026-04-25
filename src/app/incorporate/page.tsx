@@ -10,7 +10,7 @@ import NaicsCombobox from "@/components/NaicsCombobox";
 import AddressAutocomplete, { type ParsedAddress } from "@/components/AddressAutocomplete";
 import {
   PRICES,
-  NUANS_FEE,
+  getNuansFee,
   JURISDICTION_LABELS,
   PKG_LABELS,
   REG_OFFICE_ADDON,
@@ -63,8 +63,8 @@ interface WizardData {
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
-// Pricing, NUANS fee, and tax rates live in `@/lib/pricing` so the API route
-// can recalculate totals from the same source. PRICES and NUANS_FEE are
+// Pricing, NUANS fees, and tax rates live in `@/lib/pricing` so the API route
+// can recalculate totals from the same source. PRICES and getNuansFee() are
 // imported above; kept inline references below read from those.
 
 const PKG_FEATURES: Record<Pkg, string[]> = {
@@ -630,7 +630,7 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
 
           {nameSearchApplies && corpNameType === "named" && (
             <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-700 leading-relaxed">
-              <strong className="text-gray-800">{nameSearchLabel} required.</strong> A ${NUANS_FEE} report fee
+              <strong className="text-gray-800">{nameSearchLabel} required.</strong> A ${getNuansFee(jurisdiction)} report fee
               applies and is shown separately at checkout. Choose a numbered corporation above to skip this fee.
             </div>
           )}

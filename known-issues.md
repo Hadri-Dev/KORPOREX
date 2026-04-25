@@ -30,13 +30,6 @@
 - **Why not fixed yet**: Vercel CLI v51.8.0 rejects `vercel env add ... preview --value X --yes` with `git_branch_required` even though the docs say omitting branch = "all preview branches". Dashboard workaround: https://vercel.com/youness-7473s-projects/korporex/settings/environment-variables → Add → `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` → check Preview → paste value.
 - **Logged**: 2026-04-23
 
-### [Severity: low] NUANS pass-through fee is a placeholder
-- **Where**: `src/app/incorporate/page.tsx` — `NUANS_FEE = 45`.
-- **Symptom**: Review step shows a $45 NUANS line item for federal and Ontario named corporations. This is an indicative number, not a confirmed pass-through price.
-- **Impact**: Customer-facing price may differ from actual NUANS report cost + handling once finalized.
-- **Why not fixed yet**: Pricing decision is pending. Constant is documented in a code comment so it's a one-line adjustment when final.
-- **Logged**: 2026-04-21
-
 ### [Severity: low] Canadian sales-tax rates cover GST/HST only (no PST)
 - **Where**: `src/app/incorporate/page.tsx` — `CA_TAX_RATES` / `getTaxRate()`.
 - **Symptom**: Tax is charged as 5% in BC / SK / MB (GST-only) instead of the province-specific combined rate, because Korporex isn't currently registered to collect PST in any province.
@@ -60,6 +53,7 @@
 
 ## Resolved
 
+- **2026-04-24** — NUANS pass-through fee was a placeholder ($45 flat across federal + Ontario) — User confirmed real per-jurisdiction pricing: $20 for federal NUANS, $60 for Ontario name search. Replaced the single `NUANS_FEE = 45` constant with `NUANS_FEES: Record<Jurisdiction, number> = { federal: 20, ontario: 60, bc: 0 }` plus a `getNuansFee(jurisdiction)` helper in `src/lib/pricing.ts`. Wizard Step 3 callout now reads the fee from the helper, so it shows "$20" on federal and "$60" on Ontario; Stripe line item also adapts ("NUANS name search report" for federal vs "Ontario name search report" for Ontario).
 - **2026-04-23** — `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` was empty in Vercel Production — Removed the empty entry (`vercel env rm`), re-added the correct key (`vercel env add`), and triggered a production redeploy (`vercel deploy --prod`). Added `.vercelignore` excluding `build-tmp/` so the scratch folder's locked Chrome files don't break uploads again. Preview scope still pending — blocked by a CLI v51.8.0 quirk and tracked as its own low-sev issue.
 - **2026-04-23** — Incorporation wizard did not process payments — Wired Stripe Checkout (hosted) end-to-end. Step 7 POSTs to `/api/incorporate`, which creates a Checkout Session (package + NUANS + tax as CAD line items, pricing recalculated server-side from `@/lib/pricing`) and returns the URL; the browser full-page redirects to stripe.com. Card fields removed from the wizard UI (PCI stays on stripe.com). On payment success, `/api/stripe-webhook` (signature-verified via raw body) sends a "[PAID]" follow-up email to `contact@korporex.com` referencing the shared `KPX-YYYYMMDD-XXXX` order ref so operators can cross-reference with the earlier "[PENDING]" intake. Confirmation page is now dynamic and retrieves the Stripe session to surface the order ref + amount paid. Currently wired for test mode (card `4242 4242 4242 4242`); live-mode is a key swap in Vercel.
 - **2026-04-23** — Incorporation wizard intake was not emailed / stored — Built `/api/incorporate` (Next.js route handler in `src/app/api/incorporate/route.ts`) that validates the full wizard payload with Zod, recalculates pricing server-side from the shared `@/lib/pricing` module, and emails a structured HTML summary to `contact@korporex.com` via Brevo with `replyTo` set to the primary director. Step 7 is now async with submitting / error states — on success it navigates to the confirmation page. Card details (`cardNumber` / `expiry` / `cvc` / `cardholderName`) are deliberately excluded from the schema and stripped client-side, so PCI data never reaches the server. Dev fallback without `BREVO_API_KEY` logs submissions to the console. Issue [Severity: high] "Incorporation wizard does not process payments" remains open as the separate Stripe scope.

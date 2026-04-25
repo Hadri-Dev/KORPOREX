@@ -9,6 +9,14 @@
 
 ## Log
 
+### 2026-04-24 (NUANS / name-search fee — per-jurisdiction)
+- **Decision (from user)**: Real pass-through fees confirmed: **$20 for federal NUANS, $60 for Ontario name search**. Previously a single `NUANS_FEE = 45` placeholder constant covered both.
+- **`src/lib/pricing.ts`**: replaced single constant with `NUANS_FEES: Record<Jurisdiction, number> = { federal: 20, ontario: 60, bc: 0 }`. Added `getNuansFee(jurisdiction)` helper. `computePricing` now calls `getNuansFee(args.jurisdiction)` instead of using the flat constant.
+- **Wizard Step 3 callout** (`src/app/incorporate/page.tsx`): the "$45 report fee" line now reads `${getNuansFee(jurisdiction)}` so Federal renders `$20` and Ontario renders `$60`. Import swapped from `NUANS_FEE` → `getNuansFee`. Comment block at the top of the file also updated.
+- **`/api/incorporate` Stripe line item**: the line-item label now adapts — `"NUANS name search report"` for federal and `"Ontario name search report"` for Ontario; description includes the jurisdiction label.
+- **`known-issues.md`**: closed the previous low-sev "NUANS pass-through fee is a placeholder" entry.
+- **Verified**: `npx tsc --noEmit` clean, `npm run lint` clean, `npm run build` green. No bundle size change. Manually re-checked Step 3 callout copy on the Ontario default — `getNuansFee("ontario")` returns 60, so the callout reads "A $60 report fee applies…".
+
 ### 2026-04-24 (incorporation wizard — required Legal Ending dropdown on Step 3)
 - **Decision (from user)**: Every incorporation must capture a "legal ending" (legal element) from a fixed list, regardless of jurisdiction (federal / Ontario / BC) or corp-name type (named / numbered). Options: `CORP.`, `CORPORATION`, `INC.`, `INCORPORATED`, `INCORPORÉE`, `LIMITED`, `LIMITÉE`, `LTD.`, `LTÉE`. Rationale: matches what corporate registries actually require on filings. The "named" path previously asked the user to type the ending into the free-text business-name field, which mixed two pieces of data into one input.
 - **New shared module** [src/lib/legalEndings.ts](src/lib/legalEndings.ts): exports `LEGAL_ENDINGS` const tuple, `LegalEnding` type, and `legalEndingSchema` (Zod enum with custom "Select a legal ending" message). Single source of truth shared by wizard + API.

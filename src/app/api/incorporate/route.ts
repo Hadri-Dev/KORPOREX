@@ -143,12 +143,16 @@ export async function POST(req: Request) {
   ];
 
   if (pricing.nuansFee > 0) {
+    const nuansLabel =
+      payload.jurisdiction === "ontario"
+        ? "Ontario name search report"
+        : "NUANS name search report";
     lineItems.push({
       price_data: {
         currency: "cad",
         product_data: {
-          name: "NUANS name-search report",
-          description: "Federal/Ontario named-corporation pass-through fee",
+          name: nuansLabel,
+          description: `${JURISDICTION_LABELS[payload.jurisdiction as Jurisdiction]} named-corporation name-search pass-through fee`,
         },
         unit_amount: Math.round(pricing.nuansFee * 100),
       },

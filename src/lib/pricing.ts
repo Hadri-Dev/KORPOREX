@@ -53,10 +53,22 @@ export const PRICES: Record<Jurisdiction, Record<Pkg, number>> = {
   bc: { basic: 449, standard: 649, premium: 949 },
 };
 
-// NUANS / name-search pass-through fee. Applies to federal and Ontario named
-// corporations; BC uses a separate Name Approval process not billed here.
-// Adjust when actual NUANS pass-through pricing is finalized.
-export const NUANS_FEE = 45;
+// Name-search pass-through fees. Applies to federal and Ontario named
+// corporations only — BC uses a separate Name Approval process handled inline
+// with the incorporation and not billed as a line item.
+//
+// Federal uses Corporations Canada's NUANS preliminary search; Ontario uses
+// an Ontario-Biz-style name search. The two are billed at different rates
+// reflecting the different government pass-through and handling costs.
+export const NUANS_FEES: Record<Jurisdiction, number> = {
+  federal: 20,
+  ontario: 60,
+  bc: 0,
+};
+
+export function getNuansFee(jurisdiction: Jurisdiction): number {
+  return NUANS_FEES[jurisdiction] ?? 0;
+}
 
 // Canadian sales-tax rates (GST/HST only — PST registrations not currently held).
 export const CA_TAX_RATES: Record<string, number> = {
@@ -115,7 +127,9 @@ export function computePricing(args: {
   regOfficeAddon?: RegOfficeAddon;
 }): PriceBreakdown {
   const price = PRICES[args.jurisdiction][args.pkg];
-  const nuansFee = nuansApplies(args.jurisdiction, args.corpNameType) ? NUANS_FEE : 0;
+  const nuansFee = nuansApplies(args.jurisdiction, args.corpNameType)
+    ? getNuansFee(args.jurisdiction)
+    : 0;
   const addon = args.regOfficeAddon ?? "none";
   const regOfficeFee =
     addon === "korporex" && regOfficeAddonAvailable(args.jurisdiction)
