@@ -27,9 +27,13 @@
 - **Configurability**: `NEXT_PUBLIC_CALENDLY_LAWYER_URL` env var (placeholder URL `https://calendly.com/placeholder-korporex-lawyer/30min` until user provides Hadri Law's real Calendly link).
 - **Verified**: `npx tsc --noEmit` clean, `npm run lint` clean, `npm run build` green. Routes: 24 → **26** (`/legal-consultation` 10.3 kB / 148 kB first-load static; `/legal-consultation/confirmation` and `/api/legal-consult` dynamic). Visual screenshot at [build-tmp/legal-consult-verify/01-questionnaire.png](build-tmp/legal-consult-verify/01-questionnaire.png) confirms the page renders end-to-end with all 10 topic checkboxes, hero, disclaimer, all questionnaire fields, and Continue button. `/services` callout strings ("Need Personalized Legal Advice", "Talk to a Trusted Corporate Lawyer") confirmed in rendered HTML.
 - **Open follow-ups**:
-  1. User to provide the real Hadri Law Calendly URL → set `NEXT_PUBLIC_CALENDLY_LAWYER_URL` on Vercel and redeploy.
-  2. The Calendly `event_scheduled` postMessage doesn't reliably include the start time; we currently fall back to "(see Calendly notification)" when absent. If users complain about the friendly time not appearing in the email, we can use the Calendly REST API server-side to fetch the start time given the event URI (Calendly Personal Access Token required).
-  3. No automated test for the new flow — same gap as the rest of the wizard. Tracked under the existing "No automated tests" known-issue entry.
+  1. The Calendly `event_scheduled` postMessage doesn't reliably include the start time; we currently fall back to "(see Calendly notification)" when absent. If users complain about the friendly time not appearing in the email, we can use the Calendly REST API server-side to fetch the start time given the event URI (Calendly Personal Access Token required).
+  2. No automated test for the new flow — same gap as the rest of the wizard. Tracked under the existing "No automated tests" known-issue entry.
+
+### 2026-04-24 (lawyer-consult — Calendly URL plumbed in)
+- User provided the real Calendly link: `https://calendly.com/hadrilaw/consultation-korporex`.
+- Updated [src/lib/legalConsult.ts](src/lib/legalConsult.ts) so the real URL is the default fallback (replacing the earlier placeholder). The `NEXT_PUBLIC_CALENDLY_LAWYER_URL` env var still overrides it, so future swaps to a different referral lawyer or a test event don't need a code change.
+- Approach chosen: code default rather than Vercel env var. Reasoning: `NEXT_PUBLIC_*` vars bake into the client bundle at build time anyway, so there's no operational difference; the code-default version also makes local dev "just work" without anyone needing to set up the env var. One push triggers the Vercel redeploy that bakes the real URL into the production bundle.
 
 ### 2026-04-24 (new wizard Step 6 — Officers)
 - **Decision (from user)**: Officers must be captured between Shareholders and Office Address. Each officer needs: First Name, Last Name, Position (from a fixed dropdown of 22 registry titles), Email Address, Street Address, City, Province, Postal/ZIP, Country. At least one officer is required. The "Other (untitled)" option visible in the source registry list was deliberately excluded — customers must pick a defined position.
