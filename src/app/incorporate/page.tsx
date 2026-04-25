@@ -21,6 +21,11 @@ import {
   type RegOfficeAddon,
 } from "@/lib/pricing";
 import { LEGAL_ENDINGS, legalEndingSchema, type LegalEnding } from "@/lib/legalEndings";
+import {
+  OFFICER_POSITIONS,
+  officerPositionSchema,
+  type OfficerPosition,
+} from "@/lib/officerPositions";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -44,6 +49,15 @@ interface Shareholder {
   shareClass: string; numberOfShares: string;
   address: Address;
 }
+interface Officer {
+  firstName: string; lastName: string;
+  // Surface "" at the input level (= "-- Please Select --") with a cast
+  // (`"" as OfficerPosition`) on the seed value; Zod will reject empty
+  // values at submit time. Same pattern used for `legalEnding` on Step 3.
+  position: OfficerPosition;
+  email: string;
+  address: Address;
+}
 interface WizardData {
   jurisdiction: Jurisdiction; pkg: Pkg;
   corpNameType: CorpNameType;
@@ -56,6 +70,7 @@ interface WizardData {
   fiscalYearEndDay: string;
   directors: Director[];
   shareholders: Shareholder[];
+  officers: Officer[];
   regOffice: Address;
   regOfficeAddon: RegOfficeAddon;
   billingName: string;
@@ -120,7 +135,7 @@ const MONTHS = [
 ];
 
 const SHARE_CLASSES = ["Common","Preferred","Class A","Class B"];
-const STEP_LABELS = ["Jurisdiction","Package","Business Info","Directors","Shareholders","Office Address","Review & Pay"];
+const STEP_LABELS = ["Jurisdiction","Package","Business Info","Directors","Shareholders","Officers","Office Address","Review & Pay"];
 
 // Non-superiority-language jurisdiction descriptions (each is a valid choice).
 const JURISDICTION_INFO = [
@@ -180,6 +195,14 @@ const shareholderSchema = z.object({
   address: addressSchema,
 });
 
+const officerSchema = z.object({
+  firstName: z.string().min(1, "Required"),
+  lastName: z.string().min(1, "Required"),
+  position: officerPositionSchema,
+  email: z.string().email("Valid email required"),
+  address: addressSchema,
+});
+
 const s3 = z.object({
   corpNameType: z.enum(["named", "numbered"]),
   businessName: z.string().max(120),
@@ -196,11 +219,12 @@ const s3 = z.object({
 
 const s4 = z.object({ directors: z.array(directorSchema).min(1) });
 const s5 = z.object({ shareholders: z.array(shareholderSchema).min(1) });
-const s6 = z.object({
+const s6 = z.object({ officers: z.array(officerSchema).min(1) });
+const s7 = z.object({
   regOffice: addressSchema,
   regOfficeAddon: z.enum(["none", "korporex"]),
 });
-const s7 = z.object({
+const s8 = z.object({
   billingName: z.string().min(1, "Required"),
   billingAddress: addressSchema,
 });
@@ -836,21 +860,87 @@ function Step5({ def, onNext, onBack }: { def: Partial<S5>; onNext: (d: S5) => v
   );
 }
 
-// ─── Step 6 — Registered Office ───────────────────────────────────────────────
+// ─── Step 6 — Officers ────────────────────────────────────────────────────────
 
 type S6 = z.infer<typeof s6>;
-function Step6({ jurisdiction, def, onNext, onBack }: {
+const emptyOfficer: Officer = {
+  firstName: "", lastName: "",
+  position: "" as OfficerPosition,
+  email: "",
+  address: { ...emptyAddress },
+};
+
+function Step6({ def, onNext, onBack }: { def: Partial<S6>; onNext: (d: S6) => void; onBack: () => void }) {
+  const form = useForm<S6>({
+    resolver: zodResolver(s6),
+    defaultValues: { officers: def.officers?.length ? def.officers : [emptyOfficer] },
+  });
+  const { register, handleSubmit, control, formState: { errors } } = form;
+  const { fields, append, remove } = useFieldArray({ control, name: "officers" });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const oe = (errors.officers as any) ?? [];
+
+  return (
+    <FormProvider {...form}>
+      <div className="max-w-2xl mx-auto px-6 py-12">
+        <BackBtn onClick={onBack} />
+        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Officers</h2>
+        <p className="text-gray-500 text-sm mb-8">List the corporation&rsquo;s officers and their positions. At least one officer is required.</p>
+        <form onSubmit={handleSubmit(onNext)} className="space-y-6">
+          {fields.map((field, i) => (
+            <div key={field.id} className="border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-5">
+                <p className="font-serif font-bold text-navy-900 text-base">Officer {i + 1}</p>
+                {fields.length > 1 && (
+                  <button type="button" onClick={() => remove(i)} className="text-xs text-red-500 flex items-center gap-1 hover:text-red-600">
+                    <Trash2 size={13} /> Remove
+                  </button>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <Field label="First Name *" error={oe[i]?.firstName?.message}><input {...register(`officers.${i}.firstName`)} className={iCls} /></Field>
+                <Field label="Last Name *" error={oe[i]?.lastName?.message}><input {...register(`officers.${i}.lastName`)} className={iCls} /></Field>
+                <Field label="Position *" error={oe[i]?.position?.message}>
+                  <select {...register(`officers.${i}.position`)} className={sCls}>
+                    <option value="">-- Please Select --</option>
+                    {OFFICER_POSITIONS.map((p) => (
+                      <option key={p} value={p}>{p}</option>
+                    ))}
+                  </select>
+                </Field>
+                <Field label="Email Address *" error={oe[i]?.email?.message}>
+                  <input type="email" {...register(`officers.${i}.email`)} className={iCls} />
+                </Field>
+              </div>
+              <AddressFields prefix={`officers.${i}.address`} />
+            </div>
+          ))}
+          <button type="button" onClick={() => append(emptyOfficer)}
+            className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
+            <Plus size={14} /> Add Another Officer
+          </button>
+          <NextBtn />
+        </form>
+      </div>
+    </FormProvider>
+  );
+}
+
+// ─── Step 7 — Registered Office ───────────────────────────────────────────────
+
+type S7 = z.infer<typeof s7>;
+function Step7({ jurisdiction, def, onNext, onBack }: {
   jurisdiction: Jurisdiction;
-  def: Partial<S6>;
-  onNext: (d: S6) => void;
+  def: Partial<S7>;
+  onNext: (d: S7) => void;
   onBack: () => void;
 }) {
   const regionLock = jurisdiction === "ontario" ? "ON" : jurisdiction === "bc" ? "BC" : undefined;
   const regionAllow = jurisdiction === "federal" ? CA_PROVINCES.map((p) => p.code) : undefined;
   const addonEligible = regOfficeAddonAvailable(jurisdiction);
 
-  const form = useForm<S6>({
-    resolver: zodResolver(s6),
+  const form = useForm<S7>({
+    resolver: zodResolver(s7),
     defaultValues: {
       regOfficeAddon: def.regOfficeAddon ?? "none",
       regOffice: {
@@ -1004,16 +1094,16 @@ function AddonOption({ selected, onSelect, title, subtitle, price, priceSub }: {
   );
 }
 
-// ─── Step 7 — Review & Pay ────────────────────────────────────────────────────
+// ─── Step 8 — Review & Pay ────────────────────────────────────────────────────
 
-type S7 = z.infer<typeof s7>;
-function Step7({ data, onBack, onPay }: {
+type S8 = z.infer<typeof s8>;
+function Step8({ data, onBack, onPay }: {
   data: WizardData;
   onBack: () => void;
   onPay: (billing: { billingName: string; billingAddress: Address }) => Promise<void>;
 }) {
-  const form = useForm<S7>({
-    resolver: zodResolver(s7),
+  const form = useForm<S8>({
+    resolver: zodResolver(s8),
     defaultValues: {
       billingName: data.billingName || "",
       billingAddress: {
@@ -1088,6 +1178,7 @@ function Step7({ data, onBack, onPay }: {
               ["Official Email", data.officialEmail || "—"],
               ["Directors", String(data.directors.length)],
               ["Shareholders", String(data.shareholders.length)],
+              ["Officers", String(data.officers.length)],
               [
                 "Registered Office",
                 data.regOfficeAddon === "korporex"
@@ -1190,7 +1281,7 @@ const init: WizardData = {
   naicsCode: "",
   businessActivity: "",
   fiscalYearEndMonth: "", fiscalYearEndDay: "",
-  directors: [], shareholders: [],
+  directors: [], shareholders: [], officers: [],
   regOffice: { street: "", city: "", region: "", postalCode: "", country: "CA" },
   regOfficeAddon: "none",
   billingName: "",
@@ -1231,12 +1322,13 @@ export default function IncorporatePage() {
         />}
         {step === 4 && <Step4 def={{ directors: data.directors }} onNext={(d) => { patch(d); setStep(5); }} onBack={() => setStep(3)} />}
         {step === 5 && <Step5 def={{ shareholders: data.shareholders }} onNext={(d) => { patch(d); setStep(6); }} onBack={() => setStep(4)} />}
-        {step === 6 && <Step6 jurisdiction={data.jurisdiction}
+        {step === 6 && <Step6 def={{ officers: data.officers }} onNext={(d) => { patch(d); setStep(7); }} onBack={() => setStep(5)} />}
+        {step === 7 && <Step7 jurisdiction={data.jurisdiction}
           def={{ regOffice: data.regOffice, regOfficeAddon: data.regOfficeAddon }}
-          onNext={(d) => { patch(d); setStep(7); }} onBack={() => setStep(5)} />}
-        {step === 7 && <Step7
+          onNext={(d) => { patch(d); setStep(8); }} onBack={() => setStep(6)} />}
+        {step === 8 && <Step8
           data={data}
-          onBack={() => setStep(6)}
+          onBack={() => setStep(7)}
           onPay={async (billing) => {
             patch(billing);
             const payload = {
@@ -1252,6 +1344,7 @@ export default function IncorporatePage() {
               fiscalYearEndDay: data.fiscalYearEndDay,
               directors: data.directors,
               shareholders: data.shareholders,
+              officers: data.officers,
               regOffice: data.regOffice,
               regOfficeAddon: data.regOfficeAddon,
               billingName: billing.billingName,

@@ -9,6 +9,26 @@
 
 ## Log
 
+### 2026-04-24 (new wizard Step 6 — Officers)
+- **Decision (from user)**: Officers must be captured between Shareholders and Office Address. Each officer needs: First Name, Last Name, Position (from a fixed dropdown of 22 registry titles), Email Address, Street Address, City, Province, Postal/ZIP, Country. At least one officer is required. The "Other (untitled)" option visible in the source registry list was deliberately excluded — customers must pick a defined position.
+- **Wizard structure shifted from 7 steps to 8**:
+  - 1 Jurisdiction · 2 Package · 3 Business Info · 4 Directors · 5 Shareholders · **6 Officers (NEW)** · 7 Office Address · 8 Review & Pay
+  - `STEP_LABELS` updated; the existing horizontal progress bar auto-rerenders 8 cells and the bottom mobile bar auto-scales `width = current / 8`.
+- **New shared module** [src/lib/officerPositions.ts](src/lib/officerPositions.ts): `OFFICER_POSITIONS` const tuple (22 entries, registry order preserved — `Authorized Signing Officer` sits between the two `Assistant…` entries by source-list convention), `OfficerPosition` type, `officerPositionSchema` Zod enum.
+- **Wizard (`src/app/incorporate/page.tsx`)**:
+  - New `Officer` interface (with `position: OfficerPosition`; the empty "" placeholder is cast at the seed value, same pattern used for `legalEnding`).
+  - New `officerSchema` and `s6 = z.object({ officers: z.array(officerSchema).min(1) })`.
+  - **Renamed** the previous `s6` (regOffice) → `s7`, previous `s7` (review) → `s8`. Step component renames in lockstep: `Step6` (regOffice) → `Step7`, `Step7` (review) → `Step8`. Internal `useForm<S6>`/`zodResolver(s6)` references updated.
+  - **NEW `Step6` component** — modeled on Step4 (Directors). Card-per-officer with `useFieldArray`, "Position" `<select>` populated from `OFFICER_POSITIONS` with a `-- Please Select --` placeholder, email input, address subform via `<AddressFields>`, "+ Add Another Officer" button, single-officer entries can't be removed.
+  - `IncorporatePage` step switch updated: step 6 renders the new Officers component (passing `def={{ officers: data.officers }}`); step 7 renders the renumbered RegOffice step; step 8 renders the renumbered Review step. Back/forward `setStep(N)` calls all bumped.
+  - `init` extended with `officers: []`; the wizard's `onPay` payload now includes `officers: data.officers`.
+  - Step 8 (Review) Order Summary gains a new "Officers" row showing the count.
+- **`/api/incorporate`** (`src/app/api/incorporate/route.ts`):
+  - New `officerSchema` mirroring the wizard's; `officers: z.array(officerSchema).min(1).max(50)` added to the payload schema.
+  - Intake email body includes a new "Officers" section using the existing `personBlock` helper, between Shareholders and Registered Office. Each officer block shows Name / Position / Email / Address.
+  - Note copy in the [PENDING] email tweaked: "captured at Step 7 submit" → "captured at Review submit" (so the wording is step-number-agnostic — survives future renumbering).
+- **Verified**: `npx tsc --noEmit` clean (after a one-pass type-mismatch fix on `Officer.position` — narrowed from `OfficerPosition | ""` to `OfficerPosition` with a cast at the seed, same pattern used for `legalEnding`), `npm run lint` clean, `npm run build` green. Visual screenshot at [build-tmp/step6-officers-verify/01-officers.png](build-tmp/step6-officers-verify/01-officers.png) confirms: 8-step progress bar with "Officers" highlighted, single Officer 1 card with all required fields, Position dropdown showing "-- Please Select --", "+ Add Another Officer" button, Continue button. `curl` confirms all 22 position values present in the rendered `<option>` list.
+
 ### 2026-04-24 (Step 3 — Official Email Address field)
 - New required field on Step 3 between Business Activity Description and Fiscal Year End: **Official Email Address**, validated as a real email by Zod (`z.string().email()`).
 - Threaded through end-to-end: `WizardData.officialEmail`, `s3` Zod schema, Step 3 defaults, init, Step 3 → IncorporatePage `def` prop, onPay payload, Step 7 review (new "Official Email" row in the Order Summary), and `/api/incorporate` schema + intake email (new "Official email" row in the Order section of the [PENDING] email).

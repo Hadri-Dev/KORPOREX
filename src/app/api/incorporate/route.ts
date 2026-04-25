@@ -9,6 +9,7 @@ import {
   type Pkg,
 } from "@/lib/pricing";
 import { legalEndingSchema } from "@/lib/legalEndings";
+import { officerPositionSchema } from "@/lib/officerPositions";
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
 
@@ -48,6 +49,14 @@ const shareholderSchema = z.object({
   address: addressSchema,
 });
 
+const officerSchema = z.object({
+  firstName: z.string().trim().min(1).max(100),
+  lastName: z.string().trim().min(1).max(100),
+  position: officerPositionSchema,
+  email: z.string().trim().email().max(320),
+  address: addressSchema,
+});
+
 const schema = z.object({
   jurisdiction: z.enum(["federal", "ontario", "bc"]),
   pkg: z.enum(["basic", "standard", "premium"]),
@@ -61,6 +70,7 @@ const schema = z.object({
   fiscalYearEndDay: z.string().trim().min(1).max(2),
   directors: z.array(directorSchema).min(1).max(20),
   shareholders: z.array(shareholderSchema).min(1).max(50),
+  officers: z.array(officerSchema).min(1).max(50),
   regOffice: addressSchema,
   regOfficeAddon: z.enum(["none", "korporex"]).default("none"),
   billingName: z.string().trim().min(1).max(200),
@@ -398,6 +408,16 @@ function buildHtmlBody(
     }))
   );
 
+  const officers = personBlock(
+    "Officer",
+    d.officers.map((x) => ({
+      Name: `${x.firstName} ${x.lastName}`,
+      Position: x.position,
+      Email: x.email,
+      Address: formatAddress(x.address),
+    }))
+  );
+
   const regOfficeHeader =
     d.regOfficeAddon === "korporex"
       ? `<p style="margin:0 0 6px;color:#C5A35A;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">${escapeHtml(
@@ -417,7 +437,7 @@ function buildHtmlBody(
     d.billingName
   )}${row("Billing address", formatAddress(d.billingAddress))}</table>`;
 
-  const note = `<p style="margin:24px 0 0;padding:12px 16px;background:#fef3c7;border-left:3px solid #C5A35A;color:#78350f;font-size:13px;line-height:1.6;"><strong>Status: PENDING PAYMENT.</strong> This order was captured at Step 7 submit. A second email will follow from the Stripe webhook once payment completes. If no "[PAID]" email arrives for <strong>${escapeHtml(
+  const note = `<p style="margin:24px 0 0;padding:12px 16px;background:#fef3c7;border-left:3px solid #C5A35A;color:#78350f;font-size:13px;line-height:1.6;"><strong>Status: PENDING PAYMENT.</strong> This order was captured at Review submit. A second email will follow from the Stripe webhook once payment completes. If no "[PAID]" email arrives for <strong>${escapeHtml(
     orderRef
   )}</strong>, the customer did not finish checkout.</p>`;
 
@@ -432,7 +452,7 @@ function buildHtmlBody(
   )}${section("Directors", directors)}${section(
     "Shareholders",
     shareholders
-  )}${section("Registered office", regOffice)}${section(
+  )}${section("Officers", officers)}${section("Registered office", regOffice)}${section(
     "Billing",
     billing
   )}${note}</div></body></html>`;
