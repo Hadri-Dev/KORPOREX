@@ -115,9 +115,9 @@ export default function Footer() {
                 ["Federal Incorporation", "/services"],
                 ["Ontario Incorporation", "/services"],
                 ["BC Incorporation", "/services"],
-                ["Business Name Registration", "/services"],
                 ["Annual Returns", "/services"],
                 ["Dissolve a Business", "/services"],
+                ["Talk to a Corporate Lawyer", "/legal-consultation"],
               ].map(([label, href]) => (
                 <li key={label}>
                   <Link href={href} className="text-sm text-gray-400 hover:text-white transition-colors">

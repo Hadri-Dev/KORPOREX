@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { JURISDICTION_LABELS, PKG_LABELS, REG_OFFICE_ADDON, type Jurisdiction, type Pkg, type RegOfficeAddon } from "@/lib/pricing";
+import { LEGAL_CONSULT_RECIPIENTS } from "@/lib/legalConsult";
 
 export const runtime = "nodejs";
 // Webhooks must always run fresh — never cache.
@@ -80,6 +81,12 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     return;
   }
 
+  const productType = session.metadata?.productType ?? "incorporation";
+  if (productType === "legal-consult") {
+    await handleLegalConsultPaid(session);
+    return;
+  }
+
   const orderRef = session.metadata?.orderRef ?? "(no ref)";
   const amountTotal = ((session.amount_total ?? 0) / 100).toFixed(2);
   const currency = (session.currency ?? "cad").toUpperCase();
@@ -132,6 +139,12 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 }
 
 async function handleCheckoutFailed(session: Stripe.Checkout.Session) {
+  const productType = session.metadata?.productType ?? "incorporation";
+  if (productType === "legal-consult") {
+    await handleLegalConsultFailed(session);
+    return;
+  }
+
   const orderRef = session.metadata?.orderRef ?? "(no ref)";
   const businessName = session.metadata?.businessName ?? "(unknown)";
   const corpNameType = session.metadata?.corpNameType ?? "";
@@ -246,4 +259,104 @@ function buildPaidBody(d: {
   return `<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#FAFAF8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;"><div style="max-width:600px;margin:0 auto;background:#ffffff;padding:32px;border:1px solid #e5e7eb;"><div style="width:32px;height:2px;background:#C5A35A;margin-bottom:20px;"></div><h1 style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#1B4332;">Payment received — ${escapeHtml(
     d.orderRef
   )}</h1><p style="margin:0 0 24px;color:#6b7280;font-size:13px;">Stripe <code>checkout.session.completed</code></p><table style="width:100%;border-collapse:collapse;">${rows}</table><p style="margin:24px 0 0;padding:12px 16px;background:#d1fae5;border-left:3px solid #059669;color:#065f46;font-size:13px;line-height:1.6;">Cross-reference with the earlier <strong>[PENDING]</strong> email for this order reference to view the full submission (directors, shareholders, addresses). Customer receives their Stripe receipt automatically; no customer-facing email is sent from this webhook.</p></div></body></html>`;
+}
+
+// ─── Legal-consult product type ─────────────────────────────────────────────
+
+async function handleLegalConsultPaid(session: Stripe.Checkout.Session) {
+  const orderRef = session.metadata?.orderRef ?? "(no ref)";
+  const amountTotal = ((session.amount_total ?? 0) / 100).toFixed(2);
+  const currency = (session.currency ?? "cad").toUpperCase();
+  const customerName = session.metadata?.customerName ?? "(unknown)";
+  const customerEmail = session.metadata?.customerEmail ?? session.customer_details?.email ?? "(unknown)";
+  const customerPhone = session.metadata?.customerPhone ?? "(not provided)";
+  const calendlyStartTime = session.metadata?.calendlyStartTime ?? "(not provided)";
+  const calendlyEventUri = session.metadata?.calendlyEventUri ?? "";
+  const isUrgent = session.metadata?.isUrgent === "yes";
+
+  const subject = `[PAID] Legal consult — ${orderRef} — ${customerName} — $${amountTotal} ${currency}`;
+  const rows: Array<[string, string]> = [
+    ["Order reference", orderRef],
+    ["Customer", `${customerName} <${customerEmail}>`],
+    ["Phone", customerPhone],
+    ["Booked slot", calendlyStartTime],
+    ["Calendly event", calendlyEventUri || "(not recorded)"],
+    ["Urgent matter?", isUrgent ? "Yes" : "No"],
+    ["Amount paid", `$${amountTotal} ${currency}`],
+    ["Stripe session", session.id],
+  ];
+  const rowHtml = rows
+    .map(
+      ([k, v]) =>
+        `<tr><td style="padding:6px 16px 6px 0;color:#6b7280;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;vertical-align:top;white-space:nowrap;">${escapeHtml(
+          k
+        )}</td><td style="padding:6px 0;color:#111827;font-size:14px;">${escapeHtml(v)}</td></tr>`
+    )
+    .join("");
+
+  const html = `<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#FAFAF8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;"><div style="max-width:600px;margin:0 auto;background:#ffffff;padding:32px;border:1px solid #e5e7eb;"><div style="width:32px;height:2px;background:#C5A35A;margin-bottom:20px;"></div><h1 style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#1B4332;">Consultation payment received — ${escapeHtml(
+    orderRef
+  )}</h1><p style="margin:0 0 24px;color:#6b7280;font-size:13px;">Stripe <code>checkout.session.completed</code></p><table style="width:100%;border-collapse:collapse;">${rowHtml}</table><p style="margin:24px 0 0;padding:12px 16px;background:#d1fae5;border-left:3px solid #059669;color:#065f46;font-size:13px;line-height:1.6;">Cross-reference with the earlier <strong>[PENDING]</strong> email for this order reference to see the full questionnaire and any uploaded documents. The customer's Calendly confirmation will arrive separately.</p></div></body></html>`;
+
+  await sendBrevoEmailToMany(
+    LEGAL_CONSULT_RECIPIENTS.map((r) => ({ email: r.email, name: r.name })),
+    subject,
+    html,
+    customerEmail !== "(unknown)" ? customerEmail : undefined,
+    customerName !== "(unknown)" ? customerName : undefined
+  );
+}
+
+async function handleLegalConsultFailed(session: Stripe.Checkout.Session) {
+  const orderRef = session.metadata?.orderRef ?? "(no ref)";
+  const customerName = session.metadata?.customerName ?? "(unknown)";
+  const subject = `[PAYMENT FAILED] Legal consult — ${orderRef} — ${customerName}`;
+  const html = `<p>Async payment for legal-consult order <strong>${escapeHtml(
+    orderRef
+  )}</strong> failed. Calendly slot was already reserved at <strong>${escapeHtml(
+    session.metadata?.calendlyStartTime ?? "unknown"
+  )}</strong> — consider whether to release it.</p><p>Stripe session: ${escapeHtml(session.id)}</p>`;
+  await sendBrevoEmailToMany(
+    LEGAL_CONSULT_RECIPIENTS.map((r) => ({ email: r.email, name: r.name })),
+    subject,
+    html
+  );
+}
+
+async function sendBrevoEmailToMany(
+  to: Array<{ email: string; name?: string }>,
+  subject: string,
+  htmlContent: string,
+  replyToEmail?: string,
+  replyToName?: string
+): Promise<void> {
+  const apiKey = process.env.BREVO_API_KEY;
+  if (!apiKey) {
+    console.warn("[stripe-webhook] BREVO_API_KEY not set — notification logged only");
+    console.log("[stripe-webhook] would send:", { to, subject, htmlPreview: htmlContent.slice(0, 200) });
+    return;
+  }
+
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "content-type": "application/json",
+      accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: { email: CONTACT_ADDRESS, name: "Korporex" },
+      to,
+      ...(replyToEmail
+        ? { replyTo: { email: replyToEmail, name: replyToName || replyToEmail } }
+        : {}),
+      subject,
+      htmlContent,
+    }),
+  });
+
+  if (!res.ok) {
+    const detail = await res.text().catch(() => "");
+    throw new Error(`Brevo ${res.status}: ${detail}`);
+  }
 }

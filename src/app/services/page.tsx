@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Building2, FileText, Edit3, ClipboardCheck, RefreshCw } from "lucide-react";
+import { ArrowRight, Building2, FileText, Edit3, ClipboardCheck, RefreshCw, ScaleIcon } from "lucide-react";
 
 type Service = { name: string; from: string; href: string };
 type Category = {
@@ -130,6 +130,37 @@ export default function ServicesPage() {
               <div className="border-b border-gray-100 mt-14" />
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Lawyer-referral callout */}
+      <section className="bg-cream-50 py-16 px-6 border-t border-gray-100">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white border border-gray-200 p-8 md:p-10 flex flex-col md:flex-row gap-8 items-start">
+            <div className="w-12 h-12 bg-navy-900 flex items-center justify-center shrink-0">
+              <ScaleIcon size={22} className="text-gold-500" />
+            </div>
+            <div className="flex-1">
+              <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-3">
+                Need Personalized Legal Advice?
+              </p>
+              <h2 className="font-serif text-2xl md:text-3xl font-bold text-navy-900 mb-3">
+                Talk to a Trusted Corporate Lawyer
+              </h2>
+              <p className="text-gray-600 leading-relaxed mb-5">
+                Korporex isn&rsquo;t a law firm — but if you need personalized legal advice on incorporation strategy,
+                shareholder agreements, restructuring, or anything else corporate-law related, we can connect you with an
+                independent corporate lawyer from our trusted referral network. Book a 30-minute consultation for{" "}
+                <span className="font-semibold text-navy-900">$150 + HST</span>.
+              </p>
+              <Link
+                href="/legal-consultation"
+                className="inline-flex items-center gap-2 bg-navy-900 text-white font-medium px-6 py-3 text-sm tracking-wide hover:bg-navy-800 transition-colors"
+              >
+                Book a Consultation <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -53,6 +53,26 @@ export const PRICES: Record<Jurisdiction, Record<Pkg, number>> = {
   bc: { basic: 449, standard: 649, premium: 949 },
 };
 
+// Lawyer consultation fee. Flat-rated 30-minute session with an independent
+// lawyer from Korporex's referral network. HST is computed at 13% (Ontario)
+// because the lawyer is Ontario-based — Canadian place-of-supply for legal
+// services follows the lawyer's province.
+export const LEGAL_CONSULT_FEE = 150;
+export const LEGAL_CONSULT_TAX_RATE = 0.13;
+
+export type LegalConsultPricing = {
+  fee: number;
+  tax: number;
+  total: number;
+};
+
+export function getLegalConsultPricing(): LegalConsultPricing {
+  const fee = LEGAL_CONSULT_FEE;
+  const tax = Math.round(fee * LEGAL_CONSULT_TAX_RATE * 100) / 100;
+  const total = Math.round((fee + tax) * 100) / 100;
+  return { fee, tax, total };
+}
+
 // Name-search pass-through fees. Applies to federal and Ontario named
 // corporations only — BC uses a separate Name Approval process handled inline
 // with the incorporation and not billed as a line item.

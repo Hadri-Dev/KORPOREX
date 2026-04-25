@@ -21,7 +21,11 @@ const categories: Category[] = [
       },
       {
         q: "Is Korporex a law firm?",
-        a: "No. Korporex is a technology company and document preparation and filing service. We are not a law firm and do not provide legal advice. If you require legal advice specific to your situation, we recommend consulting a licensed lawyer.",
+        a: "No. Korporex is a technology company and document preparation and filing service. We are not a law firm and do not provide legal advice. If you require legal advice specific to your situation, we can connect you with an independent corporate lawyer from our trusted referral network — see “What if I need personalized legal advice?” below.",
+      },
+      {
+        q: "What if I need personalized legal advice?",
+        a: "We can connect you with an independent licensed corporate lawyer from our trusted referral network for a 30-minute consultation ($150 + HST, billed in advance). Fill out a short questionnaire describing your situation, pick a slot from the lawyer’s Calendly, and pay to confirm. The lawyer reviews your questionnaire and any documents you upload before the call. Korporex is not a law firm and is not party to the consultation; no solicitor-client relationship is created with Korporex. Visit /legal-consultation to book.",
       },
       {
         q: "Is my personal information secure?",
@@ -50,7 +54,7 @@ const categories: Category[] = [
       },
       {
         q: "Do I need a physical office address to incorporate?",
-        a: "Yes — every corporation requires a registered office address in its incorporating jurisdiction. This address must be a physical location (not a P.O. Box) where official notices and corporate correspondence can be received. If you don't have one, Korporex offers a registered office address service at checkout for federal and Ontario incorporations: Basic ($49.99/mo, billed annually at $599.88 + HST) uses our Ontario address, and Premium ($99.99/mo, billed annually at $1,199.88 + HST) uses our Toronto financial-district address. Both include monthly scanning of received mail to your email. BC incorporations require a BC address — email contact@korporex.com for help.",
+        a: "Yes — every corporation requires a registered office address in its incorporating jurisdiction. This address must be a physical location (not a P.O. Box) where official notices and corporate correspondence can be received. If you don't have one, Korporex offers a registered office address service at checkout for federal and Ontario incorporations: $99.99/month, billed annually in advance at $1,199.88 + HST. The address is in the Greater Toronto Area, chosen by Korporex at our discretion, and includes a monthly scanned copy of received mail emailed to you. The annual fee is non-refundable, including if you obtain your own address before the term ends. BC incorporations require a BC address — email contact@korporex.com for help.",
       },
     ],
   },
