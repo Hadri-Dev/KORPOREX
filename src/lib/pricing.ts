@@ -8,42 +8,36 @@
 
 export type Jurisdiction = "federal" | "ontario" | "bc";
 export type Pkg = "basic" | "standard" | "premium";
-export type RegOfficeAddon = "none" | "basic" | "premium";
+export type RegOfficeAddon = "none" | "korporex";
 
-// Registered office address add-on (annual prepay; price shown as monthly
-// equivalent in UI). Only legally valid for Federal and Ontario incorporations
-// — BC requires a BC registered office, so we gate the add-on out for BC.
+// Registered office address add-on. Single tier: Korporex provides a
+// registered office address in the Greater Toronto Area, billed annually in
+// advance. Annual fee is non-refundable, even if the customer obtains their
+// own registered office address before the term ends.
 //
-// TODO(before-launch): Replace placeholder `address` fields below with the
-// actual addresses we control. These strings appear in the filed Articles of
-// Incorporation and on the customer's public corporate record — they must be
-// real, current, and under our control.
+// Only legally valid for Federal and Ontario incorporations — BC requires a
+// BC registered office, so we gate the add-on out for BC.
+//
+// The actual street/city of the GTA address is selected by Korporex at the
+// time of filing and is intentionally NOT advertised on the marketing or
+// wizard surfaces — customers commit to "Greater Toronto Area, assigned by
+// Korporex". The placeholder address values below are sentinel strings that
+// flow into the wizard's `regOffice` fields when this add-on is selected, so
+// the operator (cross-referencing the [PENDING]/[PAID] emails) knows the real
+// address is to be filled in before the Articles of Incorporation are filed.
 export const REG_OFFICE_ADDON = {
-  basic: {
-    annual: 599.88, // 49.99 × 12
-    monthly: 49.99,
-    label: "Basic",
-    locationLabel: "Ontario",
-    address: {
-      street: "100 Queen Street West",
-      city: "Mississauga",
-      region: "ON",
-      postalCode: "L5B 2S4",
-      country: "CA",
-    },
-  },
-  premium: {
-    annual: 1199.88, // 99.99 × 12
-    monthly: 99.99,
-    label: "Premium",
-    locationLabel: "Toronto — Financial District",
-    address: {
-      street: "181 Bay Street, Suite 4400",
-      city: "Toronto",
-      region: "ON",
-      postalCode: "M5J 2T3",
-      country: "CA",
-    },
+  annual: 1199.88, // 99.99 × 12
+  monthly: 99.99,
+  label: "Korporex Registered Office",
+  locationLabel: "Greater Toronto Area",
+  // Sentinel values — replaced with the real, Korporex-controlled address
+  // before each customer's Articles of Incorporation are filed.
+  address: {
+    street: "Assigned by Korporex at filing",
+    city: "Greater Toronto Area",
+    region: "ON",
+    postalCode: "TBD",
+    country: "CA",
   },
 } as const;
 
@@ -124,8 +118,8 @@ export function computePricing(args: {
   const nuansFee = nuansApplies(args.jurisdiction, args.corpNameType) ? NUANS_FEE : 0;
   const addon = args.regOfficeAddon ?? "none";
   const regOfficeFee =
-    addon !== "none" && regOfficeAddonAvailable(args.jurisdiction)
-      ? REG_OFFICE_ADDON[addon].annual
+    addon === "korporex" && regOfficeAddonAvailable(args.jurisdiction)
+      ? REG_OFFICE_ADDON.annual
       : 0;
   const subtotal = Math.round((price + nuansFee + regOfficeFee) * 100) / 100;
   const taxRate = getTaxRate(args.billingCountry, args.billingRegion);

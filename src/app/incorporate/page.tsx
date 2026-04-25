@@ -193,7 +193,7 @@ const s4 = z.object({ directors: z.array(directorSchema).min(1) });
 const s5 = z.object({ shareholders: z.array(shareholderSchema).min(1) });
 const s6 = z.object({
   regOffice: addressSchema,
-  regOfficeAddon: z.enum(["none", "basic", "premium"]),
+  regOfficeAddon: z.enum(["none", "korporex"]),
 });
 const s7 = z.object({
   billingName: z.string().min(1, "Required"),
@@ -820,10 +820,12 @@ function Step6({ jurisdiction, def, onNext, onBack }: {
   const { handleSubmit, watch, setValue } = form;
   const selectedAddon = watch("regOfficeAddon");
 
-  // When an add-on is selected, mirror Korporex's address into the regOffice
-  // fields so the intake email and downstream filings show the actual address
-  // being used. When the user switches back to "none", blank the fields so
-  // they can enter their own.
+  // When the Korporex add-on is selected, mirror the sentinel address
+  // (city = "Greater Toronto Area", street = "Assigned by Korporex at filing")
+  // into the regOffice fields so the schema validates and the operator sees
+  // a clear "to be filled in before filing" marker on the intake email. When
+  // the user switches back to "none", blank the fields so they can enter
+  // their own address.
   const applyAddonAddress = (addon: RegOfficeAddon) => {
     if (addon === "none") {
       setValue("regOffice.street", "");
@@ -833,7 +835,7 @@ function Step6({ jurisdiction, def, onNext, onBack }: {
       setValue("regOffice.country", "CA");
       return;
     }
-    const a = REG_OFFICE_ADDON[addon].address;
+    const a = REG_OFFICE_ADDON.address;
     setValue("regOffice.street", a.street, { shouldValidate: true });
     setValue("regOffice.city", a.city, { shouldValidate: true });
     setValue("regOffice.region", a.region, { shouldValidate: true });
@@ -863,22 +865,13 @@ function Step6({ jurisdiction, def, onNext, onBack }: {
                 subtitle="Enter an address you control in the fields below."
               />
               <AddonOption
-                value="basic"
-                selected={selectedAddon === "basic"}
-                onSelect={() => { setValue("regOfficeAddon", "basic"); applyAddonAddress("basic"); }}
-                title="Korporex Registered Office — Basic"
-                subtitle="Our Ontario address. Monthly mail scans emailed to you."
-                price={`$${REG_OFFICE_ADDON.basic.monthly.toFixed(2)}/mo`}
-                priceSub={`billed annually at $${REG_OFFICE_ADDON.basic.annual.toFixed(2)} + HST`}
-              />
-              <AddonOption
-                value="premium"
-                selected={selectedAddon === "premium"}
-                onSelect={() => { setValue("regOfficeAddon", "premium"); applyAddonAddress("premium"); }}
-                title="Korporex Registered Office — Premium"
-                subtitle="Toronto financial-district address. Monthly mail scans emailed to you."
-                price={`$${REG_OFFICE_ADDON.premium.monthly.toFixed(2)}/mo`}
-                priceSub={`billed annually at $${REG_OFFICE_ADDON.premium.annual.toFixed(2)} + HST`}
+                value="korporex"
+                selected={selectedAddon === "korporex"}
+                onSelect={() => { setValue("regOfficeAddon", "korporex"); applyAddonAddress("korporex"); }}
+                title="Use a Korporex registered office address"
+                subtitle="Greater Toronto Area address chosen by Korporex. Monthly mail scans emailed to you."
+                price={`$${REG_OFFICE_ADDON.monthly.toFixed(2)}/mo`}
+                priceSub={`billed annually in advance at $${REG_OFFICE_ADDON.annual.toFixed(2)} + HST`}
               />
             </div>
           )}
@@ -891,16 +884,22 @@ function Step6({ jurisdiction, def, onNext, onBack }: {
               regionAllow={regionAllow}
             />
           )}
-          {selectedAddon !== "none" && (
+          {selectedAddon === "korporex" && (
             <div className="bg-navy-50 border border-navy-900 p-4 text-sm text-navy-900 leading-relaxed">
-              <p className="font-semibold mb-1">{REG_OFFICE_ADDON[selectedAddon].label} — {REG_OFFICE_ADDON[selectedAddon].locationLabel}</p>
+              <p className="font-semibold mb-1">{REG_OFFICE_ADDON.label} — {REG_OFFICE_ADDON.locationLabel}</p>
               <p className="text-gray-700">
-                {REG_OFFICE_ADDON[selectedAddon].address.street}, {REG_OFFICE_ADDON[selectedAddon].address.city}, {REG_OFFICE_ADDON[selectedAddon].address.region} {REG_OFFICE_ADDON[selectedAddon].address.postalCode}
+                Korporex selects and assigns the registered office address — somewhere in the Greater Toronto Area —
+                at our discretion before your Articles of Incorporation are filed. The street address is not
+                disclosed in advance.
               </p>
-              <p className="text-xs text-gray-600 mt-2">
-                This address will appear on your Articles of Incorporation and in the public corporate registry.
-                Mail received here is scanned and emailed to you once per month.
-              </p>
+              <ul className="text-xs text-gray-700 mt-3 space-y-1.5 list-disc pl-5">
+                <li>Monthly scanned copy of mail received at the address, emailed to you.</li>
+                <li>The assigned address appears on your Articles of Incorporation and the public corporate registry.</li>
+                <li>
+                  ${REG_OFFICE_ADDON.annual.toFixed(2)} CAD billed annually in advance, plus HST. <strong>Non-refundable</strong> —
+                  including if you obtain your own registered office address before the term ends.
+                </li>
+              </ul>
             </div>
           )}
 
@@ -914,7 +913,7 @@ function Step6({ jurisdiction, def, onNext, onBack }: {
           )}
           {addonEligible && selectedAddon === "none" && (
             <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-600 leading-relaxed">
-              Don&rsquo;t have a physical address in {jurisLabel}? Pick one of the Korporex options above instead.
+              Don&rsquo;t have a physical address in {jurisLabel}? Use the Korporex registered office option above instead.
             </div>
           )}
 
@@ -997,9 +996,9 @@ function Step7({ data, onBack, onPay }: {
     regOfficeAddon: data.regOfficeAddon,
   });
   const nameSearchApplies = nuansFee > 0;
-  const addonApplies = regOfficeFee > 0 && data.regOfficeAddon !== "none";
+  const addonApplies = regOfficeFee > 0 && data.regOfficeAddon === "korporex";
   const addonLabel = addonApplies
-    ? `Registered office — ${REG_OFFICE_ADDON[data.regOfficeAddon as Exclude<RegOfficeAddon, "none">].label} (12 mo)`
+    ? `Registered office — ${REG_OFFICE_ADDON.label} (12 mo)`
     : "";
 
   const jurisLabel = JURISDICTION_LABELS[data.jurisdiction];
@@ -1042,8 +1041,8 @@ function Step7({ data, onBack, onPay }: {
               ["Shareholders", String(data.shareholders.length)],
               [
                 "Registered Office",
-                data.regOfficeAddon !== "none"
-                  ? `Korporex ${REG_OFFICE_ADDON[data.regOfficeAddon as Exclude<RegOfficeAddon, "none">].label} — ${REG_OFFICE_ADDON[data.regOfficeAddon as Exclude<RegOfficeAddon, "none">].address.city}, ON`
+                data.regOfficeAddon === "korporex"
+                  ? `${REG_OFFICE_ADDON.label} — ${REG_OFFICE_ADDON.locationLabel}`
                   : data.regOffice.city ? `${data.regOffice.city}, ${data.regOffice.region}` : "—",
               ],
             ].map(([k, v]) => (

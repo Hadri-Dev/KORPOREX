@@ -207,10 +207,10 @@ function buildPaidBody(d: {
   paymentIntent: string;
 }) {
   const regOfficeRow: [string, string] | null =
-    d.regOfficeAddon !== "none"
+    d.regOfficeAddon === "korporex"
       ? [
           "Registered office add-on",
-          `Korporex ${REG_OFFICE_ADDON[d.regOfficeAddon].label} — ${REG_OFFICE_ADDON[d.regOfficeAddon].locationLabel} (12 months)`,
+          `${REG_OFFICE_ADDON.label} — ${REG_OFFICE_ADDON.locationLabel} (12 months, non-refundable)`,
         ]
       : null;
 

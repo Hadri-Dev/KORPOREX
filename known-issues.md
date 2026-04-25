@@ -9,12 +9,12 @@
 - **Why not fixed yet**: Waiting on user's legal review pass. Drafts are marked as "living" — both files carry a `NOTE TO REVIEWERS` comment indicating they should be revised as operational processes solidify.
 - **Logged**: 2026-04-23 (updated later same day — entity + refund policy resolved)
 
-### [Severity: high] Registered-office add-on uses placeholder physical addresses
-- **Where**: `src/lib/pricing.ts` — `REG_OFFICE_ADDON.basic.address` and `REG_OFFICE_ADDON.premium.address`.
-- **Symptom**: Customers who select the Basic or Premium add-on get a placeholder Ontario address (Mississauga / 181 Bay Street) on their Articles of Incorporation. These addresses are NOT under Korporex's control.
-- **Impact**: **Blocks go-live of the add-on.** If a customer pays for the service today, their filed corporate record lists an address Korporex doesn't operate — legally invalid and would cause mail delivery failures.
-- **Why not fixed yet**: Waiting on user to provide the real physical address(es) we'll use for the service. Once provided, it's a one-line-per-field change in `REG_OFFICE_ADDON`.
-- **Logged**: 2026-04-23
+### [Severity: medium] Registered-office add-on assigns the actual GTA address operationally per filing
+- **Where**: `src/lib/pricing.ts` — `REG_OFFICE_ADDON.address` carries sentinel values (`street: "Assigned by Korporex at filing"`, `postalCode: "TBD"`); `src/app/api/incorporate/route.ts` flags this in the intake email with an "ACTION REQUIRED" note when the customer selects the add-on.
+- **Symptom**: When a customer pays for the Korporex registered office add-on, the intake/[PENDING] email shows the sentinel address, not the real GTA street address. Operations must replace it with a real, Korporex-controlled GTA address before filing the Articles of Incorporation.
+- **Impact**: **No site-side bug** — the wizard, pricing page, and Stripe line item all describe the service as "Greater Toronto Area, address chosen by Korporex" and nothing customer-facing implies a specific street is committed in advance. The risk is purely operational: if ops files the Articles without substituting the sentinel, the registry would reject (or accept invalid) filings.
+- **Why not fixed yet**: This is by design — the user requested address selection at Korporex's discretion, not advertised in advance. The sentinel + the [PENDING] email's "ACTION REQUIRED" banner are the operator-side reminder. When the GTA address(es) are finalized and a more permanent rotation is set up, replace the sentinel in `REG_OFFICE_ADDON.address` with the default address and remove the "ACTION REQUIRED" banner.
+- **Logged**: 2026-04-23 (revised 2026-04-24 — model changed to single tier, GTA, non-refundable, address assigned at filing)
 
 ### [Severity: low] Stripe webhook endpoint still uses Vercel's `.vercel.app` alias
 - **Where**: Stripe Dashboard (live mode) → Developers → Webhooks → "Korporex production — checkout" destination. URL: `https://korporex.vercel.app/api/stripe-webhook`.

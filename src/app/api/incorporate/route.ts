@@ -7,7 +7,6 @@ import {
   computePricing,
   type Jurisdiction,
   type Pkg,
-  type RegOfficeAddon,
 } from "@/lib/pricing";
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
@@ -60,7 +59,7 @@ const schema = z.object({
   directors: z.array(directorSchema).min(1).max(20),
   shareholders: z.array(shareholderSchema).min(1).max(50),
   regOffice: addressSchema,
-  regOfficeAddon: z.enum(["none", "basic", "premium"]).default("none"),
+  regOfficeAddon: z.enum(["none", "korporex"]).default("none"),
   billingName: z.string().trim().min(1).max(200),
   billingAddress: addressSchema,
 });
@@ -153,14 +152,13 @@ export async function POST(req: Request) {
     });
   }
 
-  if (pricing.regOfficeFee > 0 && payload.regOfficeAddon !== "none") {
-    const addon = REG_OFFICE_ADDON[payload.regOfficeAddon];
+  if (pricing.regOfficeFee > 0 && payload.regOfficeAddon === "korporex") {
     lineItems.push({
       price_data: {
         currency: "cad",
         product_data: {
-          name: `Registered office — ${addon.label} (12 months)`,
-          description: `${addon.locationLabel}. Monthly mail scans emailed to customer. $${addon.monthly.toFixed(2)}/mo × 12.`,
+          name: `${REG_OFFICE_ADDON.label} (12 months)`,
+          description: `${REG_OFFICE_ADDON.locationLabel}. Korporex assigns the address before filing. Monthly mail scans emailed to customer. $${REG_OFFICE_ADDON.monthly.toFixed(2)}/mo × 12. Non-refundable.`,
         },
         unit_amount: Math.round(pricing.regOfficeFee * 100),
       },
@@ -343,8 +341,8 @@ function buildHtmlBody(
   ].join("");
 
   const addonLabel =
-    d.regOfficeAddon !== "none"
-      ? `Registered office — ${REG_OFFICE_ADDON[d.regOfficeAddon as Exclude<RegOfficeAddon, "none">].label} (12 mo)`
+    d.regOfficeAddon === "korporex"
+      ? `Registered office — ${REG_OFFICE_ADDON.label} (12 mo)`
       : "";
 
   const pricingRows = [
@@ -385,14 +383,18 @@ function buildHtmlBody(
   );
 
   const regOfficeHeader =
-    d.regOfficeAddon !== "none"
-      ? `<p style="margin:0 0 6px;color:#C5A35A;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Korporex ${escapeHtml(
-          REG_OFFICE_ADDON[d.regOfficeAddon as Exclude<RegOfficeAddon, "none">].label
-        )} — ${escapeHtml(REG_OFFICE_ADDON[d.regOfficeAddon as Exclude<RegOfficeAddon, "none">].locationLabel)}</p>`
+    d.regOfficeAddon === "korporex"
+      ? `<p style="margin:0 0 6px;color:#C5A35A;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">${escapeHtml(
+          REG_OFFICE_ADDON.label
+        )} — ${escapeHtml(REG_OFFICE_ADDON.locationLabel)}</p>`
+      : "";
+  const regOfficeNote =
+    d.regOfficeAddon === "korporex"
+      ? `<p style="margin:6px 0 0;color:#92400e;font-size:12px;line-height:1.6;"><strong>ACTION REQUIRED:</strong> assign actual GTA address before filing. Customer paid 12-month non-refundable term.</p>`
       : "";
   const regOffice = `${regOfficeHeader}<p style="margin:0;color:#111827;font-size:14px;line-height:1.6;">${escapeHtml(
     formatAddress(d.regOffice)
-  )}</p>`;
+  )}</p>${regOfficeNote}`;
 
   const billing = `<table style="width:100%;border-collapse:collapse;">${row(
     "Billing name",
