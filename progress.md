@@ -30,6 +30,20 @@
   1. The Calendly `event_scheduled` postMessage doesn't reliably include the start time; we currently fall back to "(see Calendly notification)" when absent. If users complain about the friendly time not appearing in the email, we can use the Calendly REST API server-side to fetch the start time given the event URI (Calendly Personal Access Token required).
   2. No automated test for the new flow — same gap as the rest of the wizard. Tracked under the existing "No automated tests" known-issue entry.
 
+### 2026-04-24 (Directors — Country of Tax Residency field)
+- New required field on each director (Step 4) capturing country of tax residency, per user direction.
+- New shared module [src/lib/countries.ts](src/lib/countries.ts) with the full ISO 3166-1 alpha-2 list (249 entries, alphabetized by English short name). Kept separate from the existing 12-entry `COUNTRIES` const used by the address dropdown — that one's intentionally restricted to common countries plus an `Other` fallback; migrating it later is a separate task.
+- [src/app/incorporate/page.tsx](src/app/incorporate/page.tsx):
+  - `Director` interface gains `taxResidencyCountry: string`.
+  - `directorSchema` Zod requires `min(2)` (rejects empty placeholder).
+  - `emptyDir` defaults to `""`.
+  - Step 4 UI renders a full-width `<select>` between the address subform and the Canadian-resident checkbox. Hint clarifies the field is independent of the mailing address: "The country where the director is a tax resident — may differ from their mailing address."
+  - The Canadian-resident checkbox below is preserved — that's residency for Canadian corporate-law purposes (CBCA / OBCA director-residency requirements), not tax. Two separate concepts that should both be captured.
+- [src/app/api/incorporate/route.ts](src/app/api/incorporate/route.ts):
+  - `directorSchema` Zod adds the field.
+  - Intake email director block resolves the ISO code to the country's display name via `ALL_COUNTRIES.find(...)`, formatted as `Canada (CA)` for clarity.
+- **Verified**: tsc/lint/build green. Dev-server screenshot at [build-tmp/step4-tax-residency/01-with-tax-residency.png](build-tmp/step4-tax-residency/01-with-tax-residency.png) confirms the new field renders correctly with the placeholder and hint. `curl` spot-check confirms 249 unique country options in the rendered HTML (`Afghanistan` through `Zimbabwe`).
+
 ### 2026-04-24 (lawyer-consult — Talk to a Lawyer nav tab)
 - User opted to add a regular nav tab ("Option 1" of two suggestions — the other was a small text link beside the Incorporate Now button) rather than a co-equal top-right button. Reasoning: a second prominent CTA would split attention from the primary $399–$999 incorporation funnel and crowd the navbar on mobile; a nav tab keeps the lawyer-referral discoverable but visually subordinate to Incorporate Now.
 - [src/components/layout/Navbar.tsx](src/components/layout/Navbar.tsx) — added `{ href: "/legal-consultation", label: "Talk to a Lawyer" }` between Resources and Contact in the shared `links` array. Both desktop (`hidden lg:flex`) and mobile (`open && ...`) menus auto-inherit, so the same entry appears in both. Verified visually at 1400px wide: `KORPOREX | Services Pricing About FAQ Resources Talk to a Lawyer Contact | Incorporate Now` fits comfortably with no overflow ([build-tmp/legal-consult-verify/05-navbar-with-tab.png](build-tmp/legal-consult-verify/05-navbar-with-tab.png)).

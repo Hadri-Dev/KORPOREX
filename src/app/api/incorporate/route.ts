@@ -10,6 +10,7 @@ import {
 } from "@/lib/pricing";
 import { legalEndingSchema } from "@/lib/legalEndings";
 import { officerPositionSchema } from "@/lib/officerPositions";
+import { ALL_COUNTRIES } from "@/lib/countries";
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
 
@@ -33,6 +34,7 @@ const directorSchema = z.object({
   email: z.string().trim().email().max(320),
   dateOfBirth: z.string().trim().min(1).max(20),
   isCanadianResident: z.boolean(),
+  taxResidencyCountry: z.string().trim().min(2).max(10),
   address: addressSchema,
 });
 
@@ -389,13 +391,18 @@ function buildHtmlBody(
 
   const directors = personBlock(
     "Director",
-    d.directors.map((x) => ({
-      Name: `${x.firstName} ${x.lastName}`,
-      Email: x.email,
-      "Date of birth": x.dateOfBirth,
-      "Canadian resident": x.isCanadianResident ? "Yes" : "No",
-      Address: formatAddress(x.address),
-    }))
+    d.directors.map((x) => {
+      const country = ALL_COUNTRIES.find((c) => c.code === x.taxResidencyCountry);
+      const taxRes = country ? `${country.name} (${country.code})` : x.taxResidencyCountry || "—";
+      return {
+        Name: `${x.firstName} ${x.lastName}`,
+        Email: x.email,
+        "Date of birth": x.dateOfBirth,
+        "Canadian resident": x.isCanadianResident ? "Yes" : "No",
+        "Tax residency": taxRes,
+        Address: formatAddress(x.address),
+      };
+    })
   );
 
   const shareholders = personBlock(

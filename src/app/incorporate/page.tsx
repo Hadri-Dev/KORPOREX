@@ -26,6 +26,7 @@ import {
   officerPositionSchema,
   type OfficerPosition,
 } from "@/lib/officerPositions";
+import { ALL_COUNTRIES } from "@/lib/countries";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -42,6 +43,7 @@ interface Address {
 interface Director {
   firstName: string; lastName: string; email: string;
   dateOfBirth: string; isCanadianResident: boolean;
+  taxResidencyCountry: string;
   address: Address;
 }
 interface Shareholder {
@@ -181,6 +183,7 @@ const directorSchema = z.object({
   email: z.string().email("Valid email required"),
   dateOfBirth: z.string().min(1, "Required"),
   isCanadianResident: z.boolean(),
+  taxResidencyCountry: z.string().min(2, "Select a country"),
   address: addressSchema,
 });
 
@@ -744,6 +747,7 @@ const emptyAddress: Address = { street: "", city: "", region: "", postalCode: ""
 const emptyDir: Director = {
   firstName: "", lastName: "", email: "",
   dateOfBirth: "", isCanadianResident: true,
+  taxResidencyCountry: "",
   address: { ...emptyAddress },
 };
 
@@ -781,6 +785,23 @@ function Step4({ def, onNext, onBack }: { def: Partial<S4>; onNext: (d: S4) => v
                 <Field label="Date of Birth *" error={de[i]?.dateOfBirth?.message}><input type="date" {...register(`directors.${i}.dateOfBirth`)} className={iCls} /></Field>
               </div>
               <AddressFields prefix={`directors.${i}.address`} />
+              {/* Tax residency — separate from the address country and from
+                  the Canadian-resident checkbox below (which captures
+                  residency for Canadian corporate-law purposes). */}
+              <div className="mt-4">
+                <Field
+                  label="Country of Tax Residency *"
+                  error={de[i]?.taxResidencyCountry?.message}
+                  hint="The country where the director is a tax resident — may differ from their mailing address."
+                >
+                  <select {...register(`directors.${i}.taxResidencyCountry`)} className={sCls}>
+                    <option value="">-- Select a country --</option>
+                    {ALL_COUNTRIES.map((c) => (
+                      <option key={c.code} value={c.code}>{c.name}</option>
+                    ))}
+                  </select>
+                </Field>
+              </div>
               <div className="flex items-center gap-3 mt-4">
                 <input type="checkbox" id={`resident-${i}`} {...register(`directors.${i}.isCanadianResident`)} className="shrink-0 accent-navy-900" />
                 <label htmlFor={`resident-${i}`} className="text-sm text-gray-700 cursor-pointer">Canadian resident</label>
