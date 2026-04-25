@@ -114,8 +114,15 @@ export default function LegalConsultationPage() {
       if (!w.Calendly || !calendlyContainerRef.current || !formData) return;
       // Empty the container in case React re-mounts it during HMR.
       calendlyContainerRef.current.innerHTML = "";
+      // Append Calendly's white-label flags so the host's avatar / firm name
+      // / GDPR banner are hidden — customers should experience the booking
+      // as a Korporex flow rather than a Hadri Law one. The event title
+      // (`Consultation - KORPOREX`) stays visible.
+      const url = new URL(CALENDLY_LAWYER_URL);
+      url.searchParams.set("hide_landing_page_details", "1");
+      url.searchParams.set("hide_gdpr_banner", "1");
       w.Calendly.initInlineWidget({
-        url: CALENDLY_LAWYER_URL,
+        url: url.toString(),
         parentElement: calendlyContainerRef.current,
         prefill: {
           name: formData.fullName,
@@ -253,9 +260,12 @@ export default function LegalConsultationPage() {
         </div>
       </section>
 
-      {/* Body — staged content */}
+      {/* Body — staged content. Width varies by stage: the questionnaire
+          and confirmation panels sit in a 2xl column for readability, while
+          the Calendly embed widens to a 4xl column so the calendar grid
+          and time-slot list aren't cramped. */}
       <section className="bg-white py-12 px-6 min-h-[60vh]">
-        <div className="max-w-2xl mx-auto">
+        <div className={stage === "calendly" ? "max-w-4xl mx-auto" : "max-w-2xl mx-auto"}>
           {stage === "form" && (
             <form onSubmit={handleSubmit(onValid)} className="space-y-6">
               <h2 className="font-serif text-2xl font-bold text-navy-900 mb-1">Tell us about your situation</h2>
@@ -438,7 +448,14 @@ export default function LegalConsultationPage() {
               <p className="text-gray-500 text-sm mb-6">
                 Choose any 30-minute slot that works for you. After selecting, you&rsquo;ll be redirected to checkout.
               </p>
-              <div ref={calendlyContainerRef} className="min-h-[700px] border border-gray-100" />
+              {/*
+                Calendly's inline widget renders an iframe at 100% of this
+                container. A fixed h-[1100px] gives the calendar grid + slot
+                picker enough room without internal scrollbars. The previous
+                `min-h-[700px]` was too short and made Calendly scroll
+                internally with arrow controls — which looked broken.
+              */}
+              <div ref={calendlyContainerRef} className="h-[1100px] border border-gray-100" />
             </>
           )}
 
