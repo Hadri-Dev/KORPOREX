@@ -3,7 +3,7 @@
 ## Current Focus
 **Public face: coming-soon page at `https://korporex.com` and `www.korporex.com`** (since 2026-04-24 afternoon). Apex + www both CNAME to Vercel (`a2768dd48b0e9d48.vercel-dns-017.com`), SSL cert provisioned by Vercel, and the Next.js middleware in [src/middleware.ts](src/middleware.ts) rewrites every non-`/api`, non-`/_next`, non-`/favicon.ico` path to `/soon` for these hostnames. Full WIP site is privately accessible at `https://korporex.vercel.app/*` for continued dev. Email (Cloudflare Email Routing MX + Brevo SPF/DKIM/DMARC) untouched — `contact@korporex.com` works inbound + outbound. **To remove launch mode when ready**: delete `src/middleware.ts`, `git push` — `korporex.com` immediately serves the full site (no DNS change needed).
 
-**Latest session (2026-04-25)**: closed out a chunk of incorporation-wizard work plus the new lawyer-consultation referral flow. Repo at commit `216cb8b`, working tree clean, all pushed to `origin/main`.
+**Latest session (2026-04-25)**: small UX fix — wizard now scrolls to top on every step change so customers don't have to scroll up after clicking Continue. Earlier in the day: closed out a chunk of incorporation-wizard work plus the new lawyer-consultation referral flow.
 
 ### Recently shipped (last few sessions)
 - **Lawyer-consultation referral feature** (`/legal-consultation`) — questionnaire → Calendly embed (Hadri Law's `https://calendly.com/hadrilaw/consultation-korporex`, branded with `hide_landing_page_details=1` so the law firm's logo is suppressed) → Stripe Checkout ($150 + 13% HST = $169.50 CAD). `[PENDING]` and `[PAID]` emails go to BOTH `contact@korporex.com` and `contact@hadrilaw.com`. Optional file uploads attached to the email. Disclaimers everywhere — Korporex is not a law firm, consultation is by an independent licensed lawyer, no solicitor-client relationship with Korporex. Entry points: nav tab "Talk to a Lawyer", footer link, services callout, FAQ entry, and a persistent "Not sure? Speak with a lawyer" link below every wizard step.
@@ -35,6 +35,12 @@
 - Stripe is **live mode** on Vercel Production. Test transactions = real money. Use `.vercel.app` for testing while DNS is on the coming-soon page (`NEXT_PUBLIC_SITE_URL=https://korporex.vercel.app` is intentional during launch-mode).
 
 ## Log
+
+### 2026-04-25 (UX — wizard scrolls to top on step change)
+- **Issue**: After completing a step in `/incorporate` and clicking Continue, the next step rendered with the page still scrolled to the bottom (where the previous step's CTA was), forcing the customer to scroll up manually to see the new step's heading and first field.
+- **Fix**: Added a `useEffect(() => window.scrollTo({ top: 0, behavior: "auto" }), [step])` at the top of `IncorporatePage` in [src/app/incorporate/page.tsx](src/app/incorporate/page.tsx). One hook handles all 8 steps, both forward (Continue) and backward (Back) transitions.
+- **Why instant (`behavior: "auto"`) rather than smooth**: Step 4 (Directors) and Step 5 (Shareholders) can be very long when multiple records are added — a smooth scroll over thousands of pixels is disorienting and slow. Instant snap to top mirrors the mental model of "I've moved to a new page" and is the convention used by other multi-step checkout flows.
+- **Verified**: `npx tsc --noEmit` clean, `npm run lint` clean.
 
 ### 2026-04-24 (new feature — Lawyer-consultation referral flow)
 - **Decision (from user)**: Korporex offers a $150 + HST 30-minute consultation with an independent corporate lawyer from a trusted referral network (currently Hadri Law). Korporex is not a law firm and the consultation is not Korporex's service — Korporex's role is referral facilitation only.

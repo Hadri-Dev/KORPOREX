@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm, useFieldArray, FormProvider, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -1408,6 +1408,10 @@ const init: WizardData = {
 export default function IncorporatePage() {
   const [step, setStep] = useState(1);
   const [data, setData] = useState<WizardData>(init);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [step]);
 
   function patch(p: Partial<WizardData>) { setData((prev) => ({ ...prev, ...p })); }
 
