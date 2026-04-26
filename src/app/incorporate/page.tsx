@@ -756,7 +756,6 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
               </select>
             </Field>
           </div>
-          <p className="text-xs text-gray-500 -mt-3">Many corporations pick December 31.</p>
 
           <NextBtn />
         </form>

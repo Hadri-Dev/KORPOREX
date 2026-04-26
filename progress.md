@@ -36,6 +36,9 @@
 
 ## Log
 
+### 2026-04-25 (Step 3 copy — drop "Many corporations pick December 31" hint)
+- Removed the small grey hint under the Fiscal Year End month/day fields in [src/app/incorporate/page.tsx](src/app/incorporate/page.tsx). Per user direction — keeps the wizard free of suggestive framing on choices the customer should make for themselves (consistent with the earlier no-guidance treatment of Price per Share on Step 5).
+
 ### 2026-04-25 (UX — wizard scrolls to top on step change)
 - **Issue**: After completing a step in `/incorporate` and clicking Continue, the next step rendered with the page still scrolled to the bottom (where the previous step's CTA was), forcing the customer to scroll up manually to see the new step's heading and first field.
 - **Fix**: Added a `useEffect(() => window.scrollTo({ top: 0, behavior: "auto" }), [step])` at the top of `IncorporatePage` in [src/app/incorporate/page.tsx](src/app/incorporate/page.tsx). One hook handles all 8 steps, both forward (Continue) and backward (Back) transitions.
