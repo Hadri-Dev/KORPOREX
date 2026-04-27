@@ -901,10 +901,18 @@ function Step4({ def, jurisdiction, onNext, onBack }: { def: Partial<S4>; jurisd
                     <p>(c) a permanent resident within the meaning of subsection 2(1) of the Immigration and Refugee Protection Act and ordinarily resident in Canada, except a permanent resident who has been ordinarily resident in Canada for more than one year after the time at which he or she first became eligible to apply for Canadian citizenship; (résident canadien)</p>
                   </div>
                 </div>
+              ) : jurisdiction === "ontario" ? (
+                // Ontario — residency block intentionally omitted. OBCA dropped
+                // the Canadian-resident director requirement (Bill 213, in
+                // force 2021-07-05), so surfacing a CBCA-style residency
+                // checkbox would be misleading. The underlying field defaults
+                // to "no" via seedDir so the schema still validates.
+                null
               ) : (
-                // Non-federal — preserve legacy checkbox UX. Field is still
-                // tri-state ("yes" | "no") under the hood; we manually map
-                // the checkbox's checked state to those string values via
+                // BC (and any other non-federal, non-Ontario jurisdictions) —
+                // preserve legacy checkbox UX. Field is still tri-state
+                // ("yes" | "no") under the hood; we manually map the
+                // checkbox's checked state to those string values via
                 // watch/setValue so the schema sees a valid enum.
                 <div className="mt-4">
                   <div className="flex items-center gap-3">

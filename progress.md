@@ -36,6 +36,12 @@
 
 ## Log
 
+### 2026-04-27 (Ontario — drop Canadian-resident block from Step 4)
+- Removed the "Canadian resident" checkbox + paraphrased CBCA s.2(1) paragraph from the Ontario flow on Step 4. OBCA dropped the resident-Canadian director requirement under Bill 213 (in force 2021-07-05), so showing a CBCA-style residency control on an Ontario filing was misleading.
+- Implementation: extended the existing `isFederal ? ... : ...` ternary in [src/app/incorporate/page.tsx](src/app/incorporate/page.tsx) to a three-way branch — federal renders the mandatory radio group + statutory text, **Ontario renders nothing**, BC keeps the legacy checkbox + paragraph. The underlying `Director.isCanadianResident` field still defaults to `"no"` via `seedDir` so the schema validates without a UI.
+- API + email unchanged. Ontario intake emails will still show "CBCA resident Canadian: No" — left as-is for now (separate polish if it confuses ops).
+- Verified: `npx tsc --noEmit` clean, `npm run lint` clean.
+
 ### 2026-04-27 (Federal-only — mandatory Resident Canadian radio + statutory paragraph)
 - **Issue**: On Step 4 (Directors), the existing "Canadian resident" checkbox was optional and had a paraphrased description of CBCA s. 2(1) below it. User wanted the federal form to (a) require a conscious yes/no choice rather than allow the checkbox to silently default to unchecked, and (b) show the verbatim statutory definition so customers see the exact legal text they're acknowledging.
 - **Scope**: Federal jurisdiction only — Ontario and BC retain the existing checkbox + existing paragraph (untouched per user direction). Step 4's `Step4` component now takes a `jurisdiction: Jurisdiction` prop and branches the render.
