@@ -34,7 +34,7 @@ const directorSchema = z.object({
   email: z.string().trim().email().max(320),
   dateOfBirth: z.string().trim().min(1).max(20),
   citizenshipStatus: z.enum(["citizen", "permanent_resident", "other"]),
-  isCanadianResident: z.boolean(),
+  isCanadianResident: z.enum(["yes", "no"]),
   taxResidencyCountry: z.string().trim().min(2).max(10),
   address: addressSchema,
 });
@@ -412,7 +412,7 @@ function buildHtmlBody(
         Email: x.email,
         "Date of birth": x.dateOfBirth,
         Citizenship: citizenshipLabel,
-        "CBCA resident Canadian": x.isCanadianResident ? "Yes" : "No",
+        "CBCA resident Canadian": x.isCanadianResident === "yes" ? "Yes" : "No",
         "Tax residency": taxRes,
         Address: formatAddress(x.address),
       };

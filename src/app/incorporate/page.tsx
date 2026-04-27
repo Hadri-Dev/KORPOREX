@@ -37,9 +37,13 @@ type CorpNameType = "named" | "numbered";
 // resident ordinarily resident in Canada (with one-year-after-citizenship-
 // eligibility caveat). We split the data into two orthogonal fields:
 //  - `citizenshipStatus` — what the director IS (citizen / PR / other)
-//  - `isCanadianResident` — whether the director ordinarily lives in Canada
-// The combination of both determines CBCA "resident Canadian" status.
+//  - `isCanadianResident` — whether the director qualifies as a CBCA
+//    "resident Canadian" ("yes" / "no"). Empty string is the unset state
+//    used by the federal radio group at first render so customers must
+//    consciously pick. Non-federal jurisdictions seed it to "no" so the
+//    existing checkbox UI behaves as before (unchecked = no).
 type CitizenshipStatus = "citizen" | "permanent_resident" | "other";
+type ResidentChoice = "yes" | "no";
 
 const CITIZENSHIP_OPTIONS: ReadonlyArray<{ value: CitizenshipStatus; label: string }> = [
   { value: "citizen", label: "Canadian citizen" },
@@ -59,7 +63,7 @@ interface Director {
   firstName: string; lastName: string; email: string;
   dateOfBirth: string;
   citizenshipStatus: CitizenshipStatus;
-  isCanadianResident: boolean;
+  isCanadianResident: ResidentChoice;
   taxResidencyCountry: string;
   address: Address;
 }
@@ -203,7 +207,7 @@ const directorSchema = z.object({
   citizenshipStatus: z.enum(["citizen", "permanent_resident", "other"], {
     message: "Select citizenship status",
   }),
-  isCanadianResident: z.boolean(),
+  isCanadianResident: z.enum(["yes", "no"], { message: "Required" }),
   taxResidencyCountry: z.string().min(2, "Select a country"),
   address: addressSchema,
 });
@@ -775,17 +779,25 @@ const emptyDir: Director = {
   // Zod rejects it at submit time so the customer is forced to pick.
   // Same pattern used for `legalEnding` on Step 3.
   citizenshipStatus: "" as CitizenshipStatus,
-  isCanadianResident: false,
+  // Unset by default. For federal, customer must pick a radio option (Zod rejects "").
+  // For non-federal, Step4 reseeds this to "no" so the existing checkbox UI
+  // (unchecked = no) passes validation without forced interaction.
+  isCanadianResident: "" as ResidentChoice,
   taxResidencyCountry: "",
   address: { ...emptyAddress },
 };
 
-function Step4({ def, onNext, onBack }: { def: Partial<S4>; onNext: (d: S4) => void; onBack: () => void }) {
+function Step4({ def, jurisdiction, onNext, onBack }: { def: Partial<S4>; jurisdiction: Jurisdiction; onNext: (d: S4) => void; onBack: () => void }) {
+  const isFederal = jurisdiction === "federal";
+  // Federal customers must consciously pick "yes" or "no" — seed unset so the
+  // radio group renders with neither option selected. Non-federal preserves
+  // the legacy checkbox-as-boolean UX, so seed "no" (= unchecked).
+  const seedDir: Director = isFederal ? emptyDir : { ...emptyDir, isCanadianResident: "no" };
   const form = useForm<S4>({
     resolver: zodResolver(s4),
-    defaultValues: { directors: def.directors?.length ? def.directors : [emptyDir] },
+    defaultValues: { directors: def.directors?.length ? def.directors : [seedDir] },
   });
-  const { register, handleSubmit, control, formState: { errors } } = form;
+  const { register, handleSubmit, control, watch, setValue, formState: { errors } } = form;
   const { fields, append, remove } = useFieldArray({ control, name: "directors" });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const de = (errors.directors as any) ?? [];
@@ -859,20 +871,62 @@ function Step4({ def, onNext, onBack }: { def: Partial<S4>; onNext: (d: S4) => v
                   </div>
                 </Field>
               </div>
-              <div className="mt-4">
-                <div className="flex items-center gap-3">
-                  <input type="checkbox" id={`resident-${i}`} {...register(`directors.${i}.isCanadianResident`)} className="shrink-0 accent-navy-900" />
-                  <label htmlFor={`resident-${i}`} className="text-sm text-gray-700 cursor-pointer">Canadian resident</label>
+              {isFederal ? (
+                // Federal — mandatory two-radio choice. Customer must pick
+                // "yes" or "no" (Zod rejects ""). Statutory text quoted from
+                // CBCA s.2(1) verbatim so the customer sees the legal
+                // definition they're acknowledging when they select Yes.
+                <div className="mt-4">
+                  <Field
+                    label="Resident Canadian *"
+                    error={de[i]?.isCanadianResident?.message}
+                  >
+                    <div className="grid grid-cols-2 gap-3">
+                      <label className="flex items-center gap-2 border border-gray-200 px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium">
+                        <input type="radio" value="yes" {...register(`directors.${i}.isCanadianResident`)} className="accent-navy-900" />
+                        I am a resident Canadian
+                      </label>
+                      <label className="flex items-center gap-2 border border-gray-200 px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium">
+                        <input type="radio" value="no" {...register(`directors.${i}.isCanadianResident`)} className="accent-navy-900" />
+                        I am not a resident Canadian
+                      </label>
+                    </div>
+                  </Field>
+                  <div className="text-xs text-gray-500 mt-2 leading-relaxed space-y-2">
+                    <p>
+                      Per s.&nbsp;2(1) of the Canada Business Corporations Act, resident Canadian means an individual who is
+                    </p>
+                    <p>(a) a Canadian citizen ordinarily resident in Canada,</p>
+                    <p>(b) a Canadian citizen not ordinarily resident in Canada who is a member of a prescribed class of persons, or</p>
+                    <p>(c) a permanent resident within the meaning of subsection 2(1) of the Immigration and Refugee Protection Act and ordinarily resident in Canada, except a permanent resident who has been ordinarily resident in Canada for more than one year after the time at which he or she first became eligible to apply for Canadian citizenship; (résident canadien)</p>
+                  </div>
                 </div>
-                <p className="text-xs text-gray-500 mt-1.5 leading-relaxed">
-                  Per CBCA s.2(1), a &ldquo;resident Canadian&rdquo; is a Canadian citizen who ordinarily lives in Canada,
-                  or a permanent resident who ordinarily lives in Canada (and has not been a permanent resident long enough
-                  to be eligible for Canadian citizenship). Tick this box only if you meet that definition.
-                </p>
-              </div>
+              ) : (
+                // Non-federal — preserve legacy checkbox UX. Field is still
+                // tri-state ("yes" | "no") under the hood; we manually map
+                // the checkbox's checked state to those string values via
+                // watch/setValue so the schema sees a valid enum.
+                <div className="mt-4">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      id={`resident-${i}`}
+                      checked={watch(`directors.${i}.isCanadianResident`) === "yes"}
+                      onChange={(e) => setValue(`directors.${i}.isCanadianResident`, e.target.checked ? "yes" : "no", { shouldValidate: true })}
+                      className="shrink-0 accent-navy-900"
+                    />
+                    <label htmlFor={`resident-${i}`} className="text-sm text-gray-700 cursor-pointer">Canadian resident</label>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1.5 leading-relaxed">
+                    Per CBCA s.2(1), a &ldquo;resident Canadian&rdquo; is a Canadian citizen who ordinarily lives in Canada,
+                    or a permanent resident who ordinarily lives in Canada (and has not been a permanent resident long enough
+                    to be eligible for Canadian citizenship). Tick this box only if you meet that definition.
+                  </p>
+                </div>
+              )}
             </div>
           ))}
-          <button type="button" onClick={() => append(emptyDir)}
+          <button type="button" onClick={() => append(seedDir)}
             className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
             <Plus size={14} /> Add Another Director
           </button>
@@ -1440,7 +1494,7 @@ export default function IncorporatePage() {
           }}
           onBack={() => setStep(2)}
         />}
-        {step === 4 && <Step4 def={{ directors: data.directors }} onNext={(d) => { patch(d); setStep(5); }} onBack={() => setStep(3)} />}
+        {step === 4 && <Step4 jurisdiction={data.jurisdiction} def={{ directors: data.directors }} onNext={(d) => { patch(d); setStep(5); }} onBack={() => setStep(3)} />}
         {step === 5 && <Step5 def={{ shareholders: data.shareholders }} onNext={(d) => { patch(d); setStep(6); }} onBack={() => setStep(4)} />}
         {step === 6 && <Step6 def={{ officers: data.officers }} onNext={(d) => { patch(d); setStep(7); }} onBack={() => setStep(5)} />}
         {step === 7 && <Step7 jurisdiction={data.jurisdiction}
