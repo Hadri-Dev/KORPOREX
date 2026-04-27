@@ -271,7 +271,7 @@ function Field({ label, error, hint, children }: { label: string; error?: string
   const baseLabel = required ? label.slice(0, -2) : label;
   return (
     <div>
-      <label className="block text-xs font-semibold tracking-[0.1em] uppercase text-gray-500 mb-1.5">
+      <label className="block text-xs font-bold tracking-[0.1em] uppercase text-black mb-1.5">
         {baseLabel}
         {required && <span className="text-red-500 ml-0.5">*</span>}
       </label>

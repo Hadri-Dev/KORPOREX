@@ -36,6 +36,13 @@
 
 ## Log
 
+### 2026-04-27 (Wizard — bold black field labels for visibility)
+- Per user direction (screenshot of Step 3 with "CORPORATION NAME TYPE", "PROPOSED CORPORATION NAME", "LEGAL ENDING", "PRIMARY ACTIVITY (NAICS CODE)", "BUSINESS ACTIVITY DESCRIPTION" highlighted in yellow): the wizard's field titles were rendering in `font-semibold` + `text-gray-500`, making them easy to overlook against the white background.
+- Single edit in the shared `Field` component ([src/app/incorporate/page.tsx](src/app/incorporate/page.tsx) line 274): `font-semibold` → `font-bold`, `text-gray-500` → `text-black`. Affects every `<Field label=...>` call across all 8 wizard steps (Jurisdiction, Package, Business Info, Directors, Shareholders, Officers, Office Address, Review & Pay) since every step routes its labels through this component.
+- Did not touch other forms (contact page, hero, soon page, legal-consult) — user said "the rest of the form" (singular), referring to the incorporation wizard. Other forms can be unified in a follow-up if requested.
+- Did not touch non-form headings (Footer column titles, "Order Summary", "Billing Details", confirmation-page metadata) — those are section headings, not field labels.
+- Verified: `npx tsc --noEmit` clean, `npm run lint` clean.
+
 ### 2026-04-27 (Navbar — remove "Talk to a Lawyer" tab)
 - Dropped the `{ href: "/legal-consultation", label: "Talk to a Lawyer" }` entry from the shared `links` array in [src/components/layout/Navbar.tsx](src/components/layout/Navbar.tsx). Removes the tab from both the desktop and mobile nav (both menus iterate the same array).
 - All other entry points to `/legal-consultation` are deliberately preserved per user direction: footer "Talk to a Corporate Lawyer" link, services-page callout, FAQ entry, and the persistent "Not sure? Speak with a lawyer" link below every wizard step. The page itself is unchanged.
