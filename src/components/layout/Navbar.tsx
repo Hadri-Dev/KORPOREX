@@ -41,7 +41,7 @@ export default function Navbar() {
             <Link
               key={href}
               href={href}
-              className="text-sm text-gray-600 hover:text-navy-900 transition-colors tracking-wide"
+              className="text-sm font-semibold text-black hover:text-gold-500 transition-colors tracking-wide"
             >
               {label}
             </Link>
@@ -73,7 +73,7 @@ export default function Navbar() {
               key={href}
               href={href}
               onClick={() => setOpen(false)}
-              className="block py-3 text-base text-gray-700 hover:text-navy-900 border-b border-gray-50 last:border-0"
+              className="block py-3 text-base font-semibold text-black hover:text-gold-500 border-b border-gray-50 last:border-0"
             >
               {label}
             </Link>

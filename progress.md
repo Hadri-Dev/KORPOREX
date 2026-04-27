@@ -36,6 +36,11 @@
 
 ## Log
 
+### 2026-04-27 (Navbar — bold black tabs + gold hover)
+- Top nav tabs were rendering in `text-gray-600` regular weight, which the user flagged as low-contrast against the white navbar. Tried two variants in browser (navy-900 green vs plain black, both at `font-semibold`); user picked black.
+- [src/components/layout/Navbar.tsx](src/components/layout/Navbar.tsx) — desktop tabs and mobile drawer entries both updated: `text-gray-600`/`text-gray-700` regular → `font-semibold text-black`, with `hover:text-gold-500` (was `hover:text-navy-900`) so the hover affordance still shows since the default state is now already dark. Same change applied to both menus so they stay consistent.
+- Verified live in browser via dev server before saving (per user's "show me the link" workflow).
+
 ### 2026-04-27 (Wizard — bold black field labels for visibility)
 - Per user direction (screenshot of Step 3 with "CORPORATION NAME TYPE", "PROPOSED CORPORATION NAME", "LEGAL ENDING", "PRIMARY ACTIVITY (NAICS CODE)", "BUSINESS ACTIVITY DESCRIPTION" highlighted in yellow): the wizard's field titles were rendering in `font-semibold` + `text-gray-500`, making them easy to overlook against the white background.
 - Single edit in the shared `Field` component ([src/app/incorporate/page.tsx](src/app/incorporate/page.tsx) line 274): `font-semibold` → `font-bold`, `text-gray-500` → `text-black`. Affects every `<Field label=...>` call across all 8 wizard steps (Jurisdiction, Package, Business Info, Directors, Shareholders, Officers, Office Address, Review & Pay) since every step routes its labels through this component.
