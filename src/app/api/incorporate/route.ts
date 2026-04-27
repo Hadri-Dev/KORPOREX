@@ -396,6 +396,10 @@ function buildHtmlBody(
     .filter(Boolean)
     .join("");
 
+  // CBCA-style residency only applies to federal (and remains a legacy field
+  // on BC). OBCA Bill 213 repealed the resident-Canadian director requirement
+  // for Ontario in 2021, so the row is omitted from Ontario intake emails.
+  const showResidencyRow = d.jurisdiction !== "ontario";
   const directors = personBlock(
     "Director",
     d.directors.map((x) => {
@@ -412,7 +416,9 @@ function buildHtmlBody(
         Email: x.email,
         "Date of birth": x.dateOfBirth,
         Citizenship: citizenshipLabel,
-        "CBCA resident Canadian": x.isCanadianResident === "yes" ? "Yes" : "No",
+        ...(showResidencyRow
+          ? { "CBCA resident Canadian": x.isCanadianResident === "yes" ? "Yes" : "No" }
+          : {}),
         "Tax residency": taxRes,
         Address: formatAddress(x.address),
       };

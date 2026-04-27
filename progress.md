@@ -36,10 +36,10 @@
 
 ## Log
 
-### 2026-04-27 (Ontario — drop Canadian-resident block from Step 4)
+### 2026-04-27 (Ontario — drop Canadian-resident block from Step 4 + intake email)
 - Removed the "Canadian resident" checkbox + paraphrased CBCA s.2(1) paragraph from the Ontario flow on Step 4. OBCA dropped the resident-Canadian director requirement under Bill 213 (in force 2021-07-05), so showing a CBCA-style residency control on an Ontario filing was misleading.
-- Implementation: extended the existing `isFederal ? ... : ...` ternary in [src/app/incorporate/page.tsx](src/app/incorporate/page.tsx) to a three-way branch — federal renders the mandatory radio group + statutory text, **Ontario renders nothing**, BC keeps the legacy checkbox + paragraph. The underlying `Director.isCanadianResident` field still defaults to `"no"` via `seedDir` so the schema validates without a UI.
-- API + email unchanged. Ontario intake emails will still show "CBCA resident Canadian: No" — left as-is for now (separate polish if it confuses ops).
+- UI: extended the existing `isFederal ? ... : ...` ternary in [src/app/incorporate/page.tsx](src/app/incorporate/page.tsx) to a three-way branch — federal renders the mandatory radio group + statutory text, **Ontario renders nothing**, BC keeps the legacy checkbox + paragraph. The underlying `Director.isCanadianResident` field still defaults to `"no"` via `seedDir` so the schema validates without a UI.
+- Intake email: also dropped the "CBCA resident Canadian" row from Ontario emails ([src/app/api/incorporate/route.ts](src/app/api/incorporate/route.ts)) — gated by `d.jurisdiction !== "ontario"`. Federal + BC emails are unchanged.
 - Verified: `npx tsc --noEmit` clean, `npm run lint` clean.
 
 ### 2026-04-27 (Federal-only — mandatory Resident Canadian radio + statutory paragraph)
