@@ -36,6 +36,10 @@
 
 ## Log
 
+### 2026-04-27 (Navbar — remove "Talk to a Lawyer" tab)
+- Dropped the `{ href: "/legal-consultation", label: "Talk to a Lawyer" }` entry from the shared `links` array in [src/components/layout/Navbar.tsx](src/components/layout/Navbar.tsx). Removes the tab from both the desktop and mobile nav (both menus iterate the same array).
+- All other entry points to `/legal-consultation` are deliberately preserved per user direction: footer "Talk to a Corporate Lawyer" link, services-page callout, FAQ entry, and the persistent "Not sure? Speak with a lawyer" link below every wizard step. The page itself is unchanged.
+
 ### 2026-04-27 (Ontario — drop Canadian-resident block from Step 4 + intake email)
 - Removed the "Canadian resident" checkbox + paraphrased CBCA s.2(1) paragraph from the Ontario flow on Step 4. OBCA dropped the resident-Canadian director requirement under Bill 213 (in force 2021-07-05), so showing a CBCA-style residency control on an Ontario filing was misleading.
 - UI: extended the existing `isFederal ? ... : ...` ternary in [src/app/incorporate/page.tsx](src/app/incorporate/page.tsx) to a three-way branch — federal renders the mandatory radio group + statutory text, **Ontario renders nothing**, BC keeps the legacy checkbox + paragraph. The underlying `Director.isCanadianResident` field still defaults to `"no"` via `seedDir` so the schema validates without a UI.

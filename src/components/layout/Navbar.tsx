@@ -10,7 +10,6 @@ const links = [
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
   { href: "/resources", label: "Resources" },
-  { href: "/legal-consultation", label: "Talk to a Lawyer" },
   { href: "/contact", label: "Contact" },
 ];
 
