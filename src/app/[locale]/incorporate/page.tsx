@@ -817,7 +817,6 @@ function Step4({ def, jurisdiction, onNext, onBack }: { def: Partial<S4>; jurisd
                 <Field
                   label="Country of Tax Residency *"
                   error={de[i]?.taxResidencyCountry?.message}
-                  hint="The country where the director is a tax resident — may differ from their mailing address."
                 >
                   <select {...register(`directors.${i}.taxResidencyCountry`)} className={sCls}>
                     <option value="">-- Select a country --</option>
