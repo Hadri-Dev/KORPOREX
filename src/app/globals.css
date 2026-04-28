@@ -10,4 +10,17 @@
     @apply antialiased;
     font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   }
+  /* Site-wide rounded corners on form fields, buttons, and links/labels styled
+     as buttons or cards. Excludes checkboxes and radios — those use the
+     browser's native appearance via accent-color. The radius on text-only
+     links/labels is invisible (no border or background), so this is safe to
+     apply broadly. */
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea,
+  button,
+  a,
+  label {
+    @apply rounded-md;
+  }
 }

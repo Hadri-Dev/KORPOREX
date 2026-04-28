@@ -59,7 +59,7 @@ export default function ContactPage() {
               Send Us a Message
             </h2>
             {submitted ? (
-              <div className="bg-cream-50 border border-gray-200 p-8">
+              <div className="bg-cream-50 border border-gray-200 rounded-lg p-8">
                 <div className="w-8 h-0.5 bg-gold-500 mb-6" />
                 <h3 className="font-serif text-2xl font-bold text-navy-900 mb-3">Thank You</h3>
                 <p className="text-gray-600">
@@ -103,7 +103,7 @@ export default function ContactPage() {
                     className="w-full border border-gray-200 px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors resize-none" />
                 </div>
                 {error && (
-                  <p className="text-sm text-red-700 bg-red-50 border border-red-200 px-4 py-3" role="alert">
+                  <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-4 py-3" role="alert">
                     {error}
                   </p>
                 )}
@@ -137,7 +137,7 @@ export default function ContactPage() {
               </ul>
             </div>
 
-            <div className="bg-cream-50 border border-gray-100 p-6">
+            <div className="bg-cream-50 border border-gray-100 rounded-lg p-6">
               <div className="flex items-center gap-3 mb-4">
                 <MessageSquare size={18} className="text-gold-500" />
                 <h3 className="font-serif text-lg font-bold text-navy-900">

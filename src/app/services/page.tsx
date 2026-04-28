@@ -109,7 +109,7 @@ export default function ServicesPage() {
                   <Link
                     key={name}
                     href={href}
-                    className="flex items-center justify-between bg-cream-50 border border-gray-100 px-5 py-4 hover:border-navy-900 hover:bg-white group transition-colors"
+                    className="flex items-center justify-between bg-cream-50 border border-gray-100 rounded-md px-5 py-4 hover:border-navy-900 hover:bg-white group transition-colors"
                   >
                     <div>
                       <p className="text-sm font-medium text-gray-800 group-hover:text-navy-900 transition-colors">
@@ -130,7 +130,7 @@ export default function ServicesPage() {
       {/* Lawyer-referral callout */}
       <section className="bg-cream-50 py-16 px-6 border-t border-gray-100">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white border border-gray-200 p-8 md:p-10 flex flex-col md:flex-row gap-8 items-start">
+          <div className="bg-white border border-gray-200 rounded-lg p-8 md:p-10 flex flex-col md:flex-row gap-8 items-start">
             <div className="w-12 h-12 bg-navy-900 flex items-center justify-center shrink-0">
               <ScaleIcon size={22} className="text-gold-500" />
             </div>

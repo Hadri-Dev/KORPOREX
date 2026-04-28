@@ -37,7 +37,7 @@ export default function HeroContactForm() {
 
   if (submitted) {
     return (
-      <div className="bg-white p-8 flex flex-col justify-center min-h-[360px]">
+      <div className="bg-white rounded-lg p-8 flex flex-col justify-center min-h-[360px]">
         <div className="w-8 h-0.5 bg-gold-500 mb-6" />
         <p className="font-serif text-2xl font-bold text-navy-900 mb-3">Thank You</p>
         <p className="text-sm text-gray-600 leading-relaxed">
@@ -48,7 +48,7 @@ export default function HeroContactForm() {
   }
 
   return (
-    <div className="bg-white p-8">
+    <div className="bg-white rounded-lg p-8">
       <div className="w-8 h-0.5 bg-gold-500 mb-5" />
       <p className="font-serif text-xl font-bold text-navy-900 mb-1">Have a Question?</p>
       <p className="text-xs text-gray-500 mb-6">We respond within one business day.</p>
@@ -105,7 +105,7 @@ export default function HeroContactForm() {
         </div>
 
         {error && (
-          <p className="text-sm text-red-700 bg-red-50 border border-red-200 px-3 py-2" role="alert">
+          <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2" role="alert">
             {error}
           </p>
         )}

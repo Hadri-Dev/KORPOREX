@@ -186,7 +186,7 @@ export default function HomePage() {
             {featuredServices.map(({ jurisdiction, subtitle, description, from, href }) => (
               <div
                 key={jurisdiction}
-                className="group flex flex-col p-8 border border-gray-200 transition-colors hover:bg-navy-900 hover:border-navy-900"
+                className="group flex flex-col p-8 border border-gray-200 rounded-lg transition-colors hover:bg-navy-900 hover:border-navy-900"
               >
                 <p className="font-serif text-2xl font-bold text-navy-900 mb-1 transition-colors group-hover:text-white">{jurisdiction}</p>
                 <p className="text-sm text-gray-500 mb-4 transition-colors group-hover:text-gray-400">{subtitle}</p>
@@ -228,7 +228,7 @@ export default function HomePage() {
             {otherServices.map(({ icon: Icon, title, description, from, items }) => (
               <div
                 key={title}
-                className="group flex flex-col bg-white border border-gray-200 p-7 transition-colors hover:bg-navy-900 hover:border-navy-900"
+                className="group flex flex-col bg-white border border-gray-200 rounded-lg p-7 transition-colors hover:bg-navy-900 hover:border-navy-900"
               >
                 <div className="w-11 h-11 bg-navy-50 flex items-center justify-center mb-5 transition-colors group-hover:bg-white/10">
                   <Icon size={20} className="text-navy-900 transition-colors group-hover:text-gold-400" />
@@ -348,7 +348,7 @@ export default function HomePage() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map(({ quote, name, location }) => (
-              <div key={name} className="bg-white p-8 border border-gray-100">
+              <div key={name} className="bg-white rounded-lg p-8 border border-gray-100">
                 <div className="flex gap-0.5 mb-4">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} size={14} className="text-gold-500 fill-gold-500" />

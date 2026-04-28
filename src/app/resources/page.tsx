@@ -51,7 +51,7 @@ export default function ResourcesPage() {
       <section className="bg-white py-14 px-6 border-b border-gray-100">
         <div className="max-w-6xl mx-auto grid sm:grid-cols-3 gap-6">
           {categories.map(({ icon: Icon, title, description }) => (
-            <div key={title} className="flex gap-4 items-start p-6 bg-cream-50 border border-gray-100">
+            <div key={title} className="flex gap-4 items-start p-6 bg-cream-50 border border-gray-100 rounded-lg">
               <div className="w-10 h-10 bg-navy-900 flex items-center justify-center shrink-0">
                 <Icon size={18} className="text-gold-500" />
               </div>
@@ -78,7 +78,7 @@ export default function ResourcesPage() {
               <Link
                 key={slug}
                 href={`/resources/${slug}`}
-                className="group flex flex-col border border-gray-100 hover:border-navy-900 transition-colors bg-cream-50 hover:bg-white"
+                className="group flex flex-col border border-gray-100 rounded-lg hover:border-navy-900 transition-colors bg-cream-50 hover:bg-white"
               >
                 <div className="p-6 flex flex-col flex-1">
                   <p className="text-xs font-semibold tracking-[0.1em] uppercase text-gold-500 mb-3">
@@ -99,7 +99,7 @@ export default function ResourcesPage() {
             ))}
           </div>
 
-          <div className="mt-12 border border-dashed border-gray-200 p-8 text-center">
+          <div className="mt-12 border border-dashed border-gray-200 rounded-lg p-8 text-center">
             <p className="font-serif text-lg font-bold text-navy-900 mb-2">More Articles Coming Soon</p>
             <p className="text-sm text-gray-600">
               We&apos;re regularly publishing new guides on incorporation, compliance, and running a Canadian corporation.

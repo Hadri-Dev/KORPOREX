@@ -457,7 +457,7 @@ function ProgressBar({ current }: { current: number }) {
             return (
               <div key={label} className="flex items-center flex-1 last:flex-none">
                 <div className="flex flex-col items-center shrink-0">
-                  <div className={`w-8 h-8 flex items-center justify-center text-xs font-bold transition-colors
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors
                     ${done ? "bg-navy-900 text-white" : active ? "border-2 border-navy-900 text-navy-900" : "border border-gray-300 text-gray-400"}`}>
                     {done ? <Check size={14} /> : num}
                   </div>
@@ -651,7 +651,7 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
               <input {...register("businessName")} placeholder='e.g. "Acme Technologies"' className={iCls} />
             </Field>
           ) : (
-            <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-700 leading-relaxed">
+            <div className="bg-cream-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700 leading-relaxed">
               <strong className="text-gray-800">Numbered corporation:</strong> A unique number will be assigned
               by the government at incorporation and combined with your selected legal ending below
               (e.g. <em>1234567 Canada INC.</em>). No name search is required, so no NUANS fee applies. You can
@@ -678,7 +678,7 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
           </Field>
 
           {corpNameType === "named" && (
-            <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-700 leading-relaxed">
+            <div className="bg-cream-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700 leading-relaxed">
               <strong className="text-gray-800">{nameSearchLabel} required.</strong> A ${getNuansFee(jurisdiction)} report fee
               applies and is shown separately at checkout. Choose a numbered corporation above to skip this fee.
             </div>
@@ -794,7 +794,7 @@ function Step4({ def, jurisdiction, onNext, onBack }: { def: Partial<S4>; jurisd
         <p className="text-gray-500 text-sm mb-8">At least one director is required. Directors must be 18 or older. International directors are supported — residency requirements vary by jurisdiction.</p>
         <form onSubmit={handleSubmit(onNext)} className="space-y-6">
           {fields.map((field, i) => (
-            <div key={field.id} className="border border-gray-200 p-6">
+            <div key={field.id} className="border border-gray-200 rounded-lg p-6">
               <div className="flex items-center justify-between mb-5">
                 <p className="font-serif font-bold text-navy-900 text-base">Director {i + 1}</p>
                 {fields.length > 1 && (
@@ -934,7 +934,7 @@ function Step5({ def, onNext, onBack }: { def: Partial<S5>; onNext: (d: S5) => v
         <p className="text-gray-500 text-sm mb-8">List all initial shareholders of the corporation. International shareholders are supported.</p>
         <form onSubmit={handleSubmit(onNext)} className="space-y-6">
           {fields.map((field, i) => (
-            <div key={field.id} className="border border-gray-200 p-6">
+            <div key={field.id} className="border border-gray-200 rounded-lg p-6">
               <div className="flex items-center justify-between mb-5">
                 <p className="font-serif font-bold text-navy-900 text-base">Shareholder {i + 1}</p>
                 {fields.length > 1 && (
@@ -1027,7 +1027,7 @@ function Step6({ def, onNext, onBack }: { def: Partial<S6>; onNext: (d: S6) => v
         <p className="text-gray-500 text-sm mb-8">List the corporation&rsquo;s officers and their positions. At least one officer is required.</p>
         <form onSubmit={handleSubmit(onNext)} className="space-y-6">
           {fields.map((field, i) => (
-            <div key={field.id} className="border border-gray-200 p-6">
+            <div key={field.id} className="border border-gray-200 rounded-lg p-6">
               <div className="flex items-center justify-between mb-5">
                 <p className="font-serif font-bold text-navy-900 text-base">Officer {i + 1}</p>
                 {fields.length > 1 && (
@@ -1159,7 +1159,7 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
             />
           )}
           {selectedAddon === "korporex" && (
-            <div className="bg-navy-50 border border-navy-900 p-4 text-sm text-navy-900 leading-relaxed">
+            <div className="bg-navy-50 border border-navy-900 rounded-lg p-4 text-sm text-navy-900 leading-relaxed">
               <p className="font-semibold mb-1">{REG_OFFICE_ADDON.label} — {REG_OFFICE_ADDON.locationLabel}</p>
               <p className="text-gray-700">
                 Korporex selects and assigns the registered office address — somewhere in the Greater Toronto Area —
@@ -1178,7 +1178,7 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
           )}
 
           {addonEligible && selectedAddon === "none" && (
-            <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-600 leading-relaxed">
+            <div className="bg-cream-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-600 leading-relaxed">
               Don&rsquo;t have a physical address in {jurisLabel}? Use the Korporex registered office option above instead.
             </div>
           )}
@@ -1299,7 +1299,7 @@ function Step8({ data, onBack, onPay }: {
         <h2 className="font-serif text-3xl font-bold text-navy-900 mb-8">Review &amp; Pay</h2>
 
         {/* Order Summary */}
-        <div className="bg-cream-50 border border-gray-200 p-6 mb-8">
+        <div className="bg-cream-50 border border-gray-200 rounded-lg p-6 mb-8">
           <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-4">Order Summary</p>
           <div className="space-y-2.5 text-sm">
             {[
@@ -1367,7 +1367,7 @@ function Step8({ data, onBack, onPay }: {
         </div>
 
         {/* Billing */}
-        <div className="border border-gray-200 p-6">
+        <div className="border border-gray-200 rounded-lg p-6">
           <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-5">Billing Details</p>
           <form onSubmit={submit} className="space-y-4">
             <Field label="Billing Name *" error={errors.billingName?.message}>
@@ -1375,12 +1375,12 @@ function Step8({ data, onBack, onPay }: {
             </Field>
             <AddressFields prefix="billingAddress" labelPrefix="Billing" />
 
-            <p className="text-xs text-gray-500 bg-cream-50 border border-gray-200 px-3 py-2.5 mt-2 leading-relaxed">
+            <p className="text-xs text-gray-500 bg-cream-50 border border-gray-200 rounded-md px-3 py-2.5 mt-2 leading-relaxed">
               You&apos;ll be redirected to <span className="font-semibold">Stripe</span> to complete payment securely.
               Card details are entered on stripe.com — never on Korporex.
             </p>
             {submitError && (
-              <p className="text-sm text-red-700 bg-red-50 border border-red-200 px-3 py-2" role="alert">
+              <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2" role="alert">
                 {submitError}
               </p>
             )}

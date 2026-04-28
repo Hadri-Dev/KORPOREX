@@ -391,7 +391,7 @@ export default function LegalConsultationPage() {
                       {files.map((f, i) => (
                         <li
                           key={`${f.name}-${i}`}
-                          className="flex items-center justify-between text-sm bg-white border border-gray-200 px-3 py-2"
+                          className="flex items-center justify-between text-sm bg-white border border-gray-200 rounded-md px-3 py-2"
                         >
                           <span className="flex items-center gap-2 text-gray-700">
                             <FileText size={14} className="text-navy-900" />
@@ -421,7 +421,7 @@ export default function LegalConsultationPage() {
               </Field>
 
               {submitError && (
-                <p className="text-sm text-red-700 bg-red-50 border border-red-200 px-3 py-2" role="alert">
+                <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2" role="alert">
                   {submitError}
                 </p>
               )}
@@ -455,7 +455,7 @@ export default function LegalConsultationPage() {
                 `min-h-[700px]` was too short and made Calendly scroll
                 internally with arrow controls — which looked broken.
               */}
-              <div ref={calendlyContainerRef} className="h-[1100px] border border-gray-100" />
+              <div ref={calendlyContainerRef} className="h-[1100px] border border-gray-100 rounded-lg overflow-hidden" />
             </>
           )}
 
@@ -483,7 +483,7 @@ export default function LegalConsultationPage() {
                 You&rsquo;ll be redirected to <span className="font-semibold">Stripe</span> to complete payment securely.
               </p>
               {submitError && (
-                <p className="text-sm text-red-700 bg-red-50 border border-red-200 px-3 py-2 mt-4" role="alert">
+                <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2 mt-4" role="alert">
                   {submitError}
                 </p>
               )}
@@ -498,7 +498,7 @@ export default function LegalConsultationPage() {
 
           {stage === "error" && (
             <div className="text-center py-12">
-              <p className="text-red-700 bg-red-50 border border-red-200 px-3 py-3 mb-4" role="alert">
+              <p className="text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-3 mb-4" role="alert">
                 {submitError ?? "Something went wrong."}
               </p>
               <button

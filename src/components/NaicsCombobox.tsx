@@ -132,7 +132,7 @@ export default function NaicsCombobox({ value, onChange, placeholder, error }: P
       </div>
 
       {open && (
-        <div className="absolute z-50 mt-1 w-full bg-white border border-gray-200 shadow-lg max-h-72 overflow-y-auto">
+        <div className="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-72 overflow-y-auto">
           {results.length === 0 ? (
             <p className="px-4 py-3 text-sm text-gray-500">No matches. Try a different keyword.</p>
           ) : (

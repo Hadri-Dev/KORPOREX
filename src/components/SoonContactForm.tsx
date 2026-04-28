@@ -51,7 +51,7 @@ export default function SoonContactForm() {
 
   if (submitted) {
     return (
-      <div className="bg-white p-8 md:p-10 border border-gold-500/30 shadow-xl">
+      <div className="bg-white rounded-lg p-8 md:p-10 border border-gold-500/30 shadow-xl">
         <div className="flex items-center gap-3 mb-5">
           <div className="w-10 h-10 bg-gold-500 flex items-center justify-center">
             <CheckCircle size={20} className="text-white" />
@@ -74,7 +74,7 @@ export default function SoonContactForm() {
   }
 
   return (
-    <div className="bg-white p-8 md:p-10 shadow-xl">
+    <div className="bg-white rounded-lg p-8 md:p-10 shadow-xl">
       <div className="w-10 h-0.5 bg-gold-500 mb-5" />
       <p className="font-serif text-2xl md:text-3xl font-bold text-navy-900 mb-2">Tell Us About Your Business</p>
       <p className="text-sm text-gray-600 mb-7">
@@ -147,7 +147,7 @@ export default function SoonContactForm() {
         </div>
 
         {error && (
-          <p className="text-sm text-red-700 bg-red-50 border border-red-200 px-3 py-2" role="alert">
+          <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2" role="alert">
             {error}
           </p>
         )}

@@ -84,7 +84,7 @@ export default async function LegalConsultConfirmationPage({ searchParams }: Pag
             The lawyer has your questionnaire and any documents you shared. We&rsquo;ll see you at the scheduled time.
           </p>
           {(displayRef || amountPaid || slotTime) && (
-            <div className="mt-8 inline-block bg-white border border-gray-200 px-6 py-4 text-left">
+            <div className="mt-8 inline-block bg-white border border-gray-200 rounded-lg px-6 py-4 text-left">
               {displayRef && (
                 <>
                   <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-1">
@@ -133,7 +133,7 @@ export default async function LegalConsultConfirmationPage({ searchParams }: Pag
 
       <section className="bg-cream-50 py-12 px-6 border-t border-gray-100">
         <div className="max-w-3xl mx-auto">
-          <div className="bg-white border border-gray-200 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="bg-white border border-gray-200 rounded-lg p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <p className="font-serif text-base font-bold text-navy-900 mb-1">Need to reschedule?</p>
               <p className="text-sm text-gray-600">

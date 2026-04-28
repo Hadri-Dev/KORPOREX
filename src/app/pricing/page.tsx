@@ -157,7 +157,7 @@ export default function PricingPage() {
             {tiers.map(({ name, price, description, features }) => (
               <div
                 key={name}
-                className="group flex flex-col p-8 bg-white border border-gray-200 transition-colors hover:bg-navy-900 hover:border-navy-900"
+                className="group flex flex-col p-8 bg-white border border-gray-200 rounded-lg transition-colors hover:bg-navy-900 hover:border-navy-900"
               >
                 <p className="text-xs font-semibold tracking-[0.15em] uppercase mb-3 text-gray-500 transition-colors group-hover:text-gray-400">
                   {name}
@@ -203,7 +203,7 @@ export default function PricingPage() {
           </h2>
           <div className="grid sm:grid-cols-2 gap-4 text-left">
             {everythingIncluded.map((item) => (
-              <div key={item} className="flex items-start gap-3 bg-white border border-gray-100 px-5 py-4">
+              <div key={item} className="flex items-start gap-3 bg-white border border-gray-100 rounded-md px-5 py-4">
                 <CheckCircle size={16} className="text-navy-900 shrink-0 mt-0.5" />
                 <span className="text-sm text-gray-700">{item}</span>
               </div>
@@ -227,7 +227,7 @@ export default function PricingPage() {
               checkout for federal and Ontario incorporations.
             </p>
           </div>
-          <div className="border border-navy-900 p-8 bg-cream-50">
+          <div className="border border-navy-900 rounded-lg p-8 bg-cream-50">
             <p className="text-xs font-semibold tracking-[0.15em] uppercase text-gold-500 mb-3">
               {REG_OFFICE_ADDON.label}
             </p>

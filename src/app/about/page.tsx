@@ -99,7 +99,7 @@ export default function AboutPage() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map(({ icon: Icon, title, description }) => (
-              <div key={title} className="bg-white p-7 border border-gray-100">
+              <div key={title} className="bg-white rounded-lg p-7 border border-gray-100">
                 <div className="w-10 h-10 bg-navy-50 flex items-center justify-center mb-5">
                   <Icon size={20} className="text-navy-900" />
                 </div>
@@ -114,7 +114,7 @@ export default function AboutPage() {
       {/* Disclaimer */}
       <section className="bg-white py-12 px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="inline-block bg-cream-50 border border-gray-200 px-8 py-6">
+          <div className="inline-block bg-cream-50 border border-gray-200 rounded-lg px-8 py-6">
             <p className="text-sm text-gray-600 leading-relaxed">
               <strong className="text-gray-800">Important notice:</strong> Korporex is a document preparation
               and filing service. We are not a law firm and do not provide legal advice. For questions specific
