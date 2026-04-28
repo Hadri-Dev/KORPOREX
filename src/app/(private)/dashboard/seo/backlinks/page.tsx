@@ -1,6 +1,7 @@
-import SeoPageShell from "@/components/dashboard/seo/SeoPageShell";
+"use client";
 
-export const dynamic = "force-static";
+import SeoPageShell from "@/components/dashboard/seo/SeoPageShell";
+import RemoveInternalLinksButton from "@/components/dashboard/seo/RemoveInternalLinksButton";
 
 export default function BacklinksPage() {
   return (
@@ -9,6 +10,9 @@ export default function BacklinksPage() {
       title="Backlinks"
       description="Inbound links earned, typically imported from Ahrefs / SEMrush exports."
       helperText="Typical Ahrefs columns: Referring page URL, Domain rating, URL rating, Anchor, Target URL, First seen, Last seen."
+      customActions={({ data, onUpdate }) => (
+        <RemoveInternalLinksButton data={data} onUpdate={onUpdate} />
+      )}
     />
   );
 }

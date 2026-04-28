@@ -15,12 +15,21 @@ import {
 import CsvImporter from "./CsvImporter";
 import DataTable from "./DataTable";
 
+interface CustomActionsParams {
+  data: Dataset;
+  onUpdate: (next: Dataset) => void;
+}
+
 interface Props {
   datasetKey: SeoDatasetKey;
   title: string;
   description: string;
   helperText?: string;
   emptyHint?: string;
+  // Render-prop for page-specific buttons that need access to the live
+  // dataset and a way to mutate it (e.g. "Remove internal links" on Backlinks).
+  // Only invoked when there is data — i.e. omits empty-state.
+  customActions?: (params: CustomActionsParams) => React.ReactNode;
 }
 
 export default function SeoPageShell({
@@ -29,6 +38,7 @@ export default function SeoPageShell({
   description,
   helperText,
   emptyHint,
+  customActions,
 }: Props) {
   const [data, setData] = useState<Dataset | null>(null);
   const [hydrated, setHydrated] = useState(false);
@@ -64,7 +74,16 @@ export default function SeoPageShell({
           <p className="mt-1 text-sm text-gray-600">{description}</p>
         </div>
         {data ? (
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
+            {customActions
+              ? customActions({
+                  data,
+                  onUpdate: (next) => {
+                    setDataset(datasetKey, next);
+                    setData(next);
+                  },
+                })
+              : null}
             <button
               type="button"
               onClick={handleExport}
