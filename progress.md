@@ -38,6 +38,22 @@
 
 ## Log
 
+### 2026-04-28 (SEO Dashboard sub-section — 5 client-side, CSV-driven pages)
+- **Goal**: per-user request, add a "SEO Dashboard" section under `/dashboard` that mirrors Hadri's left-nav structure but works without any of Hadri's Supabase / external-API infrastructure. Five pages: Link Building, Backlinks, Competitors, Rankings, Import / Export. The user said they would import data from Ahrefs.
+- **Strategy**: single-owner admin → store everything in **the owner's browser localStorage**. No database. Each page accepts a CSV paste-or-upload, parses with [papaparse](https://www.papaparse.com/), persists under `kpx:seo:<key>` localStorage keys, and renders a column-agnostic table (sortable + filterable + paginated). User exports same data back to CSV (per-page) or downloads a JSON bundle of all four datasets (Import/Export hub).
+- **No Hadri data copied** — every page starts empty. Tables show whatever columns the imported CSV has, in whatever order.
+- **Files**:
+  - [src/lib/seoStore.ts](src/lib/seoStore.ts) — typed `Dataset` shape (`{ columns, rows, importedAt, source }`), `getDataset` / `setDataset` / `clearDataset`, `datasetToCsv` + `downloadCsv` helpers, storage-usage measurement.
+  - [src/components/dashboard/seo/CsvImporter.tsx](src/components/dashboard/seo/CsvImporter.tsx) — file picker + paste textarea, parses via papaparse with header row required.
+  - [src/components/dashboard/seo/DataTable.tsx](src/components/dashboard/seo/DataTable.tsx) — generic table; auto-detects numeric columns via sample inspection, sortable headers, full-text filter, 50-row pagination, auto-linkifies values that look like URLs.
+  - [src/components/dashboard/seo/SeoPageShell.tsx](src/components/dashboard/seo/SeoPageShell.tsx) — shared chrome (header + import + table + re-import) — each of the 4 dataset pages is just a thin wrapper around this shell with a different `datasetKey`.
+  - [/dashboard/seo/{link-building,backlinks,competitors,rankings}/page.tsx](src/app/(private)/dashboard/seo/) — the 4 dataset pages.
+  - [/dashboard/seo/import-export/page.tsx](src/app/(private)/dashboard/seo/import-export/page.tsx) — central hub: per-dataset row counts + last-imported timestamp, CSV export per dataset, JSON bundle export of all four, clear-all, storage-usage indicator, storage notes (browser-local, ~5 MB cap).
+  - [src/components/dashboard/Sidebar.tsx](src/components/dashboard/Sidebar.tsx) — added "SEO Dashboard" expandable section (TrendingUp icon) with the 5 children.
+- **Storage notes for future-me**: data lives under `kpx:seo:<key>` localStorage keys on the owner's browser only. Switching browser or device shows empty datasets — this is by design (single-owner) but worth flagging if multi-device access is ever needed (would require swapping `seoStore.ts` for a server-backed store like Supabase / Vercel KV; the `Dataset` shape can stay the same).
+- **Pages NOT included** (the user explicitly excluded these from Hadri's SEO nav): Overview, Content Pipeline, Competitor Tracker, E-E-A-T, Expenses, Internal Links, Link Health, Redirects, 404 Log, LLMs.txt. Internal Links was specifically out-of-scope because the user plans to import them from Ahrefs anyway.
+- **Verified**: `npx tsc --noEmit` clean, `npm run lint` clean, `npm run build` green. New routes are static-prerendered (auth at middleware, data at runtime in browser). Bundle: papaparse adds ~12 kB to the SEO pages. Pushed (`c47b075`) and force-deployed via `vercel deploy --prod`. Production gating verified — `/dashboard/seo/backlinks` and `/dashboard/seo/import-export` both 307 to `/admin` for unauthenticated requests.
+
 ### 2026-04-28 (Dashboard — Hadri-style admin shell with live Stripe data)
 - **Goal**: replicate Hadri's admin dashboard for Korporex without a database — Korporex's "order log" lives in Stripe Checkout sessions, not Supabase. Picked **option 2** from a three-option scoping (visual-shell-only / real-data-no-DB / DB-and-port-Hadri).
 - **Shell**: sidebar (Overview / Orders / Settings) + top bar in `src/components/dashboard/{Sidebar,TopBar,StatCard}.tsx`. Layout at [`src/app/(private)/dashboard/layout.tsx`](src/app/(private)/dashboard/layout.tsx) composes them. Sign-out lives in the sidebar foot (desktop) and the top bar (mobile fallback). Auth still enforced by [`src/middleware.ts`](src/middleware.ts) — the layout itself does no auth.
