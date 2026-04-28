@@ -183,6 +183,17 @@ const PKG_INFO: { id: Pkg; label: string; desc: string }[] = [
   { id: "premium",  label: "Premium",  desc: "Complete package with first annual return filing and priority turnaround." },
 ];
 
+// Google Places location-bias rectangles per jurisdiction. Tuple format is
+// [south, west, north, east]. Bias only — international addresses are still
+// selectable (international directors / billing-abroad supported), but
+// addresses inside the rectangle rank higher in the suggestion list.
+//   - federal: rough bounding box of Canada
+//   - ontario: rough bounding box of Ontario
+const ADDRESS_BIAS: Record<Jurisdiction, [number, number, number, number]> = {
+  federal: [41.7, -141.0, 83.1, -52.6],
+  ontario: [41.7, -95.2, 56.9, -74.3],
+};
+
 // ─── Schemas ─────────────────────────────────────────────────────────────────
 
 const addressSchema = z.object({
@@ -306,12 +317,16 @@ type AddressFieldsProps = {
   regionLock?: string;
   regionAllow?: string[];
   labelPrefix?: string;
+  // Optional Google Places bias rectangle [south, west, north, east] — used by
+  // the wizard to prefer Canadian addresses (Federal) or Ontario addresses
+  // (Ontario) without restricting outright.
+  locationBias?: [number, number, number, number];
 };
 // Renders a structured address subform bound to the surrounding react-hook-form
 // context at `${prefix}.{street|city|region|postalCode|country}`. Uses
 // AddressAutocomplete for the street input; falls back to a plain input if the
 // Google Maps key is absent.
-function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPrefix }: AddressFieldsProps) {
+function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPrefix, locationBias }: AddressFieldsProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { register, watch, setValue, formState: { errors } } = useFormContext<any>();
   const country: string = countryLock ?? watch(`${prefix}.country`) ?? "CA";
@@ -387,6 +402,7 @@ function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPref
           onChange={(v) => setValue(`${prefix}.street`, v, { shouldValidate: true })}
           onAddressSelected={applyParsed}
           countryRestrict={countryRestrict}
+          locationBias={locationBias}
           className={iCls}
         />
       </Field>
@@ -809,7 +825,7 @@ function Step4({ def, jurisdiction, onNext, onBack }: { def: Partial<S4>; jurisd
                 <Field label="Email Address *" error={de[i]?.email?.message}><input type="email" {...register(`directors.${i}.email`)} className={iCls} /></Field>
                 <Field label="Date of Birth *" error={de[i]?.dateOfBirth?.message}><input type="date" {...register(`directors.${i}.dateOfBirth`)} className={iCls} /></Field>
               </div>
-              <AddressFields prefix={`directors.${i}.address`} />
+              <AddressFields prefix={`directors.${i}.address`} locationBias={ADDRESS_BIAS[jurisdiction]} />
               {/* Tax residency — separate from the address country and from
                   the Canadian-resident checkbox below (which captures
                   residency for Canadian corporate-law purposes). */}
@@ -915,7 +931,7 @@ const emptySH: Shareholder = {
   address: { ...emptyAddress },
 };
 
-function Step5({ def, onNext, onBack }: { def: Partial<S5>; onNext: (d: S5) => void; onBack: () => void }) {
+function Step5({ def, jurisdiction, onNext, onBack }: { def: Partial<S5>; jurisdiction: Jurisdiction; onNext: (d: S5) => void; onBack: () => void }) {
   const form = useForm<S5>({
     resolver: zodResolver(s5),
     defaultValues: { shareholders: def.shareholders?.length ? def.shareholders : [emptySH] },
@@ -984,7 +1000,7 @@ function Step5({ def, onNext, onBack }: { def: Partial<S5>; onNext: (d: S5) => v
                   speak with a corporate lawyer
                 </Link>.
               </p>
-              <AddressFields prefix={`shareholders.${i}.address`} />
+              <AddressFields prefix={`shareholders.${i}.address`} locationBias={ADDRESS_BIAS[jurisdiction]} />
             </div>
           ))}
           <button type="button" onClick={() => append(emptySH)}
@@ -1008,7 +1024,7 @@ const emptyOfficer: Officer = {
   address: { ...emptyAddress },
 };
 
-function Step6({ def, onNext, onBack }: { def: Partial<S6>; onNext: (d: S6) => void; onBack: () => void }) {
+function Step6({ def, jurisdiction, onNext, onBack }: { def: Partial<S6>; jurisdiction: Jurisdiction; onNext: (d: S6) => void; onBack: () => void }) {
   const form = useForm<S6>({
     resolver: zodResolver(s6),
     defaultValues: { officers: def.officers?.length ? def.officers : [emptyOfficer] },
@@ -1050,7 +1066,7 @@ function Step6({ def, onNext, onBack }: { def: Partial<S6>; onNext: (d: S6) => v
                   <input type="email" {...register(`officers.${i}.email`)} className={iCls} />
                 </Field>
               </div>
-              <AddressFields prefix={`officers.${i}.address`} />
+              <AddressFields prefix={`officers.${i}.address`} locationBias={ADDRESS_BIAS[jurisdiction]} />
             </div>
           ))}
           <button type="button" onClick={() => append(emptyOfficer)}
@@ -1155,6 +1171,7 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
               countryLock="CA"
               regionLock={regionLock}
               regionAllow={regionAllow}
+              locationBias={ADDRESS_BIAS[jurisdiction]}
             />
           )}
           {selectedAddon === "korporex" && (
@@ -1372,7 +1389,7 @@ function Step8({ data, onBack, onPay }: {
             <Field label="Billing Name *" error={errors.billingName?.message}>
               <input {...register("billingName")} placeholder="Jane Smith or Acme Ltd." className={iCls} />
             </Field>
-            <AddressFields prefix="billingAddress" labelPrefix="Billing" />
+            <AddressFields prefix="billingAddress" labelPrefix="Billing" locationBias={ADDRESS_BIAS[data.jurisdiction]} />
 
             <p className="text-xs text-gray-500 bg-cream-50 border border-gray-200 rounded-md px-3 py-2.5 mt-2 leading-relaxed">
               You&apos;ll be redirected to <span className="font-semibold">Stripe</span> to complete payment securely.
@@ -1455,8 +1472,8 @@ export default function IncorporatePage() {
           onBack={() => setStep(2)}
         />}
         {step === 4 && <Step4 jurisdiction={data.jurisdiction} def={{ directors: data.directors }} onNext={(d) => { patch(d); setStep(5); }} onBack={() => setStep(3)} />}
-        {step === 5 && <Step5 def={{ shareholders: data.shareholders }} onNext={(d) => { patch(d); setStep(6); }} onBack={() => setStep(4)} />}
-        {step === 6 && <Step6 def={{ officers: data.officers }} onNext={(d) => { patch(d); setStep(7); }} onBack={() => setStep(5)} />}
+        {step === 5 && <Step5 jurisdiction={data.jurisdiction} def={{ shareholders: data.shareholders }} onNext={(d) => { patch(d); setStep(6); }} onBack={() => setStep(4)} />}
+        {step === 6 && <Step6 jurisdiction={data.jurisdiction} def={{ officers: data.officers }} onNext={(d) => { patch(d); setStep(7); }} onBack={() => setStep(5)} />}
         {step === 7 && <Step7 jurisdiction={data.jurisdiction}
           def={{ regOffice: data.regOffice, regOfficeAddon: data.regOfficeAddon }}
           onNext={(d) => { patch(d); setStep(8); }} onBack={() => setStep(6)} />}

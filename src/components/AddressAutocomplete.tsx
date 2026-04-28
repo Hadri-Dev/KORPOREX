@@ -17,6 +17,12 @@ type Props = {
   onChange: (street: string) => void;
   onAddressSelected?: (parsed: ParsedAddress) => void;
   countryRestrict?: string[];
+  // Bias predictions toward a rectangular region without strictly excluding
+  // results outside it. Tuple is [south, west, north, east] — passed to
+  // Google Places as `bounds` with `strictBounds: false`. Use for jurisdiction
+  // ranking (e.g. prefer Ontario addresses for an Ontario incorporation while
+  // still allowing international directors to enter their home address).
+  locationBias?: [number, number, number, number];
   placeholder?: string;
   className?: string;
   id?: string;
@@ -87,6 +93,7 @@ export default function AddressAutocomplete({
   onChange,
   onAddressSelected,
   countryRestrict,
+  locationBias,
   placeholder,
   className,
   id,
@@ -125,6 +132,16 @@ export default function AddressAutocomplete({
     };
     if (countryRestrict && countryRestrict.length > 0) {
       options.componentRestrictions = { country: countryRestrict };
+    }
+    if (locationBias) {
+      const [south, west, north, east] = locationBias;
+      options.bounds = new w.google.maps.LatLngBounds(
+        { lat: south, lng: west },
+        { lat: north, lng: east }
+      );
+      // Bias only — still allow predictions outside the rectangle (international
+      // directors, billing addresses abroad, etc.).
+      options.strictBounds = false;
     }
     const ac = new w.google.maps.places.Autocomplete(inputRef.current, options);
     acRef.current = ac;
