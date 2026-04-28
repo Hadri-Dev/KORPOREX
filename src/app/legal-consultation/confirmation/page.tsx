@@ -138,8 +138,8 @@ export default async function LegalConsultConfirmationPage({ searchParams }: Pag
               <p className="font-serif text-base font-bold text-navy-900 mb-1">Need to reschedule?</p>
               <p className="text-sm text-gray-600">
                 Use the link in your Calendly confirmation email, or contact{" "}
-                <a className="text-navy-900 underline underline-offset-2" href="mailto:contact@korporex.com">
-                  contact@korporex.com
+                <a className="text-navy-900 underline underline-offset-2" href="mailto:contact@korporex.ca">
+                  contact@korporex.ca
                 </a>
                 {displayRef && (
                   <>

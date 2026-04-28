@@ -189,8 +189,8 @@ export default function TermsPage() {
             <p>
               <strong>Exceptional circumstances.</strong> If you believe your circumstances
               warrant special consideration, you may email{" "}
-              <a href="mailto:contact@korporex.com" className="text-navy-900 underline">
-                contact@korporex.com
+              <a href="mailto:contact@korporex.ca" className="text-navy-900 underline">
+                contact@korporex.ca
               </a>{" "}
               with your order reference (the <code>KPX-</code> number shown on your
               confirmation page and in your emailed receipts). We may review these requests
@@ -427,8 +427,8 @@ export default function TermsPage() {
           <Section n="20" title="Contact">
             <p>
               Questions about these Terms should be sent to{" "}
-              <a href="mailto:contact@korporex.com" className="text-navy-900 underline">
-                contact@korporex.com
+              <a href="mailto:contact@korporex.ca" className="text-navy-900 underline">
+                contact@korporex.ca
               </a>.
             </p>
           </Section>

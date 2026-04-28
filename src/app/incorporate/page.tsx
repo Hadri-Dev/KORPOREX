@@ -1286,7 +1286,7 @@ function Step8({ data, onBack, onPay }: {
       setSubmitError(
         err instanceof Error && err.message
           ? err.message
-          : "Something went wrong. Please try again or email us at contact@korporex.com."
+          : "Something went wrong. Please try again or email us at contact@korporex.ca."
       );
       setSubmitting(false);
     }

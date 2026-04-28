@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 // be revised as operational processes solidify (analytics, user accounts,
 // data exports, any additional processors). Review by qualified legal counsel
 // is required before deployment. The Privacy Officer designation at
-// contact@korporex.com should also be verified before launch.
+// contact@korporex.ca should also be verified before launch.
 
 const EFFECTIVE_DATE = "April 23, 2026";
 
@@ -91,7 +91,7 @@ export default function PrivacyPage() {
             </p>
             <p>
               <strong>(d) Communications.</strong> If you contact us (for example, by email to{" "}
-              <a href="mailto:contact@korporex.com" className="text-navy-900 underline">contact@korporex.com</a>{" "}
+              <a href="mailto:contact@korporex.ca" className="text-navy-900 underline">contact@korporex.ca</a>{" "}
               or through a form on the Site), we collect your name, email address, the content
               of your message, and any other information you choose to include.
             </p>
@@ -152,7 +152,7 @@ export default function PrivacyPage() {
               marketing, where we choose to offer it in the future) will be obtained expressly.
               You may withdraw your consent at any time, subject to legal or contractual
               restrictions and reasonable notice, by contacting us at{" "}
-              <a href="mailto:contact@korporex.com" className="text-navy-900 underline">contact@korporex.com</a>.
+              <a href="mailto:contact@korporex.ca" className="text-navy-900 underline">contact@korporex.ca</a>.
               Withdrawing consent may mean we cannot continue to provide some or all of the
               Services to you.
             </p>
@@ -309,7 +309,7 @@ export default function PrivacyPage() {
             </ul>
             <p>
               To exercise any of these rights, email us at{" "}
-              <a href="mailto:contact@korporex.com" className="text-navy-900 underline">contact@korporex.com</a>.
+              <a href="mailto:contact@korporex.ca" className="text-navy-900 underline">contact@korporex.ca</a>.
               We may need to verify your identity before responding. There is generally no
               fee for reasonable requests; we will let you know in advance if a fee would
               apply to an unusually burdensome request.
@@ -370,7 +370,7 @@ export default function PrivacyPage() {
               Questions about this Privacy Policy, requests to exercise your rights, or
               complaints about our privacy practices should be directed to our Privacy Officer
               at{" "}
-              <a href="mailto:contact@korporex.com" className="text-navy-900 underline">contact@korporex.com</a>.
+              <a href="mailto:contact@korporex.ca" className="text-navy-900 underline">contact@korporex.ca</a>.
               We will acknowledge receipt and respond within the time limits described above.
             </p>
           </Section>

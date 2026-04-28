@@ -29,7 +29,7 @@ export default function HeroContactForm() {
       }
       setSubmitted(true);
     } catch (err) {
-      setError(err instanceof Error && err.message !== "Send failed" ? err.message : "Something went wrong. Please try again or email us at contact@korporex.com.");
+      setError(err instanceof Error && err.message !== "Send failed" ? err.message : "Something went wrong. Please try again or email us at contact@korporex.ca.");
     } finally {
       setSubmitting(false);
     }

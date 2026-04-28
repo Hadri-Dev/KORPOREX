@@ -23,11 +23,11 @@ export default function SoonPage() {
       <header className="bg-navy-900 py-5 px-6 border-b border-white/10">
         <div className="max-w-7xl mx-auto flex items-center justify-end">
           <a
-            href="mailto:contact@korporex.com"
+            href="mailto:contact@korporex.ca"
             className="inline-flex items-center gap-2 text-xs text-gray-300 hover:text-gold-400 transition-colors"
           >
             <Mail size={14} />
-            contact@korporex.com
+            contact@korporex.ca
           </a>
         </div>
       </header>
@@ -110,8 +110,8 @@ export default function SoonPage() {
             &copy; 2026 Korporex Business Solutions Inc. All rights reserved.
           </p>
           <p className="text-xs text-gray-500">
-            <a href="mailto:contact@korporex.com" className="hover:text-navy-900 transition-colors">
-              contact@korporex.com
+            <a href="mailto:contact@korporex.ca" className="hover:text-navy-900 transition-colors">
+              contact@korporex.ca
             </a>
           </p>
           <p className="text-xs text-gray-400 max-w-md sm:text-right">

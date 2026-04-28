@@ -8,7 +8,7 @@ export const runtime = "nodejs";
 // Webhooks must always run fresh — never cache.
 export const dynamic = "force-dynamic";
 
-const CONTACT_ADDRESS = "contact@korporex.com";
+const CONTACT_ADDRESS = "contact@korporex.ca";
 
 export async function POST(req: Request) {
   if (!stripe) {

@@ -133,8 +133,8 @@ export default function Footer() {
             </p>
             <ul className="space-y-3 text-sm text-gray-400">
               <li>
-                <a href="mailto:contact@korporex.com" className="hover:text-white transition-colors">
-                  contact@korporex.com
+                <a href="mailto:contact@korporex.ca" className="hover:text-white transition-colors">
+                  contact@korporex.ca
                 </a>
               </li>
               <li className="leading-relaxed text-xs text-gray-500">

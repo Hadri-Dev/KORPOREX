@@ -36,6 +36,13 @@
 
 ## Log
 
+### 2026-04-27 (Customer-facing email switched from contact@korporex.com → contact@korporex.ca)
+- Per user direction: every customer-facing email reference on the site swapped from `contact@korporex.com` to `contact@korporex.ca`. Affected 16 source files (mailto links, footer, soon page, contact page, legal-consultation flow, error messages, terms, privacy, FAQ, footer, plus four backend `CONTACT_ADDRESS` constants in the API routes and the `LEGAL_CONSULT_RECIPIENTS` entry).
+- The two archived BC-removal files (`src/archive/bc/copy.md`, `src/archive/bc/pricing-page.ts`) deliberately retain the old `.com` reference — they're frozen historical records and shouldn't be rewritten.
+- The website domain itself (`korporex.com` / `www.korporex.com` in `src/middleware.ts` and the "online platform at korporex.com" wording in legal pages) was **not** changed — only the email address was in scope.
+- Verified: `npx tsc --noEmit` clean, `npm run lint` clean.
+- **Operational follow-up** (not a code change): the existing Brevo SPF/DKIM/DMARC and Cloudflare Email Routing are configured for `korporex.com`. `contact@korporex.ca` will not receive mail and outbound `from: contact@korporex.ca` will fail SPF unless the same setup is replicated on the `.ca` zone. Logged as a `[high]` known-issue until confirmed bidirectional.
+
 ### 2026-04-27 (BC incorporation removed from live site, archived to src/archive/bc/)
 - **Decision**: User asked to pull BC incorporation from the website "for now" while keeping it preserved for later restoration. Strategy chosen: narrow the `Jurisdiction` type to `"federal" | "ontario"` (so the TypeScript compiler flags every code path that needs touching) and move BC-specific data + copy into a dedicated `src/archive/bc/` folder that is excluded from the build.
 - **Archive folder created** ([src/archive/bc/](src/archive/bc/)):

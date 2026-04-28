@@ -14,7 +14,7 @@ const schema = z.object({
 
 type Submission = z.infer<typeof schema>;
 
-const CONTACT_ADDRESS = "contact@korporex.com";
+const CONTACT_ADDRESS = "contact@korporex.ca";
 
 export async function POST(req: Request) {
   let payload: Submission;

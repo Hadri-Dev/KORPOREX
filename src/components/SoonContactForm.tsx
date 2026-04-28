@@ -42,7 +42,7 @@ export default function SoonContactForm() {
       setError(
         err instanceof Error && err.message !== "Send failed"
           ? err.message
-          : "Something went wrong. Please try again or email us at contact@korporex.com."
+          : "Something went wrong. Please try again or email us at contact@korporex.ca."
       );
     } finally {
       setSubmitting(false);
@@ -64,8 +64,8 @@ export default function SoonContactForm() {
         <p className="text-sm md:text-base text-gray-600 leading-relaxed">
           A member of our team will respond within <span className="font-semibold text-navy-900">24 hours</span> at
           the email you provided. In the meantime, you can also reach us directly at{" "}
-          <a href="mailto:contact@korporex.com" className="text-navy-900 underline underline-offset-2">
-            contact@korporex.com
+          <a href="mailto:contact@korporex.ca" className="text-navy-900 underline underline-offset-2">
+            contact@korporex.ca
           </a>
           .
         </p>

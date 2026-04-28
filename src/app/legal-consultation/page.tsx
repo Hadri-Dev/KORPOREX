@@ -207,7 +207,7 @@ export default function LegalConsultationPage() {
       setSubmitError(
         err instanceof Error && err.message
           ? err.message
-          : "Something went wrong. Please try again or email contact@korporex.com."
+          : "Something went wrong. Please try again or email contact@korporex.ca."
       );
       setStage("error");
     }
@@ -510,8 +510,8 @@ export default function LegalConsultationPage() {
               </button>
               <p className="text-xs text-gray-500 mt-4">
                 Or email{" "}
-                <a className="underline" href="mailto:contact@korporex.com">
-                  contact@korporex.com
+                <a className="underline" href="mailto:contact@korporex.ca">
+                  contact@korporex.ca
                 </a>
                 .
               </p>
@@ -525,7 +525,7 @@ export default function LegalConsultationPage() {
         <div className="max-w-3xl mx-auto text-center text-xs text-gray-500 leading-relaxed">
           <p className="mb-2">
             <strong className="text-navy-900">Need general help that isn&rsquo;t legal advice?</strong>{" "}
-            Email <a className="underline" href="mailto:contact@korporex.com">contact@korporex.com</a> or check our{" "}
+            Email <a className="underline" href="mailto:contact@korporex.ca">contact@korporex.ca</a> or check our{" "}
             <Link className="underline" href="/faq">FAQ</Link>.
           </p>
           <p>

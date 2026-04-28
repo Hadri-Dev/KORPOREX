@@ -29,7 +29,7 @@ export default function ContactPage() {
       }
       setSubmitted(true);
     } catch (err) {
-      setError(err instanceof Error && err.message !== "Send failed" ? err.message : "Something went wrong. Please try again or email us at contact@korporex.com.");
+      setError(err instanceof Error && err.message !== "Send failed" ? err.message : "Something went wrong. Please try again or email us at contact@korporex.ca.");
     } finally {
       setSubmitting(false);
     }
@@ -126,8 +126,8 @@ export default function ContactPage() {
                   <Mail size={18} className="text-gold-500 shrink-0 mt-0.5" />
                   <div>
                     <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase mb-1">Email</p>
-                    <a href="mailto:contact@korporex.com" className="text-sm text-gray-700 hover:text-navy-900">
-                      contact@korporex.com
+                    <a href="mailto:contact@korporex.ca" className="text-sm text-gray-700 hover:text-navy-900">
+                      contact@korporex.ca
                     </a>
                     <p className="text-xs text-gray-500 mt-1 leading-relaxed">
                       All enquiries — general questions, incorporation orders, and support.

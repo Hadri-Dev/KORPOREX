@@ -14,7 +14,7 @@ import { LEGAL_CONSULT_TAX_RATE, getLegalConsultPricing } from "@/lib/pricing";
 
 export const runtime = "nodejs";
 
-const CONTACT_ADDRESS = "contact@korporex.com";
+const CONTACT_ADDRESS = "contact@korporex.ca";
 
 type EmailAttachment = { name: string; content: string };
 

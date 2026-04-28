@@ -92,7 +92,7 @@ const categories: Category[] = [
       },
       {
         q: "What is your refund policy?",
-        a: "All fees are non-refundable once payment has been submitted. This includes package fees, NUANS pass-through fees, registered office service fees, and applicable taxes. The reason is that incorporation work — including third-party fees and government filings — is commenced immediately upon payment. If a filing is rejected because of an error on our part, we will re-file at no additional service cost (that's rectification, not a refund). Exceptional-circumstance requests can be emailed to contact@korporex.com with your order reference, but we are under no obligation to issue a refund. See our Terms of Service for the full policy.",
+        a: "All fees are non-refundable once payment has been submitted. This includes package fees, NUANS pass-through fees, registered office service fees, and applicable taxes. The reason is that incorporation work — including third-party fees and government filings — is commenced immediately upon payment. If a filing is rejected because of an error on our part, we will re-file at no additional service cost (that's rectification, not a refund). Exceptional-circumstance requests can be emailed to contact@korporex.ca with your order reference, but we are under no obligation to issue a refund. See our Terms of Service for the full policy.",
       },
       {
         q: "Do prices include taxes?",

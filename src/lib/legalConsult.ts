@@ -86,8 +86,8 @@ export const CALENDLY_LAWYER_URL =
 
 // Recipient list for the [PENDING] / [PAID] consultation emails. The
 // trusted-network lawyer is currently Hadri Law (`contact@hadrilaw.com`);
-// Korporex's `contact@korporex.com` is also CC'd for operational visibility.
+// Korporex's `contact@korporex.ca` is also CC'd for operational visibility.
 export const LEGAL_CONSULT_RECIPIENTS = [
-  { email: "contact@korporex.com", name: "Korporex" },
+  { email: "contact@korporex.ca", name: "Korporex" },
   { email: "contact@hadrilaw.com", name: "Hadri Law" },
 ] as const;

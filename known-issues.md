@@ -2,6 +2,13 @@
 
 ## Open
 
+### [Severity: high] contact@korporex.ca mailbox not yet provisioned (site displays it but email infrastructure is on .com)
+- **Where**: 16 site files now reference `contact@korporex.ca` (mailto links, footer, error messages, plus the backend `CONTACT_ADDRESS` constants in `/api/contact`, `/api/incorporate`, `/api/stripe-webhook`, `/api/legal-consult`, and the `LEGAL_CONSULT_RECIPIENTS` entry in `src/lib/legalConsult.ts`).
+- **Symptom**: Customers clicking the email link send mail to `contact@korporex.ca`. Backend services send transactional email **from** that address. Both will fail in production unless `.ca` is set up the same way `.com` is today.
+- **Impact**: Inbound — customer mail to `contact@korporex.ca` will bounce or sink (no MX record, no Cloudflare Email Routing for `.ca`). Outbound — Brevo will reject sends from `contact@korporex.ca` because SPF/DKIM/DMARC for `.ca` aren't configured; `[PENDING]`/`[PAID]` emails will silently fail and customers won't get confirmations.
+- **Why not fixed yet**: This is an operational/DNS task (registrar + Cloudflare + Brevo + Gmail "Send mail as"), not a code change. Must be completed before flipping launch mode off. Replicate the existing `korporex.com` setup on `korporex.ca`: register the domain (if not done), add MX to Cloudflare Email Routing forwarding to the same Gmail, add SPF (`include:spf.brevo.com`), DKIM (Brevo-provided records), DMARC, and configure Gmail "Send mail as" with a fresh Brevo SMTP key.
+- **Logged**: 2026-04-27
+
 ### [Severity: low] British Columbia incorporation temporarily removed from live site
 - **Where**: BC was stripped 2026-04-27 from every customer-facing surface and from the `Jurisdiction` type in [src/lib/pricing.ts](src/lib/pricing.ts). All BC-specific code, copy, and data is preserved in [src/archive/bc/](src/archive/bc/) — that folder is excluded from the TypeScript build via [tsconfig.json](tsconfig.json).
 - **Symptom**: Customers cannot select BC anywhere — wizard, pricing page, services page, hero/soon/contact forms all show only Federal + Ontario. The BC resource article is not published.
