@@ -9,6 +9,7 @@ import {
   Settings,
   LogOut,
   ChevronDown,
+  TrendingUp,
   type LucideIcon,
 } from "lucide-react";
 
@@ -29,6 +30,18 @@ const NAV_ITEMS: NavItem[] = [
       { label: "All orders", href: "/dashboard/orders" },
       { label: "Paid", href: "/dashboard/orders?status=paid" },
       { label: "Pending / Abandoned", href: "/dashboard/orders?status=open" },
+    ],
+  },
+  {
+    label: "SEO Dashboard",
+    href: "/dashboard/seo",
+    icon: TrendingUp,
+    children: [
+      { label: "Link Building", href: "/dashboard/seo/link-building" },
+      { label: "Backlinks", href: "/dashboard/seo/backlinks" },
+      { label: "Competitors", href: "/dashboard/seo/competitors" },
+      { label: "Rankings", href: "/dashboard/seo/rankings" },
+      { label: "Import / Export", href: "/dashboard/seo/import-export" },
     ],
   },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
