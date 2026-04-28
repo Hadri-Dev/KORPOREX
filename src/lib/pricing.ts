@@ -6,7 +6,10 @@
 // the API re-derives price/tax from the same constants rather than trusting
 // anything the client sends.
 
-export type Jurisdiction = "federal" | "ontario" | "bc";
+// BC ("british columbia") was archived 2026-04-27 — see src/archive/bc/ for
+// preserved code and the restore procedure. To restore, re-add `"bc"` to this
+// union and follow the README in that folder.
+export type Jurisdiction = "federal" | "ontario";
 export type Pkg = "basic" | "standard" | "premium";
 export type RegOfficeAddon = "none" | "korporex";
 
@@ -15,8 +18,7 @@ export type RegOfficeAddon = "none" | "korporex";
 // advance. Annual fee is non-refundable, even if the customer obtains their
 // own registered office address before the term ends.
 //
-// Only legally valid for Federal and Ontario incorporations — BC requires a
-// BC registered office, so we gate the add-on out for BC.
+// Available for all currently supported jurisdictions (Federal + Ontario).
 //
 // The actual street/city of the GTA address is selected by Korporex at the
 // time of filing and is intentionally NOT advertised on the marketing or
@@ -42,15 +44,12 @@ export const REG_OFFICE_ADDON = {
 } as const;
 
 export function regOfficeAddonAvailable(jurisdiction: Jurisdiction): boolean {
-  // Our registered office service uses Ontario addresses; BC incorporations
-  // must have a BC registered office by statute.
   return jurisdiction === "federal" || jurisdiction === "ontario";
 }
 
 export const PRICES: Record<Jurisdiction, Record<Pkg, number>> = {
   federal: { basic: 499, standard: 699, premium: 999 },
   ontario: { basic: 399, standard: 599, premium: 899 },
-  bc: { basic: 449, standard: 649, premium: 949 },
 };
 
 // Lawyer consultation fee. Flat-rated 30-minute session with an independent
@@ -73,17 +72,13 @@ export function getLegalConsultPricing(): LegalConsultPricing {
   return { fee, tax, total };
 }
 
-// Name-search pass-through fees. Applies to federal and Ontario named
-// corporations only — BC uses a separate Name Approval process handled inline
-// with the incorporation and not billed as a line item.
-//
-// Federal uses Corporations Canada's NUANS preliminary search; Ontario uses
-// an Ontario-Biz-style name search. The two are billed at different rates
-// reflecting the different government pass-through and handling costs.
+// Name-search pass-through fees. Federal uses Corporations Canada's NUANS
+// preliminary search; Ontario uses an Ontario-Biz-style name search. The two
+// are billed at different rates reflecting the different government pass-
+// through and handling costs.
 export const NUANS_FEES: Record<Jurisdiction, number> = {
   federal: 20,
   ontario: 60,
-  bc: 0,
 };
 
 export function getNuansFee(jurisdiction: Jurisdiction): number {
@@ -115,7 +110,6 @@ export function getTaxRate(country: string, region: string): number {
 export const JURISDICTION_LABELS: Record<Jurisdiction, string> = {
   federal: "Federal (Canada)",
   ontario: "Ontario",
-  bc: "British Columbia",
 };
 
 export const PKG_LABELS: Record<Pkg, string> = {

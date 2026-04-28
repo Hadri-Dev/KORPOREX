@@ -175,12 +175,6 @@ const JURISDICTION_INFO = [
     sub: "Ontario Business Corporations Act",
     desc: "Provincial corporation created under Ontario law. Automatic authorization to carry on business in Ontario.",
   },
-  {
-    id: "bc" as Jurisdiction,
-    label: "British Columbia",
-    sub: "BC Business Corporations Act",
-    desc: "Provincial corporation under BC's modern corporate legislation; fully online filing system.",
-  },
 ];
 
 const PKG_INFO: { id: Pkg; label: string; desc: string }[] = [
@@ -611,11 +605,7 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
   }, [month]);
 
   const nameSearchLabel =
-    jurisdiction === "federal" ? "NUANS name search" :
-    jurisdiction === "ontario" ? "Ontario name search" :
-    "BC name approval";
-
-  const nameSearchApplies = jurisdiction === "federal" || jurisdiction === "ontario";
+    jurisdiction === "federal" ? "NUANS name search" : "Ontario name search";
 
   return (
     <FormProvider {...form}>
@@ -687,16 +677,10 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
             </select>
           </Field>
 
-          {nameSearchApplies && corpNameType === "named" && (
+          {corpNameType === "named" && (
             <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-700 leading-relaxed">
               <strong className="text-gray-800">{nameSearchLabel} required.</strong> A ${getNuansFee(jurisdiction)} report fee
               applies and is shown separately at checkout. Choose a numbered corporation above to skip this fee.
-            </div>
-          )}
-          {!nameSearchApplies && (
-            <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-700 leading-relaxed">
-              British Columbia uses its own name-approval process rather than NUANS. We handle the Name Request
-              submission as part of your incorporation — no separate NUANS fee.
             </div>
           )}
 
@@ -797,7 +781,7 @@ function Step4({ def, jurisdiction, onNext, onBack }: { def: Partial<S4>; jurisd
     resolver: zodResolver(s4),
     defaultValues: { directors: def.directors?.length ? def.directors : [seedDir] },
   });
-  const { register, handleSubmit, control, watch, setValue, formState: { errors } } = form;
+  const { register, handleSubmit, control, formState: { errors } } = form;
   const { fields, append, remove } = useFieldArray({ control, name: "directors" });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const de = (errors.directors as any) ?? [];
@@ -901,36 +885,13 @@ function Step4({ def, jurisdiction, onNext, onBack }: { def: Partial<S4>; jurisd
                     <p>(c) a permanent resident within the meaning of subsection 2(1) of the Immigration and Refugee Protection Act and ordinarily resident in Canada, except a permanent resident who has been ordinarily resident in Canada for more than one year after the time at which he or she first became eligible to apply for Canadian citizenship; (résident canadien)</p>
                   </div>
                 </div>
-              ) : jurisdiction === "ontario" ? (
+              ) : (
                 // Ontario — residency block intentionally omitted. OBCA dropped
                 // the Canadian-resident director requirement (Bill 213, in
                 // force 2021-07-05), so surfacing a CBCA-style residency
                 // checkbox would be misleading. The underlying field defaults
                 // to "no" via seedDir so the schema still validates.
                 null
-              ) : (
-                // BC (and any other non-federal, non-Ontario jurisdictions) —
-                // preserve legacy checkbox UX. Field is still tri-state
-                // ("yes" | "no") under the hood; we manually map the
-                // checkbox's checked state to those string values via
-                // watch/setValue so the schema sees a valid enum.
-                <div className="mt-4">
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="checkbox"
-                      id={`resident-${i}`}
-                      checked={watch(`directors.${i}.isCanadianResident`) === "yes"}
-                      onChange={(e) => setValue(`directors.${i}.isCanadianResident`, e.target.checked ? "yes" : "no", { shouldValidate: true })}
-                      className="shrink-0 accent-navy-900"
-                    />
-                    <label htmlFor={`resident-${i}`} className="text-sm text-gray-700 cursor-pointer">Canadian resident</label>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1.5 leading-relaxed">
-                    Per CBCA s.2(1), a &ldquo;resident Canadian&rdquo; is a Canadian citizen who ordinarily lives in Canada,
-                    or a permanent resident who ordinarily lives in Canada (and has not been a permanent resident long enough
-                    to be eligible for Canadian citizenship). Tick this box only if you meet that definition.
-                  </p>
-                </div>
               )}
             </div>
           ))}
@@ -1113,7 +1074,7 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
   onNext: (d: S7) => void;
   onBack: () => void;
 }) {
-  const regionLock = jurisdiction === "ontario" ? "ON" : jurisdiction === "bc" ? "BC" : undefined;
+  const regionLock = jurisdiction === "ontario" ? "ON" : undefined;
   const regionAllow = jurisdiction === "federal" ? CA_PROVINCES.map((p) => p.code) : undefined;
   const addonEligible = regOfficeAddonAvailable(jurisdiction);
 
@@ -1156,7 +1117,7 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
     setValue("regOffice.country", a.country, { shouldValidate: true });
   };
 
-  const jurisLabel = jurisdiction === "federal" ? "any Canadian province or territory" : jurisdiction === "ontario" ? "Ontario" : "British Columbia";
+  const jurisLabel = jurisdiction === "federal" ? "any Canadian province or territory" : "Ontario";
 
   return (
     <FormProvider {...form}>
@@ -1216,14 +1177,6 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
             </div>
           )}
 
-          {!addonEligible && (
-            <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-600 leading-relaxed">
-              British Columbia requires a BC registered office. If you don&rsquo;t have a physical address in BC,
-              email{" "}
-              <a href="mailto:contact@korporex.com" className="text-navy-900 underline">contact@korporex.com</a>{" "}
-              and we&rsquo;ll help.
-            </div>
-          )}
           {addonEligible && selectedAddon === "none" && (
             <div className="bg-cream-50 border border-gray-200 p-4 text-sm text-gray-600 leading-relaxed">
               Don&rsquo;t have a physical address in {jurisLabel}? Use the Korporex registered office option above instead.

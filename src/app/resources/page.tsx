@@ -22,7 +22,7 @@ const categories: ResourceCategory[] = [
   {
     icon: HelpCircle,
     title: "Jurisdiction Comparisons",
-    description: "Federal vs. Ontario vs. BC — understand the differences before you choose.",
+    description: "Federal vs. Ontario — understand the differences before you choose.",
   },
 ];
 

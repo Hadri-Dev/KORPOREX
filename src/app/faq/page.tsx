@@ -38,11 +38,11 @@ const categories: Category[] = [
     items: [
       {
         q: "What's the difference between federal and provincial incorporation?",
-        a: "A federal corporation (incorporated under the Canada Business Corporations Act) has its name protected nationwide and can carry on business in any province, subject to extra-provincial registration in each one. A provincial corporation (such as Ontario or BC) is created under provincial law and is automatically authorized to carry on business in the incorporating province, with name protection limited to that province. Each route produces a valid corporation — the practical differences are name-protection scope, government fees, and ongoing filings.",
+        a: "A federal corporation (incorporated under the Canada Business Corporations Act) has its name protected nationwide and can carry on business in any province, subject to extra-provincial registration in each one. A provincial corporation (such as Ontario) is created under provincial law and is automatically authorized to carry on business in the incorporating province, with name protection limited to that province. Each route produces a valid corporation — the practical differences are name-protection scope, government fees, and ongoing filings.",
       },
       {
         q: "Which jurisdiction should I choose?",
-        a: "There is no universally best jurisdiction — the right choice depends on your specific needs. Federal, Ontario, and British Columbia incorporations are each a valid path, and the decision typically comes down to where you plan to operate, how important nationwide name protection is, and your budget. Our Resources section has dedicated guides on each jurisdiction, and our wizard captures the information needed for any of the three.",
+        a: "There is no universally best jurisdiction — the right choice depends on your specific needs. Federal and Ontario incorporations are each a valid path, and the decision typically comes down to where you plan to operate, how important nationwide name protection is, and your budget. Our Resources section has dedicated guides on each jurisdiction, and our wizard captures the information needed for either.",
       },
       {
         q: "What is a NUANS name search?",
@@ -50,11 +50,11 @@ const categories: Category[] = [
       },
       {
         q: "What types of corporations can I incorporate?",
-        a: "Through Korporex you can incorporate Standard (for-profit) corporations, Professional corporations (for regulated professionals such as doctors, dentists, and accountants), Holding corporations (for managing investments or assets), and Non-Profit corporations. Availability varies by jurisdiction — federal incorporations currently support standard and holding corporations; Ontario and BC support all four types.",
+        a: "Through Korporex you can incorporate Standard (for-profit) corporations, Professional corporations (for regulated professionals such as doctors, dentists, and accountants), Holding corporations (for managing investments or assets), and Non-Profit corporations. Availability varies by jurisdiction — federal incorporations currently support standard and holding corporations; Ontario supports all four types.",
       },
       {
         q: "Do I need a physical office address to incorporate?",
-        a: "Yes — every corporation requires a registered office address in its incorporating jurisdiction. This address must be a physical location (not a P.O. Box) where official notices and corporate correspondence can be received. If you don't have one, Korporex offers a registered office address service at checkout for federal and Ontario incorporations: $99.99/month, billed annually in advance at $1,199.88 + HST. The address is in the Greater Toronto Area, chosen by Korporex at our discretion, and includes a monthly scanned copy of received mail emailed to you. The annual fee is non-refundable, including if you obtain your own address before the term ends. BC incorporations require a BC address — email contact@korporex.com for help.",
+        a: "Yes — every corporation requires a registered office address in its incorporating jurisdiction. This address must be a physical location (not a P.O. Box) where official notices and corporate correspondence can be received. If you don't have one, Korporex offers a registered office address service at checkout for federal and Ontario incorporations: $99.99/month, billed annually in advance at $1,199.88 + HST. The address is in the Greater Toronto Area, chosen by Korporex at our discretion, and includes a monthly scanned copy of received mail emailed to you. The annual fee is non-refundable, including if you obtain your own address before the term ends.",
       },
     ],
   },
@@ -117,7 +117,7 @@ const categories: Category[] = [
       },
       {
         q: "What annual filings are required after incorporation?",
-        a: "Requirements vary by jurisdiction. Ontario corporations must file an Annual Return with the Ontario government each year (typically within 60 days of your anniversary date). Federal corporations must file an Annual Return with Corporations Canada. BC corporations must file an Annual Report with the BC Registrar. Failure to file can result in your corporation being dissolved. Korporex offers annual return filing services — available on our Services page.",
+        a: "Requirements vary by jurisdiction. Ontario corporations must file an Annual Return with the Ontario government each year (typically within 60 days of your anniversary date). Federal corporations must file an Annual Return with Corporations Canada. Failure to file can result in your corporation being dissolved. Korporex offers annual return filing services — available on our Services page.",
       },
       {
         q: "Do I need a business bank account after incorporating?",

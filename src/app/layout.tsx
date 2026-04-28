@@ -18,7 +18,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Korporex — Online Business Incorporation in Canada",
   description:
-    "Incorporate your Canadian business online in about 10 minutes. Federal, Ontario, and BC filings handled end-to-end and delivered within 24 hours.",
+    "Incorporate your Canadian business online in about 10 minutes. Federal and Ontario filings handled end-to-end and delivered within 24 hours.",
 };
 
 export default function RootLayout({

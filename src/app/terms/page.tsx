@@ -66,10 +66,9 @@ export default function TermsPage() {
             <p>
               Korporex is a Canadian online platform that prepares and files business
               incorporation documents with federal and provincial corporate registries in Canada
-              (currently Corporations Canada, the Ontario Business Registry, and the BC
-              Corporate Registry). We also coordinate optional pass-through services such as
-              NUANS name searches and provide an optional registered office address service in
-              Ontario.
+              (currently Corporations Canada and the Ontario Business Registry). We also
+              coordinate optional pass-through services such as NUANS name searches and provide
+              an optional registered office address service in Ontario.
             </p>
           </Section>
 
@@ -289,8 +288,8 @@ export default function TermsPage() {
               (payment processing), Brevo (transactional email), Google Maps Platform (address
               autocomplete), Cloudflare (DNS and email routing), and Vercel (hosting). The
               government registries to which we submit your filings (including Corporations
-              Canada, the Ontario Business Registry, and the BC Corporate Registry) are
-              operated by federal and provincial authorities and are not controlled by
+              Canada and the Ontario Business Registry) are operated by federal and provincial
+              authorities and are not controlled by
               Korporex. Korporex is not responsible for the availability, accuracy,
               performance, or policies of these third-party services, though we will take
               reasonable steps to select reputable providers.

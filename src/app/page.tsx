@@ -18,13 +18,6 @@ const featuredServices = [
     from: "$399",
     href: "/incorporate?jurisdiction=ontario",
   },
-  {
-    jurisdiction: "British Columbia",
-    subtitle: "BC Business Corporations Act",
-    description: "Incorporate provincially in British Columbia. Modern corporate legislation and a fully online filing system.",
-    from: "$449",
-    href: "/incorporate?jurisdiction=bc",
-  },
 ];
 
 const otherServices = [
@@ -183,13 +176,13 @@ export default function HomePage() {
               Choose Your Jurisdiction
             </h2>
             <p className="text-gray-600 mt-4 max-w-xl mx-auto">
-              Federal, Ontario, and British Columbia — each is a valid choice depending on where you plan to
-              operate, the name-protection scope you need, and your budget. None is superior; the right pick
+              Federal and Ontario — each is a valid choice depending on where you plan to operate,
+              the name-protection scope you need, and your budget. Neither is superior; the right pick
               depends on your business.{" "}
               <Link href="/faq" className="text-navy-900 underline underline-offset-2">See our FAQ.</Link>
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 gap-6">
             {featuredServices.map(({ jurisdiction, subtitle, description, from, href }) => (
               <div
                 key={jurisdiction}

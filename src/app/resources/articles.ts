@@ -45,7 +45,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "Federal incorporation does not, however, exempt the corporation from provincial rules. If a federal corporation carries on business in a province — has an office, employees, or a physical presence there — it must register extra-provincially in that province and pay the associated fee. A federal corporation operating in Ontario, Alberta, and BC effectively maintains four registrations: one federal plus one in each province.",
+        text: "Federal incorporation does not, however, exempt the corporation from provincial rules. If a federal corporation carries on business in a province — has an office, employees, or a physical presence there — it must register extra-provincially in that province and pay the associated fee. A federal corporation operating in three provinces effectively maintains four registrations: one federal plus one in each province.",
       },
       {
         type: "heading",
@@ -54,7 +54,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "A provincial corporation is created under the business corporations act of a specific province (e.g., Ontario's OBCA, BC's BCA, Alberta's ABCA). The corporation is automatically authorized to carry on business throughout that province. Name protection, however, is limited to that province — a business in another province could, in principle, register a similar name there.",
+        text: "A provincial corporation is created under the business corporations act of a specific province (e.g., Ontario's OBCA, Alberta's ABCA). The corporation is automatically authorized to carry on business throughout that province. Name protection, however, is limited to that province — a business in another province could, in principle, register a similar name there.",
       },
       {
         type: "paragraph",
@@ -70,7 +70,7 @@ export const articles: Article[] = [
         head: ["", "Federal (CBCA)", "Provincial"],
         rows: [
           ["Name protection", "Nationwide", "Within the incorporating province"],
-          ["NUANS name search", "Mandatory", "Required in ON/BC/AB; optional or province-specific elsewhere"],
+          ["NUANS name search", "Mandatory", "Required in ON/AB; optional or province-specific elsewhere"],
           ["Government filing fee", "Approximately $200 online", "Roughly $300–$360 depending on province"],
           [
             "Operating in multiple provinces",
@@ -78,7 +78,7 @@ export const articles: Article[] = [
             "Needs extra-provincial registration in each province",
           ],
           ["Annual return", "Filed with Corporations Canada every year", "Filed with the province every year"],
-          ["Director residency", "No Canadian-resident director requirement (as of 2022)", "Varies; Ontario removed its requirement in 2021, BC has none"],
+          ["Director residency", "No Canadian-resident director requirement (as of 2022)", "Varies; Ontario removed its requirement in 2021"],
         ],
       },
       {
@@ -102,7 +102,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "Once you've decided on the jurisdiction, the rest of the incorporation process is largely the same: choose a name (or opt for a numbered corporation), draft articles, appoint directors, file, and receive your certificate of incorporation. Korporex handles the entire filing online for federal, Ontario, and BC jurisdictions.",
+        text: "Once you've decided on the jurisdiction, the rest of the incorporation process is largely the same: choose a name (or opt for a numbered corporation), draft articles, appoint directors, file, and receive your certificate of incorporation. Korporex handles the entire filing online for federal and Ontario jurisdictions.",
       },
     ],
   },
@@ -129,9 +129,8 @@ export const articles: Article[] = [
         items: [
           "Federal incorporation under the CBCA — always required if you're registering a named corporation.",
           "Ontario incorporation under the OBCA — required for named corporations.",
-          "British Columbia — BC uses its own Name Request system through BC Registries, not NUANS.",
           "Alberta, Saskatchewan, Manitoba, New Brunswick, Nova Scotia, Newfoundland and Labrador, PEI — all use NUANS for named corporations.",
-          "Quebec and the territories — use separate name systems, not NUANS.",
+          "Quebec, British Columbia, and the territories — use separate name systems, not NUANS.",
           "Numbered corporations (e.g., 1234567 Canada Inc.) — no NUANS search required in any jurisdiction.",
         ],
       },
@@ -237,20 +236,6 @@ export const articles: Article[] = [
           "Due within six months after the corporation's fiscal year-end.",
           "Filing fee: currently no fee for the annual return itself in Ontario.",
           "Non-filing may result in cancellation of the corporation's registration.",
-        ],
-      },
-      {
-        type: "heading",
-        id: "british-columbia",
-        text: "British Columbia corporations",
-      },
-      {
-        type: "list",
-        items: [
-          "Filed with BC Registries and Online Services.",
-          "Due within two months after the anniversary of the date of recognition (usually the incorporation date).",
-          "Filing fee: $43.39 online.",
-          "Missing two consecutive annual reports can trigger administrative dissolution.",
         ],
       },
       {
@@ -452,122 +437,6 @@ export const articles: Article[] = [
         type: "callout",
         title: "One common oversight",
         text: "Ontario requires an Initial Return within 60 days of incorporation, confirming the directors and registered office that were named on the Articles. Missing this filing puts the corporation out of compliance almost immediately. It is a quick online filing — do it the same week you incorporate.",
-      },
-    ],
-  },
-  {
-    slug: "incorporating-in-bc",
-    category: "Jurisdiction Comparisons",
-    title: "Incorporating in BC: A Step-by-Step Overview",
-    excerpt:
-      "British Columbia uses the BC Business Corporations Act and the BC Business Registry. Learn what makes BC incorporation unique and whether it's the right choice for your business.",
-    readTime: "6 min read",
-    updated: "2026-04-21",
-    content: [
-      {
-        type: "paragraph",
-        text: "British Columbia incorporations are governed by the BC Business Corporations Act (BCA) and processed through BC Registries and Online Services. BC's process differs from Ontario's and the federal process in two meaningful ways: name approval is a separate upstream step, and BC corporations receive a pair of governance documents — a Notice of Articles and a set of Articles — rather than a single Articles of Incorporation document.",
-      },
-      {
-        type: "heading",
-        id: "two-documents",
-        text: "Notice of Articles vs. Articles",
-      },
-      {
-        type: "paragraph",
-        text: "BC splits corporate governance documentation into two pieces. The Notice of Articles is the public-facing document filed with the registry — it lists the corporate name, directors, registered office, records office, and authorized share structure. The Articles are the corporation's internal rule book — they govern how shares are issued and transferred, how directors and shareholders meet, and how decisions are made. The Articles are signed by the incorporators but not filed with the registry.",
-      },
-      {
-        type: "heading",
-        id: "name-approval",
-        text: "Step 1 — Name approval (for named corporations)",
-      },
-      {
-        type: "paragraph",
-        text: "Before filing incorporation documents, a named corporation must submit a Name Request (NR) through BC Registries. BC uses its own name search system rather than NUANS. Standard processing takes roughly 1–2 weeks; priority processing (for an additional fee) cuts that to around 1–2 business days. Once approved, the name is reserved for 56 days — the incorporation must be filed within that window.",
-      },
-      {
-        type: "paragraph",
-        text: "A BC numbered corporation (e.g., 1234567 B.C. Ltd.) skips the Name Request step entirely and can be incorporated immediately.",
-      },
-      {
-        type: "heading",
-        id: "whats-required",
-        text: "What is required",
-      },
-      {
-        type: "list",
-        items: [
-          "Approved name (from the Name Request step) or election to incorporate as a numbered company.",
-          "Incorporation Application, including the Notice of Articles.",
-          "Articles of the corporation — signed by each incorporator (can be customized or adopted from a standard template).",
-          "One or more incorporators — may be individuals or corporations.",
-          "At least one director. BC has no Canadian-resident director requirement.",
-          "A BC registered office and records office address. They can be the same address.",
-        ],
-      },
-      {
-        type: "heading",
-        id: "costs",
-        text: "Costs",
-      },
-      {
-        type: "table",
-        head: ["Item", "Cost (BC)"],
-        rows: [
-          ["Name Request — standard", "$30"],
-          ["Name Request — priority", "$100"],
-          ["Incorporation filing fee", "$350"],
-          ["Numbered corporation (no Name Request required)", "$350 incorporation fee only"],
-        ],
-      },
-      {
-        type: "heading",
-        id: "timeline",
-        text: "Timeline",
-      },
-      {
-        type: "list",
-        items: [
-          "Name Request: 1–2 weeks standard, or 1–2 business days with priority.",
-          "Articles drafting: same day.",
-          "Incorporation filing: usually processed immediately or within a few hours.",
-          "Total: a numbered BC corporation can be incorporated same-day. A named BC corporation typically takes 1–3 weeks unless priority name approval is used.",
-        ],
-      },
-      {
-        type: "heading",
-        id: "what-you-receive",
-        text: "What you receive after filing",
-      },
-      {
-        type: "list",
-        items: [
-          "Certificate of Incorporation with incorporation date and BC Incorporation Number.",
-          "Certified Notice of Articles.",
-          "Corporate summary from BC Registries.",
-          "Access credentials for BC Registries Online Services for future filings.",
-        ],
-      },
-      {
-        type: "heading",
-        id: "after-incorporation",
-        text: "After incorporation",
-      },
-      {
-        type: "list",
-        items: [
-          "Hold the organizational meeting (or pass written resolutions) to issue shares, appoint officers, and adopt the Articles.",
-          "Register for a CRA Business Number and relevant tax accounts.",
-          "Open a corporate bank account.",
-          "Set up the minute book — for BC corporations it must be maintained at the records office.",
-          "Calendar the annual report deadline (due within two months after the anniversary of incorporation).",
-        ],
-      },
-      {
-        type: "callout",
-        title: "One BC-specific thing to remember",
-        text: "BC requires a records office in addition to a registered office. They can share an address, but both must be shown on the Notice of Articles, and both must be kept current if either changes.",
       },
     ],
   },

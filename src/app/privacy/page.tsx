@@ -169,8 +169,8 @@ export default function PrivacyPage() {
               registered office) is submitted to the applicable corporate registry as part of
               the filing. Some of this information becomes part of a public corporate record
               maintained by the registry and may be accessible through public search tools
-              operated by Corporations Canada, the Ontario Business Registry, the BC
-              Corporate Registry, or other authorities, in accordance with the legislation
+              operated by Corporations Canada, the Ontario Business Registry, or other
+              authorities, in accordance with the legislation
               under which the corporation is created. You should review the public-disclosure
               rules of the chosen jurisdiction before incorporating.
             </p>

@@ -5,12 +5,11 @@ import { CheckCircle, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { REG_OFFICE_ADDON } from "@/lib/pricing";
 
-type Jurisdiction = "federal" | "ontario" | "bc";
+type Jurisdiction = "federal" | "ontario";
 
 const jurisdictions = [
   { id: "federal" as Jurisdiction, label: "Federal", subtitle: "Canada Business Corporations Act" },
   { id: "ontario" as Jurisdiction, label: "Ontario", subtitle: "Ontario Business Corporations Act" },
-  { id: "bc" as Jurisdiction, label: "British Columbia", subtitle: "BC Business Corporations Act" },
 ];
 
 const pricingData: Record<Jurisdiction, {
@@ -96,46 +95,6 @@ const pricingData: Record<Jurisdiction, {
         "First Annual Return filing",
         "Priority 12-hour processing",
         "Annual filing reminder service",
-      ],
-    },
-  ],
-  bc: [
-    {
-      name: "Basic",
-      price: "$449",
-      description: "Everything you need to get incorporated in British Columbia, including government fees.",
-      features: [
-        "Certificate and Articles of Incorporation",
-        "BC Company registration number",
-        "Corporate bylaws",
-        "BC Business Registry filing",
-        "Digital document delivery",
-        "Digital document storage in your account",
-      ],
-    },
-    {
-      name: "Standard",
-      price: "$649",
-      description: "Complete incorporation package with your full corporate minute book.",
-      features: [
-        "Everything in Basic",
-        "Corporate minute book",
-        "Share certificates",
-        "Organizational resolutions",
-        "Banking resolution",
-        "Post-filing support",
-      ],
-    },
-    {
-      name: "Premium",
-      price: "$949",
-      description: "Full-service incorporation with ongoing compliance support for year one.",
-      features: [
-        "Everything in Standard",
-        "First annual report filing",
-        "Priority 12-hour processing",
-        "Dedicated account support",
-        "Annual report reminder service",
       ],
     },
   ],
@@ -300,8 +259,7 @@ export default function PricingPage() {
             </p>
           </div>
           <p className="text-xs text-gray-500 text-center mt-6">
-            Available for federal and Ontario incorporations. BC incorporations require a BC registered office —
-            email <a href="mailto:contact@korporex.com" className="text-navy-900 underline">contact@korporex.com</a> for BC.
+            Available for federal and Ontario incorporations.
           </p>
         </div>
       </section>

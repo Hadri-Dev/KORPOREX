@@ -2,6 +2,14 @@
 
 ## Open
 
+### [Severity: low] British Columbia incorporation temporarily removed from live site
+- **Where**: BC was stripped 2026-04-27 from every customer-facing surface and from the `Jurisdiction` type in [src/lib/pricing.ts](src/lib/pricing.ts). All BC-specific code, copy, and data is preserved in [src/archive/bc/](src/archive/bc/) — that folder is excluded from the TypeScript build via [tsconfig.json](tsconfig.json).
+- **Symptom**: Customers cannot select BC anywhere — wizard, pricing page, services page, hero/soon/contact forms all show only Federal + Ontario. The BC resource article is not published.
+- **Impact**: By design — user direction is to focus operational capacity on Federal + Ontario filings until BC is brought back online. No customer is impacted because no BC orders were ever fulfilled (site has been launch-mode since 2026-04-24, no real-card transactions yet).
+- **Why not fixed yet**: Intentional removal, not a bug. Scheduled for re-enablement when ops capacity for BC name-request handling and BC registered-office requirements is in place.
+- **Restore procedure**: see [src/archive/bc/README.md](src/archive/bc/README.md). Net effort: re-add `"bc"` to the `Jurisdiction` union in `src/lib/pricing.ts`; paste the archived data files into the matching maps; paste the BC article back into `src/app/resources/articles.ts`; reverse the snippets documented in [src/archive/bc/copy.md](src/archive/bc/copy.md). Then `npx tsc --noEmit && npm run lint && npm run build` to verify.
+- **Logged**: 2026-04-27
+
 ### [Severity: medium] Terms of Service and Privacy Policy are living drafts pending legal review
 - **Where**: `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`.
 - **Symptom**: Both pages are structurally complete and now reference the correct legal entity (Korporex Business Solutions Inc., CBCA / Ontario HQ) with a confirmed no-refund policy, but have not yet been reviewed by qualified legal counsel.

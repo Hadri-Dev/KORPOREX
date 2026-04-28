@@ -305,7 +305,7 @@ export default function LegalConsultationPage() {
                   <Field
                     label="Jurisdiction"
                     error={errors.existingJurisdiction?.message}
-                    hint="Federal, Ontario, BC, or other province"
+                    hint="Federal, Ontario, or other province"
                   >
                     <input {...register("existingJurisdiction")} placeholder="e.g. Ontario" className={iCls} />
                   </Field>

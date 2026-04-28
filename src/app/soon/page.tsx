@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 const capabilities = [
-  { icon: Building2, label: "Incorporation", sub: "Federal · Ontario · BC" },
+  { icon: Building2, label: "Incorporation", sub: "Federal · Ontario" },
   { icon: FileText, label: "Registrations", sub: "Sole prop & business name" },
   { icon: Edit3, label: "Amendments", sub: "Directors · articles · address" },
   { icon: ClipboardCheck, label: "Compliance", sub: "Annual returns & filings" },

@@ -114,7 +114,6 @@ export default function Footer() {
               {[
                 ["Federal Incorporation", "/services"],
                 ["Ontario Incorporation", "/services"],
-                ["BC Incorporation", "/services"],
                 ["Annual Returns", "/services"],
                 ["Dissolve a Business", "/services"],
                 ["Talk to a Corporate Lawyer", "/legal-consultation"],

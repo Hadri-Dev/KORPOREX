@@ -6,7 +6,6 @@ import { ArrowRight, CheckCircle } from "lucide-react";
 const SERVICE_OPTIONS = [
   { value: "federal", label: "Federal incorporation" },
   { value: "ontario", label: "Ontario incorporation" },
-  { value: "bc", label: "BC incorporation" },
   { value: "registration", label: "Business name / sole prop registration" },
   { value: "amendment", label: "Changes & amendments" },
   { value: "compliance", label: "Compliance filing (annual return, etc.)" },

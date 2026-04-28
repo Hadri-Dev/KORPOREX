@@ -87,7 +87,6 @@ export default function HeroContactForm() {
             <option value="">Select a service…</option>
             <option value="federal">Federal Incorporation</option>
             <option value="ontario">Ontario Incorporation</option>
-            <option value="bc">BC Incorporation</option>
             <option value="registration">Business Name Registration</option>
             <option value="compliance">Compliance Filings</option>
             <option value="other">Other</option>

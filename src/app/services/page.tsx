@@ -22,10 +22,6 @@ const categories: Category[] = [
       { name: "Ontario Incorporation — Professional Corp", from: "$449", href: "/incorporate?jurisdiction=ontario&type=professional" },
       { name: "Ontario Incorporation — Non-Profit", from: "$399", href: "/incorporate?jurisdiction=ontario&type=nonprofit" },
       { name: "Ontario Incorporation — Holding Corp", from: "$399", href: "/incorporate?jurisdiction=ontario&type=holding" },
-      { name: "BC Incorporation — Standard Corp", from: "$449", href: "/incorporate?jurisdiction=bc&type=standard" },
-      { name: "BC Incorporation — Professional Corp", from: "$499", href: "/incorporate?jurisdiction=bc&type=professional" },
-      { name: "BC Incorporation — Non-Profit", from: "$449", href: "/incorporate?jurisdiction=bc&type=nonprofit" },
-      { name: "BC Incorporation — Holding Corp", from: "$449", href: "/incorporate?jurisdiction=bc&type=holding" },
     ],
   },
   {
@@ -34,9 +30,7 @@ const categories: Category[] = [
     description: "Register a sole proprietorship, business name, or expand your existing corporation to operate in a new province.",
     services: [
       { name: "Sole Proprietorship Registration — Ontario", from: "$99", href: "/services" },
-      { name: "Sole Proprietorship Registration — BC", from: "$99", href: "/services" },
       { name: "Business Name Registration — Ontario", from: "$79", href: "/services" },
-      { name: "Business Name Registration — BC", from: "$79", href: "/services" },
       { name: "Extra-Provincial Registration", from: "$199", href: "/services" },
     ],
   },
