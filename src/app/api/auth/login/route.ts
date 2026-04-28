@@ -29,7 +29,11 @@ function constantTimeEquals(a: string, b: string): boolean {
 export async function POST(req: Request) {
   const expectedUsername = process.env.ADMIN_USERNAME;
   const expectedPassword = process.env.ADMIN_PASSWORD;
-  if (!expectedUsername || !expectedPassword) {
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+  // All three vars are required — bail with a clear 503 if any are missing
+  // so the form can show "Login is not configured" instead of the generic
+  // "Incorrect username or password" message.
+  if (!expectedUsername || !expectedPassword || !sessionSecret || sessionSecret.length < 32) {
     return NextResponse.json(
       { error: "Login is not configured on this server." },
       { status: 503 },

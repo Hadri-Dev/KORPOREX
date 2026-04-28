@@ -19,7 +19,16 @@ export default function LoginForm() {
         body: JSON.stringify({ username, password }),
       });
       if (!res.ok) {
-        setError("Incorrect username or password.");
+        // Surface the API's own error string so 503 (env not configured)
+        // and 401 (wrong creds) don't both read as "wrong password".
+        let msg = "Sign-in failed. Try again.";
+        try {
+          const data = (await res.json()) as { error?: string };
+          if (data?.error) msg = data.error;
+        } catch {
+          // response wasn't JSON — keep the generic message
+        }
+        setError(msg);
         setBusy(false);
         return;
       }
