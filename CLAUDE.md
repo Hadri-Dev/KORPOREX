@@ -65,7 +65,57 @@ stripe listen --forward-to localhost:3000/api/stripe-webhook
 - **Forms**: React Hook Form + Zod (type-safe validation)
 - **Icons**: lucide-react
 - **Fonts**: Playfair Display (serif headings) and Inter (body) via next/font/google
+- **i18n**: `next-intl` v4 — locales `en` / `fr` / `es`, prefix routing (`/en/`, `/fr/`, `/es/`), default `en`
 - **Deployment**: GitHub → Vercel (auto-deploys on push to main)
+
+## Internationalization (i18n) — non-negotiable for all new code
+
+The site is **fully internationalized**. Every user-visible string must come from a translation key, **never hardcoded** in JSX.
+
+### Architecture
+- **Library**: `next-intl` v4
+- **Supported locales**: `en` (default), `fr`, `es` — defined in [`src/i18n/routing.ts`](src/i18n/routing.ts). To add a locale, append it there, add `messages/<code>.json` mirroring `en.json`, and add a `LOCALE_LABELS` entry.
+- **URL pattern**: prefix-all (`/en/...`, `/fr/...`, `/es/...`). Root `/` redirects to `/en/`. Configured via `localePrefix: "always"`.
+- **App directory**: every page lives under `src/app/[locale]/`. The root layout is [`src/app/[locale]/layout.tsx`](src/app/[locale]/layout.tsx) — there is **no `src/app/layout.tsx`**. API routes (`src/app/api/`) are not localized.
+- **Middleware**: [`src/middleware.ts`](src/middleware.ts) composes `next-intl/middleware` (locale routing) with the launch-mode rewrite. Order matters — locale resolution runs first so the launch-mode redirect can target `/<locale>/soon`.
+- **Server-side messages loader**: [`src/i18n/request.ts`](src/i18n/request.ts) — wired into `next.config.mjs` via `createNextIntlPlugin`.
+- **Locale-aware navigation**: [`src/i18n/navigation.ts`](src/i18n/navigation.ts) re-exports `Link`, `useRouter`, `usePathname`, `redirect`, `getPathname` that are locale-aware.
+- **Language switcher**: [`src/components/layout/LanguageSwitcher.tsx`](src/components/layout/LanguageSwitcher.tsx), top-right of [`Navbar`](src/components/layout/Navbar.tsx) and [`SoonPageBody`](src/app/[locale]/soon/SoonPageBody.tsx).
+
+### Translation files
+
+`messages/en.json`, `messages/fr.json`, `messages/es.json` — **must stay structurally identical** (same keys/nesting in all three). Adding a key to one means adding it to all three.
+
+Namespaces in use today: `metadata`, `common`, `languageSwitcher`, `nav`, `footer`, `soon`, `heroContactForm`, `home`. New namespaces (e.g. `pricing`, `services`, `faq`, `incorporate`, `legalConsult`, `articles`, `terms`, `privacy`) should be added when the corresponding pages are converted.
+
+### Mandatory rules for every code change
+
+1. **No hardcoded user-visible strings.** Any text rendered to the customer (buttons, labels, placeholders, error messages, headings, body copy, alt text, aria-labels, tooltips, validation messages) **must** come from a translation key.
+2. **Imports**:
+   - `import { Link } from "@/i18n/navigation"` — never `import Link from "next/link"` for internal app routes.
+   - `import { useRouter, usePathname, redirect } from "@/i18n/navigation"` — never the equivalents from `next/navigation`. (`notFound` from `next/navigation` is fine.)
+3. **Server vs client components**:
+   - Server components use `getTranslations()` (async) from `next-intl/server`.
+   - Client components use `useTranslations()` from `next-intl`.
+   - If a server-component page needs `t.rich()` with React-element callbacks, **split the page into a server entry (`page.tsx` with `generateMetadata` + `setRequestLocale`) and a client body (`PageNameBody.tsx` with `"use client"`)**. The reason: `t.rich()` callbacks can't serialize across the server-to-client boundary that `NextIntlClientProvider` introduces. Pattern is in [`src/app/[locale]/page.tsx`](src/app/[locale]/page.tsx) + [`src/app/[locale]/HomePageBody.tsx`](src/app/[locale]/HomePageBody.tsx) and the `/soon` equivalent.
+4. **Locale prop on layout**: every page under `[locale]/` must call `setRequestLocale(locale)` (in the server component) so static rendering works.
+5. **API routes** (`src/app/api/*`): not under `[locale]/`. Accept the visitor's locale via `accept-language` header or an explicit `locale` field in the request body, then use it for any user-facing email/error text.
+6. **Dynamic data** (e.g. `src/app/[locale]/resources/articles.ts`): structure such that the rendering page reads localized content from messages JSON or a per-locale file. Don't hardcode English-only strings in shared data files that pages render directly.
+7. **Adding a key**: add it to all three messages files (`en.json`, `fr.json`, `es.json`) in the same edit. Even a new English-only string must have FR/ES entries (use the English text temporarily and flag for translation in [`known-issues.md`](known-issues.md) — never leave a key missing).
+8. **Date / number / currency formatting**: use `useFormatter()` / `getFormatter()` from next-intl with the appropriate `numbering`, `currency`, etc. options. Don't hand-roll locale-specific formatting (e.g. `$499 CAD` is fine for all locales since it's already locale-neutral; but if formatting differs per language, use the formatter).
+9. **HTML `lang` attribute**: set in [`src/app/[locale]/layout.tsx`](src/app/[locale]/layout.tsx) as `<html lang={locale}>`. Don't override elsewhere.
+
+### Translation status (as of last conversion pass)
+
+Fully translated to FR/ES: nav, footer, language switcher, common UI, soon page, homepage, hero/soon contact forms, all metadata.
+
+**Pages still in English regardless of locale** (move under `[locale]/` complete, but text not yet extracted): about, contact, faq, pricing, services, resources index, resource articles, terms, privacy, incorporate wizard (8 steps), legal-consultation flow, both confirmation pages. Tracked as a `[high]` known-issue. When you edit any of these pages, **convert the strings you touch to translation keys** rather than leaving them hardcoded.
+
+### Common pitfalls
+
+- Do not call `useTranslations` inside a `.map()` callback — that violates Rules of Hooks. Pull all needed translations at the top of the component, then reference them inside the loop.
+- The launch-mode middleware rewrites `/` → `/en/soon` (and `/fr/`, `/es/` equivalents) on production hosts. When testing /soon, hit `https://korporex.vercel.app/<locale>/soon` directly or use a non-launch-mode host.
+- Stripe `success_url` and `cancel_url` should include the locale prefix so the customer lands back on the same-language confirmation page. When updating those URLs in `/api/incorporate` or `/api/legal-consult`, prepend the locale from the request.
 
 ## Project Context
 

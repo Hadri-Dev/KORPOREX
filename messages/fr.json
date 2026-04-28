@@ -1,0 +1,282 @@
+{
+  "metadata": {
+    "title": "Korporex — Constitution d'entreprise en ligne au Canada",
+    "description": "Constituez votre entreprise canadienne en ligne en environ 10 minutes. Constitutions fédérales et ontariennes traitées de bout en bout et livrées en 24 heures."
+  },
+  "common": {
+    "appName": "Korporex",
+    "incorporateNow": "Constituer maintenant",
+    "viewPricing": "Voir les tarifs",
+    "getStarted": "Commencer",
+    "learnMore": "En savoir plus",
+    "back": "Retour",
+    "continue": "Continuer",
+    "submit": "Envoyer",
+    "sendMessage": "Envoyer le message",
+    "sending": "Envoi en cours…",
+    "submitting": "Soumission en cours…",
+    "loading": "Chargement…",
+    "required": "Obligatoire",
+    "optional": "Facultatif",
+    "yes": "Oui",
+    "no": "Non",
+    "remove": "Retirer",
+    "addAnother": "Ajouter un autre",
+    "thankYou": "Merci",
+    "errorGeneric": "Une erreur s'est produite. Veuillez réessayer ou nous écrire à {email}.",
+    "fastOnlineAffordable": "Rapide · En ligne · Abordable",
+    "talkToLawyer": "Parler à un avocat en droit des sociétés",
+    "contactEmail": "contact@korporex.ca"
+  },
+  "languageSwitcher": {
+    "label": "Langue",
+    "en": "English",
+    "fr": "Français",
+    "es": "Español"
+  },
+  "nav": {
+    "services": "Services",
+    "pricing": "Tarifs",
+    "about": "À propos",
+    "faq": "FAQ",
+    "resources": "Ressources",
+    "contact": "Contact",
+    "toggleMenu": "Ouvrir/fermer le menu"
+  },
+  "footer": {
+    "tagline": "Plateforme canadienne de constitution d'entreprise en ligne. Rapide, abordable, entièrement en ligne.",
+    "socialAria": "Korporex sur {network}",
+    "companyTitle": "Entreprise",
+    "servicesTitle": "Services",
+    "contactTitle": "Contact",
+    "responseLine": "Nous répondons à toutes les demandes en un jour ouvrable.",
+    "companyLinks": {
+      "services": "Services",
+      "pricing": "Tarifs",
+      "about": "À propos",
+      "faq": "FAQ",
+      "resources": "Ressources",
+      "contact": "Contact"
+    },
+    "links": {
+      "federalIncorporation": "Constitution fédérale",
+      "ontarioIncorporation": "Constitution ontarienne",
+      "annualReturns": "Déclarations annuelles",
+      "dissolveBusiness": "Dissoudre une entreprise",
+      "talkToLawyer": "Parler à un avocat en droit des sociétés",
+      "terms": "Conditions d'utilisation",
+      "privacy": "Politique de confidentialité"
+    },
+    "copyrightDisclaimer": "© {year} Korporex Business Solutions Inc. Tous droits réservés. Korporex n'est pas un cabinet d'avocats et ne fournit pas de conseils juridiques."
+  },
+  "soon": {
+    "metaTitle": "Korporex — Lancement bientôt",
+    "metaDescription": "Korporex — services de constitution d'entreprise et services aux sociétés au Canada — sera lancé bientôt. Entre-temps, contactez-nous et nous répondrons dans les 24 heures.",
+    "launchingSoon": "Lancement bientôt",
+    "headline": {
+      "before": "Quelque chose",
+      "highlight": "d'exceptionnel",
+      "after": "arrive bientôt."
+    },
+    "lead1": "Korporex est une nouvelle plateforme canadienne de constitution d'entreprise et de services aux sociétés — conçue pour rendre les dépôts fédéraux et provinciaux rapides, transparents et entièrement en ligne. Notre site complet sera bientôt en ligne.",
+    "lead2": "Entre-temps, si vous avez besoin d'une {incorporation}, d'un {registration}, d'une {amendment} ou d'un {compliance}, contactez-nous — nous prenons déjà des commandes.",
+    "leadInline": {
+      "incorporation": "constitution",
+      "registration": "enregistrement",
+      "amendment": "modification",
+      "compliance": "dépôt de conformité"
+    },
+    "responseWindow": "Nous répondons dans les {hours} heures.",
+    "capabilitiesEyebrow": "Ce que nous offrons",
+    "capabilities": {
+      "incorporation": { "label": "Constitution", "sub": "Fédérale · Ontario" },
+      "registrations": { "label": "Enregistrements", "sub": "Entreprise individuelle et nom commercial" },
+      "amendments": { "label": "Modifications", "sub": "Administrateurs · statuts · adresse" },
+      "compliance": { "label": "Conformité", "sub": "Déclarations annuelles et dépôts" },
+      "businessUpdates": { "label": "Changements d'entreprise", "sub": "Dissolution · reconstitution · fusion" }
+    },
+    "form": {
+      "headline": "Parlez-nous de votre entreprise",
+      "lead": "Laissez vos coordonnées et nous répondrons dans les {hours} heures.",
+      "name": "Nom complet",
+      "namePlaceholder": "Jeanne Tremblay",
+      "email": "Adresse courriel",
+      "emailPlaceholder": "jeanne@entreprise.com",
+      "service": "De quoi avez-vous besoin?",
+      "selectService": "Sélectionnez un service…",
+      "message": "Message",
+      "messagePlaceholder": "Décrivez brièvement vos besoins…",
+      "consent": "En soumettant, vous acceptez que nous puissions vous contacter au sujet de votre demande.",
+      "thankYouHeadline": "Merci — nous avons reçu votre message.",
+      "thankYouBody": "Un membre de notre équipe vous répondra dans les {hours} à l'adresse courriel fournie. Entre-temps, vous pouvez aussi nous joindre directement à {email}."
+    },
+    "serviceOptions": {
+      "federal": "Constitution fédérale",
+      "ontario": "Constitution ontarienne",
+      "registration": "Nom commercial / entreprise individuelle",
+      "amendment": "Modifications et changements",
+      "compliance": "Dépôt de conformité (déclaration annuelle, etc.)",
+      "update": "Dissolution / reconstitution / fusion / continuation",
+      "other": "Autre"
+    },
+    "footerCopyright": "© {year} Korporex Business Solutions Inc. Tous droits réservés.",
+    "footerDisclaimer": "Korporex n'est pas un cabinet d'avocats et ne fournit pas de conseils juridiques."
+  },
+  "heroContactForm": {
+    "title": "Une question?",
+    "subtitle": "Nous répondons en un jour ouvrable.",
+    "name": "Nom complet",
+    "namePlaceholder": "Jeanne Tremblay",
+    "email": "Adresse courriel",
+    "emailPlaceholder": "jeanne@entreprise.com",
+    "service": "Je m'intéresse à",
+    "selectService": "Sélectionnez un service…",
+    "message": "Message",
+    "messagePlaceholder": "Parlez-nous de votre entreprise…",
+    "thankYouBody": "Nous avons reçu votre message et vous répondrons en un jour ouvrable.",
+    "serviceOptions": {
+      "federal": "Constitution fédérale",
+      "ontario": "Constitution ontarienne",
+      "registration": "Enregistrement de nom commercial",
+      "compliance": "Dépôts de conformité",
+      "other": "Autre"
+    }
+  },
+  "home": {
+    "hero": {
+      "rotating": ["Constitution d'entreprise.", "Services aux sociétés."],
+      "tagline": "Simple. Rapide.\nAbordable.",
+      "lead": "Constituez votre entreprise au Canada en aussi peu que 24 heures. 100 % en ligne, dépôts conformes aux exigences gouvernementales et tarification transparente — offert aux entrepreneurs canadiens et aux fondateurs internationaux.",
+      "trust": {
+        "fees": "Frais gouvernementaux inclus",
+        "speed": "Documents en 24 heures",
+        "online": "Dépôts 100 % en ligne"
+      }
+    },
+    "jurisdictions": {
+      "eyebrow": "Juridictions",
+      "title": "Choisissez votre juridiction",
+      "lead": "Fédérale et Ontario — chacune est un choix valable selon l'endroit où vous prévoyez exercer vos activités, l'étendue de protection du nom dont vous avez besoin et votre budget. Aucune n'est supérieure; le bon choix dépend de votre entreprise. {faqLink}",
+      "faqLink": "Consultez notre FAQ.",
+      "items": {
+        "federal": {
+          "title": "Fédérale",
+          "subtitle": "Loi canadienne sur les sociétés par actions",
+          "description": "Constituez votre société en vertu de la LCSA. Protection nationale du nom et exploitation dans toute province (avec enregistrement extra-provincial).",
+          "from": "499 $"
+        },
+        "ontario": {
+          "title": "Ontario",
+          "subtitle": "Loi sur les sociétés par actions de l'Ontario",
+          "description": "Constituez une société provinciale en Ontario. Autorisation automatique d'exercer dans toute la province.",
+          "from": "399 $"
+        }
+      },
+      "startCta": "Commencer"
+    },
+    "otherServices": {
+      "eyebrow": "Plus que la constitution",
+      "title": "Services aux sociétés complets",
+      "lead": "Au-delà de la constitution, Korporex prend en charge les dépôts continus dont votre entreprise a besoin pour croître, évoluer et rester conforme — entièrement en ligne, à un prix fixe.",
+      "browseAllCta": "Voir tous les services",
+      "items": {
+        "registrations": {
+          "title": "Enregistrements",
+          "description": "Entreprises individuelles, noms commerciaux et enregistrements extra-provinciaux.",
+          "from": "À partir de 79 $",
+          "items": ["Entreprises individuelles", "Enregistrement de nom commercial", "Enregistrement extra-provincial"]
+        },
+        "amendments": {
+          "title": "Modifications et changements",
+          "description": "Mettez à jour les administrateurs, dirigeants, actionnaires, adresses ou statuts.",
+          "from": "À partir de 99 $",
+          "items": ["Changement d'administrateur / dirigeant", "Changement d'actionnaire", "Statuts modificateurs"]
+        },
+        "compliance": {
+          "title": "Dépôts de conformité",
+          "description": "Déclarations annuelles et dépôts statutaires pour maintenir votre société en règle.",
+          "from": "À partir de 99 $",
+          "items": ["Déclarations annuelles (fédérale et Ontario)", "Déclaration initiale (Ontario)", "Avis de changement"]
+        },
+        "businessUpdates": {
+          "title": "Changements d'entreprise",
+          "description": "Dissolvez, reconstituez, fusionnez ou continuez votre société entre juridictions.",
+          "from": "À partir de 199 $",
+          "items": ["Dissolution et reconstitution", "Fusion", "Continuation entre juridictions"]
+        }
+      }
+    },
+    "howItWorks": {
+      "eyebrow": "Processus simple",
+      "title": "Constituez votre société en 3 étapes",
+      "startCta": "Lancer votre constitution",
+      "steps": {
+        "1": {
+          "number": "01",
+          "title": "Choisissez votre service",
+          "description": "Sélectionnez la juridiction et le type de société qui conviennent à votre entreprise. Pas certain? Notre FAQ couvre les différences clés."
+        },
+        "2": {
+          "number": "02",
+          "title": "Remplissez le formulaire en ligne",
+          "description": "Répondez à quelques questions sur votre entreprise, vos administrateurs et vos actionnaires. Environ 10 minutes, entièrement en ligne."
+        },
+        "3": {
+          "number": "03",
+          "title": "Nous déposons en 24 heures",
+          "description": "Votre demande est soumise au gouvernement et vos documents de constitution sont livrés par courriel."
+        }
+      }
+    },
+    "whyUs": {
+      "eyebrow": "Pourquoi Korporex",
+      "title": "Conçu pour des entrepreneurs comme vous",
+      "items": {
+        "speed": {
+          "title": "Délai de 24 heures",
+          "description": "La plupart des commandes sont traitées et soumises au gouvernement dans les 24 heures suivant leur achèvement."
+        },
+        "online": {
+          "title": "100 % en ligne",
+          "description": "Aucune visite en personne. Aucun formulaire papier. Constituez votre société entièrement depuis votre téléphone ou votre ordinateur."
+        },
+        "compliant": {
+          "title": "Conforme aux exigences",
+          "description": "Chaque dépôt respecte les exigences actuelles des registres des sociétés fédéraux et provinciaux."
+        },
+        "transparent": {
+          "title": "Tarification transparente",
+          "description": "Les frais de dépôt gouvernementaux sont inclus dans nos prix. Les taxes et les frais de recherche de nom NUANS ne sont pas inclus et sont indiqués séparément au paiement."
+        }
+      }
+    },
+    "testimonials": {
+      "eyebrow": "Ce que disent nos clients",
+      "title": "Recommandé par des milliers d'entrepreneurs canadiens",
+      "items": [
+        {
+          "quote": "J'ai constitué mon entreprise en moins d'une journée. Le processus était parfaitement simple et l'équipe a été incroyablement réactive.",
+          "name": "Michael R.",
+          "location": "Toronto, ON"
+        },
+        {
+          "quote": "Je redoutais le processus de constitution, mais Korporex l'a rendu complètement indolore. Hautement recommandé pour tout entrepreneur canadien.",
+          "name": "Jennifer L.",
+          "location": "Vancouver, C.-B."
+        },
+        {
+          "quote": "J'ai utilisé Korporex pour notre constitution fédérale et nos dépôts annuels. Rapide, fiable et un excellent rapport qualité-prix.",
+          "name": "David K.",
+          "location": "Ottawa, ON"
+        }
+      ]
+    },
+    "ctaBottom": {
+      "title": "Lancez votre constitution aujourd'hui",
+      "lead": "Rejoignez les milliers d'entrepreneurs canadiens qui ont simplifié leur enregistrement d'entreprise avec Korporex. Constituez votre société en aussi peu que 24 heures.",
+      "primary": "Commencer maintenant"
+    },
+    "starting": "À partir de",
+    "learnMoreArrow": "En savoir plus →"
+  }
+}

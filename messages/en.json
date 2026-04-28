@@ -1,0 +1,282 @@
+{
+  "metadata": {
+    "title": "Korporex — Online Business Incorporation in Canada",
+    "description": "Incorporate your Canadian business online in about 10 minutes. Federal and Ontario filings handled end-to-end and delivered within 24 hours."
+  },
+  "common": {
+    "appName": "Korporex",
+    "incorporateNow": "Incorporate Now",
+    "viewPricing": "View Pricing",
+    "getStarted": "Get Started",
+    "learnMore": "Learn more",
+    "back": "Back",
+    "continue": "Continue",
+    "submit": "Submit",
+    "sendMessage": "Send Message",
+    "sending": "Sending…",
+    "submitting": "Submitting…",
+    "loading": "Loading…",
+    "required": "Required",
+    "optional": "Optional",
+    "yes": "Yes",
+    "no": "No",
+    "remove": "Remove",
+    "addAnother": "Add another",
+    "thankYou": "Thank You",
+    "errorGeneric": "Something went wrong. Please try again or email us at {email}.",
+    "fastOnlineAffordable": "Fast · Online · Affordable",
+    "talkToLawyer": "Talk to a Corporate Lawyer",
+    "contactEmail": "contact@korporex.ca"
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "en": "English",
+    "fr": "Français",
+    "es": "Español"
+  },
+  "nav": {
+    "services": "Services",
+    "pricing": "Pricing",
+    "about": "About",
+    "faq": "FAQ",
+    "resources": "Resources",
+    "contact": "Contact",
+    "toggleMenu": "Toggle navigation"
+  },
+  "footer": {
+    "tagline": "Canada's online business incorporation platform. Fast, affordable, fully online.",
+    "socialAria": "Korporex on {network}",
+    "companyTitle": "Company",
+    "servicesTitle": "Services",
+    "contactTitle": "Contact",
+    "responseLine": "We respond to all enquiries within one business day.",
+    "companyLinks": {
+      "services": "Services",
+      "pricing": "Pricing",
+      "about": "About Us",
+      "faq": "FAQ",
+      "resources": "Resources",
+      "contact": "Contact"
+    },
+    "links": {
+      "federalIncorporation": "Federal Incorporation",
+      "ontarioIncorporation": "Ontario Incorporation",
+      "annualReturns": "Annual Returns",
+      "dissolveBusiness": "Dissolve a Business",
+      "talkToLawyer": "Talk to a Corporate Lawyer",
+      "terms": "Terms of Service",
+      "privacy": "Privacy Policy"
+    },
+    "copyrightDisclaimer": "© {year} Korporex Business Solutions Inc. All rights reserved. Korporex is not a law firm and does not provide legal advice."
+  },
+  "soon": {
+    "metaTitle": "Korporex — Launching Soon",
+    "metaDescription": "Korporex — Canadian business incorporation and corporate services — is launching soon. In the meantime, get in touch and we'll respond within 24 hours.",
+    "launchingSoon": "Launching Soon",
+    "headline": {
+      "before": "Something",
+      "highlight": "great",
+      "after": "is on the way."
+    },
+    "lead1": "Korporex is a new Canadian business incorporation and corporate-services platform — built to make federal and provincial filings fast, transparent, and fully online. Our full site goes live soon.",
+    "lead2": "In the meantime, if you need {incorporation}, a {registration}, an {amendment}, or a {compliance}, get in touch — we're already taking orders.",
+    "leadInline": {
+      "incorporation": "incorporation",
+      "registration": "registration",
+      "amendment": "amendment",
+      "compliance": "compliance filing"
+    },
+    "responseWindow": "We respond within {hours} hours.",
+    "capabilitiesEyebrow": "What we do",
+    "capabilities": {
+      "incorporation": { "label": "Incorporation", "sub": "Federal · Ontario" },
+      "registrations": { "label": "Registrations", "sub": "Sole prop & business name" },
+      "amendments": { "label": "Amendments", "sub": "Directors · articles · address" },
+      "compliance": { "label": "Compliance", "sub": "Annual returns & filings" },
+      "businessUpdates": { "label": "Business Updates", "sub": "Dissolve · revive · amalgamate" }
+    },
+    "form": {
+      "headline": "Tell Us About Your Business",
+      "lead": "Leave your details and we'll respond within {hours} hours.",
+      "name": "Full Name",
+      "namePlaceholder": "Jane Smith",
+      "email": "Email Address",
+      "emailPlaceholder": "jane@company.com",
+      "service": "What do you need?",
+      "selectService": "Select a service…",
+      "message": "Message",
+      "messagePlaceholder": "Briefly describe what you need…",
+      "consent": "By submitting, you agree we may contact you about your enquiry.",
+      "thankYouHeadline": "Thank you — we've received your message.",
+      "thankYouBody": "A member of our team will respond within {hours} at the email you provided. In the meantime, you can also reach us directly at {email}."
+    },
+    "serviceOptions": {
+      "federal": "Federal incorporation",
+      "ontario": "Ontario incorporation",
+      "registration": "Business name / sole prop registration",
+      "amendment": "Changes & amendments",
+      "compliance": "Compliance filing (annual return, etc.)",
+      "update": "Dissolve / revive / amalgamate / continue",
+      "other": "Something else"
+    },
+    "footerCopyright": "© {year} Korporex Business Solutions Inc. All rights reserved.",
+    "footerDisclaimer": "Korporex is not a law firm and does not provide legal advice."
+  },
+  "heroContactForm": {
+    "title": "Have a Question?",
+    "subtitle": "We respond within one business day.",
+    "name": "Full Name",
+    "namePlaceholder": "Jane Smith",
+    "email": "Email Address",
+    "emailPlaceholder": "jane@company.com",
+    "service": "I'm Interested In",
+    "selectService": "Select a service…",
+    "message": "Message",
+    "messagePlaceholder": "Tell us about your business…",
+    "thankYouBody": "We've received your message and will get back to you within one business day.",
+    "serviceOptions": {
+      "federal": "Federal Incorporation",
+      "ontario": "Ontario Incorporation",
+      "registration": "Business Name Registration",
+      "compliance": "Compliance Filings",
+      "other": "Other"
+    }
+  },
+  "home": {
+    "hero": {
+      "rotating": ["Business Incorporation.", "Corporate Services."],
+      "tagline": "Easy. Fast.\nAffordable.",
+      "lead": "Incorporate your business in Canada in as little as 24 hours. 100% online, government-compliant filings, and transparent pricing — available to Canadian entrepreneurs and international founders.",
+      "trust": {
+        "fees": "Government fees included",
+        "speed": "Documents in 24 hours",
+        "online": "100% online filings"
+      }
+    },
+    "jurisdictions": {
+      "eyebrow": "Jurisdictions",
+      "title": "Choose Your Jurisdiction",
+      "lead": "Federal and Ontario — each is a valid choice depending on where you plan to operate, the name-protection scope you need, and your budget. Neither is superior; the right pick depends on your business. {faqLink}",
+      "faqLink": "See our FAQ.",
+      "items": {
+        "federal": {
+          "title": "Federal",
+          "subtitle": "Canada Business Corporations Act",
+          "description": "Incorporate federally under the CBCA. Country-wide name protection and operate in any province (with extra-provincial registration).",
+          "from": "$499"
+        },
+        "ontario": {
+          "title": "Ontario",
+          "subtitle": "Ontario Business Corporations Act",
+          "description": "Incorporate provincially in Ontario. Automatic authorization to carry on business throughout the province.",
+          "from": "$399"
+        }
+      },
+      "startCta": "Start"
+    },
+    "otherServices": {
+      "eyebrow": "More Than Incorporation",
+      "title": "Complete Corporate Services",
+      "lead": "Beyond incorporation, Korporex handles the ongoing filings your business needs to grow, change, and stay compliant — all online, all at a fixed price.",
+      "browseAllCta": "Browse All Services",
+      "items": {
+        "registrations": {
+          "title": "Registrations",
+          "description": "Sole proprietorships, business names, and extra-provincial registrations.",
+          "from": "From $79",
+          "items": ["Sole proprietorships", "Business name registration", "Extra-provincial registration"]
+        },
+        "amendments": {
+          "title": "Changes & Amendments",
+          "description": "Update directors, officers, shareholders, addresses, or articles.",
+          "from": "From $99",
+          "items": ["Director / officer changes", "Shareholder changes", "Articles of amendment"]
+        },
+        "compliance": {
+          "title": "Compliance Filings",
+          "description": "Annual returns and statutory filings to keep your corporation in good standing.",
+          "from": "From $99",
+          "items": ["Annual returns (federal & Ontario)", "Initial return (Ontario)", "Notice of change"]
+        },
+        "businessUpdates": {
+          "title": "Business Updates",
+          "description": "Dissolve, revive, amalgamate, or continue your corporation across jurisdictions.",
+          "from": "From $199",
+          "items": ["Dissolution & revival", "Amalgamation", "Continuance between jurisdictions"]
+        }
+      }
+    },
+    "howItWorks": {
+      "eyebrow": "Simple Process",
+      "title": "Get Incorporated in 3 Steps",
+      "startCta": "Start Your Incorporation",
+      "steps": {
+        "1": {
+          "number": "01",
+          "title": "Choose Your Service",
+          "description": "Select the jurisdiction and incorporation type that fits your business. Not sure? Our FAQ covers the key differences."
+        },
+        "2": {
+          "number": "02",
+          "title": "Complete the Online Form",
+          "description": "Answer a few questions about your business, directors, and shareholders. Takes about 10 minutes, entirely online."
+        },
+        "3": {
+          "number": "03",
+          "title": "We File Within 24 Hours",
+          "description": "Your application is submitted to the government and your incorporation documents are delivered by email."
+        }
+      }
+    },
+    "whyUs": {
+      "eyebrow": "Why Korporex",
+      "title": "Built for Entrepreneurs Like You",
+      "items": {
+        "speed": {
+          "title": "24-Hour Turnaround",
+          "description": "Most orders are processed and submitted to the government within 24 hours of completion."
+        },
+        "online": {
+          "title": "100% Online",
+          "description": "No office visits. No paper forms. Complete your entire incorporation from your phone or laptop."
+        },
+        "compliant": {
+          "title": "Government-Compliant",
+          "description": "Every filing follows current federal and provincial corporate-registry requirements."
+        },
+        "transparent": {
+          "title": "Transparent Pricing",
+          "description": "Government filing fees included in our prices. Taxes and NUANS name-search fees are not included and shown separately at checkout."
+        }
+      }
+    },
+    "testimonials": {
+      "eyebrow": "What Our Clients Say",
+      "title": "Trusted by Thousands of Canadian Entrepreneurs",
+      "items": [
+        {
+          "quote": "Incorporated my business in less than a day. The process was completely straightforward and the team was incredibly responsive.",
+          "name": "Michael R.",
+          "location": "Toronto, ON"
+        },
+        {
+          "quote": "I was dreading the incorporation process but Korporex made it completely painless. Highly recommended for any Canadian entrepreneur.",
+          "name": "Jennifer L.",
+          "location": "Vancouver, BC"
+        },
+        {
+          "quote": "Used Korporex for our federal incorporation and annual filings. Fast, reliable, and exceptional value for money.",
+          "name": "David K.",
+          "location": "Ottawa, ON"
+        }
+      ]
+    },
+    "ctaBottom": {
+      "title": "Start Your Incorporation Today",
+      "lead": "Join thousands of Canadian entrepreneurs who've simplified their business registration with Korporex. Get incorporated in as little as 24 hours.",
+      "primary": "Get Started Now"
+    },
+    "starting": "Starting from",
+    "learnMoreArrow": "Learn more →"
+  }
+}

@@ -1,17 +1,19 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
 
-const links = [
-  { href: "/services", label: "Services" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/about", label: "About" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/resources", label: "Resources" },
-  { href: "/contact", label: "Contact" },
-];
+const linkHrefs = [
+  { href: "/services", labelKey: "services" },
+  { href: "/pricing", labelKey: "pricing" },
+  { href: "/about", labelKey: "about" },
+  { href: "/faq", labelKey: "faq" },
+  { href: "/resources", labelKey: "resources" },
+  { href: "/contact", labelKey: "contact" },
+] as const;
 
 function KLogo() {
   return (
@@ -24,6 +26,8 @@ function KLogo() {
 }
 
 export default function Navbar() {
+  const tNav = useTranslations("nav");
+  const tCommon = useTranslations("common");
   const [open, setOpen] = useState(false);
 
   return (
@@ -37,45 +41,49 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden lg:flex items-center gap-7">
-          {links.map(({ href, label }) => (
+          {linkHrefs.map(({ href, labelKey }) => (
             <Link
               key={href}
               href={href}
               className="text-sm font-semibold text-black hover:text-gold-500 transition-colors tracking-wide"
             >
-              {label}
+              {tNav(labelKey)}
             </Link>
           ))}
         </div>
 
-        <div className="hidden lg:block">
+        <div className="hidden lg:flex items-center gap-3">
+          <LanguageSwitcher />
           <Link
             href="/incorporate"
             className="inline-flex items-center bg-navy-900 text-white text-sm font-medium px-5 py-2.5 tracking-wide hover:bg-navy-800 transition-colors"
           >
-            Incorporate Now
+            {tCommon("incorporateNow")}
           </Link>
         </div>
 
-        <button
-          className="lg:hidden text-gray-700 p-1"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle navigation"
-        >
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <LanguageSwitcher />
+          <button
+            className="text-gray-700 p-1"
+            onClick={() => setOpen(!open)}
+            aria-label={tNav("toggleMenu")}
+          >
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </nav>
 
       {open && (
         <div className="lg:hidden absolute inset-x-0 top-[72px] bg-white border-b border-gray-100 px-6 py-6 shadow-lg z-50">
-          {links.map(({ href, label }) => (
+          {linkHrefs.map(({ href, labelKey }) => (
             <Link
               key={href}
               href={href}
               onClick={() => setOpen(false)}
               className="block py-3 text-base font-semibold text-black hover:text-gold-500 border-b border-gray-50 last:border-0"
             >
-              {label}
+              {tNav(labelKey)}
             </Link>
           ))}
           <Link
@@ -83,7 +91,7 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
             className="block mt-4 bg-navy-900 text-white text-sm font-medium px-5 py-3 tracking-wide text-center"
           >
-            Incorporate Now
+            {tCommon("incorporateNow")}
           </Link>
         </div>
       )}

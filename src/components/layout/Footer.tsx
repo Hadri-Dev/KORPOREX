@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 const SOCIALS: { label: string; href: string; icon: React.ReactNode }[] = [
   {
@@ -48,7 +49,28 @@ const SOCIALS: { label: string; href: string; icon: React.ReactNode }[] = [
   },
 ];
 
+const COMPANY_LINKS = [
+  { href: "/services", labelKey: "services" },
+  { href: "/pricing", labelKey: "pricing" },
+  { href: "/about", labelKey: "about" },
+  { href: "/faq", labelKey: "faq" },
+  { href: "/resources", labelKey: "resources" },
+  { href: "/contact", labelKey: "contact" },
+] as const;
+
+const SERVICE_LINKS = [
+  { labelKey: "federalIncorporation", href: "/services" },
+  { labelKey: "ontarioIncorporation", href: "/services" },
+  { labelKey: "annualReturns", href: "/services" },
+  { labelKey: "dissolveBusiness", href: "/services" },
+  { labelKey: "talkToLawyer", href: "/legal-consultation" },
+] as const;
+
 export default function Footer() {
+  const t = useTranslations("footer");
+  const tCommon = useTranslations("common");
+  const year = new Date().getFullYear();
+
   return (
     <footer className="bg-navy-950 text-white">
       <div className="max-w-7xl mx-auto px-6 py-16">
@@ -62,10 +84,7 @@ export default function Footer() {
                 KORPOREX
               </span>
             </div>
-            <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
-              Canada&apos;s online business incorporation platform. Fast, affordable,
-              fully online.
-            </p>
+            <p className="text-sm text-gray-400 leading-relaxed max-w-xs">{t("tagline")}</p>
             <div className="mt-6 flex items-center gap-3">
               {SOCIALS.map(({ label, href, icon }) => (
                 <a
@@ -73,7 +92,7 @@ export default function Footer() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`Korporex on ${label}`}
+                  aria-label={t("socialAria", { network: label })}
                   className="w-9 h-9 flex items-center justify-center border border-white/15 text-gray-400 hover:text-gold-500 hover:border-gold-500 transition-colors"
                 >
                   {icon}
@@ -84,22 +103,13 @@ export default function Footer() {
 
           <div>
             <p className="text-xs font-semibold tracking-[0.12em] uppercase text-gray-500 mb-5">
-              Company
+              {t("companyTitle")}
             </p>
             <ul className="space-y-3">
-              {(
-                [
-                  ["/services", "Services"],
-                  ["/pricing", "Pricing"],
-                  ["/about", "About Us"],
-                  ["/faq", "FAQ"],
-                  ["/resources", "Resources"],
-                  ["/contact", "Contact"],
-                ] as [string, string][]
-              ).map(([href, label]) => (
+              {COMPANY_LINKS.map(({ href, labelKey }) => (
                 <li key={href}>
                   <Link href={href} className="text-sm text-gray-400 hover:text-white transition-colors">
-                    {label}
+                    {t(`companyLinks.${labelKey}`)}
                   </Link>
                 </li>
               ))}
@@ -108,19 +118,13 @@ export default function Footer() {
 
           <div>
             <p className="text-xs font-semibold tracking-[0.12em] uppercase text-gray-500 mb-5">
-              Services
+              {t("servicesTitle")}
             </p>
             <ul className="space-y-3">
-              {[
-                ["Federal Incorporation", "/services"],
-                ["Ontario Incorporation", "/services"],
-                ["Annual Returns", "/services"],
-                ["Dissolve a Business", "/services"],
-                ["Talk to a Corporate Lawyer", "/legal-consultation"],
-              ].map(([label, href]) => (
-                <li key={label}>
+              {SERVICE_LINKS.map(({ labelKey, href }) => (
+                <li key={labelKey}>
                   <Link href={href} className="text-sm text-gray-400 hover:text-white transition-colors">
-                    {label}
+                    {t(`links.${labelKey}`)}
                   </Link>
                 </li>
               ))}
@@ -129,36 +133,36 @@ export default function Footer() {
 
           <div>
             <p className="text-xs font-semibold tracking-[0.12em] uppercase text-gray-500 mb-5">
-              Contact
+              {t("contactTitle")}
             </p>
             <ul className="space-y-3 text-sm text-gray-400">
               <li>
-                <a href="mailto:contact@korporex.ca" className="hover:text-white transition-colors">
-                  contact@korporex.ca
+                <a href={`mailto:${tCommon("contactEmail")}`} className="hover:text-white transition-colors">
+                  {tCommon("contactEmail")}
                 </a>
               </li>
-              <li className="leading-relaxed text-xs text-gray-500">
-                We respond to all enquiries within one business day.
-              </li>
+              <li className="leading-relaxed text-xs text-gray-500">{t("responseLine")}</li>
             </ul>
             <div className="mt-6">
               <Link
                 href="/incorporate"
                 className="inline-block bg-gold-500 text-white text-sm font-medium px-4 py-2 hover:bg-gold-600 transition-colors"
               >
-                Incorporate Now
+                {tCommon("incorporateNow")}
               </Link>
             </div>
           </div>
         </div>
 
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-gray-600">
-            © 2026 Korporex Business Solutions Inc. All rights reserved. Korporex is not a law firm and does not provide legal advice.
-          </p>
+          <p className="text-xs text-gray-600">{t("copyrightDisclaimer", { year })}</p>
           <div className="flex gap-6 text-xs text-gray-600">
-            <Link href="/privacy" className="hover:text-gray-400 transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-gray-400 transition-colors">Terms of Service</Link>
+            <Link href="/privacy" className="hover:text-gray-400 transition-colors">
+              {t("links.privacy")}
+            </Link>
+            <Link href="/terms" className="hover:text-gray-400 transition-colors">
+              {t("links.terms")}
+            </Link>
           </div>
         </div>
       </div>

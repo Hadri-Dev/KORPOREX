@@ -1,6 +1,9 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+// usePathname comes from `@/i18n/navigation` so the returned path is locale-
+// stripped (e.g. `/en/soon` → `/soon`). This lets us match against the
+// canonical /soon prefix regardless of which language the visitor is on.
+import { usePathname } from "@/i18n/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 

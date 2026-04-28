@@ -2,6 +2,14 @@
 
 ## Open
 
+### [Severity: high] French + Spanish translations only cover chrome + soon page + homepage; the rest of the site still renders English under /fr/ and /es/ URLs
+- **Where**: every page under `src/app/[locale]/` except the homepage and `/soon` still has hardcoded English text in JSX (about, contact, faq, pricing, services, resources index, the 5 resource articles, terms, privacy, the 8-step incorporation wizard, legal-consultation, both confirmation pages).
+- **Symptom**: Visiting `/fr/about` or `/es/pricing` shows the navbar/footer/language switcher in the chosen language, but page content is English. Internal links use the locale-aware `Link` so the URL prefix is preserved when navigating between pages.
+- **Impact**: A visitor switching to French or Spanish sees a partly-translated site. The landing experience (`/<locale>/` and `/<locale>/soon`) is fully translated; deeper pages are not. Until this is resolved, FR and ES are not launch-ready surfaces — the user's lawyer also needs to review the FR/ES translations of legal text (Terms, Privacy, statutory CBCA s.2(1) text in Step 4 of the wizard) before going live.
+- **Why not fixed yet**: The infrastructure pass alone took the available session — content extraction across all pages is several more hours of work. Translation quality for the legal pages additionally requires lawyer review (the user has agreed: I translate, lawyer approves the draft).
+- **Restore procedure** (per page): (1) Mark the page body as `"use client"` if it uses `t.rich()` with React-element callbacks (split server entry + client body if so). (2) Replace every hardcoded user-visible string with a translation key. (3) Add the keys to `messages/en.json` first, then translate the same keys to `messages/fr.json` and `messages/es.json`. (4) Verify with `npx tsc --noEmit && npm run lint && npm run build`. The CLAUDE.md i18n contract (under `## Internationalization`) describes the rules.
+- **Logged**: 2026-04-27
+
 ### [Severity: high] contact@korporex.ca mailbox not yet provisioned (site displays it but email infrastructure is on .com)
 - **Where**: 16 site files now reference `contact@korporex.ca` (mailto links, footer, error messages, plus the backend `CONTACT_ADDRESS` constants in `/api/contact`, `/api/incorporate`, `/api/stripe-webhook`, `/api/legal-consult`, and the `LEGAL_CONSULT_RECIPIENTS` entry in `src/lib/legalConsult.ts`).
 - **Symptom**: Customers clicking the email link send mail to `contact@korporex.ca`. Backend services send transactional email **from** that address. Both will fail in production unless `.ca` is set up the same way `.com` is today.
