@@ -849,7 +849,7 @@ function Step4({ def, jurisdiction, onNext, onBack }: { def: Partial<S4>; jurisd
                   Tailwind variant. */}
               <div className="mt-4">
                 <Field
-                  label="Citizenship Status *"
+                  label="Residency Status *"
                   error={de[i]?.citizenshipStatus?.message}
                 >
                   <div className="grid grid-cols-3 gap-3">

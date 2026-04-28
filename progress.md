@@ -36,6 +36,11 @@
 
 ## Log
 
+### 2026-04-28 (Wizard Step 4 — relabel "Citizenship Status" → "Residency Status")
+- Per user direction (screenshot of Step 4 with the "CITIZENSHIP STATUS" radio group highlighted): renamed the field label only. Field name (`citizenshipStatus`), Zod schema, options array (`CITIZENSHIP_OPTIONS`), and intake-email "Citizenship:" row were left unchanged — the underlying data shape and operator-facing email semantics are still about the customer's citizenship/PR status; only the customer-facing label was retitled.
+- One-line edit in [src/app/[locale]/incorporate/page.tsx](src/app/[locale]/incorporate/page.tsx) line 852 (`Field label="Citizenship Status *"` → `"Residency Status *"`).
+- Verified: `npx tsc --noEmit` clean, `npm run lint` clean.
+
 ### 2026-04-27 (i18n — site internationalized for English / French / Spanish via next-intl)
 - **Stack**: `next-intl` v4 (industry-standard for Next.js 14 App Router). Installed via `npm install next-intl`.
 - **Locales**: `en` (default), `fr`, `es`. Defined in [src/i18n/routing.ts](src/i18n/routing.ts) with `localePrefix: "always"` so URLs are symmetric (`/en/...`, `/fr/...`, `/es/...`). Root `/` redirects to `/en/`.
