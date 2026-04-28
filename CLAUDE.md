@@ -65,7 +65,7 @@ stripe listen --forward-to localhost:3000/api/stripe-webhook
 - **Forms**: React Hook Form + Zod (type-safe validation)
 - **Icons**: lucide-react
 - **Fonts**: Playfair Display (serif headings) and Inter (body) via next/font/google
-- **i18n**: `next-intl` v4 — locales `en` / `fr` / `es`, prefix routing (`/en/`, `/fr/`, `/es/`), default `en`
+- **i18n**: `next-intl` v4 — locales `en` / `fr` / `es`, default English served unprefixed (`/`, `/about`, …), French and Spanish prefixed (`/fr/`, `/es/`); `/en/*` redirects to the unprefixed equivalent
 - **Deployment**: GitHub → Vercel (auto-deploys on push to main)
 
 ## Internationalization (i18n) — non-negotiable for all new code
@@ -75,7 +75,7 @@ The site is **fully internationalized**. Every user-visible string must come fro
 ### Architecture
 - **Library**: `next-intl` v4
 - **Supported locales**: `en` (default), `fr`, `es` — defined in [`src/i18n/routing.ts`](src/i18n/routing.ts). To add a locale, append it there, add `messages/<code>.json` mirroring `en.json`, and add a `LOCALE_LABELS` entry.
-- **URL pattern**: prefix-all (`/en/...`, `/fr/...`, `/es/...`). Root `/` redirects to `/en/`. Configured via `localePrefix: "always"`.
+- **URL pattern**: `localePrefix: "as-needed"` — English (default) is served at the unprefixed root (`/`, `/about`, `/pricing`); French and Spanish use a prefix (`/fr/about`, `/es/pricing`). Visiting `/en/*` redirects to the unprefixed equivalent. The `[locale]` directory still drives routing — the param is `en` even when the URL has no prefix.
 - **App directory**: every page lives under `src/app/[locale]/`. The root layout is [`src/app/[locale]/layout.tsx`](src/app/[locale]/layout.tsx) — there is **no `src/app/layout.tsx`**. API routes (`src/app/api/`) are not localized.
 - **Middleware**: [`src/middleware.ts`](src/middleware.ts) composes `next-intl/middleware` (locale routing) with the launch-mode rewrite. Order matters — locale resolution runs first so the launch-mode redirect can target `/<locale>/soon`.
 - **Server-side messages loader**: [`src/i18n/request.ts`](src/i18n/request.ts) — wired into `next.config.mjs` via `createNextIntlPlugin`.

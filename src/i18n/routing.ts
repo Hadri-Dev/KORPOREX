@@ -8,10 +8,10 @@ import { defineRouting } from "next-intl/routing";
 export const routing = defineRouting({
   locales: ["en", "fr", "es"],
   defaultLocale: "en",
-  // Always prefix the URL with the locale (no implicit root for default).
-  // This keeps URLs symmetric (/en/..., /fr/..., /es/...) and is the
-  // recommended SEO pattern.
-  localePrefix: "always",
+  // English (default) is served at the root with no prefix (/about, /pricing).
+  // French and Spanish use a locale prefix (/fr/about, /es/pricing). Visiting
+  // /en/* redirects to the unprefixed equivalent.
+  localePrefix: "as-needed",
 });
 
 export type Locale = (typeof routing.locales)[number];

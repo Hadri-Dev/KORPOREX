@@ -4,19 +4,19 @@ import { routing } from "@/i18n/routing";
 
 // Composes two middlewares:
 //
-//  1. next-intl locale middleware — handles `/en/*`, `/fr/*`, `/es/*` URLs
-//     and redirects `/` to the appropriate locale prefix. Required for
-//     next-intl App Router routing.
+//  1. next-intl locale middleware — handles `/`, `/fr/*`, `/es/*` URLs
+//     (English is served unprefixed; French and Spanish are prefixed).
+//     Required for next-intl App Router routing with `localePrefix: "as-needed"`.
 //
 //  2. Launch-mode gate — when a request hits the production apex/www
-//     hostnames, rewrite every public route to `/<locale>/soon` so the
-//     coming-soon page renders in the visitor's language. The full WIP site
-//     stays reachable on `*.vercel.app` (and localhost). When ready to ship,
-//     remove the LAUNCH_MODE_HOSTS check below (or empty the set) — the
-//     locale middleware should remain.
+//     hostnames, rewrite every public route to the locale's /soon page so
+//     the coming-soon page renders in the visitor's language. The full WIP
+//     site stays reachable on `*.vercel.app` (and localhost). When ready to
+//     ship, remove the LAUNCH_MODE_HOSTS check below (or empty the set) —
+//     the locale middleware should remain.
 //
 // Order matters: the launch-mode rewrite must run AFTER locale resolution
-// so we know which `/<locale>/soon` to point at.
+// so we know which /soon to point at.
 //
 // Excluded from both middlewares:
 //   - /api/*          — contact form and webhooks must keep working at /api
@@ -39,12 +39,13 @@ export default function middleware(req: NextRequest): NextResponse {
     return intlResponse;
   }
 
-  // 2. Launch-mode rewrite. Resolve the locale from the URL — after the
-  //    intl middleware has run, the URL will be one of `/en/...`, `/fr/...`,
-  //    or `/es/...`. Pull the prefix and rewrite to `/<locale>/soon`.
+  // 2. Launch-mode rewrite. With `localePrefix: "as-needed"`, English is
+  //    served unprefixed (rewrite target: /soon), and FR/ES are prefixed
+  //    (rewrite target: /fr/soon or /es/soon). Resolve the locale from the
+  //    URL's first segment; if it's not one of the non-default locales, fall
+  //    back to the default locale (English) which uses the unprefixed path.
   const { pathname } = req.nextUrl;
 
-  // Skip the rewrite if we're already at a /soon route or a non-locale path.
   if (
     pathname === "/favicon.ico" ||
     pathname.startsWith("/api/") ||
@@ -54,17 +55,17 @@ export default function middleware(req: NextRequest): NextResponse {
   }
 
   const segments = pathname.split("/").filter(Boolean);
-  const locale = (routing.locales as readonly string[]).includes(segments[0] ?? "")
-    ? segments[0]
-    : routing.defaultLocale;
+  const prefixedLocales = routing.locales.filter((l) => l !== routing.defaultLocale);
+  const matchedLocale = prefixedLocales.find((l) => segments[0] === l);
+  const targetSoonPath = matchedLocale ? `/${matchedLocale}/soon` : "/soon";
 
-  // Already on the soon page for this locale — let it through.
-  if (segments[0] === locale && segments[1] === "soon" && segments.length === 2) {
+  // Already on the correct /soon route for this locale — let it through.
+  if (pathname === targetSoonPath) {
     return intlResponse;
   }
 
   const url = req.nextUrl.clone();
-  url.pathname = `/${locale}/soon`;
+  url.pathname = targetSoonPath;
   return NextResponse.rewrite(url);
 }
 
