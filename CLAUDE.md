@@ -32,6 +32,9 @@ Copy `.env.local.example` to `.env.local` (gitignored) and fill in. For Vercel, 
 | `STRIPE_WEBHOOK_SECRET` | No (degrades) | Signing secret for `/api/stripe-webhook`. Locally, get this from `stripe listen --forward-to localhost:3000/api/stripe-webhook`. In prod, each Stripe Dashboard webhook endpoint has its own `whsec_...`. |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | No (currently unused) | Reserved for future migration to Stripe Elements / Embedded Checkout. Not referenced by current code (hosted Checkout doesn't need it client-side). |
 | `NEXT_PUBLIC_SITE_URL` | No (degrades) | Absolute origin used to build Stripe `success_url` / `cancel_url`. Falls back to `VERCEL_URL` then `http://localhost:3000`. Set explicitly on Vercel once DNS cuts over. |
+| `ADMIN_USERNAME` | Yes for `/admin` | Single-owner username for the `/admin` login form. Compared case-insensitively. Without it, `/api/auth/login` returns 503. |
+| `ADMIN_PASSWORD` | Yes for `/admin` | Plaintext password for the single-owner login. Without it, `/api/auth/login` returns 503. Rotate by changing this value (+ Vercel) and redeploying. |
+| `ADMIN_SESSION_SECRET` | Yes for `/admin` | 32+ byte hex string used to sign the session JWT (HS256). Generate with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`. Rotating it invalidates every active session immediately. |
 
 ## Payments — Stripe Checkout
 
@@ -57,6 +60,29 @@ stripe listen --forward-to localhost:3000/api/stripe-webhook
 ```
 
 **Production webhook**: add endpoint `https://<domain>/api/stripe-webhook` in Stripe Dashboard → Developers → Webhooks, subscribe to `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`. Copy the endpoint's signing secret into Vercel as `STRIPE_WEBHOOK_SECRET`.
+
+## Owner section (`/admin` → `/dashboard`)
+
+Single-owner credentials-gated section. Login at [`/admin`](src/app/(private)/admin/page.tsx); authenticated landing at [`/dashboard`](src/app/(private)/dashboard/page.tsx). **Both live outside `[locale]/` deliberately** — English-only, not customer-facing, not localized, not indexed.
+
+Both pages live in the `src/app/(private)/` route group. The parens in `(private)` are Next.js route-group syntax — they create a shared layout boundary without adding a URL segment, so the URLs stay `/admin` and `/dashboard` (no `/private` prefix).
+
+**Flow**: visitor opens `/dashboard` → middleware checks `kpx_admin_session` cookie → missing/invalid → redirect to `/admin` → submits `{username, password}` to `/api/auth/login` → server constant-time compares both (username case-insensitively, password exactly), signs an HS256 JWT (7-day expiry) via [`src/lib/adminAuth.ts`](src/lib/adminAuth.ts), sets HttpOnly Secure SameSite=Lax cookie → redirect to `/dashboard`.
+
+**Files**:
+- [`src/app/(private)/layout.tsx`](src/app/(private)/layout.tsx) — own root layout (multi-root with `[locale]/`); `robots: noindex`. Wraps both `/admin` and `/dashboard`.
+- [`src/app/(private)/admin/page.tsx`](src/app/(private)/admin/page.tsx) + [`LoginForm.tsx`](src/app/(private)/admin/LoginForm.tsx) — username + password form.
+- [`src/app/(private)/dashboard/page.tsx`](src/app/(private)/dashboard/page.tsx) + [`LogoutButton.tsx`](src/app/(private)/dashboard/LogoutButton.tsx) — placeholder dashboard.
+- [`src/app/api/auth/login/route.ts`](src/app/api/auth/login/route.ts) — Node runtime; `crypto.timingSafeEqual` for both compares; runs both compares regardless of which one fails so timing is uniform.
+- [`src/app/api/auth/logout/route.ts`](src/app/api/auth/logout/route.ts) — clears the cookie.
+- [`src/lib/adminAuth.ts`](src/lib/adminAuth.ts) — `signAdminSession()` / `verifyAdminSession()` via `jose` (works in both Edge and Node runtimes).
+- [`src/middleware.ts`](src/middleware.ts) — owner gate runs first, ahead of next-intl + launch-mode. `/admin` is always allowed through; `/dashboard` and `/dashboard/*` redirect on missing/invalid cookie. Both paths are exempt from the launch-mode rewrite, so the owner can reach them even while `korporex.com` serves the coming-soon page.
+
+**Adding new owner pages**: drop them under `src/app/(private)/<segment>/page.tsx` so they share the private root layout, then update the `isOwnerPath()` helper in [`src/middleware.ts`](src/middleware.ts) to gate the new path. Do not add owner routes under `[locale]/` — they would inherit the localized chrome, locale prefix, and the launch-mode rewrite.
+
+**Adding new owner API routes**: drop them under `src/app/api/auth/<segment>/route.ts` (or another sibling under `/api/`). **Middleware does not protect `/api/*`** (matcher excludes it), so each protected API route must verify the session itself by reading the `ADMIN_COOKIE_NAME` cookie and calling `verifyAdminSession(token)` from `@/lib/adminAuth`.
+
+**Local dev login**: credentials are in `.env.local` (`ADMIN_USERNAME` / `ADMIN_PASSWORD`). Visit `http://localhost:3000/admin`.
 
 ## Tech Stack
 
