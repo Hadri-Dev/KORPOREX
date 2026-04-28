@@ -114,24 +114,24 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy-900 text-white py-20 md:py-28 px-6">
+      <section className="bg-navy-900 text-white py-12 md:py-16 px-6">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left — copy */}
           <div>
-            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 mb-8">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
               <span className="text-xs text-gray-300 tracking-widest uppercase font-medium">
                 Fast · Online · Affordable
               </span>
             </div>
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] mb-8">
+            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] mb-6">
               <RotatingWords
                 phrases={["Business Incorporation.", "Corporate Services."]}
               />
               <br />
               <span className="text-gold-400">Easy. Fast.<br />Affordable.</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-10">
+            <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-8">
               Incorporate your business in Canada in as little as 24 hours. 100% online,
               government-compliant filings, and transparent pricing — available to Canadian
               entrepreneurs and international founders.
@@ -151,7 +151,7 @@ export default function HomePage() {
                 View Pricing
               </Link>
             </div>
-            <div className="mt-12 flex flex-wrap gap-6 text-sm text-gray-400">
+            <div className="mt-8 flex flex-wrap gap-6 text-sm text-gray-400">
               <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Government fees included</span>
               <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> Documents in 24 hours</span>
               <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> 100% online filings</span>
@@ -166,7 +166,7 @@ export default function HomePage() {
       </section>
 
       {/* Featured Services */}
-      <section className="bg-white py-24 px-6">
+      <section className="bg-white py-14 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
@@ -210,7 +210,7 @@ export default function HomePage() {
       </section>
 
       {/* Complete Corporate Services — beyond incorporation */}
-      <section className="bg-cream-50 py-24 px-6 border-t border-gray-100">
+      <section className="bg-cream-50 py-14 px-6 border-t border-gray-100">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
@@ -272,7 +272,7 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="bg-cream-50 py-24 px-6">
+      <section className="bg-cream-50 py-14 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
@@ -311,7 +311,7 @@ export default function HomePage() {
       </section>
 
       {/* Why Korporex */}
-      <section className="bg-white py-24 px-6">
+      <section className="bg-white py-14 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
@@ -336,7 +336,7 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="bg-cream-50 py-24 px-6">
+      <section className="bg-cream-50 py-14 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
@@ -368,7 +368,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-navy-900 py-24 px-6 text-center text-white">
+      <section className="bg-navy-900 py-14 px-6 text-center text-white">
         <div className="max-w-2xl mx-auto">
           <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">
             Start Your Incorporation Today

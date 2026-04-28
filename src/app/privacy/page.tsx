@@ -25,7 +25,7 @@ export default function PrivacyPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-cream-50 py-20 px-6 border-b border-gray-100">
+      <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             Legal

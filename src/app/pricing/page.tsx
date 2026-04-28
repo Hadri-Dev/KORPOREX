@@ -116,7 +116,7 @@ export default function PricingPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-cream-50 py-20 px-6 border-b border-gray-100 text-center">
+      <section className="bg-cream-50 py-12 px-6 border-b border-gray-100 text-center">
         <div className="max-w-3xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             Pricing
@@ -265,7 +265,7 @@ export default function PricingPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-navy-900 py-20 px-6 text-center text-white">
+      <section className="bg-navy-900 py-12 px-6 text-center text-white">
         <div className="max-w-xl mx-auto">
           <h2 className="font-serif text-4xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-gray-300 mb-8">

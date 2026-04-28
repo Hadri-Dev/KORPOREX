@@ -35,7 +35,7 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-cream-50 py-20 px-6 border-b border-gray-100">
+      <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             About Korporex
@@ -54,7 +54,7 @@ export default function AboutPage() {
       </section>
 
       {/* Story */}
-      <section className="bg-white py-20 px-6">
+      <section className="bg-white py-12 px-6">
         <div className="max-w-5xl mx-auto grid md:grid-cols-5 gap-12 items-start">
           <div className="md:col-span-3 space-y-5 text-gray-700 leading-relaxed">
             <h2 className="font-serif text-3xl font-bold text-navy-900 mb-6">Our Story</h2>
@@ -89,7 +89,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="bg-cream-50 py-20 px-6">
+      <section className="bg-cream-50 py-12 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="mb-14">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
@@ -126,7 +126,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-navy-900 py-20 px-6 text-center text-white">
+      <section className="bg-navy-900 py-12 px-6 text-center text-white">
         <div className="max-w-xl mx-auto">
           <h2 className="font-serif text-4xl font-bold mb-4">Ready to Incorporate?</h2>
           <p className="text-gray-300 mb-8">

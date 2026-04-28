@@ -232,7 +232,7 @@ export default function ArticlePage({ params }: Params) {
       ) : null}
 
       {/* CTA */}
-      <section className="bg-navy-900 py-20 px-6 text-center text-white">
+      <section className="bg-navy-900 py-12 px-6 text-center text-white">
         <div className="max-w-xl mx-auto">
           <h2 className="font-serif text-4xl font-bold mb-4">Ready to Incorporate?</h2>
           <p className="text-gray-300 mb-8">

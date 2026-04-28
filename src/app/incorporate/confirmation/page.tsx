@@ -69,7 +69,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
 
   return (
     <>
-      <section className="bg-cream-50 py-20 px-6 border-b border-gray-100">
+      <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
         <div className="max-w-3xl mx-auto text-center">
           <div className="flex justify-center mb-6">
             <div className="w-16 h-16 bg-navy-900 flex items-center justify-center">

@@ -37,7 +37,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <section className="bg-cream-50 py-20 px-6 border-b border-gray-100">
+      <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             Contact Us
@@ -52,7 +52,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="bg-white py-20 px-6">
+      <section className="bg-white py-12 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-5 gap-16">
           <div className="md:col-span-3">
             <h2 className="font-serif text-2xl font-bold text-navy-900 mb-8">
