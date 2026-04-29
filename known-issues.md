@@ -2,6 +2,13 @@
 
 ## Open
 
+### [Severity: high] korporex.com and www.korporex.com return DEPLOYMENT_NOT_FOUND
+- **Where**: Vercel project domain configuration. The `.com` apex and `www` are no longer mapped to a deployment in this project.
+- **Symptom**: `curl -I https://korporex.com/` returns `HTTP/1.1 404 Not Found` with `X-Vercel-Error: DEPLOYMENT_NOT_FOUND`. Same for `www.korporex.com`. The project itself is healthy — `https://korporex.vercel.app/` and `https://korporex.ca/` both serve correctly.
+- **Impact**: The primary public domain is offline. Customers, search engines, and any inbound link to `korporex.com` will hit the Vercel error page until this is re-attached. `.ca` is currently the only working public hostname.
+- **Why not fixed yet**: Discovered 2026-04-29 while testing the launch-mode rewrite for `.ca` — by sheer accident, since the bug that was hiding the launch-mode-rewrite-404 on `.com` was the .com domain being detached entirely. Resolution is a Vercel-side action: Dashboard → Project → Settings → Domains, confirm `korporex.com` and `www.korporex.com` are present and pointed at the production deployment; re-attach if missing. Likely cause is a deployment-promotion or domain-transfer step that disconnected the alias.
+- **Logged**: 2026-04-29
+
 ### [Severity: high] French + Spanish translations only cover chrome + soon page + homepage; the rest of the site still renders English under /fr/ and /es/ URLs
 - **Where**: every page under `src/app/[locale]/` except the homepage and `/soon` still has hardcoded English text in JSX (about, contact, faq, pricing, services, resources index, the 5 resource articles, terms, privacy, the 8-step incorporation wizard, legal-consultation, both confirmation pages).
 - **Symptom**: Visiting `/fr/about` or `/es/pricing` shows the navbar/footer/language switcher in the chosen language, but page content is English. Internal links use the locale-aware `Link` so the URL prefix is preserved when navigating between pages.
