@@ -2,13 +2,6 @@
 
 ## Open
 
-### [Severity: high] korporex.com and www.korporex.com return DEPLOYMENT_NOT_FOUND
-- **Where**: Vercel project domain configuration. The `.com` apex and `www` are no longer mapped to a deployment in this project.
-- **Symptom**: `curl -I https://korporex.com/` returns `HTTP/1.1 404 Not Found` with `X-Vercel-Error: DEPLOYMENT_NOT_FOUND`. Same for `www.korporex.com`. The project itself is healthy — `https://korporex.vercel.app/` and `https://korporex.ca/` both serve correctly.
-- **Impact**: The primary public domain is offline. Customers, search engines, and any inbound link to `korporex.com` will hit the Vercel error page until this is re-attached. `.ca` is currently the only working public hostname.
-- **Why not fixed yet**: Discovered 2026-04-29 while testing the launch-mode rewrite for `.ca` — by sheer accident, since the bug that was hiding the launch-mode-rewrite-404 on `.com` was the .com domain being detached entirely. Resolution is a Vercel-side action: Dashboard → Project → Settings → Domains, confirm `korporex.com` and `www.korporex.com` are present and pointed at the production deployment; re-attach if missing. Likely cause is a deployment-promotion or domain-transfer step that disconnected the alias.
-- **Logged**: 2026-04-29
-
 ### [Severity: high] French + Spanish translations only cover chrome + soon page + homepage; the rest of the site still renders English under /fr/ and /es/ URLs
 - **Where**: every page under `src/app/[locale]/` except the homepage and `/soon` still has hardcoded English text in JSX (about, contact, faq, pricing, services, resources index, the 5 resource articles, terms, privacy, the 8-step incorporation wizard, legal-consultation, both confirmation pages).
 - **Symptom**: Visiting `/fr/about` or `/es/pricing` shows the navbar/footer/language switcher in the chosen language, but page content is English. Internal links use the locale-aware `Link` so the URL prefix is preserved when navigating between pages.
@@ -17,12 +10,12 @@
 - **Restore procedure** (per page): (1) Mark the page body as `"use client"` if it uses `t.rich()` with React-element callbacks (split server entry + client body if so). (2) Replace every hardcoded user-visible string with a translation key. (3) Add the keys to `messages/en.json` first, then translate the same keys to `messages/fr.json` and `messages/es.json`. (4) Verify with `npx tsc --noEmit && npm run lint && npm run build`. The CLAUDE.md i18n contract (under `## Internationalization`) describes the rules.
 - **Logged**: 2026-04-27
 
-### [Severity: high] contact@korporex.ca mailbox not yet provisioned (site displays it but email infrastructure is on .com)
-- **Where**: 16 site files now reference `contact@korporex.ca` (mailto links, footer, error messages, plus the backend `CONTACT_ADDRESS` constants in `/api/contact`, `/api/incorporate`, `/api/stripe-webhook`, `/api/legal-consult`, and the `LEGAL_CONSULT_RECIPIENTS` entry in `src/lib/legalConsult.ts`).
-- **Symptom**: Customers clicking the email link send mail to `contact@korporex.ca`. Backend services send transactional email **from** that address. Both will fail in production unless `.ca` is set up the same way `.com` is today.
+### [Severity: high] contact@korporex.ca mailbox not yet provisioned (site displays it but no .ca email infrastructure exists)
+- **Where**: All site files reference `contact@korporex.ca` (mailto links, footer, error messages, plus the backend `CONTACT_ADDRESS` constants in `/api/contact`, `/api/incorporate`, `/api/stripe-webhook`, `/api/legal-consult`, and the `LEGAL_CONSULT_RECIPIENTS` entry in `src/lib/legalConsult.ts`).
+- **Symptom**: Customers clicking the email link send mail to `contact@korporex.ca`. Backend services send transactional email **from** that address. Both will fail in production until the `.ca` domain has the matching MX / SPF / DKIM / DMARC records and a Brevo SMTP key.
 - **Impact**: Inbound — customer mail to `contact@korporex.ca` will bounce or sink (no MX record, no Cloudflare Email Routing for `.ca`). Outbound — Brevo will reject sends from `contact@korporex.ca` because SPF/DKIM/DMARC for `.ca` aren't configured; `[PENDING]`/`[PAID]` emails will silently fail and customers won't get confirmations.
-- **Why not fixed yet**: This is an operational/DNS task (registrar + Cloudflare + Brevo + Gmail "Send mail as"), not a code change. Must be completed before flipping launch mode off. Replicate the existing `korporex.com` setup on `korporex.ca`: register the domain (if not done), add MX to Cloudflare Email Routing forwarding to the same Gmail, add SPF (`include:spf.brevo.com`), DKIM (Brevo-provided records), DMARC, and configure Gmail "Send mail as" with a fresh Brevo SMTP key.
-- **Logged**: 2026-04-27
+- **Why not fixed yet**: This is an operational/DNS task (registrar + Cloudflare + Brevo + Gmail "Send mail as"), not a code change. Must be completed before flipping launch mode off. Build the same setup on `korporex.ca` that previously existed on `.com`: register/confirm the domain in Cloudflare, add MX to Cloudflare Email Routing forwarding to the owner's Gmail, add SPF (`include:spf.brevo.com`), DKIM (Brevo-provided records), DMARC, and configure Gmail "Send mail as" with a fresh Brevo SMTP key.
+- **Logged**: 2026-04-27 (updated 2026-04-29 — `.com` is no longer in scope; this is now the sole email path).
 
 ### [Severity: low] British Columbia incorporation temporarily removed from live site
 - **Where**: BC was stripped 2026-04-27 from every customer-facing surface and from the `Jurisdiction` type in [src/lib/pricing.ts](src/lib/pricing.ts). All BC-specific code, copy, and data is preserved in [src/archive/bc/](src/archive/bc/) — that folder is excluded from the TypeScript build via [tsconfig.json](tsconfig.json).
@@ -48,9 +41,9 @@
 
 ### [Severity: low] Stripe webhook endpoint still uses Vercel's `.vercel.app` alias
 - **Where**: Stripe Dashboard (live mode) → Developers → Webhooks → "Korporex production — checkout" destination. URL: `https://korporex.vercel.app/api/stripe-webhook`.
-- **Symptom**: The webhook endpoint URL reveals the hosting provider (Vercel) and is inconsistent with the rest of the site, which is now served at `https://korporex.com` after the 2026-04-23 DNS cutover.
-- **Impact**: Cosmetic/branding only. Webhook delivery works identically — the `.vercel.app` alias is a permanent Vercel project alias and will continue resolving to the production deployment indefinitely, regardless of DNS cutover state.
-- **Why not fixed yet**: Zero customer impact and any in-place URL change risks missing events during the switch. Recommended cleanup path when ready: create a **second** webhook destination at `https://korporex.com/api/stripe-webhook`, observe both deliver successfully for 24–48 hours, then delete the `.vercel.app` one. No urgency.
+- **Symptom**: The webhook endpoint URL reveals the hosting provider (Vercel) and is inconsistent with the rest of the site, which now serves at `https://korporex.ca` (the `.com` domain has been retired).
+- **Impact**: Cosmetic/branding only. Webhook delivery works identically — the `.vercel.app` alias is a permanent Vercel project alias and will continue resolving to the production deployment indefinitely, regardless of DNS state.
+- **Why not fixed yet**: Zero customer impact and any in-place URL change risks missing events during the switch. Recommended cleanup path when ready: create a **second** webhook destination at `https://korporex.ca/api/stripe-webhook`, observe both deliver successfully for 24–48 hours, then delete the `.vercel.app` one. No urgency.
 - **Logged**: 2026-04-23
 
 ### [Severity: low] `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` not set for Vercel Preview scope
@@ -83,6 +76,8 @@
 
 ## Resolved
 
+- **2026-04-29** — `korporex.com` and `www.korporex.com` returned `DEPLOYMENT_NOT_FOUND` — Resolved by retiring the `.com` domain entirely. User confirmed `.com` has been replaced by `.ca` going forward. Code references swept to `.ca` (middleware `LAUNCH_MODE_HOSTS`, terms, privacy, intake email subject lines for `/api/contact`, `/api/incorporate`, `/api/legal-consult`, business-card SVG, CLAUDE.md, `.env.local.example`). Historical mentions in `progress.md` and `src/archive/` left untouched.
+- **2026-04-29** — Launch-mode rewrite returned 404 for English visitors — Bug introduced in commit `e691731` (`localePrefix: "as-needed"` switch) targeted `/soon` for English, but the App Router page lives at `app/[locale]/soon/page.tsx`. next-intl middleware does not re-run on rewrites issued from our middleware, so `/soon` never got remapped to `/en/soon`. Fixed in commit `6bb9417` by always rewriting to `/${locale}/soon`, including the default locale.
 - **2026-04-24** — NUANS pass-through fee was a placeholder ($45 flat across federal + Ontario) — User confirmed real per-jurisdiction pricing: $20 for federal NUANS, $60 for Ontario name search. Replaced the single `NUANS_FEE = 45` constant with `NUANS_FEES: Record<Jurisdiction, number> = { federal: 20, ontario: 60, bc: 0 }` plus a `getNuansFee(jurisdiction)` helper in `src/lib/pricing.ts`. Wizard Step 3 callout now reads the fee from the helper, so it shows "$20" on federal and "$60" on Ontario; Stripe line item also adapts ("NUANS name search report" for federal vs "Ontario name search report" for Ontario).
 - **2026-04-23** — `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` was empty in Vercel Production — Removed the empty entry (`vercel env rm`), re-added the correct key (`vercel env add`), and triggered a production redeploy (`vercel deploy --prod`). Added `.vercelignore` excluding `build-tmp/` so the scratch folder's locked Chrome files don't break uploads again. Preview scope still pending — blocked by a CLI v51.8.0 quirk and tracked as its own low-sev issue.
 - **2026-04-23** — Incorporation wizard did not process payments — Wired Stripe Checkout (hosted) end-to-end. Step 7 POSTs to `/api/incorporate`, which creates a Checkout Session (package + NUANS + tax as CAD line items, pricing recalculated server-side from `@/lib/pricing`) and returns the URL; the browser full-page redirects to stripe.com. Card fields removed from the wizard UI (PCI stays on stripe.com). On payment success, `/api/stripe-webhook` (signature-verified via raw body) sends a "[PAID]" follow-up email to `contact@korporex.com` referencing the shared `KPX-YYYYMMDD-XXXX` order ref so operators can cross-reference with the earlier "[PENDING]" intake. Confirmation page is now dynamic and retrieves the Stripe session to surface the order ref + amount paid. Currently wired for test mode (card `4242 4242 4242 4242`); live-mode is a key swap in Vercel.

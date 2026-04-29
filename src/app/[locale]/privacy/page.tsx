@@ -47,7 +47,7 @@ export default function PrivacyPage() {
             &ldquo;<strong>we</strong>&rdquo;, &ldquo;<strong>us</strong>&rdquo;, or
             &ldquo;<strong>our</strong>&rdquo;), a Canadian corporation incorporated under the{" "}
             <em>Canada Business Corporations Act</em> with its head office in Ontario, operates
-            an online platform at <strong>korporex.com</strong> that prepares and files
+            an online platform at <strong>korporex.ca</strong> that prepares and files
             business incorporation documents with Canadian federal and provincial corporate
             registries and offers related services, including an optional registered office
             address service. This Privacy Policy describes what personal information we

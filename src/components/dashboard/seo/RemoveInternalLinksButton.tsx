@@ -6,12 +6,13 @@ import type { Dataset } from "@/lib/seoStore";
 
 // Domains we treat as "internal" — anything in a backlink dataset whose
 // source URL is one of these isn't actually a backlink, it's an internal
-// link from korporex.com to korporex.com (or a Vercel preview / .ca alias
-// pointing at the same site). Trailing slashes / paths / subdomains are
-// matched substring-wise so e.g. "www.korporex.com/about" is caught.
+// link to our own site (current .ca primary, the legacy .com that may still
+// appear in older Ahrefs exports, or a Vercel preview alias). Trailing
+// slashes / paths / subdomains are matched substring-wise so e.g.
+// "www.korporex.ca/about" is caught.
 const INTERNAL_DOMAINS = [
-  "korporex.com",
   "korporex.ca",
+  "korporex.com",
   "korporex.vercel.app",
 ];
 

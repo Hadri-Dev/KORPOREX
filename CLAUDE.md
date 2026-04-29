@@ -27,7 +27,7 @@ Copy `.env.local.example` to `.env.local` (gitignored) and fill in. For Vercel, 
 | Variable | Required | Purpose |
 |---|---|---|
 | `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | No (feature-gated) | Enables Google Places address autocomplete in the incorporation wizard. Without it, address inputs fall back to plain text (the wizard still works). The `NEXT_PUBLIC_` prefix exposes the key to the browser — it must be HTTP-referrer restricted and API-scoped to Maps JavaScript + Places in Google Cloud Console. See `.env.local.example` for setup steps. |
-| `BREVO_API_KEY` | No (degrades) | Transactional email API key. `/api/contact` (contact + hero forms) and `/api/incorporate` (wizard intake) use it to email submissions to `contact@korporex.com`. Without it, both routes log to the server console and return success — so local dev isn't blocked. |
+| `BREVO_API_KEY` | No (degrades) | Transactional email API key. `/api/contact` (contact + hero forms) and `/api/incorporate` (wizard intake) use it to email submissions to `contact@korporex.ca`. Without it, both routes log to the server console and return success — so local dev isn't blocked. |
 | `STRIPE_SECRET_KEY` | No (degrades) | Server-side Stripe key (`sk_test_...` for test mode, `sk_live_...` for live). `/api/incorporate` creates a Checkout Session when set. Without it, the wizard falls back to redirecting straight to `/incorporate/confirmation?dev=1` — useful for local dev, **must not ship to prod without the live key**. |
 | `STRIPE_WEBHOOK_SECRET` | No (degrades) | Signing secret for `/api/stripe-webhook`. Locally, get this from `stripe listen --forward-to localhost:3000/api/stripe-webhook`. In prod, each Stripe Dashboard webhook endpoint has its own `whsec_...`. |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | No (currently unused) | Reserved for future migration to Stripe Elements / Embedded Checkout. Not referenced by current code (hosted Checkout doesn't need it client-side). |
@@ -76,7 +76,7 @@ Both pages live in the `src/app/(private)/` route group. The parens in `(private
 - [`src/app/api/auth/login/route.ts`](src/app/api/auth/login/route.ts) — Node runtime; `crypto.timingSafeEqual` for both compares; runs both compares regardless of which one fails so timing is uniform.
 - [`src/app/api/auth/logout/route.ts`](src/app/api/auth/logout/route.ts) — clears the cookie.
 - [`src/lib/adminAuth.ts`](src/lib/adminAuth.ts) — `signAdminSession()` / `verifyAdminSession()` via `jose` (works in both Edge and Node runtimes).
-- [`src/middleware.ts`](src/middleware.ts) — owner gate runs first, ahead of next-intl + launch-mode. `/admin` is always allowed through; `/dashboard` and `/dashboard/*` redirect on missing/invalid cookie. Both paths are exempt from the launch-mode rewrite, so the owner can reach them even while `korporex.com` serves the coming-soon page.
+- [`src/middleware.ts`](src/middleware.ts) — owner gate runs first, ahead of next-intl + launch-mode. `/admin` is always allowed through; `/dashboard` and `/dashboard/*` redirect on missing/invalid cookie. Both paths are exempt from the launch-mode rewrite, so the owner can reach them even while `korporex.ca` serves the coming-soon page.
 
 **Adding new owner pages**: drop them under `src/app/(private)/<segment>/page.tsx` so they share the private root layout, then update the `isOwnerPath()` helper in [`src/middleware.ts`](src/middleware.ts) to gate the new path. Do not add owner routes under `[locale]/` — they would inherit the localized chrome, locale prefix, and the launch-mode rewrite.
 

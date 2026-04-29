@@ -42,7 +42,7 @@ export default function TermsPage() {
         <div className="max-w-3xl mx-auto prose prose-sm text-gray-700 leading-relaxed">
           <p className="text-gray-700 leading-relaxed mb-8">
             These Terms of Service (the &ldquo;<strong>Terms</strong>&rdquo;) govern your access to
-            and use of the Korporex website at <strong>korporex.com</strong> (the
+            and use of the Korporex website at <strong>korporex.ca</strong> (the
             &ldquo;<strong>Site</strong>&rdquo;) and the incorporation preparation, filing,
             registered office, and related services we make available through it (collectively,
             the &ldquo;<strong>Services</strong>&rdquo;). By creating an order, submitting

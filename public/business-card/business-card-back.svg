@@ -24,8 +24,8 @@
 
   <text x="5" y="40"
         font-family="Inter, system-ui, -apple-system, sans-serif"
-        font-size="2.6" fill="#1B4332">contact@korporex.com</text>
+        font-size="2.6" fill="#1B4332">contact@korporex.ca</text>
   <text x="5" y="44.5"
         font-family="Inter, system-ui, -apple-system, sans-serif"
-        font-size="2.6" fill="#1B4332">korporex.com</text>
+        font-size="2.6" fill="#1B4332">korporex.ca</text>
 </svg>

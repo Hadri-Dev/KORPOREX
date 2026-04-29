@@ -293,7 +293,7 @@ function buildHtmlBody(
 
   return `<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#FAFAF8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;"><div style="max-width:640px;margin:0 auto;background:#ffffff;padding:32px;border:1px solid #e5e7eb;"><div style="width:32px;height:2px;background:#C5A35A;margin-bottom:20px;"></div><h1 style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#1B4332;">Legal consultation booking — ${escapeHtml(
     orderRef
-  )}</h1><p style="margin:0 0 24px;color:#6b7280;font-size:13px;">Submitted from korporex.com /legal-consultation</p>${section(
+  )}</h1><p style="margin:0 0 24px;color:#6b7280;font-size:13px;">Submitted from korporex.ca /legal-consultation</p>${section(
     "Customer",
     `<table style="width:100%;border-collapse:collapse;">${customerRows}</table>`
   )}${section(
