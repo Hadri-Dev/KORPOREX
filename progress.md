@@ -38,11 +38,11 @@
 
 ## Log
 
-### 2026-04-29 (Google Search Console verification file for korporex.ca)
+### 2026-04-29 (Google Search Console verification file for korporex.ca + .ca added to launch mode)
 - Added [public/google9dcffcd3adc0950d.html](public/google9dcffcd3adc0950d.html) so `https://korporex.ca/google9dcffcd3adc0950d.html` resolves to the standard `google-site-verification:` token. The middleware matcher excludes paths with file extensions, so this serves as a static asset and is unaffected by launch-mode + next-intl.
 - Confirmed DNS: `korporex.ca` already resolves to Vercel (216.198.79.1 / 64.29.17.1) and is attached to the same Vercel project — `curl -I https://korporex.ca/` returns 200 with `Server: Vercel`.
-- **Side observation**: `korporex.ca` currently serves the full WIP site, NOT the launch-mode `/soon` page, because `LAUNCH_MODE_HOSTS` in [src/middleware.ts](src/middleware.ts) only contains `korporex.com` and `www.korporex.com`. If the user wants `.ca` to also display the coming-soon page until launch, add `"korporex.ca"` (and `"www.korporex.ca"` if applicable) to the `LAUNCH_MODE_HOSTS` set. Flagged with the user.
-- Pushed (`3a53287`).
+- **Launch mode extended to `.ca`**: added `korporex.ca` and `www.korporex.ca` to `LAUNCH_MODE_HOSTS` in [src/middleware.ts](src/middleware.ts) so all four production hostnames now rewrite to `/soon` until launch. The GSC verification file is unaffected (excluded from middleware via the matcher's file-extension rule).
+- Pushed (`3a53287` + follow-ups).
 
 ### 2026-04-28 (SEO Dashboard sub-section — 5 client-side, CSV-driven pages)
 - **Goal**: per-user request, add a "SEO Dashboard" section under `/dashboard` that mirrors Hadri's left-nav structure but works without any of Hadri's Supabase / external-API infrastructure. Five pages: Link Building, Backlinks, Competitors, Rankings, Import / Export. The user said they would import data from Ahrefs.

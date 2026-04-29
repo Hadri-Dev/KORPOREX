@@ -29,6 +29,8 @@ import { ADMIN_COOKIE_NAME, verifyAdminSession } from "@/lib/adminAuth";
 const LAUNCH_MODE_HOSTS = new Set([
   "korporex.com",
   "www.korporex.com",
+  "korporex.ca",
+  "www.korporex.ca",
 ]);
 
 const intlMiddleware = createIntlMiddleware(routing);
