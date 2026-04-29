@@ -12,10 +12,15 @@
 
 ### [Severity: high] contact@korporex.ca mailbox not yet provisioned (site displays it but no .ca email infrastructure exists)
 - **Where**: All site files reference `contact@korporex.ca` (mailto links, footer, error messages, plus the backend `CONTACT_ADDRESS` constants in `/api/contact`, `/api/incorporate`, `/api/stripe-webhook`, `/api/legal-consult`, and the `LEGAL_CONSULT_RECIPIENTS` entry in `src/lib/legalConsult.ts`).
-- **Symptom**: Customers clicking the email link send mail to `contact@korporex.ca`. Backend services send transactional email **from** that address. Both will fail in production until the `.ca` domain has the matching MX / SPF / DKIM / DMARC records and a Brevo SMTP key.
-- **Impact**: Inbound — customer mail to `contact@korporex.ca` will bounce or sink (no MX record, no Cloudflare Email Routing for `.ca`). Outbound — Brevo will reject sends from `contact@korporex.ca` because SPF/DKIM/DMARC for `.ca` aren't configured; `[PENDING]`/`[PAID]` emails will silently fail and customers won't get confirmations.
-- **Why not fixed yet**: This is an operational/DNS task (registrar + Cloudflare + Brevo + Gmail "Send mail as"), not a code change. Must be completed before flipping launch mode off. Build the same setup on `korporex.ca` that previously existed on `.com`: register/confirm the domain in Cloudflare, add MX to Cloudflare Email Routing forwarding to the owner's Gmail, add SPF (`include:spf.brevo.com`), DKIM (Brevo-provided records), DMARC, and configure Gmail "Send mail as" with a fresh Brevo SMTP key.
-- **Logged**: 2026-04-27 (updated 2026-04-29 — `.com` is no longer in scope; this is now the sole email path).
+- **Symptom**: Customers clicking the email link send mail to `contact@korporex.ca`. Backend services send transactional email **from** that address. Both will fail in production until the `.ca` domain has matching MX / SPF / DKIM / DMARC records and a Brevo SMTP key.
+- **Impact**: Inbound — customer mail to `contact@korporex.ca` will bounce or sink (no MX record). Outbound — Brevo will reject sends from `contact@korporex.ca` because SPF/DKIM/DMARC for `.ca` aren't configured; `[PENDING]`/`[PAID]` emails will silently fail and customers won't get confirmations.
+- **Why not fixed yet**: This is an operational/DNS task, not a code change. Must be completed before flipping launch mode off. **Important context**: `.ca` was bought through Vercel, so DNS is managed in the Vercel dashboard (Project → Settings → Domains) — **not Cloudflare**, and Vercel does not provide a built-in inbound email-forwarding service. Three viable paths:
+  1. **Third-party forwarder (cheapest)** — sign up for ImprovMX or Forward Email, add their MX records in Vercel DNS, configure `contact@korporex.ca → owner@gmail.com`. Free for one rule.
+  2. **Move DNS to Cloudflare** — change Vercel registrar nameservers to Cloudflare, then use Cloudflare Email Routing as before. Higher friction but matches the prior `.com` setup.
+  3. **Real mailbox** — Google Workspace / Zoho Mail at `contact@korporex.ca` (~$6+/mo).
+  
+  In all three, outbound is the same: add SPF (`include:spf.brevo.com`), DKIM (records from Brevo's domain-verification wizard), DMARC TXT in Vercel DNS, and configure Gmail "Send mail as" via Brevo SMTP relay (`smtp-relay.brevo.com:587`, TLS) with a fresh Brevo SMTP key.
+- **Logged**: 2026-04-27 (updated 2026-04-29 — `.com` is no longer owned; DNS now on Vercel, so Cloudflare Email Routing is no longer the default path).
 
 ### [Severity: low] British Columbia incorporation temporarily removed from live site
 - **Where**: BC was stripped 2026-04-27 from every customer-facing surface and from the `Jurisdiction` type in [src/lib/pricing.ts](src/lib/pricing.ts). All BC-specific code, copy, and data is preserved in [src/archive/bc/](src/archive/bc/) — that folder is excluded from the TypeScript build via [tsconfig.json](tsconfig.json).
