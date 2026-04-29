@@ -71,11 +71,12 @@ export default async function middleware(req: NextRequest): Promise<NextResponse
     return intlResponse;
   }
 
-  // 3. Launch-mode rewrite. With `localePrefix: "as-needed"`, English is
-  //    served unprefixed (rewrite target: /soon), and FR/ES are prefixed
-  //    (rewrite target: /fr/soon or /es/soon). Resolve the locale from the
-  //    URL's first segment; if it's not one of the non-default locales, fall
-  //    back to the default locale (English) which uses the unprefixed path.
+  // 3. Launch-mode rewrite. Resolve the visitor's locale from the URL's
+  //    first segment, defaulting to English. Always rewrite to the
+  //    filesystem path `/${locale}/soon` (which matches `app/[locale]/soon/
+  //    page.tsx`). With `localePrefix: "as-needed"`, English at `/soon`
+  //    would 404 because there is no `app/soon/page.tsx` — next-intl's
+  //    middleware does not re-run on rewrites we issue here.
 
   if (
     pathname === "/favicon.ico" ||
@@ -86,9 +87,9 @@ export default async function middleware(req: NextRequest): Promise<NextResponse
   }
 
   const segments = pathname.split("/").filter(Boolean);
-  const prefixedLocales = routing.locales.filter((l) => l !== routing.defaultLocale);
-  const matchedLocale = prefixedLocales.find((l) => segments[0] === l);
-  const targetSoonPath = matchedLocale ? `/${matchedLocale}/soon` : "/soon";
+  const matchedLocale = routing.locales.find((l) => segments[0] === l);
+  const locale = matchedLocale ?? routing.defaultLocale;
+  const targetSoonPath = `/${locale}/soon`;
 
   // Already on the correct /soon route for this locale — let it through.
   if (pathname === targetSoonPath) {
