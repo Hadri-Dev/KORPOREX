@@ -1,4 +1,4 @@
-import { Check, X, AlertTriangle } from "lucide-react";
+import { Check, X, AlertTriangle, FileText } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -69,6 +69,21 @@ export default function SettingsPage() {
       description: "Builds Stripe success / cancel URLs",
       status: checkEnv("NEXT_PUBLIC_SITE_URL", false),
     },
+    {
+      name: "NEXT_PUBLIC_SUPABASE_URL",
+      description: "SEO Dashboard server-state (Phase 2+)",
+      status: checkEnv("NEXT_PUBLIC_SUPABASE_URL", false),
+    },
+    {
+      name: "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      description: "Supabase anon JWT (RLS-gated, browser-safe)",
+      status: checkEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", false),
+    },
+    {
+      name: "SUPABASE_SERVICE_ROLE_KEY",
+      description: "Supabase service-role JWT (server-only, bypasses RLS)",
+      status: checkEnv("SUPABASE_SERVICE_ROLE_KEY", false),
+    },
   ];
 
   const env = process.env.VERCEL_ENV ?? (process.env.NODE_ENV === "production" ? "production" : "development");
@@ -125,6 +140,54 @@ export default function SettingsPage() {
           <code className="rounded bg-gray-100 px-1">ADMIN_SESSION_SECRET</code> — every existing
           session JWT becomes invalid immediately.
         </p>
+      </section>
+
+      <section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 className="font-serif text-lg font-semibold text-navy-900">Project docs</h2>
+        <ul className="mt-3 space-y-2 text-sm">
+          <li>
+            <a
+              href="https://github.com/Hadri-Dev/KORPOREX/blob/main/roadmap.md"
+              target="_blank"
+              rel="noopener"
+              className="inline-flex items-center gap-2 text-navy-900 hover:underline"
+            >
+              <FileText className="h-4 w-4" />
+              SEO Dashboard roadmap
+            </a>
+            <span className="ml-2 text-xs text-gray-500">
+              Phased plan to grow the SEO Dashboard to its full 10-surface scope.
+            </span>
+          </li>
+          <li>
+            <a
+              href="https://github.com/Hadri-Dev/KORPOREX/blob/main/progress.md"
+              target="_blank"
+              rel="noopener"
+              className="inline-flex items-center gap-2 text-navy-900 hover:underline"
+            >
+              <FileText className="h-4 w-4" />
+              progress.md
+            </a>
+            <span className="ml-2 text-xs text-gray-500">
+              Session log of what shipped and what&rsquo;s next.
+            </span>
+          </li>
+          <li>
+            <a
+              href="https://github.com/Hadri-Dev/KORPOREX/blob/main/known-issues.md"
+              target="_blank"
+              rel="noopener"
+              className="inline-flex items-center gap-2 text-navy-900 hover:underline"
+            >
+              <FileText className="h-4 w-4" />
+              known-issues.md
+            </a>
+            <span className="ml-2 text-xs text-gray-500">
+              Open issues with severity, impact, and why they&rsquo;re not fixed yet.
+            </span>
+          </li>
+        </ul>
       </section>
     </div>
   );
