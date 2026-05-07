@@ -7,9 +7,9 @@
 
 import { z } from "zod";
 
-// File-upload limits. Brevo's transactional email API caps attachments at
-// roughly 10 MB total (after base64 encoding inflates the payload by ~33%),
-// so we keep raw upload at 5 MB total across up to 3 files.
+// File-upload limits. Zoho Mail caps message size at 25 MB (after base64
+// encoding inflates the payload by ~33%), so we keep raw upload at 5 MB
+// total across up to 3 files — well inside the limit with HTML body overhead.
 export const LEGAL_CONSULT_MAX_FILES = 3;
 export const LEGAL_CONSULT_MAX_FILE_BYTES = 5 * 1024 * 1024; // 5 MB total raw
 export const LEGAL_CONSULT_ACCEPTED_MIMES = [

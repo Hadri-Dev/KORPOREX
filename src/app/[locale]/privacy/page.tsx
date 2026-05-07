@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 // entity name has been set to "Korporex Business Solutions Inc." (a Canadian
 // corporation incorporated under the CBCA with head office in Ontario).
 // Structure is aligned with PIPEDA obligations and documents the actual
-// third-party data flows implemented in the codebase (Stripe, Brevo, Google
-// Maps Platform, Cloudflare, Vercel, federal/provincial registries). Should
+// third-party data flows implemented in the codebase (Stripe, Zoho Mail,
+// Google Maps Platform, Vercel, federal/provincial registries). Should
 // be revised as operational processes solidify (analytics, user accounts,
 // data exports, any additional processors). Review by qualified legal counsel
 // is required before deployment. The Privacy Officer designation at
@@ -180,10 +180,12 @@ export default function PrivacyPage() {
               directly to Stripe and handled under Stripe&rsquo;s terms and privacy policy.
             </p>
             <p>
-              <strong>(c) Transactional email provider.</strong> Brevo (operated by Sendinblue
-              SAS, based in France) transmits receipts, order confirmations, filed documents,
-              and scanned mail (for registered office customers) to you and to our operations
-              inbox.
+              <strong>(c) Transactional email provider.</strong> Zoho Mail (operated by Zoho
+              Corporation, a multinational technology group with offices in India and the
+              United States) hosts our operations mailbox at <code>contact@korporex.ca</code>
+              and transmits receipts, order confirmations, filed documents, and scanned mail
+              (for registered office customers) to you and to our operations inbox. Mailbox
+              data is stored in Zoho&rsquo;s Canadian data centre.
             </p>
             <p>
               <strong>(d) Address autocomplete.</strong> When you type an address into the
@@ -195,9 +197,10 @@ export default function PrivacyPage() {
             </p>
             <p>
               <strong>(e) Infrastructure providers.</strong> Our Site is hosted by Vercel Inc.
-              (United States). DNS, email routing, and content delivery are handled by
-              Cloudflare, Inc. (United States). These providers process technical data
-              required to serve requests and deliver inbound email to our mailbox.
+              (United States), which also manages DNS for <code>korporex.ca</code> and serves
+              edge content. Inbound email routing for our mailbox is handled by Zoho
+              Corporation through its Canadian data centre. These providers process technical
+              data required to serve requests and deliver email to our mailbox.
             </p>
             <p>
               <strong>(f) Professional and business advisors.</strong> We may share limited
@@ -223,10 +226,13 @@ export default function PrivacyPage() {
 
           <Section n="5" title="International Transfers of Personal Information">
             <p>
-              Several of the service providers we use (including Stripe, Google, Cloudflare,
-              and Vercel) are based outside Canada or process data on servers located outside
-              Canada, principally in the United States. Brevo is based in France and may
-              process data in the European Economic Area. When personal information is
+              Several of the service providers we use (including Stripe, Google, and Vercel)
+              are based outside Canada or process data on servers located outside Canada,
+              principally in the United States. Zoho Corporation is a multinational group
+              with offices in India and the United States; mailbox data for
+              <code>contact@korporex.ca</code> is stored in Zoho&rsquo;s Canadian data centre,
+              but Zoho support and operations personnel based outside Canada may access it
+              for service delivery. When personal information is
               transferred outside Canada, it becomes subject to the laws of the jurisdiction
               in which it is stored or processed, and foreign governments, courts, or law
               enforcement agencies may be able to obtain access to it under applicable foreign

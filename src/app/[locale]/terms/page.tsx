@@ -285,8 +285,9 @@ export default function TermsPage() {
           <Section n="11" title="Third-Party Services">
             <p>
               The Services rely on a number of third-party providers, including Stripe
-              (payment processing), Brevo (transactional email), Google Maps Platform (address
-              autocomplete), Cloudflare (DNS and email routing), and Vercel (hosting). The
+              (payment processing), Zoho Mail (transactional email and mailbox hosting in
+              Zoho&rsquo;s Canadian data centre), Google Maps Platform (address autocomplete),
+              and Vercel (hosting and DNS for korporex.ca). The
               government registries to which we submit your filings (including Corporations
               Canada and the Ontario Business Registry) are operated by federal and provincial
               authorities and are not controlled by

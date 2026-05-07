@@ -3,7 +3,7 @@ import Stripe from "stripe";
 // Server-side Stripe SDK singleton. Reads STRIPE_SECRET_KEY from env; returns
 // null when the key is missing so local dev and preview deploys without Stripe
 // credentials still render. API routes that need Stripe must null-check and
-// fail gracefully (same pattern as /api/contact with BREVO_API_KEY).
+// fail gracefully (same pattern as `src/lib/mailer.ts` with ZOHO_SMTP_USER).
 
 const apiKey = process.env.STRIPE_SECRET_KEY;
 

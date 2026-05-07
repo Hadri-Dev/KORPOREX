@@ -11,12 +11,9 @@ import {
   type LegalConsultInput,
 } from "@/lib/legalConsult";
 import { LEGAL_CONSULT_TAX_RATE, getLegalConsultPricing } from "@/lib/pricing";
+import { CONTACT_ADDRESS, sendMail, type EmailAttachment } from "@/lib/mailer";
 
 export const runtime = "nodejs";
-
-const CONTACT_ADDRESS = "contact@korporex.ca";
-
-type EmailAttachment = { name: string; content: string };
 
 export async function POST(req: Request) {
   // The form posts multipart/form-data so we can carry optional file uploads
@@ -60,7 +57,7 @@ export async function POST(req: Request) {
   }
 
   // Collect uploaded files. Cap count + total size + per-file MIME so an
-  // oversized upload doesn't trip Brevo's 10 MB email-size limit downstream.
+  // oversized upload doesn't trip Zoho's 25 MB email-size limit downstream.
   const fileEntries = form.getAll("documents").filter((x): x is File => x instanceof File && x.size > 0);
   if (fileEntries.length > LEGAL_CONSULT_MAX_FILES) {
     return NextResponse.json(
@@ -88,7 +85,7 @@ export async function POST(req: Request) {
   const attachments: EmailAttachment[] = [];
   for (const f of fileEntries) {
     const buf = Buffer.from(await f.arrayBuffer());
-    attachments.push({ name: f.name, content: buf.toString("base64") });
+    attachments.push({ filename: f.name, content: buf.toString("base64") });
   }
 
   const orderRef = generateOrderRef();
@@ -185,39 +182,19 @@ async function sendIntakeEmail(
   orderRef: string,
   attachments: EmailAttachment[]
 ): Promise<void> {
-  const apiKey = process.env.BREVO_API_KEY;
-  if (!apiKey) {
-    console.warn("[legal-consult-api] BREVO_API_KEY not set — intake logged, not emailed");
-    console.log("[legal-consult-api] intake:", { orderRef, pricing, ...payload, attachmentCount: attachments.length });
-    return;
-  }
-
   const subject = `[PENDING] Legal consult — ${orderRef} — ${payload.fullName} — $${pricing.total.toFixed(2)} CAD`;
-  const html = buildHtmlBody(payload, pricing, orderRef, attachments.map((a) => a.name));
+  const html = buildHtmlBody(payload, pricing, orderRef, attachments.map((a) => a.filename));
 
-  const body: Record<string, unknown> = {
-    sender: { email: CONTACT_ADDRESS, name: "Korporex" },
-    to: LEGAL_CONSULT_RECIPIENTS.map((r) => ({ email: r.email, name: r.name })),
-    replyTo: { email: payload.email, name: payload.fullName },
-    subject,
-    htmlContent: html,
-  };
-  if (attachments.length) body.attachment = attachments;
-
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      "api-key": apiKey,
-      "content-type": "application/json",
-      accept: "application/json",
+  await sendMail(
+    {
+      subject,
+      html,
+      to: LEGAL_CONSULT_RECIPIENTS.map((r) => ({ email: r.email, name: r.name })),
+      replyTo: { email: payload.email, name: payload.fullName },
+      attachments: attachments.length ? attachments : undefined,
     },
-    body: JSON.stringify(body),
-  });
-
-  if (!res.ok) {
-    const detail = await res.text().catch(() => "");
-    throw new Error(`Brevo ${res.status}: ${detail}`);
-  }
+    "legal-consult-api"
+  );
 }
 
 function escapeHtml(s: string) {

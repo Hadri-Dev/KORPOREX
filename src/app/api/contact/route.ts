@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
 
 export const runtime = "nodejs";
 
@@ -14,8 +15,6 @@ const schema = z.object({
 
 type Submission = z.infer<typeof schema>;
 
-const CONTACT_ADDRESS = "contact@korporex.ca";
-
 export async function POST(req: Request) {
   let payload: Submission;
   try {
@@ -25,42 +24,29 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid submission." }, { status: 400 });
   }
 
-  const apiKey = process.env.BREVO_API_KEY;
-
-  if (!apiKey) {
-    // Dev-mode fallback so the site is testable without a real API key.
-    // Production deployments must set BREVO_API_KEY in Vercel env vars.
-    console.warn("[contact-api] BREVO_API_KEY not set — submission logged, not sent");
-    console.log("[contact-api] submission:", payload);
-    return NextResponse.json({ ok: true, dev: true });
-  }
-
-  const brevoResponse = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      "api-key": apiKey,
-      "content-type": "application/json",
-      accept: "application/json",
-    },
-    body: JSON.stringify({
-      sender: { email: CONTACT_ADDRESS, name: "Korporex" },
-      to: [{ email: CONTACT_ADDRESS, name: "Korporex" }],
-      replyTo: { email: payload.email, name: payload.name },
-      subject: buildSubject(payload),
-      htmlContent: buildHtmlBody(payload),
-    }),
-  });
-
-  if (!brevoResponse.ok) {
-    const detail = await brevoResponse.text().catch(() => "");
-    console.error("[contact-api] Brevo error:", brevoResponse.status, detail);
+  try {
+    const result = await sendMail(
+      {
+        subject: buildSubject(payload),
+        html: buildHtmlBody(payload),
+        to: [{ email: CONTACT_ADDRESS, name: "Korporex" }],
+        replyTo: { email: payload.email, name: payload.name },
+      },
+      "contact-api"
+    );
+    return NextResponse.json({ ok: true, ...(result.dev ? { dev: true } : {}) });
+  } catch (err) {
+    console.error("[contact-api] mail send error:", err);
     return NextResponse.json(
-      { error: "We couldn't send your message. Please try again or email us at " + CONTACT_ADDRESS + "." },
+      {
+        error:
+          "We couldn't send your message. Please try again or email us at " +
+          CONTACT_ADDRESS +
+          ".",
+      },
       { status: 502 }
     );
   }
-
-  return NextResponse.json({ ok: true });
 }
 
 function buildSubject(d: Submission) {

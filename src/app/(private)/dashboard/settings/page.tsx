@@ -55,9 +55,14 @@ export default function SettingsPage() {
       status: checkEnv("STRIPE_WEBHOOK_SECRET"),
     },
     {
-      name: "BREVO_API_KEY",
-      description: "Transactional email for contact + order intake",
-      status: checkEnv("BREVO_API_KEY"),
+      name: "ZOHO_SMTP_USER",
+      description: "Zoho Mail SMTP user (contact@korporex.ca) — sends contact + order intake",
+      status: checkEnv("ZOHO_SMTP_USER"),
+    },
+    {
+      name: "ZOHO_SMTP_PASS",
+      description: "Zoho app-specific password paired with ZOHO_SMTP_USER",
+      status: checkEnv("ZOHO_SMTP_PASS"),
     },
     {
       name: "NEXT_PUBLIC_GOOGLE_MAPS_API_KEY",

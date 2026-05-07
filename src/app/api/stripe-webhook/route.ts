@@ -3,12 +3,11 @@ import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { JURISDICTION_LABELS, PKG_LABELS, REG_OFFICE_ADDON, type Jurisdiction, type Pkg, type RegOfficeAddon } from "@/lib/pricing";
 import { LEGAL_CONSULT_RECIPIENTS } from "@/lib/legalConsult";
+import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
 
 export const runtime = "nodejs";
 // Webhooks must always run fresh — never cache.
 export const dynamic = "force-dynamic";
-
-const CONTACT_ADDRESS = "contact@korporex.ca";
 
 export async function POST(req: Request) {
   if (!stripe) {
@@ -135,7 +134,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
         : session.payment_intent?.id ?? "(none)",
   });
 
-  await sendBrevoEmail(subject, html, customerEmail, customerName);
+  await sendNotification(subject, html, customerEmail, customerName);
 }
 
 async function handleCheckoutFailed(session: Stripe.Checkout.Session) {
@@ -162,44 +161,26 @@ async function handleCheckoutFailed(session: Stripe.Checkout.Session) {
         : `Unnamed ${jurisLabel}${endingSuffix}`;
   const subject = `[PAYMENT FAILED] ${orderRef} — ${displayName} — ${pkgLabel}`;
   const html = `<p>Async payment for order <strong>${escapeHtml(orderRef)}</strong> failed. Customer may retry from the confirmation page or a recovery email.</p><p>Stripe session: ${escapeHtml(session.id)}</p>`;
-  await sendBrevoEmail(subject, html);
+  await sendNotification(subject, html);
 }
 
-async function sendBrevoEmail(
+async function sendNotification(
   subject: string,
   htmlContent: string,
   replyToEmail?: string,
   replyToName?: string
 ): Promise<void> {
-  const apiKey = process.env.BREVO_API_KEY;
-  if (!apiKey) {
-    console.warn("[stripe-webhook] BREVO_API_KEY not set — notification logged only");
-    console.log("[stripe-webhook] would send:", { subject, htmlPreview: htmlContent.slice(0, 200) });
-    return;
-  }
-
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      "api-key": apiKey,
-      "content-type": "application/json",
-      accept: "application/json",
-    },
-    body: JSON.stringify({
-      sender: { email: CONTACT_ADDRESS, name: "Korporex" },
-      to: [{ email: CONTACT_ADDRESS, name: "Korporex" }],
-      ...(replyToEmail
-        ? { replyTo: { email: replyToEmail, name: replyToName || replyToEmail } }
-        : {}),
+  await sendMail(
+    {
       subject,
-      htmlContent,
-    }),
-  });
-
-  if (!res.ok) {
-    const detail = await res.text().catch(() => "");
-    throw new Error(`Brevo ${res.status}: ${detail}`);
-  }
+      html: htmlContent,
+      to: [{ email: CONTACT_ADDRESS, name: "Korporex" }],
+      replyTo: replyToEmail
+        ? { email: replyToEmail, name: replyToName || replyToEmail }
+        : undefined,
+    },
+    "stripe-webhook"
+  );
 }
 
 function escapeHtml(s: string) {
@@ -298,7 +279,7 @@ async function handleLegalConsultPaid(session: Stripe.Checkout.Session) {
     orderRef
   )}</h1><p style="margin:0 0 24px;color:#6b7280;font-size:13px;">Stripe <code>checkout.session.completed</code></p><table style="width:100%;border-collapse:collapse;">${rowHtml}</table><p style="margin:24px 0 0;padding:12px 16px;background:#d1fae5;border-left:3px solid #059669;color:#065f46;font-size:13px;line-height:1.6;">Cross-reference with the earlier <strong>[PENDING]</strong> email for this order reference to see the full questionnaire and any uploaded documents. The customer's Calendly confirmation will arrive separately.</p></div></body></html>`;
 
-  await sendBrevoEmailToMany(
+  await sendNotificationToMany(
     LEGAL_CONSULT_RECIPIENTS.map((r) => ({ email: r.email, name: r.name })),
     subject,
     html,
@@ -316,47 +297,29 @@ async function handleLegalConsultFailed(session: Stripe.Checkout.Session) {
   )}</strong> failed. Calendly slot was already reserved at <strong>${escapeHtml(
     session.metadata?.calendlyStartTime ?? "unknown"
   )}</strong> — consider whether to release it.</p><p>Stripe session: ${escapeHtml(session.id)}</p>`;
-  await sendBrevoEmailToMany(
+  await sendNotificationToMany(
     LEGAL_CONSULT_RECIPIENTS.map((r) => ({ email: r.email, name: r.name })),
     subject,
     html
   );
 }
 
-async function sendBrevoEmailToMany(
+async function sendNotificationToMany(
   to: Array<{ email: string; name?: string }>,
   subject: string,
   htmlContent: string,
   replyToEmail?: string,
   replyToName?: string
 ): Promise<void> {
-  const apiKey = process.env.BREVO_API_KEY;
-  if (!apiKey) {
-    console.warn("[stripe-webhook] BREVO_API_KEY not set — notification logged only");
-    console.log("[stripe-webhook] would send:", { to, subject, htmlPreview: htmlContent.slice(0, 200) });
-    return;
-  }
-
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      "api-key": apiKey,
-      "content-type": "application/json",
-      accept: "application/json",
-    },
-    body: JSON.stringify({
-      sender: { email: CONTACT_ADDRESS, name: "Korporex" },
-      to,
-      ...(replyToEmail
-        ? { replyTo: { email: replyToEmail, name: replyToName || replyToEmail } }
-        : {}),
+  await sendMail(
+    {
       subject,
-      htmlContent,
-    }),
-  });
-
-  if (!res.ok) {
-    const detail = await res.text().catch(() => "");
-    throw new Error(`Brevo ${res.status}: ${detail}`);
-  }
+      html: htmlContent,
+      to,
+      replyTo: replyToEmail
+        ? { email: replyToEmail, name: replyToName || replyToEmail }
+        : undefined,
+    },
+    "stripe-webhook"
+  );
 }

@@ -13,6 +13,7 @@ import { officerPositionSchema } from "@/lib/officerPositions";
 import { ALL_COUNTRIES } from "@/lib/countries";
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
+import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
 
 export const runtime = "nodejs";
 
@@ -87,8 +88,6 @@ const schema = z.object({
 });
 
 type Submission = z.infer<typeof schema>;
-
-const CONTACT_ADDRESS = "contact@korporex.ca";
 
 export async function POST(req: Request) {
   let payload: Submission;
@@ -262,39 +261,19 @@ async function sendIntakeEmail(
   pricing: ReturnType<typeof computePricing>,
   orderRef: string
 ): Promise<void> {
-  const apiKey = process.env.BREVO_API_KEY;
-  if (!apiKey) {
-    console.warn("[incorporate-api] BREVO_API_KEY not set — intake logged, not emailed");
-    console.log("[incorporate-api] intake:", { orderRef, pricing, ...payload });
-    return;
-  }
-
   const primaryDirector = payload.directors[0];
-  const replyTo = {
-    email: primaryDirector.email,
-    name: `${primaryDirector.firstName} ${primaryDirector.lastName}`.trim(),
-  };
-
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      "api-key": apiKey,
-      "content-type": "application/json",
-      accept: "application/json",
-    },
-    body: JSON.stringify({
-      sender: { email: CONTACT_ADDRESS, name: "Korporex" },
-      to: [{ email: CONTACT_ADDRESS, name: "Korporex" }],
-      replyTo,
+  await sendMail(
+    {
       subject: buildSubject(payload, pricing.total, orderRef),
-      htmlContent: buildHtmlBody(payload, pricing, orderRef),
-    }),
-  });
-
-  if (!res.ok) {
-    const detail = await res.text().catch(() => "");
-    throw new Error(`Brevo ${res.status}: ${detail}`);
-  }
+      html: buildHtmlBody(payload, pricing, orderRef),
+      to: [{ email: CONTACT_ADDRESS, name: "Korporex" }],
+      replyTo: {
+        email: primaryDirector.email,
+        name: `${primaryDirector.firstName} ${primaryDirector.lastName}`.trim(),
+      },
+    },
+    "incorporate-api"
+  );
 }
 
 function buildSubject(d: Submission, total: number, orderRef: string) {
