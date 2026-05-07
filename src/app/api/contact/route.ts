@@ -10,7 +10,7 @@ const schema = z.object({
   company: z.string().trim().max(200).optional().or(z.literal("")),
   service: z.string().trim().max(100).optional().or(z.literal("")),
   message: z.string().trim().max(5000).optional().or(z.literal("")),
-  source: z.enum(["hero", "contact-page"]).optional(),
+  source: z.enum(["hero", "contact-page", "soon"]).optional(),
 });
 
 type Submission = z.infer<typeof schema>;
@@ -50,7 +50,14 @@ export async function POST(req: Request) {
 }
 
 function buildSubject(d: Submission) {
-  const sourceLabel = d.source === "hero" ? "homepage" : d.source === "contact-page" ? "contact page" : "site";
+  const sourceLabel =
+    d.source === "hero"
+      ? "homepage"
+      : d.source === "contact-page"
+        ? "contact page"
+        : d.source === "soon"
+          ? "launch page"
+          : "site";
   return `New enquiry from ${d.name} (${sourceLabel})`;
 }
 
