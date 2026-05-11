@@ -15,7 +15,8 @@ export type ImportType =
   | "competitor-keywords"
   | "competitor-backlinks"
   | "gsc"
-  | "ahrefs-keywords";
+  | "ahrefs-keywords"
+  | "serp-overview";
 
 export const IMPORT_TYPE_LABELS: Record<ImportType, string> = {
   backlinks: "Backlinks",
@@ -28,6 +29,7 @@ export const IMPORT_TYPE_LABELS: Record<ImportType, string> = {
   "competitor-backlinks": "Competitor backlinks",
   gsc: "GSC export",
   "ahrefs-keywords": "Ahrefs organic keywords",
+  "serp-overview": "Ahrefs SERP overview",
 };
 
 export interface ImportHistoryEntry {
@@ -79,6 +81,9 @@ export function clearImportHistory(): void {
 
 // Detect import type from filename — first matching pattern wins.
 const PATTERNS: Array<{ type: ImportType; re: RegExp }> = [
+  // SERP overview must precede the broader `ahrefs-keywords` rule, since SERP
+  // overview filenames also contain "ahrefs" / "keyword-explorer".
+  { type: "serp-overview", re: /serp[-_ ]?(overview|positions?)/i },
   { type: "backlinks", re: /backlinks?/i },
   { type: "ahrefs-keywords", re: /(ahrefs|organic[-_ ]?keywords|keyword[-_ ]?explorer)/i },
   { type: "gsc", re: /(gsc|search[-_ ]?console|performance)/i },

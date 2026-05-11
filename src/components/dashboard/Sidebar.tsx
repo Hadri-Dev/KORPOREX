@@ -41,6 +41,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Backlinks", href: "/dashboard/seo/backlinks" },
       { label: "Competitors", href: "/dashboard/seo/competitors" },
       { label: "Rankings", href: "/dashboard/seo/rankings" },
+      { label: "SERP Overview", href: "/dashboard/seo/serp-overview" },
       { label: "Content Pipeline", href: "/dashboard/seo/content-pipeline" },
       { label: "Link Health", href: "/dashboard/seo/link-health" },
       { label: "404 Log", href: "/dashboard/seo/not-found-log" },

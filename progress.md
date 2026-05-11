@@ -38,6 +38,20 @@
 
 ## Log
 
+### 2026-05-10 (SEO Dashboard — SERP Overview page added)
+- **Goal**: track who ranks in the SERP for each target keyword (the missing third dimension alongside competitor organic-keywords + competitor backlinks). Source = Ahrefs SERP Overview CSV export (one CSV per keyword).
+- **New page** at [`/dashboard/seo/serp-overview`](src/app/(private)/dashboard/seo/serp-overview/page.tsx) wired into the sidebar between Rankings and Content Pipeline.
+- **Store** ([serpOverviewStore.ts](src/lib/serpOverviewStore.ts)): single localStorage key `kpx:seo:serp-overview:snapshots:v1`; one snapshot per upload (keyword, importedAt, country, rows). Snapshots are kept indefinitely so position deltas can be computed. Helpers: `groupByKeyword`, `buildDomainFrequency` (top-N appearances across the latest snapshot of every keyword), `deltaForUrl` / `droppedSinceLast`, `csvRowToSerp` (fuzzy header matching across Ahrefs column variants), `detectKeywordFromFilename` (strips date / locale / "serp" / "ahrefs" tokens).
+- **Client** ([SerpOverviewClient.tsx](src/app/(private)/dashboard/seo/serp-overview/SerpOverviewClient.tsx)): three tabs.
+  - **By keyword**: left list of tracked keywords + right pane with the SERP table for the active snapshot. Snapshot dropdown lets the user step back through history. Position-delta column (▲n / ▼n / "new") vs the previous snapshot. Tracked competitors get a ★ badge inline. Collapsible "URLs dropped out of the SERP since last snapshot" section.
+  - **Domain frequency**: table aggregating "domain X appears in top {3|10|20} of K of your N tracked keywords" with avg / best position + 3 example keywords. Filter by tracked competitors only.
+  - **Snapshots**: flat audit-log of every imported snapshot with delete.
+- **Upload** is built into the page (single + batch). Auto-detects keyword from filename; user can override before running. Same flow also wired into [ImportExportClient](src/app/(private)/dashboard/seo/import-export/ImportExportClient.tsx) so dropping a file matching `/serp[-_ ]?(overview|positions?)/i` on the Import / Bulk import / History tabs routes here. Export tab gets a new "SERP overview · all keywords" source that flattens every snapshot into a single CSV with a keyword column.
+- **importHistory.ts** picked up `serp-overview` ImportType + label "Ahrefs SERP overview". Pattern is listed before `ahrefs-keywords` so SERP exports don't get misclassified.
+- **Cross-link** with `/dashboard/seo/competitors` — the page reads the competitor list once on mount and badges any matching domain in the SERP table and the frequency table.
+- **Verified**: `npx tsc --noEmit` clean, `npm run lint` clean, `npm run build` green. New `/dashboard/seo/serp-overview` route weighs 7.34 kB / 106 kB First Load JS.
+- Next: nothing tracked — feature complete. If we later want to add a "rank-tracker" view (one keyword over time, line chart of position per known competitor), the snapshot history is already there to support it.
+
 ### 2026-04-30 (SEO Dashboard — Phases 1, 2b, 3, 4 ALL shipped — full 10-surface roadmap complete)
 - **Goal**: complete the entire SEO Dashboard expansion roadmap in one session per user direction ("dont stop, just keep going until everything in the roadmap is done"). Phases 0 + 2a were already shipped earlier today; this entry covers Phases 1.1–1.5 (existing-page upgrades), 2b (Link Health), 3 (Content Pipeline), and 4 (LLMs.txt).
 - **Vercel env vars cleanup**: discovered 16 stale Supabase/Postgres env vars from a prior Marketplace integration (10 days ago) pointing to project `vosaoegjmbyuqzssxdnu` — likely the source of the $10/mo charge the user wanted to avoid. Removed and replaced the 3 vars my code uses (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) with values from the new free project (`klnxilozjfratddqriue`) for Production + Development. Preview scope blocked by Vercel CLI v51.8.0 `git_branch_required` quirk (already a `[low]` known-issue). User must clean up the rest manually + check Supabase Pro org for a leftover `vosaoegjmbyuqzssxdnu` project to delete (potential ongoing cost).

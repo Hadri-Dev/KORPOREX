@@ -38,6 +38,12 @@ import {
   loadAhrefsSnapshots,
   loadGscSnapshots,
 } from "@/lib/rankingsStore";
+import {
+  addSerpSnapshot,
+  csvRowToSerp,
+  detectKeywordFromFilename,
+  loadSerpSnapshots,
+} from "@/lib/serpOverviewStore";
 import Tabs from "@/components/dashboard/seo/Tabs";
 
 type TabId = "import" | "bulk" | "export" | "history";
@@ -116,6 +122,21 @@ function runImport(type: ImportType, parsedRows: Record<string, string>[], filen
     } else if (type === "ahrefs-keywords") {
       const rows = parsedRows.map(csvRowToAhrefs).filter((r) => r.keyword);
       addAhrefsSnapshot(rows, filename);
+      count = rows.length;
+    } else if (type === "serp-overview") {
+      const keyword = detectKeywordFromFilename(filename);
+      if (!keyword) {
+        return {
+          count: 0,
+          status: "error",
+          message: "Couldn't detect keyword from filename. Use the SERP Overview page so you can set it manually.",
+        };
+      }
+      const rows = parsedRows.map(csvRowToSerp).filter((r) => r.url);
+      if (rows.length === 0) {
+        return { count: 0, status: "partial", message: "No SERP rows found in file." };
+      }
+      addSerpSnapshot({ keyword, rows, source: filename });
       count = rows.length;
     } else {
       return {
@@ -610,6 +631,51 @@ function buildExportSources(): ExportSource[] {
           traffic: String(r.traffic),
           kd: String(r.difficulty),
         })),
+      }),
+    });
+  }
+
+  // SERP overview — flatten all snapshots into one CSV with a keyword column.
+  const serpSnaps = loadSerpSnapshots();
+  if (serpSnaps.length > 0) {
+    const totalRows = serpSnaps.reduce((acc, s) => acc + s.rows.length, 0);
+    sources.push({
+      id: "serp-overview-all",
+      label: `SERP overview · all keywords (${serpSnaps.length} snapshot${serpSnaps.length === 1 ? "" : "s"})`,
+      rowCount: totalRows,
+      exporter: () => ({
+        columns: [
+          "keyword",
+          "imported_at",
+          "country",
+          "position",
+          "domain",
+          "url",
+          "title",
+          "type",
+          "domain_rating",
+          "url_rating",
+          "page_traffic",
+          "backlinks",
+          "referring_domains",
+        ],
+        rows: serpSnaps.flatMap((s) =>
+          s.rows.map((r) => ({
+            keyword: s.keyword,
+            imported_at: s.importedAt,
+            country: s.country ?? "",
+            position: String(r.position),
+            domain: r.domain,
+            url: r.url,
+            title: r.title,
+            type: r.type ?? "",
+            domain_rating: r.domainRating != null ? String(r.domainRating) : "",
+            url_rating: r.urlRating != null ? String(r.urlRating) : "",
+            page_traffic: r.pageTraffic != null ? String(r.pageTraffic) : "",
+            backlinks: r.backlinks != null ? String(r.backlinks) : "",
+            referring_domains: r.referringDomains != null ? String(r.referringDomains) : "",
+          })),
+        ),
       }),
     });
   }
