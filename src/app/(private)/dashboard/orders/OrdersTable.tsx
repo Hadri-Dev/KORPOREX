@@ -36,8 +36,16 @@ export function OrdersTable({ orders }: OrdersTableProps) {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
-          {orders.map((order) => (
-            <OrderRow key={order.sessionId} order={order} />
+          {orders.map((order, idx) => (
+            <OrderRow
+              key={order.sessionId}
+              order={order}
+              // Flip the menu UPWARD for the last two rows so it doesn't get
+              // clipped by the table wrapper's overflow-hidden (needed for
+              // the rounded corners). For upper rows the menu drops down
+              // and overlaps subsequent rows, which is fine.
+              flipUp={idx >= orders.length - 2}
+            />
           ))}
         </tbody>
       </table>
@@ -45,7 +53,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
   );
 }
 
-function OrderRow({ order }: { order: OrderSummary }) {
+function OrderRow({ order, flipUp }: { order: OrderSummary; flipUp: boolean }) {
   return (
     <tr className="hover:bg-gray-50">
       <Td>
@@ -86,7 +94,11 @@ function OrderRow({ order }: { order: OrderSummary }) {
         <span className="text-xs text-gray-500">{formatRelative(order.createdAt)}</span>
       </Td>
       <td className="px-3 py-3 text-right">
-        <RowActions sessionId={order.sessionId} currentAdminStatus={order.adminStatus} />
+        <RowActions
+          sessionId={order.sessionId}
+          currentAdminStatus={order.adminStatus}
+          flipUp={flipUp}
+        />
       </td>
     </tr>
   );
@@ -95,9 +107,11 @@ function OrderRow({ order }: { order: OrderSummary }) {
 function RowActions({
   sessionId,
   currentAdminStatus,
+  flipUp,
 }: {
   sessionId: string;
   currentAdminStatus: AdminOrderStatus | null;
+  flipUp: boolean;
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -177,7 +191,11 @@ function RowActions({
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 z-10 mt-1 w-56 origin-top-right rounded-md border border-gray-200 bg-white shadow-lg ring-1 ring-black/5"
+          className={
+            flipUp
+              ? "absolute right-0 bottom-full z-10 mb-1 w-56 origin-bottom-right rounded-md border border-gray-200 bg-white shadow-lg ring-1 ring-black/5"
+              : "absolute right-0 z-10 mt-1 w-56 origin-top-right rounded-md border border-gray-200 bg-white shadow-lg ring-1 ring-black/5"
+          }
         >
           {submenu === "root" ? (
             <div className="py-1">
