@@ -706,8 +706,17 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack }: {
 
           {corpNameType === "named" && (
             <div className="bg-cream-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700 leading-relaxed">
-              <strong className="text-gray-800">{nameSearchLabel} required.</strong> A ${getNuansFee(jurisdiction)} report fee
-              applies and is shown separately at checkout. Choose a numbered corporation above to skip this fee.
+              {pkg === "basic" ? (
+                <>
+                  <strong className="text-gray-800">{nameSearchLabel} required.</strong> A ${getNuansFee(jurisdiction)} report fee
+                  applies and is shown separately at checkout. Choose a numbered corporation above to skip this fee.
+                </>
+              ) : (
+                <>
+                  <strong className="text-gray-800">{nameSearchLabel} included.</strong> Your {pkg === "standard" ? "Standard" : "Premium"} package
+                  bundles the {nameSearchLabel.toLowerCase()} report — no separate fee at checkout.
+                </>
+              )}
             </div>
           )}
 

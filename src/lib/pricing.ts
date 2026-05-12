@@ -48,8 +48,8 @@ export function regOfficeAddonAvailable(jurisdiction: Jurisdiction): boolean {
 }
 
 export const PRICES: Record<Jurisdiction, Record<Pkg, number>> = {
-  federal: { basic: 599, standard: 699, premium: 999 },
-  ontario: { basic: 599, standard: 599, premium: 899 },
+  federal: { basic: 599, standard: 899, premium: 1199 },
+  ontario: { basic: 599, standard: 899, premium: 1199 },
 };
 
 // Lawyer consultation fee. Flat-rated 30-minute session with an independent
@@ -118,7 +118,18 @@ export const PKG_LABELS: Record<Pkg, string> = {
   premium: "Premium",
 };
 
-export function nuansApplies(jurisdiction: Jurisdiction, corpNameType: "named" | "numbered"): boolean {
+// NUANS is bundled into Standard and Premium packages (the feature list says
+// "NUANS included"). Basic is numbered-only via the wizard, so the named
+// branch effectively never fires for Basic either. The fee-applies check
+// therefore only ever returns true if someone bypasses the wizard and sends
+// a (pkg=basic, corpNameType=named) combination via the API — kept as a
+// defensive fallback rather than because it's a customer-reachable path.
+export function nuansApplies(
+  jurisdiction: Jurisdiction,
+  corpNameType: "named" | "numbered",
+  pkg: Pkg
+): boolean {
+  if (pkg !== "basic") return false;
   return (jurisdiction === "federal" || jurisdiction === "ontario") && corpNameType === "named";
 }
 
@@ -141,7 +152,7 @@ export function computePricing(args: {
   regOfficeAddon?: RegOfficeAddon;
 }): PriceBreakdown {
   const price = PRICES[args.jurisdiction][args.pkg];
-  const nuansFee = nuansApplies(args.jurisdiction, args.corpNameType)
+  const nuansFee = nuansApplies(args.jurisdiction, args.corpNameType, args.pkg)
     ? getNuansFee(args.jurisdiction)
     : 0;
   const addon = args.regOfficeAddon ?? "none";
