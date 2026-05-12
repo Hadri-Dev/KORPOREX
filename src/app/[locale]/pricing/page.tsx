@@ -172,11 +172,14 @@ export default function PricingPage() {
                 </p>
                 <p className="text-center font-serif text-5xl font-bold mb-1 text-navy-900 transition-colors group-hover:text-white">
                   {price}
+                  <span className="ml-1 align-top text-base font-normal text-gray-500 transition-colors group-hover:text-gray-300">
+                    +HST
+                  </span>
                 </p>
                 <p className="text-center text-xs mb-5 text-gray-500 transition-colors group-hover:text-gray-400">
-                  all fees included · CAD
+                  Government fees included · CAD
                 </p>
-                <p className="text-sm leading-relaxed mb-8 text-gray-600 transition-colors group-hover:text-gray-300 whitespace-pre-line">
+                <p className="text-sm leading-relaxed mb-8 text-gray-600 transition-colors group-hover:text-gray-300 whitespace-pre-line first-line:font-bold first-line:text-navy-900 group-hover:first-line:text-white">
                   {description}
                 </p>
                 <ul className="space-y-3 mb-10 flex-1">
