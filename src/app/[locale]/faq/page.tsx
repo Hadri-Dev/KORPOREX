@@ -13,7 +13,7 @@ const categories: Category[] = [
     items: [
       {
         q: "What is Korporex?",
-        a: "Korporex is an online business incorporation and registration platform. We make it simple to incorporate a Canadian business, register a business name, and file compliance documents — all online. We serve Canadian entrepreneurs as well as international founders who want to incorporate a Canadian corporation.",
+        a: "Korporex is an online business incorporation and registration platform. We make it simple to incorporate a Canadian business, register a business name, and file compliance documents, all online. We serve Canadian entrepreneurs as well as international founders who want to incorporate a Canadian corporation.",
       },
       {
         q: "Who is Korporex for?",
@@ -21,7 +21,7 @@ const categories: Category[] = [
       },
       {
         q: "Is Korporex a law firm?",
-        a: "No. Korporex is a technology company and document preparation and filing service. We are not a law firm and do not provide legal advice. If you require legal advice specific to your situation, we can connect you with an independent corporate lawyer from our trusted referral network — see “What if I need personalized legal advice?” below.",
+        a: "No. Korporex is a technology company and document preparation and filing service. We are not a law firm and do not provide legal advice. If you require legal advice specific to your situation, we can connect you with an independent corporate lawyer from our trusted referral network. See “What if I need personalized legal advice?” below.",
       },
       {
         q: "What if I need personalized legal advice?",
@@ -38,11 +38,11 @@ const categories: Category[] = [
     items: [
       {
         q: "What's the difference between federal and provincial incorporation?",
-        a: "A federal corporation (incorporated under the Canada Business Corporations Act) has its name protected nationwide and can carry on business in any province, subject to extra-provincial registration in each one. A provincial corporation (such as Ontario) is created under provincial law and is automatically authorized to carry on business in the incorporating province, with name protection limited to that province. Each route produces a valid corporation — the practical differences are name-protection scope, government fees, and ongoing filings.",
+        a: "A federal corporation (incorporated under the Canada Business Corporations Act) has its name protected nationwide and can carry on business in any province, subject to extra-provincial registration in each one. A provincial corporation (such as Ontario) is created under provincial law and is automatically authorized to carry on business in the incorporating province, with name protection limited to that province. Each route produces a valid corporation; the practical differences are name-protection scope, government fees, and ongoing filings.",
       },
       {
         q: "Which jurisdiction should I choose?",
-        a: "There is no universally best jurisdiction — the right choice depends on your specific needs. Federal and Ontario incorporations are each a valid path, and the decision typically comes down to where you plan to operate, how important nationwide name protection is, and your budget. Our Resources section has dedicated guides on each jurisdiction, and our wizard captures the information needed for either.",
+        a: "There is no universally best jurisdiction; the right choice depends on your specific needs. Federal and Ontario incorporations are each a valid path, and the decision typically comes down to where you plan to operate, how important nationwide name protection is, and your budget. Our Resources section has dedicated guides on each jurisdiction, and our wizard captures the information needed for either.",
       },
       {
         q: "What is a NUANS name search?",
@@ -50,11 +50,11 @@ const categories: Category[] = [
       },
       {
         q: "What types of corporations can I incorporate?",
-        a: "Through Korporex you can incorporate Standard (for-profit) corporations, Professional corporations (for regulated professionals such as doctors, dentists, and accountants), Holding corporations (for managing investments or assets), and Non-Profit corporations. Availability varies by jurisdiction — federal incorporations currently support standard and holding corporations; Ontario supports all four types.",
+        a: "Through Korporex you can incorporate Standard (for-profit) corporations, Professional corporations (for regulated professionals such as doctors, dentists, and accountants), Holding corporations (for managing investments or assets), and Non-Profit corporations. Availability varies by jurisdiction: federal incorporations currently support standard and holding corporations; Ontario supports all four types.",
       },
       {
         q: "Do I need a physical office address to incorporate?",
-        a: "Yes — every corporation requires a registered office address in its incorporating jurisdiction. This address must be a physical location (not a P.O. Box) where official notices and corporate correspondence can be received. If you don't have one, Korporex offers a registered office address service at checkout for federal and Ontario incorporations: $99.99/month, billed annually in advance at $1,199.88 + HST. The address is in the Greater Toronto Area, chosen by Korporex at our discretion, and includes a monthly scanned copy of received mail emailed to you. The annual fee is non-refundable, including if you obtain your own address before the term ends.",
+        a: "Yes, every corporation requires a registered office address in its incorporating jurisdiction. This address must be a physical location (not a P.O. Box) where official notices and corporate correspondence can be received. If you don't have one, Korporex offers a registered office address service at checkout for federal and Ontario incorporations: $99.99/month, billed annually in advance at $1,199.88 + HST. The address is in the Greater Toronto Area, chosen by Korporex at our discretion, and includes a monthly scanned copy of received mail emailed to you. The annual fee is non-refundable, including if you obtain your own address before the term ends.",
       },
     ],
   },
@@ -71,11 +71,11 @@ const categories: Category[] = [
       },
       {
         q: "Can I change my corporation's details after incorporation?",
-        a: "Yes. Directors, shareholders, addresses, and other details can be updated through government filings after incorporation. Some changes (such as a corporate name change or changes to share structure) require Articles of Amendment. Korporex offers all common post-incorporation changes as separate services — you can find them on our Services page.",
+        a: "Yes. Directors, shareholders, addresses, and other details can be updated through government filings after incorporation. Some changes (such as a corporate name change or changes to share structure) require Articles of Amendment. Korporex offers all common post-incorporation changes as separate services; you can find them on our Services page.",
       },
       {
         q: "Do I need a lawyer to use Korporex?",
-        a: "Korporex is a document preparation and filing service — using our platform does not require engaging a lawyer. That said, if your situation involves complex shareholder arrangements, professional licensing requirements, tax planning, or other questions that require legal or tax judgement, we recommend consulting a qualified professional in addition to using our service.",
+        a: "Korporex is a document preparation and filing service; using our platform does not require engaging a lawyer. That said, if your situation involves complex shareholder arrangements, professional licensing requirements, tax planning, or other questions that require legal or tax judgement, we recommend consulting a qualified professional in addition to using our service.",
       },
     ],
   },
@@ -84,7 +84,7 @@ const categories: Category[] = [
     items: [
       {
         q: "Are government filing fees included in your prices?",
-        a: "Yes. All Korporex prices include government filing fees. There are no hidden charges — the price you see on our pricing page is the total amount you will pay (excluding applicable taxes).",
+        a: "Yes. All Korporex prices include government filing fees. There are no hidden charges; the price you see on our pricing page is the total amount you will pay (excluding applicable taxes).",
       },
       {
         q: "What payment methods do you accept?",
@@ -92,7 +92,7 @@ const categories: Category[] = [
       },
       {
         q: "What is your refund policy?",
-        a: "All fees are non-refundable once payment has been submitted. This includes package fees, NUANS pass-through fees, registered office service fees, and applicable taxes. The reason is that incorporation work — including third-party fees and government filings — is commenced immediately upon payment. If a filing is rejected because of an error on our part, we will re-file at no additional service cost (that's rectification, not a refund). Exceptional-circumstance requests can be emailed to contact@korporex.ca with your order reference, but we are under no obligation to issue a refund. See our Terms of Service for the full policy.",
+        a: "All fees are non-refundable once payment has been submitted. This includes package fees, NUANS pass-through fees, registered office service fees, and applicable taxes. The reason is that incorporation work, including third-party fees and government filings, is commenced immediately upon payment. If a filing is rejected because of an error on our part, we will re-file at no additional service cost (that's rectification, not a refund). Exceptional-circumstance requests can be emailed to contact@korporex.ca with your order reference, but we are under no obligation to issue a refund. See our Terms of Service for the full policy.",
       },
       {
         q: "Do prices include taxes?",
@@ -113,11 +113,11 @@ const categories: Category[] = [
       },
       {
         q: "What is a minute book and do I need one?",
-        a: "A corporate minute book is a collection of your corporation's key documents — articles, bylaws, shareholder and director registers, resolutions, and share certificates. Canadian corporations are legally required to maintain these records. Korporex's Standard and Premium packages include a digital minute book. If you choose the Basic package, you are responsible for preparing and maintaining these records separately.",
+        a: "A corporate minute book is a collection of your corporation's key documents: articles, bylaws, shareholder and director registers, resolutions, and share certificates. Canadian corporations are legally required to maintain these records. Korporex's Standard and Premium packages include a digital minute book. If you choose the Basic package, you are responsible for preparing and maintaining these records separately.",
       },
       {
         q: "What annual filings are required after incorporation?",
-        a: "Requirements vary by jurisdiction. Ontario corporations must file an Annual Return with the Ontario government each year (typically within 60 days of your anniversary date). Federal corporations must file an Annual Return with Corporations Canada. Failure to file can result in your corporation being dissolved. Korporex offers annual return filing services — available on our Services page.",
+        a: "Requirements vary by jurisdiction. Ontario corporations must file an Annual Return with the Ontario government each year (typically within 60 days of your anniversary date). Federal corporations must file an Annual Return with Corporations Canada. Failure to file can result in your corporation being dissolved. Korporex offers annual return filing services, available on our Services page.",
       },
       {
         q: "Do I need a business bank account after incorporating?",

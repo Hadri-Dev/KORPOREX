@@ -135,10 +135,10 @@ export async function POST(req: Request) {
   const pkgLabel = PKG_LABELS[payload.pkg as Pkg];
   const corpDesc =
     payload.corpNameType === "numbered"
-      ? `Numbered corporation (${jurisLabel}) — ending: ${payload.legalEnding}`
+      ? `Numbered corporation (${jurisLabel}), ending: ${payload.legalEnding}`
       : payload.businessName
         ? `${payload.businessName} ${payload.legalEnding}`
-        : `Unnamed corporation (${jurisLabel}) — ending: ${payload.legalEnding}`;
+        : `Unnamed corporation (${jurisLabel}), ending: ${payload.legalEnding}`;
 
   const lineItems: Array<{
     price_data: {
@@ -152,7 +152,7 @@ export async function POST(req: Request) {
       price_data: {
         currency: "cad",
         product_data: {
-          name: `${pkgLabel} incorporation — ${jurisLabel}`,
+          name: `${pkgLabel} incorporation - ${jurisLabel}`,
           description: corpDesc,
         },
         unit_amount: Math.round(pricing.price * 100),
@@ -200,7 +200,7 @@ export async function POST(req: Request) {
       price_data: {
         currency: "cad",
         product_data: {
-          name: `Tax (${taxPct}% — ${payload.billingAddress.region})`,
+          name: `Tax (${taxPct}%, ${payload.billingAddress.region})`,
           description: "GST/HST as applicable to billing province",
         },
         unit_amount: Math.round(pricing.tax * 100),
@@ -230,7 +230,7 @@ export async function POST(req: Request) {
         billingName: payload.billingName,
       },
       payment_intent_data: {
-        description: `Korporex — ${orderRef} — ${corpDesc}`,
+        description: `Korporex - ${orderRef} - ${corpDesc}`,
         metadata: { orderRef },
       },
     });

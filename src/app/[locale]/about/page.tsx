@@ -5,7 +5,7 @@ const values = [
   {
     icon: Zap,
     title: "Speed",
-    description: "When you're ready to start your business, every day matters. We've engineered our entire process around 24-hour turnaround — because your time is valuable.",
+    description: "When you're ready to start your business, every day matters. We've engineered our entire process around 24-hour turnaround, because your time is valuable.",
   },
   {
     icon: Eye,
@@ -20,7 +20,7 @@ const values = [
   {
     icon: Globe,
     title: "Accessibility",
-    description: "Incorporation shouldn't require a trip to a government office. We've made it as simple as shopping online — available to Canadian and international founders.",
+    description: "Incorporation shouldn't require a trip to a government office. We've made it as simple as shopping online, available to Canadian and international founders.",
   },
 ];
 
@@ -47,7 +47,7 @@ export default function AboutPage() {
           </h1>
           <p className="text-lg text-gray-600 leading-relaxed max-w-2xl">
             Korporex is a Canadian technology company that makes it simple for entrepreneurs
-            to incorporate and manage their businesses entirely online — fast, transparent,
+            to incorporate and manage their businesses entirely online: fast, transparent,
             and accessible to Canadian and international founders.
           </p>
         </div>
@@ -66,8 +66,8 @@ export default function AboutPage() {
             </p>
             <p>
               By combining technology with practical knowledge of Canadian corporate-registration
-              requirements, we built a platform that lets any founder — based in Canada or
-              internationally — incorporate and manage a Canadian business entirely online, in a
+              requirements, we built a platform that lets any founder, based in Canada or
+              internationally, incorporate and manage a Canadian business entirely online, in a
               fraction of the time and cost of the traditional route.
             </p>
             <p>

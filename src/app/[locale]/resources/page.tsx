@@ -17,12 +17,12 @@ const categories: ResourceCategory[] = [
   {
     icon: FileText,
     title: "Compliance & Maintenance",
-    description: "How to keep your corporation in good standing — annual returns, record-keeping, and more.",
+    description: "How to keep your corporation in good standing: annual returns, record-keeping, and more.",
   },
   {
     icon: HelpCircle,
     title: "Jurisdiction Comparisons",
-    description: "Federal vs. Ontario — understand the differences before you choose.",
+    description: "Federal vs. Ontario: understand the differences before you choose.",
   },
 ];
 

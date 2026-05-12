@@ -23,7 +23,7 @@ const nextSteps = [
   {
     icon: Mail,
     title: "Receipt + Confirmation",
-    body: "You'll get a Stripe receipt immediately. The lawyer received your questionnaire and any documents you uploaded — they'll come to the consultation prepared.",
+    body: "You'll get a Stripe receipt immediately. The lawyer received your questionnaire and any documents you uploaded, so they'll come to the consultation prepared.",
   },
   {
     icon: ScaleIcon,
@@ -143,7 +143,7 @@ export default async function LegalConsultConfirmationPage({ searchParams }: Pag
                 </a>
                 {displayRef && (
                   <>
-                    {" "}— please quote <span className="font-mono text-navy-900">{displayRef}</span>
+                    {" "}- please quote <span className="font-mono text-navy-900">{displayRef}</span>
                   </>
                 )}
                 .

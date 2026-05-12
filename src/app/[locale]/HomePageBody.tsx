@@ -64,7 +64,10 @@ export default function HomePageBody() {
               <br />
               <span className="text-gold-400 whitespace-pre-line">{t("hero.tagline")}</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-8">{t("hero.lead")}</p>
+            <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-6">{t("hero.lead")}</p>
+            <p className="text-sm md:text-base text-gold-400 leading-relaxed mb-8 border-l-2 border-gold-500 pl-4">
+              {t("hero.guarantee")}
+            </p>
             <div className="flex flex-wrap gap-4">
               <Link
                 href="/incorporate"

@@ -21,15 +21,18 @@ const pricingData: Record<Jurisdiction, {
   federal: [
     {
       name: "Basic",
-      price: "$499",
+      price: "$599",
       description: "Everything you need to get incorporated federally, including government fees.",
       features: [
-        "Articles of Incorporation filing",
-        "NUANS name search included",
+        "Articles of Incorporation filing, including Certificate of Incorporation",
+        "Numbered Corporation",
         "Federal corporate bylaws",
-        "Certificate of Incorporation",
+        "One Class of Shares",
+        "One Shareholder, One Director, and One Officer",
+        "Standard Digital Minute Book",
+        "All Mandatory post-incorporation filings",
+        "24-hour turnaround",
         "Digital document delivery",
-        "Digital document storage in your account",
       ],
     },
     {
@@ -61,15 +64,18 @@ const pricingData: Record<Jurisdiction, {
   ontario: [
     {
       name: "Basic",
-      price: "$399",
+      price: "$599",
       description: "Everything you need to get incorporated in Ontario, including government fees.",
       features: [
-        "Articles of Incorporation filing",
-        "Ontario Business Identifier (OBI)",
+        "Articles of Incorporation filing, including Certificate of Incorporation",
+        "Numbered Corporation",
         "Corporate bylaws",
-        "Certificate of Incorporation",
+        "One Class of Shares",
+        "One Shareholder, One Director, and One Officer",
+        "Standard Digital Minute Book",
+        "All Mandatory post-incorporation filings",
+        "24-hour turnaround",
         "Digital document delivery",
-        "Digital document storage in your account",
       ],
     },
     {

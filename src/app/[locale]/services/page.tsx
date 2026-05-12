@@ -15,13 +15,13 @@ const categories: Category[] = [
     title: "Incorporation",
     description: "Incorporate your business federally or provincially. Choose from standard, professional, holding, or non-profit corporations.",
     services: [
-      { name: "Federal Incorporation — Standard Corp", from: "$499", href: "/incorporate?jurisdiction=federal&type=standard" },
-      { name: "Federal Incorporation — Professional Corp", from: "$549", href: "/incorporate?jurisdiction=federal&type=professional" },
-      { name: "Federal Incorporation — Holding Corp", from: "$499", href: "/incorporate?jurisdiction=federal&type=holding" },
-      { name: "Ontario Incorporation — Standard Corp", from: "$399", href: "/incorporate?jurisdiction=ontario&type=standard" },
-      { name: "Ontario Incorporation — Professional Corp", from: "$449", href: "/incorporate?jurisdiction=ontario&type=professional" },
-      { name: "Ontario Incorporation — Non-Profit", from: "$399", href: "/incorporate?jurisdiction=ontario&type=nonprofit" },
-      { name: "Ontario Incorporation — Holding Corp", from: "$399", href: "/incorporate?jurisdiction=ontario&type=holding" },
+      { name: "Federal Incorporation - Standard Corp", from: "$599", href: "/incorporate?jurisdiction=federal&type=standard" },
+      { name: "Federal Incorporation - Professional Corp", from: "$549", href: "/incorporate?jurisdiction=federal&type=professional" },
+      { name: "Federal Incorporation - Holding Corp", from: "$599", href: "/incorporate?jurisdiction=federal&type=holding" },
+      { name: "Ontario Incorporation - Standard Corp", from: "$599", href: "/incorporate?jurisdiction=ontario&type=standard" },
+      { name: "Ontario Incorporation - Professional Corp", from: "$449", href: "/incorporate?jurisdiction=ontario&type=professional" },
+      { name: "Ontario Incorporation - Non-Profit", from: "$599", href: "/incorporate?jurisdiction=ontario&type=nonprofit" },
+      { name: "Ontario Incorporation - Holding Corp", from: "$599", href: "/incorporate?jurisdiction=ontario&type=holding" },
     ],
   },
   {
@@ -29,8 +29,8 @@ const categories: Category[] = [
     title: "Registrations",
     description: "Register a sole proprietorship, business name, or expand your existing corporation to operate in a new province.",
     services: [
-      { name: "Sole Proprietorship Registration — Ontario", from: "$99", href: "/services" },
-      { name: "Business Name Registration — Ontario", from: "$79", href: "/services" },
+      { name: "Sole Proprietorship Registration - Ontario", from: "$99", href: "/services" },
+      { name: "Business Name Registration - Ontario", from: "$79", href: "/services" },
       { name: "Extra-Provincial Registration", from: "$199", href: "/services" },
     ],
   },
@@ -51,8 +51,8 @@ const categories: Category[] = [
     description: "Stay in good standing with required government filings for Ontario and federal corporations.",
     services: [
       { name: "Initial Return (Ontario)", from: "$99", href: "/services" },
-      { name: "Annual Return — Ontario", from: "$149", href: "/services" },
-      { name: "Annual Return — Federal", from: "$149", href: "/services" },
+      { name: "Annual Return - Ontario", from: "$149", href: "/services" },
+      { name: "Annual Return - Federal", from: "$149", href: "/services" },
       { name: "Notice of Change", from: "$129", href: "/services" },
     ],
   },
@@ -85,7 +85,7 @@ export default function ServicesPage() {
           </h1>
           <p className="text-lg text-gray-600 leading-relaxed max-w-2xl">
             From your first incorporation to ongoing compliance filings, Korporex handles
-            every government filing your business needs — fast, online, and at a fixed price.
+            every government filing your business needs: fast, online, and at a fixed price.
           </p>
         </div>
       </section>
@@ -142,7 +142,7 @@ export default function ServicesPage() {
                 Talk to a Trusted Corporate Lawyer
               </h2>
               <p className="text-gray-600 leading-relaxed mb-5">
-                Korporex isn&rsquo;t a law firm — but if you need personalized legal advice on incorporation strategy,
+                Korporex isn&rsquo;t a law firm, but if you need personalized legal advice on incorporation strategy,
                 shareholder agreements, restructuring, or anything else corporate-law related, we can connect you with an
                 independent corporate lawyer from our trusted referral network. Book a 30-minute consultation for{" "}
                 <span className="font-semibold text-navy-900">$150 + HST</span>.

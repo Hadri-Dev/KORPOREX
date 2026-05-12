@@ -61,7 +61,7 @@ export async function POST(req: Request) {
   const fileEntries = form.getAll("documents").filter((x): x is File => x instanceof File && x.size > 0);
   if (fileEntries.length > LEGAL_CONSULT_MAX_FILES) {
     return NextResponse.json(
-      { error: `Too many files — limit is ${LEGAL_CONSULT_MAX_FILES}.` },
+      { error: `Too many files. Limit is ${LEGAL_CONSULT_MAX_FILES}.` },
       { status: 400 }
     );
   }
@@ -123,7 +123,7 @@ export async function POST(req: Request) {
           price_data: {
             currency: "cad",
             product_data: {
-              name: "Legal consultation — 30 minutes",
+              name: "Legal consultation - 30 minutes",
               description: `Independent lawyer from Korporex's referral network. Booked slot: ${payload.calendlyStartTime}.`,
             },
             unit_amount: Math.round(pricing.fee * 100),
@@ -155,7 +155,7 @@ export async function POST(req: Request) {
         isUrgent: payload.isUrgent ? "yes" : "no",
       },
       payment_intent_data: {
-        description: `Korporex — Legal consult — ${orderRef}`,
+        description: `Korporex - Legal consult - ${orderRef}`,
         metadata: { orderRef, productType: "legal-consult" },
       },
     });

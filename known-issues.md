@@ -2,6 +2,13 @@
 
 ## Open
 
+### [Severity: medium] Hero "guarantee" line uses the phrase "legal pricing", borderline for Korporex's "NOT a law firm" framing
+- **Where**: `home.hero.guarantee` key in [messages/en.json](messages/en.json), rendered in [src/app/[locale]/HomePageBody.tsx](src/app/[locale]/HomePageBody.tsx). English copy: *"All-inclusive legal pricing with no surprises. Your quote is your final total, guaranteed from start to finish."*
+- **Symptom**: The English line, as written by the user on 2026-05-12, contains "legal pricing". CLAUDE.md's content guidelines list "legal services" and "legal consulting" as banned framings (Korporex is not a law firm). "Legal pricing" plausibly means "lawful / all-inclusive pricing", but a casual reader could parse it as "pricing for legal services."
+- **Impact**: Risk of confusing customers about whether Korporex provides legal services. Footer disclaimer ("Korporex is not a law firm and does not provide legal advice") still appears site-wide so the framing is mitigated, but the hero line is more prominent than the footer disclaimer.
+- **Why not fixed yet**: User wrote the line verbatim and explicitly asked for it. Flagged for owner review. Possible reworded alternatives: "All-inclusive, transparent pricing with no surprises…" / "All-inclusive flat-rate pricing with no surprises…" / "All government fees included with no surprises…".
+- **Logged**: 2026-05-12
+
 ### [Severity: high] French + Spanish translations only cover chrome + soon page + homepage; the rest of the site still renders English under /fr/ and /es/ URLs
 - **Where**: every page under `src/app/[locale]/` except the homepage and `/soon` still has hardcoded English text in JSX (about, contact, faq, pricing, services, resources index, the 5 resource articles, terms, privacy, the 8-step incorporation wizard, legal-consultation, both confirmation pages).
 - **Symptom**: Visiting `/fr/about` or `/es/pricing` shows the navbar/footer/language switcher in the chosen language, but page content is English. Internal links use the locale-aware `Link` so the URL prefix is preserved when navigating between pages.

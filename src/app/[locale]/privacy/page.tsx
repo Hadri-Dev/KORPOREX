@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy Policy | Korporex",
   description:
-    "Privacy Policy for Korporex — how we collect, use, share, and protect personal information in connection with our Canadian incorporation and registered office services.",
+    "Privacy Policy for Korporex: how we collect, use, share, and protect personal information in connection with our Canadian incorporation and registered office services.",
 };
 
 // NOTE TO REVIEWERS:

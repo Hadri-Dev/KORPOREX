@@ -118,7 +118,7 @@ export default function NaicsCombobox({ value, onChange, placeholder, error }: P
               onKeyDown={handleKey}
               placeholder={
                 selected
-                  ? `${selected.code} — ${selected.title}`
+                  ? `${selected.code} - ${selected.title}`
                   : placeholder ?? "Search by code, keyword, or sector…"
               }
               className="flex-1 py-2.5 text-sm text-gray-900 bg-transparent focus:outline-none placeholder:text-gray-400"

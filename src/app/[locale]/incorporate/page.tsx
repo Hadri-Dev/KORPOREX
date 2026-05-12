@@ -368,7 +368,7 @@ function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPref
     regionInput = (
       <select {...register(`${prefix}.region`)} className={sCls}>
         <option value="">Select province…</option>
-        {allowed.map((p) => <option key={p.code} value={p.code}>{p.code} — {p.name}</option>)}
+        {allowed.map((p) => <option key={p.code} value={p.code}>{p.code} - {p.name}</option>)}
       </select>
     );
   } else if (country === "US") {
@@ -662,7 +662,7 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
             <Field
               label="Proposed Corporation Name *"
               error={errors.businessName?.message}
-              hint="Enter the distinctive part of the name only — the legal ending is selected separately below."
+              hint="Enter the distinctive part of the name only. The legal ending is selected separately below."
             >
               <input {...register("businessName")} placeholder='e.g. "Acme Technologies"' className={iCls} />
             </Field>
@@ -737,7 +737,7 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
 
           {/* Fiscal year end: month + day */}
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Fiscal Year End — Month *" error={errors.fiscalYearEndMonth?.message}>
+            <Field label="Fiscal Year End - Month *" error={errors.fiscalYearEndMonth?.message}>
               <select {...register("fiscalYearEndMonth")} className={sCls}
                 onChange={(e) => {
                   setValue("fiscalYearEndMonth", e.target.value, { shouldValidate: true });
@@ -753,7 +753,7 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
                 {MONTHS.map((m) => <option key={m.name} value={m.name}>{m.name}</option>)}
               </select>
             </Field>
-            <Field label="Fiscal Year End — Day *" error={errors.fiscalYearEndDay?.message}>
+            <Field label="Fiscal Year End - Day *" error={errors.fiscalYearEndDay?.message}>
               <select {...register("fiscalYearEndDay")} className={sCls} disabled={!month}>
                 <option value="">{month ? "Day…" : "Select month first"}</option>
                 {dayOptions.map((d) => <option key={d} value={String(d)}>{d}</option>)}
@@ -807,7 +807,7 @@ function Step4({ def, jurisdiction, onNext, onBack }: { def: Partial<S4>; jurisd
       <div className="max-w-2xl mx-auto px-6 py-12">
         <BackBtn onClick={onBack} />
         <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Directors</h2>
-        <p className="text-gray-500 text-sm mb-8">At least one director is required. Directors must be 18 or older. International directors are supported — residency requirements vary by jurisdiction.</p>
+        <p className="text-gray-500 text-sm mb-8">At least one director is required. Directors must be 18 or older. International directors are supported; residency requirements vary by jurisdiction.</p>
         <form onSubmit={handleSubmit(onNext)} className="space-y-6">
           {fields.map((field, i) => (
             <div key={field.id} className="border border-gray-200 rounded-lg p-6">
@@ -991,11 +991,11 @@ function Step5({ def, jurisdiction, onNext, onBack }: { def: Partial<S5>; jurisd
                   — describes what the field *is*, with arithmetic example.
                   Does NOT cite typical or common practice and is NOT advice. */}
               <p className="text-xs text-gray-500 mb-4 leading-relaxed">
-                Enter any positive dollar amount per share — the price can be{" "}
+                Enter any positive dollar amount per share. The price can be{" "}
                 <span className="font-medium text-gray-700">$1.00</span>. The total subscription amount equals
                 price per share × number of shares (for example,{" "}
                 <span className="font-medium text-gray-700">100 shares × $1.00 = $100.00 total</span>). This is a numeric
-                example only. Korporex does not provide legal or tax advice on share pricing — if you&rsquo;re unsure,{" "}
+                example only. Korporex does not provide legal or tax advice on share pricing. If you&rsquo;re unsure,{" "}
                 <Link href="/legal-consultation" className="text-navy-900 underline underline-offset-2">
                   speak with a corporate lawyer
                 </Link>.
@@ -1139,7 +1139,7 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
       <div className="max-w-xl mx-auto px-6 py-12">
         <BackBtn onClick={onBack} />
         <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Registered Office</h2>
-        <p className="text-gray-500 text-sm mb-8">Must be a physical address in {jurisLabel} — not a P.O. Box.</p>
+        <p className="text-gray-500 text-sm mb-8">Must be a physical address in {jurisLabel}, not a P.O. Box.</p>
         <form onSubmit={handleSubmit(onNext)} className="space-y-5">
           {addonEligible && (
             <div className="space-y-3">
@@ -1176,9 +1176,9 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
           )}
           {selectedAddon === "korporex" && (
             <div className="bg-navy-50 border border-navy-900 rounded-lg p-4 text-sm text-navy-900 leading-relaxed">
-              <p className="font-semibold mb-1">{REG_OFFICE_ADDON.label} — {REG_OFFICE_ADDON.locationLabel}</p>
+              <p className="font-semibold mb-1">{REG_OFFICE_ADDON.label} - {REG_OFFICE_ADDON.locationLabel}</p>
               <p className="text-gray-700">
-                Korporex selects and assigns the registered office address — somewhere in the Greater Toronto Area —
+                Korporex selects and assigns the registered office address, somewhere in the Greater Toronto Area,
                 at our discretion before your Articles of Incorporation are filed. The street address is not
                 disclosed in advance.
               </p>
@@ -1186,7 +1186,7 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
                 <li>Monthly scanned copy of mail received at the address, emailed to you.</li>
                 <li>The assigned address appears on your Articles of Incorporation and the public corporate registry.</li>
                 <li>
-                  ${REG_OFFICE_ADDON.annual.toFixed(2)} CAD billed annually in advance, plus HST. <strong>Non-refundable</strong> —
+                  ${REG_OFFICE_ADDON.annual.toFixed(2)} CAD billed annually in advance, plus HST. <strong>Non-refundable</strong>,
                   including if you obtain your own registered office address before the term ends.
                 </li>
               </ul>
@@ -1280,7 +1280,7 @@ function Step8({ data, onBack, onPay }: {
   const nameSearchApplies = nuansFee > 0;
   const addonApplies = regOfficeFee > 0 && data.regOfficeAddon === "korporex";
   const addonLabel = addonApplies
-    ? `Registered office — ${REG_OFFICE_ADDON.label} (12 mo)`
+    ? `Registered office - ${REG_OFFICE_ADDON.label} (12 mo)`
     : "";
 
   const jurisLabel = JURISDICTION_LABELS[data.jurisdiction];
@@ -1288,10 +1288,10 @@ function Step8({ data, onBack, onPay }: {
   const endingLabel = data.legalEnding || "";
   const corpName =
     data.corpNameType === "numbered"
-      ? `Numbered corporation (${jurisLabel})${endingLabel ? ` — ${endingLabel}` : ""}`
+      ? `Numbered corporation (${jurisLabel})${endingLabel ? ` - ${endingLabel}` : ""}`
       : data.businessName
         ? `${data.businessName}${endingLabel ? ` ${endingLabel}` : ""}`
-        : "—";
+        : "-";
 
   const submit = handleSubmit(async (d) => {
     setSubmitError(null);
@@ -1322,15 +1322,15 @@ function Step8({ data, onBack, onPay }: {
               ["Jurisdiction", jurisLabel],
               ["Package", pkgLabel],
               ["Corporation", corpName],
-              ["Official Email", data.officialEmail || "—"],
+              ["Official Email", data.officialEmail || "-"],
               ["Directors", String(data.directors.length)],
               ["Shareholders", String(data.shareholders.length)],
               ["Officers", String(data.officers.length)],
               [
                 "Registered Office",
                 data.regOfficeAddon === "korporex"
-                  ? `${REG_OFFICE_ADDON.label} — ${REG_OFFICE_ADDON.locationLabel}`
-                  : data.regOffice.city ? `${data.regOffice.city}, ${data.regOffice.region}` : "—",
+                  ? `${REG_OFFICE_ADDON.label} - ${REG_OFFICE_ADDON.locationLabel}`
+                  : data.regOffice.city ? `${data.regOffice.city}, ${data.regOffice.region}` : "-",
               ],
             ].map(([k, v]) => (
               <div key={k} className="flex justify-between">
@@ -1365,9 +1365,9 @@ function Step8({ data, onBack, onPay }: {
               <span>
                 {country === "CA"
                   ? region
-                    ? `Tax (${(taxRate * 100).toFixed(taxRate === 0.14975 ? 3 : 0)}% — ${region})`
+                    ? `Tax (${(taxRate * 100).toFixed(taxRate === 0.14975 ? 3 : 0)}%, ${region})`
                     : "Tax (select region below)"
-                  : "Tax (international — $0)"}
+                  : "Tax (international, $0)"}
               </span>
               <span>${tax.toFixed(2)}</span>
             </div>
@@ -1393,7 +1393,7 @@ function Step8({ data, onBack, onPay }: {
 
             <p className="text-xs text-gray-500 bg-cream-50 border border-gray-200 rounded-md px-3 py-2.5 mt-2 leading-relaxed">
               You&apos;ll be redirected to <span className="font-semibold">Stripe</span> to complete payment securely.
-              Card details are entered on stripe.com — never on Korporex.
+              Card details are entered on stripe.com, never on Korporex.
             </p>
             {submitError && (
               <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2" role="alert">
@@ -1403,7 +1403,7 @@ function Step8({ data, onBack, onPay }: {
             <button type="submit"
               disabled={submitting}
               className="w-full bg-gold-500 text-white font-medium py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
-              {submitting ? "Redirecting to Stripe…" : `Continue to Payment — $${total.toFixed(2)}`}
+              {submitting ? "Redirecting to Stripe…" : `Continue to Payment: $${total.toFixed(2)}`}
             </button>
           </form>
           <p className="text-xs text-gray-400 text-center mt-4">

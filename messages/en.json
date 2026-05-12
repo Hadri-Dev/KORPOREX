@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "Korporex — Online Business Incorporation in Canada",
+    "title": "Korporex | Online Business Incorporation in Canada",
     "description": "Incorporate your Canadian business online in about 10 minutes. Federal and Ontario filings handled end-to-end and delivered within 24 hours."
   },
   "common": {
@@ -70,16 +70,16 @@
     "copyrightDisclaimer": "© {year} Korporex Business Solutions Inc. All rights reserved. Korporex is not a law firm and does not provide legal advice."
   },
   "soon": {
-    "metaTitle": "Korporex — Launching Soon",
-    "metaDescription": "Korporex — Canadian business incorporation and corporate services — is launching soon. In the meantime, get in touch and we'll respond within 24 hours.",
+    "metaTitle": "Korporex | Launching Soon",
+    "metaDescription": "Korporex, Canadian business incorporation and corporate services, is launching soon. In the meantime, get in touch and we'll respond within 24 hours.",
     "launchingSoon": "Launching Soon",
     "headline": {
       "before": "Something",
       "highlight": "great",
       "after": "is on the way."
     },
-    "lead1": "Korporex is a new Canadian business incorporation and corporate-services platform — built to make federal and provincial filings fast, transparent, and fully online. Our full site goes live soon.",
-    "lead2": "In the meantime, if you need {incorporation}, a {registration}, an {amendment}, or a {compliance}, get in touch — we're already taking orders.",
+    "lead1": "Korporex is a new Canadian business incorporation and corporate-services platform, built to make federal and provincial filings fast, transparent, and fully online. Our full site goes live soon.",
+    "lead2": "In the meantime, if you need {incorporation}, a {registration}, an {amendment}, or a {compliance}, get in touch. We're already taking orders.",
     "leadInline": {
       "incorporation": "incorporation",
       "registration": "registration",
@@ -107,7 +107,7 @@
       "message": "Message",
       "messagePlaceholder": "Briefly describe what you need…",
       "consent": "By submitting, you agree we may contact you about your enquiry.",
-      "thankYouHeadline": "Thank you — we've received your message.",
+      "thankYouHeadline": "Thank you, we've received your message.",
       "thankYouBody": "A member of our team will respond within {hours} at the email you provided. In the meantime, you can also reach us directly at {email}."
     },
     "serviceOptions": {
@@ -146,7 +146,8 @@
     "hero": {
       "rotating": ["Business Incorporation.", "Corporate Services."],
       "tagline": "Easy. Fast.\nAffordable.",
-      "lead": "Incorporate your business in Canada in as little as 24 hours. 100% online, government-compliant filings, and transparent pricing — available to Canadian entrepreneurs and international founders.",
+      "lead": "Incorporate your business in Canada in as little as 24 hours. 100% online, government-compliant filings, and transparent pricing, available to Canadian entrepreneurs and international founders.",
+      "guarantee": "All-inclusive legal pricing with no surprises. Your quote is your final total, guaranteed from start to finish.",
       "trust": {
         "fees": "Government fees included",
         "speed": "Documents in 24 hours",
@@ -156,20 +157,20 @@
     "jurisdictions": {
       "eyebrow": "Jurisdictions",
       "title": "Choose Your Jurisdiction",
-      "lead": "Federal and Ontario — each is a valid choice depending on where you plan to operate, the name-protection scope you need, and your budget. Neither is superior; the right pick depends on your business. {faqLink}",
+      "lead": "Federal and Ontario, each is a valid choice depending on where you plan to operate, the name-protection scope you need, and your budget. Neither is superior; the right pick depends on your business. {faqLink}",
       "faqLink": "See our FAQ.",
       "items": {
         "federal": {
           "title": "Federal",
           "subtitle": "Canada Business Corporations Act",
           "description": "Incorporate federally under the CBCA. Country-wide name protection and operate in any province (with extra-provincial registration).",
-          "from": "$499"
+          "from": "$599"
         },
         "ontario": {
           "title": "Ontario",
           "subtitle": "Ontario Business Corporations Act",
           "description": "Incorporate provincially in Ontario. Automatic authorization to carry on business throughout the province.",
-          "from": "$399"
+          "from": "$599"
         }
       },
       "startCta": "Start"
@@ -177,7 +178,7 @@
     "otherServices": {
       "eyebrow": "More Than Incorporation",
       "title": "Complete Corporate Services",
-      "lead": "Beyond incorporation, Korporex handles the ongoing filings your business needs to grow, change, and stay compliant — all online, all at a fixed price.",
+      "lead": "Beyond incorporation, Korporex handles the ongoing filings your business needs to grow, change, and stay compliant, all online, all at a fixed price.",
       "browseAllCta": "Browse All Services",
       "items": {
         "registrations": {

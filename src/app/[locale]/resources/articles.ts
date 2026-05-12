@@ -45,7 +45,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "Federal incorporation does not, however, exempt the corporation from provincial rules. If a federal corporation carries on business in a province — has an office, employees, or a physical presence there — it must register extra-provincially in that province and pay the associated fee. A federal corporation operating in three provinces effectively maintains four registrations: one federal plus one in each province.",
+        text: "Federal incorporation does not, however, exempt the corporation from provincial rules. If a federal corporation carries on business in a province (has an office, employees, or a physical presence there), it must register extra-provincially in that province and pay the associated fee. A federal corporation operating in three provinces effectively maintains four registrations: one federal plus one in each province.",
       },
       {
         type: "heading",
@@ -54,7 +54,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "A provincial corporation is created under the business corporations act of a specific province (e.g., Ontario's OBCA, Alberta's ABCA). The corporation is automatically authorized to carry on business throughout that province. Name protection, however, is limited to that province — a business in another province could, in principle, register a similar name there.",
+        text: "A provincial corporation is created under the business corporations act of a specific province (e.g., Ontario's OBCA, Alberta's ABCA). The corporation is automatically authorized to carry on business throughout that province. Name protection, however, is limited to that province; a business in another province could, in principle, register a similar name there.",
       },
       {
         type: "paragraph",
@@ -109,7 +109,7 @@ export const articles: Article[] = [
   {
     slug: "what-is-nuans-name-search",
     category: "Incorporation Guides",
-    title: "What Is a NUANS Name Search — and Do You Need One?",
+    title: "What Is a NUANS Name Search, and Do You Need One?",
     excerpt:
       "If you're incorporating federally or in certain provinces, a NUANS search is mandatory. Learn what it is, how it works, and what happens if your first-choice name is unavailable.",
     readTime: "4 min read",
@@ -127,11 +127,11 @@ export const articles: Article[] = [
       {
         type: "list",
         items: [
-          "Federal incorporation under the CBCA — always required if you're registering a named corporation.",
-          "Ontario incorporation under the OBCA — required for named corporations.",
-          "Alberta, Saskatchewan, Manitoba, New Brunswick, Nova Scotia, Newfoundland and Labrador, PEI — all use NUANS for named corporations.",
-          "Quebec, British Columbia, and the territories — use separate name systems, not NUANS.",
-          "Numbered corporations (e.g., 1234567 Canada Inc.) — no NUANS search required in any jurisdiction.",
+          "Federal incorporation under the CBCA: always required if you're registering a named corporation.",
+          "Ontario incorporation under the OBCA: required for named corporations.",
+          "Alberta, Saskatchewan, Manitoba, New Brunswick, Nova Scotia, Newfoundland and Labrador, PEI: all use NUANS for named corporations.",
+          "Quebec, British Columbia, and the territories: use separate name systems, not NUANS.",
+          "Numbered corporations (e.g., 1234567 Canada Inc.): no NUANS search required in any jurisdiction.",
         ],
       },
       {
@@ -141,7 +141,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "A NUANS report is ordered through an authorized NUANS search house. You submit the proposed corporate name, the search house runs it against the database, and you receive a report — usually within minutes — listing approximately 20 to 30 similar names already in use. A NUANS report is valid for 90 days from the date it is generated. The filing must be completed within that window or the report expires and a new one is required.",
+        text: "A NUANS report is ordered through an authorized NUANS search house. You submit the proposed corporate name, the search house runs it against the database, and you receive a report (usually within minutes) listing approximately 20 to 30 similar names already in use. A NUANS report is valid for 90 days from the date it is generated. The filing must be completed within that window or the report expires and a new one is required.",
       },
       {
         type: "paragraph",
@@ -159,9 +159,9 @@ export const articles: Article[] = [
       {
         type: "list",
         items: [
-          "Distinctive element — a unique or coined word (e.g., \"Maplewind\").",
-          "Descriptive element — describes the business activity (e.g., \"Consulting\").",
-          "Legal element — indicates limited liability: Inc., Incorporated, Corp., Corporation, Ltd., Limited, Limitée, or Ltée.",
+          "Distinctive element: a unique or coined word (e.g., \"Maplewind\").",
+          "Descriptive element: describes the business activity (e.g., \"Consulting\").",
+          "Legal element: indicates limited liability: Inc., Incorporated, Corp., Corporation, Ltd., Limited, Limitée, or Ltée.",
         ],
       },
       {
@@ -179,7 +179,7 @@ export const articles: Article[] = [
       },
       {
         type: "callout",
-        text: "A NUANS report does not grant a trademark. If your name is central to your brand, you should also consider a trademark registration through the Canadian Intellectual Property Office — that is a separate process from incorporation.",
+        text: "A NUANS report does not grant a trademark. If your name is central to your brand, you should also consider a trademark registration through the Canadian Intellectual Property Office. That is a separate process from incorporation.",
       },
     ],
   },
@@ -204,7 +204,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "An annual return confirms that the information on file about the corporation — registered office address, directors, officers, and (in some provinces) shareholders — is still accurate. If anything has changed during the year, the annual return is where those changes are reported. Every active Canadian corporation is required by statute to file one every year.",
+        text: "An annual return confirms that the information on file about the corporation (registered office address, directors, officers, and in some provinces shareholders) is still accurate. If anything has changed during the year, the annual return is where those changes are reported. Every active Canadian corporation is required by statute to file one every year.",
       },
       {
         type: "heading",
@@ -227,7 +227,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "Since October 2021, Ontario annual returns are filed directly through the Ontario Business Registry. Before that date, most corporations filed the return together with their T2 through the CRA — that route was discontinued. Ontario annual returns are due within six months after the end of the corporation's fiscal year.",
+        text: "Since October 2021, Ontario annual returns are filed directly through the Ontario Business Registry. Before that date, most corporations filed the return together with their T2 through the CRA; that route was discontinued. Ontario annual returns are due within six months after the end of the corporation's fiscal year.",
       },
       {
         type: "list",
@@ -258,7 +258,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "The most reliable approach is to add the corporation's incorporation anniversary to a calendar with a reminder 30 days in advance, and to keep a short checklist of whose information might have changed during the year — directors, officers, registered office. Filing the return itself usually takes less than ten minutes once you have those details in hand.",
+        text: "The most reliable approach is to add the corporation's incorporation anniversary to a calendar with a reminder 30 days in advance, and to keep a short checklist of whose information might have changed during the year: directors, officers, registered office. Filing the return itself usually takes less than ten minutes once you have those details in hand.",
       },
     ],
   },
@@ -273,7 +273,7 @@ export const articles: Article[] = [
     content: [
       {
         type: "paragraph",
-        text: "A corporate minute book is the official record of a corporation's existence and governance. Despite the name, it is not a log of conversations — it is a complete, organized archive of every document and decision that affects the corporation's legal status, ownership, and internal rules. Every Canadian corporation is required by statute to maintain one from the day it is incorporated.",
+        text: "A corporate minute book is the official record of a corporation's existence and governance. Despite the name, it is not a log of conversations; it is a complete, organized archive of every document and decision that affects the corporation's legal status, ownership, and internal rules. Every Canadian corporation is required by statute to maintain one from the day it is incorporated.",
       },
       {
         type: "heading",
@@ -282,7 +282,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "Section 20 of the Canada Business Corporations Act requires federal corporations to maintain specified records at their registered office. Parallel provisions exist in every provincial business corporations act. The statute is specific about what must be kept and who can inspect it — typically directors, shareholders, and in some circumstances creditors or the public.",
+        text: "Section 20 of the Canada Business Corporations Act requires federal corporations to maintain specified records at their registered office. Parallel provisions exist in every provincial business corporations act. The statute is specific about what must be kept and who can inspect it: typically directors, shareholders, and in some circumstances creditors or the public.",
       },
       {
         type: "heading",
@@ -296,10 +296,10 @@ export const articles: Article[] = [
           "By-laws and any amendments to the by-laws.",
           "Minutes of meetings and written resolutions of directors.",
           "Minutes of meetings and written resolutions of shareholders.",
-          "Register of directors — names, addresses, and dates each director joined or left.",
-          "Register of officers — current officers and their positions.",
-          "Register of shareholders — names, addresses, and share holdings.",
-          "Securities register — every issuance, transfer, and cancellation of shares.",
+          "Register of directors: names, addresses, and dates each director joined or left.",
+          "Register of officers: current officers and their positions.",
+          "Register of shareholders: names, addresses, and share holdings.",
+          "Securities register: every issuance, transfer, and cancellation of shares.",
           "Copies of unanimous shareholder agreements, if any.",
           "Notices filed with the registry (changes of directors, registered office, etc.).",
         ],
@@ -311,7 +311,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "Legal responsibility rests with the directors of the corporation. In practice, the minute book is usually maintained at the corporation's registered office, or by a third party retained to act as the corporation's record keeper. Whether it lives in a physical binder or as a cloud-based digital record doesn't matter — what matters is that it is complete, current, and accessible when it needs to be inspected.",
+        text: "Legal responsibility rests with the directors of the corporation. In practice, the minute book is usually maintained at the corporation's registered office, or by a third party retained to act as the corporation's record keeper. Whether it lives in a physical binder or as a cloud-based digital record doesn't matter; what matters is that it is complete, current, and accessible when it needs to be inspected.",
       },
       {
         type: "heading",
@@ -324,12 +324,12 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "Reconstructing a minute book years after the fact is expensive and sometimes impossible — directors may no longer be available to sign backdated resolutions, share issuances may not be cleanly documented, and the corporation's legal history effectively has gaps. In the worst cases, those gaps can derail a transaction or reduce the purchase price.",
+        text: "Reconstructing a minute book years after the fact is expensive and sometimes impossible: directors may no longer be available to sign backdated resolutions, share issuances may not be cleanly documented, and the corporation's legal history effectively has gaps. In the worst cases, those gaps can derail a transaction or reduce the purchase price.",
       },
       {
         type: "callout",
         title: "A simple discipline",
-        text: "Every time the corporation does something meaningful — issues shares, appoints a new director, changes its fiscal year-end, passes a by-law — a corresponding resolution should be added to the minute book within a few weeks. A minute book that is kept current is almost effortless; one that is kept \"when we get around to it\" tends to stay unfinished.",
+        text: "Every time the corporation does something meaningful (issues shares, appoints a new director, changes its fiscal year-end, passes a by-law), a corresponding resolution should be added to the minute book within a few weeks. A minute book that is kept current is almost effortless; one that is kept \"when we get around to it\" tends to stay unfinished.",
       },
     ],
   },
@@ -356,7 +356,7 @@ export const articles: Article[] = [
         items: [
           "A corporate name (either a named corporation with a NUANS report, or a numbered corporation).",
           "Articles of Incorporation describing share structure and any restrictions on share transfers or business activities.",
-          "One or more incorporators — can be individuals or corporations.",
+          "One or more incorporators (can be individuals or corporations).",
           "At least one director. Ontario removed its 25% Canadian-resident director requirement in July 2021.",
           "An Ontario registered office address. A P.O. box alone is not acceptable; a civic address is required.",
           "Names and addresses of directors and officers for the first notice.",
@@ -426,9 +426,9 @@ export const articles: Article[] = [
         type: "list",
         items: [
           "Pass an organizational resolution issuing the initial shares and appointing officers.",
-          "Adopt by-laws — the general rules governing the corporation's internal affairs.",
+          "Adopt by-laws (the general rules governing the corporation's internal affairs).",
           "Register for a CRA Business Number and any relevant tax accounts (HST, payroll, corporate income tax).",
-          "Open a corporate bank account — banks will require the Articles, the Certificate, and a recent corporate profile.",
+          "Open a corporate bank account (banks will require the Articles, the Certificate, and a recent corporate profile).",
           "Set up the minute book and record the organizational resolutions in it.",
           "Calendar the annual return deadline (due within six months after fiscal year-end).",
         ],
@@ -436,7 +436,7 @@ export const articles: Article[] = [
       {
         type: "callout",
         title: "One common oversight",
-        text: "Ontario requires an Initial Return within 60 days of incorporation, confirming the directors and registered office that were named on the Articles. Missing this filing puts the corporation out of compliance almost immediately. It is a quick online filing — do it the same week you incorporate.",
+        text: "Ontario requires an Initial Return within 60 days of incorporation, confirming the directors and registered office that were named on the Articles. Missing this filing puts the corporation out of compliance almost immediately. It is a quick online filing; do it the same week you incorporate.",
       },
     ],
   },

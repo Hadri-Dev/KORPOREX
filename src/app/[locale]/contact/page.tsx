@@ -130,7 +130,7 @@ export default function ContactPage() {
                       contact@korporex.ca
                     </a>
                     <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                      All enquiries — general questions, incorporation orders, and support.
+                      All enquiries: general questions, incorporation orders, and support.
                     </p>
                   </div>
                 </li>
@@ -145,7 +145,7 @@ export default function ContactPage() {
                 </h3>
               </div>
               <p className="text-sm text-gray-600 leading-relaxed mb-5">
-                Most common questions are answered in our FAQ — including which jurisdiction
+                Most common questions are answered in our FAQ, including which jurisdiction
                 to choose, what&apos;s included, and how long incorporation takes.
               </p>
               <a href="/faq"
@@ -156,7 +156,7 @@ export default function ContactPage() {
 
             <div className="border-l-4 border-gold-500 pl-5">
               <p className="text-sm text-gray-600 italic leading-relaxed">
-                &ldquo;We respond to every message within one business day. Korporex is 100% online — we serve
+                &ldquo;We respond to every message within one business day. Korporex is 100% online. We serve
                 Canadian entrepreneurs and international clients from anywhere.&rdquo;
               </p>
             </div>

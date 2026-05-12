@@ -17,9 +17,9 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: Params): Metadata {
   const article = getArticleBySlug(params.slug);
-  if (!article) return { title: "Article not found — Korporex" };
+  if (!article) return { title: "Article not found | Korporex" };
   return {
-    title: `${article.title} — Korporex`,
+    title: `${article.title} | Korporex`,
     description: article.excerpt,
   };
 }

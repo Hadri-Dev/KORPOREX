@@ -48,8 +48,8 @@ export function regOfficeAddonAvailable(jurisdiction: Jurisdiction): boolean {
 }
 
 export const PRICES: Record<Jurisdiction, Record<Pkg, number>> = {
-  federal: { basic: 499, standard: 699, premium: 999 },
-  ontario: { basic: 399, standard: 599, premium: 899 },
+  federal: { basic: 599, standard: 699, premium: 999 },
+  ontario: { basic: 599, standard: 599, premium: 899 },
 };
 
 // Lawyer consultation fee. Flat-rated 30-minute session with an independent

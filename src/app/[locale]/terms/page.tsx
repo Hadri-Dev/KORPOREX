@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Terms of Service | Korporex",
   description:
-    "Terms of Service for Korporex — the agreement between you and Korporex for use of the incorporation platform and related services.",
+    "Terms of Service for Korporex: the agreement between you and Korporex for use of the incorporation platform and related services.",
 };
 
 // NOTE TO REVIEWERS:

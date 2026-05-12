@@ -477,7 +477,7 @@ export default function LegalConsultationPage() {
                 onClick={submitToApi}
                 className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors"
               >
-                Continue to Payment — ${pricing.total.toFixed(2)} CAD <ArrowRight size={14} />
+                Continue to Payment: ${pricing.total.toFixed(2)} CAD <ArrowRight size={14} />
               </button>
               <p className="text-xs text-gray-500 mt-4">
                 You&rsquo;ll be redirected to <span className="font-semibold">Stripe</span> to complete payment securely.

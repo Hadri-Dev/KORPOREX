@@ -28,7 +28,7 @@ const nextSteps = [
   {
     icon: FileText,
     title: "Your Documents",
-    body: "Depending on your package, you'll receive your Certificate of Incorporation, Articles, and corporate minute book — all stored securely in your Korporex account.",
+    body: "Depending on your package, you'll receive your Certificate of Incorporation, Articles, and corporate minute book, all stored securely in your Korporex account.",
   },
   {
     icon: Building2,
@@ -85,7 +85,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
             Is Being Processed
           </h1>
           <p className="text-lg text-gray-600 max-w-xl mx-auto">
-            Thank you — your application has been received. You&apos;ll receive your
+            Thank you, your application has been received. You&apos;ll receive your
             incorporation documents within 24 hours.
           </p>
           {(displayRef || amountPaid) && (
@@ -151,7 +151,7 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
                 </Link>
                 {displayRef && (
                   <>
-                    {" "}— please quote <span className="font-mono text-navy-900">{displayRef}</span>
+                    {" "}- please quote <span className="font-mono text-navy-900">{displayRef}</span>
                   </>
                 )}
                 .
