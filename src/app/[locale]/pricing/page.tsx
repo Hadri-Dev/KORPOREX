@@ -24,15 +24,13 @@ const pricingData: Record<Jurisdiction, {
       price: "$599",
       description: "For solo founders.\nThe simplest way to incorporate. Ideal for consultants, Freelancers, and single-owner holding companies.",
       features: [
-        "Articles of Incorporation filing, including Certificate of Incorporation",
+        "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
         "Numbered Corporation",
-        "Federal corporate bylaws",
         "One Class of Shares",
         "One Shareholder, One Director, and One Officer",
         "Standard Digital Minute Book",
         "All Mandatory post-incorporation filings",
         "24-hour turnaround",
-        "Digital document delivery",
       ],
     },
     {
@@ -67,15 +65,13 @@ const pricingData: Record<Jurisdiction, {
       price: "$599",
       description: "For solo founders.\nThe simplest way to incorporate. Ideal for consultants, Freelancers, and single-owner holding companies.",
       features: [
-        "Articles of Incorporation filing, including Certificate of Incorporation",
+        "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
         "Numbered Corporation",
-        "Corporate bylaws",
         "One Class of Shares",
         "One Shareholder, One Director, and One Officer",
         "Standard Digital Minute Book",
         "All Mandatory post-incorporation filings",
         "24-hour turnaround",
-        "Digital document delivery",
       ],
     },
     {
