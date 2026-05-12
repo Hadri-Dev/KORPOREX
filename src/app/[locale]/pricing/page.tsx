@@ -22,7 +22,7 @@ const pricingData: Record<Jurisdiction, {
     {
       name: "Basic",
       price: "$599",
-      description: "For solo founders. The simplest way to incorporate. Ideal for consultants, Freelancers, and single-owner holding companies.",
+      description: "For solo founders.\nThe simplest way to incorporate. Ideal for consultants, Freelancers, and single-owner holding companies.",
       features: [
         "Articles of Incorporation filing, including Certificate of Incorporation",
         "Numbered Corporation",
@@ -65,7 +65,7 @@ const pricingData: Record<Jurisdiction, {
     {
       name: "Basic",
       price: "$599",
-      description: "For solo founders. The simplest way to incorporate. Ideal for consultants, Freelancers, and single-owner holding companies.",
+      description: "For solo founders.\nThe simplest way to incorporate. Ideal for consultants, Freelancers, and single-owner holding companies.",
       features: [
         "Articles of Incorporation filing, including Certificate of Incorporation",
         "Numbered Corporation",
@@ -174,7 +174,7 @@ export default function PricingPage() {
                 <p className="text-xs mb-5 text-gray-500 transition-colors group-hover:text-gray-400">
                   all fees included · CAD
                 </p>
-                <p className="text-sm leading-relaxed mb-8 text-gray-600 transition-colors group-hover:text-gray-300">
+                <p className="text-sm leading-relaxed mb-8 text-gray-600 transition-colors group-hover:text-gray-300 whitespace-pre-line">
                   {description}
                 </p>
                 <ul className="space-y-3 mb-10 flex-1">
