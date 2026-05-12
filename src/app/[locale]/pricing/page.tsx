@@ -167,13 +167,13 @@ export default function PricingPage() {
                 key={name}
                 className="group flex flex-col p-8 bg-white border border-gray-200 rounded-lg transition-colors hover:bg-navy-900 hover:border-navy-900"
               >
-                <p className="text-xs font-semibold tracking-[0.15em] uppercase mb-3 text-gray-500 transition-colors group-hover:text-gray-400">
+                <p className="text-center text-base font-semibold tracking-[0.15em] uppercase mb-3 text-gray-700 transition-colors group-hover:text-gray-300">
                   {name}
                 </p>
-                <p className="font-serif text-5xl font-bold mb-1 text-navy-900 transition-colors group-hover:text-white">
+                <p className="text-center font-serif text-5xl font-bold mb-1 text-navy-900 transition-colors group-hover:text-white">
                   {price}
                 </p>
-                <p className="text-xs mb-5 text-gray-500 transition-colors group-hover:text-gray-400">
+                <p className="text-center text-xs mb-5 text-gray-500 transition-colors group-hover:text-gray-400">
                   all fees included · CAD
                 </p>
                 <p className="text-sm leading-relaxed mb-8 text-gray-600 transition-colors group-hover:text-gray-300 whitespace-pre-line">
