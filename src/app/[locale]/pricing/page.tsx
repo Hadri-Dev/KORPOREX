@@ -22,7 +22,7 @@ const pricingData: Record<Jurisdiction, {
     {
       name: "Basic",
       price: "$599",
-      description: "Everything you need to get incorporated federally, including government fees.",
+      description: "For solo founders. The simplest way to incorporate. Ideal for consultants, Freelancers, and single-owner holding companies.",
       features: [
         "Articles of Incorporation filing, including Certificate of Incorporation",
         "Numbered Corporation",
@@ -65,7 +65,7 @@ const pricingData: Record<Jurisdiction, {
     {
       name: "Basic",
       price: "$599",
-      description: "Everything you need to get incorporated in Ontario, including government fees.",
+      description: "For solo founders. The simplest way to incorporate. Ideal for consultants, Freelancers, and single-owner holding companies.",
       features: [
         "Articles of Incorporation filing, including Certificate of Incorporation",
         "Numbered Corporation",
