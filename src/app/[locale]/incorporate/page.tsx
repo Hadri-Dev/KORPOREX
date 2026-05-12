@@ -807,15 +807,19 @@ const emptyDir: Director = {
   address: { ...emptyAddress },
 };
 
-function Step4({ def, jurisdiction, onNext, onBack }: { def: Partial<S4>; jurisdiction: Jurisdiction; onNext: (d: S4) => void; onBack: () => void }) {
+function Step4({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S4>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S4) => void; onBack: () => void }) {
   const isFederal = jurisdiction === "federal";
   // Federal customers must consciously pick "yes" or "no" — seed unset so the
   // radio group renders with neither option selected. Non-federal preserves
   // the legacy checkbox-as-boolean UX, so seed "no" (= unchecked).
   const seedDir: Director = isFederal ? emptyDir : { ...emptyDir, isCanadianResident: "no" };
+  // Basic is single-director per the package feature list. Clamp carryover
+  // state if the customer downgraded from Standard/Premium mid-flow.
+  const basicLocked = pkg === "basic";
+  const initialDirs = def.directors?.length ? def.directors : [seedDir];
   const form = useForm<S4>({
     resolver: zodResolver(s4),
-    defaultValues: { directors: def.directors?.length ? def.directors : [seedDir] },
+    defaultValues: { directors: basicLocked ? initialDirs.slice(0, 1) : initialDirs },
   });
   const { register, handleSubmit, control, formState: { errors } } = form;
   const { fields, append, remove } = useFieldArray({ control, name: "directors" });
@@ -930,10 +934,12 @@ function Step4({ def, jurisdiction, onNext, onBack }: { def: Partial<S4>; jurisd
               )}
             </div>
           ))}
-          <button type="button" onClick={() => append(seedDir)}
-            className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
-            <Plus size={14} /> Add Another Director
-          </button>
+          {!basicLocked && (
+            <button type="button" onClick={() => append(seedDir)}
+              className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
+              <Plus size={14} /> Add Another Director
+            </button>
+          )}
           <NextBtn />
         </form>
       </div>
@@ -951,10 +957,12 @@ const emptySH: Shareholder = {
   address: { ...emptyAddress },
 };
 
-function Step5({ def, jurisdiction, onNext, onBack }: { def: Partial<S5>; jurisdiction: Jurisdiction; onNext: (d: S5) => void; onBack: () => void }) {
+function Step5({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S5>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S5) => void; onBack: () => void }) {
+  const basicLocked = pkg === "basic";
+  const initialSh = def.shareholders?.length ? def.shareholders : [emptySH];
   const form = useForm<S5>({
     resolver: zodResolver(s5),
-    defaultValues: { shareholders: def.shareholders?.length ? def.shareholders : [emptySH] },
+    defaultValues: { shareholders: basicLocked ? initialSh.slice(0, 1) : initialSh },
   });
   const { register, handleSubmit, control, formState: { errors } } = form;
   const { fields, append, remove } = useFieldArray({ control, name: "shareholders" });
@@ -1023,10 +1031,12 @@ function Step5({ def, jurisdiction, onNext, onBack }: { def: Partial<S5>; jurisd
               <AddressFields prefix={`shareholders.${i}.address`} locationBias={ADDRESS_BIAS[jurisdiction]} />
             </div>
           ))}
-          <button type="button" onClick={() => append(emptySH)}
-            className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
-            <Plus size={14} /> Add Another Shareholder
-          </button>
+          {!basicLocked && (
+            <button type="button" onClick={() => append(emptySH)}
+              className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
+              <Plus size={14} /> Add Another Shareholder
+            </button>
+          )}
           <NextBtn />
         </form>
       </div>
@@ -1044,10 +1054,12 @@ const emptyOfficer: Officer = {
   address: { ...emptyAddress },
 };
 
-function Step6({ def, jurisdiction, onNext, onBack }: { def: Partial<S6>; jurisdiction: Jurisdiction; onNext: (d: S6) => void; onBack: () => void }) {
+function Step6({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S6>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S6) => void; onBack: () => void }) {
+  const basicLocked = pkg === "basic";
+  const initialOfc = def.officers?.length ? def.officers : [emptyOfficer];
   const form = useForm<S6>({
     resolver: zodResolver(s6),
-    defaultValues: { officers: def.officers?.length ? def.officers : [emptyOfficer] },
+    defaultValues: { officers: basicLocked ? initialOfc.slice(0, 1) : initialOfc },
   });
   const { register, handleSubmit, control, formState: { errors } } = form;
   const { fields, append, remove } = useFieldArray({ control, name: "officers" });
@@ -1089,10 +1101,12 @@ function Step6({ def, jurisdiction, onNext, onBack }: { def: Partial<S6>; jurisd
               <AddressFields prefix={`officers.${i}.address`} locationBias={ADDRESS_BIAS[jurisdiction]} />
             </div>
           ))}
-          <button type="button" onClick={() => append(emptyOfficer)}
-            className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
-            <Plus size={14} /> Add Another Officer
-          </button>
+          {!basicLocked && (
+            <button type="button" onClick={() => append(emptyOfficer)}
+              className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
+              <Plus size={14} /> Add Another Officer
+            </button>
+          )}
           <NextBtn />
         </form>
       </div>
@@ -1492,9 +1506,9 @@ export default function IncorporatePage() {
           }}
           onBack={() => setStep(2)}
         />}
-        {step === 4 && <Step4 jurisdiction={data.jurisdiction} def={{ directors: data.directors }} onNext={(d) => { patch(d); setStep(5); }} onBack={() => setStep(3)} />}
-        {step === 5 && <Step5 jurisdiction={data.jurisdiction} def={{ shareholders: data.shareholders }} onNext={(d) => { patch(d); setStep(6); }} onBack={() => setStep(4)} />}
-        {step === 6 && <Step6 jurisdiction={data.jurisdiction} def={{ officers: data.officers }} onNext={(d) => { patch(d); setStep(7); }} onBack={() => setStep(5)} />}
+        {step === 4 && <Step4 jurisdiction={data.jurisdiction} pkg={data.pkg} def={{ directors: data.directors }} onNext={(d) => { patch(d); setStep(5); }} onBack={() => setStep(3)} />}
+        {step === 5 && <Step5 jurisdiction={data.jurisdiction} pkg={data.pkg} def={{ shareholders: data.shareholders }} onNext={(d) => { patch(d); setStep(6); }} onBack={() => setStep(4)} />}
+        {step === 6 && <Step6 jurisdiction={data.jurisdiction} pkg={data.pkg} def={{ officers: data.officers }} onNext={(d) => { patch(d); setStep(7); }} onBack={() => setStep(5)} />}
         {step === 7 && <Step7 jurisdiction={data.jurisdiction}
           def={{ regOffice: data.regOffice, regOfficeAddon: data.regOfficeAddon }}
           onNext={(d) => { patch(d); setStep(8); }} onBack={() => setStep(6)} />}
