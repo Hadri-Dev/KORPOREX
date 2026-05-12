@@ -585,16 +585,21 @@ function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
 
 type S3 = z.infer<typeof s3>;
 
-function Step3({ jurisdiction, def, onNext, onBack }: {
+function Step3({ jurisdiction, pkg, def, onNext, onBack }: {
   jurisdiction: Jurisdiction;
+  pkg: Pkg;
   def: Partial<S3>;
   onNext: (d: S3) => void;
   onBack: () => void;
 }) {
+  // Basic package is numbered-only — Named requires Standard or Premium.
+  // Force corpNameType to "numbered" regardless of what `def` carries over
+  // from a prior visit at a different package tier.
+  const basicLocked = pkg === "basic";
   const form = useForm<S3>({
     resolver: zodResolver(s3),
     defaultValues: {
-      corpNameType: "named",
+      corpNameType: basicLocked ? "numbered" : "named",
       businessName: "",
       // Cast: the wizard's WizardData allows "" for unset, but the Zod schema
       // (and therefore S3) restricts to the LegalEnding union. The UI shows
@@ -607,6 +612,7 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
       fiscalYearEndMonth: "",
       fiscalYearEndDay: "",
       ...def,
+      ...(basicLocked ? { corpNameType: "numbered" as const } : {}),
     },
   });
   const { register, handleSubmit, watch, setValue, formState: { errors } } = form;
@@ -630,33 +636,38 @@ function Step3({ jurisdiction, def, onNext, onBack }: {
         <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Business Details</h2>
         <p className="text-gray-500 text-sm mb-8">Tell us about the business you&apos;re incorporating.</p>
         <form onSubmit={handleSubmit(onNext)} className="space-y-5">
-          {/* Corporation name type */}
-          <Field label="Corporation Name Type *" error={errors.corpNameType?.message}>
-            <div className="grid grid-cols-2 gap-3">
-              {(["named", "numbered"] as const).map((t) => (
-                <button
-                  type="button"
-                  key={t}
-                  onClick={() => setValue("corpNameType", t, { shouldValidate: true })}
-                  className={`group border px-4 py-3 text-left transition-colors hover:bg-navy-900 hover:border-navy-900 ${
-                    corpNameType === t
-                      ? "border-navy-900 bg-navy-50"
-                      : "border-gray-200"
-                  }`}
-                >
-                  <p className="text-sm font-semibold text-navy-900 transition-colors group-hover:text-white">
-                    {t === "named" ? "Named" : "Numbered"}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-0.5 transition-colors group-hover:text-gray-300">
-                    {t === "named"
-                      ? "Pick your own corporate name (e.g. Acme Inc.)"
-                      : "Government-assigned (e.g. 1234567 Canada Inc.)"}
-                  </p>
-                </button>
-              ))}
-            </div>
-            <input type="hidden" {...register("corpNameType")} />
-          </Field>
+          {/* Corporation name type — picker hidden for Basic (numbered-only).
+              Standard and Premium expose both Named and Numbered options. */}
+          {basicLocked ? (
+            <input type="hidden" {...register("corpNameType")} value="numbered" />
+          ) : (
+            <Field label="Corporation Name Type *" error={errors.corpNameType?.message}>
+              <div className="grid grid-cols-2 gap-3">
+                {(["named", "numbered"] as const).map((t) => (
+                  <button
+                    type="button"
+                    key={t}
+                    onClick={() => setValue("corpNameType", t, { shouldValidate: true })}
+                    className={`group border px-4 py-3 text-left transition-colors hover:bg-navy-900 hover:border-navy-900 ${
+                      corpNameType === t
+                        ? "border-navy-900 bg-navy-50"
+                        : "border-gray-200"
+                    }`}
+                  >
+                    <p className="text-sm font-semibold text-navy-900 transition-colors group-hover:text-white">
+                      {t === "named" ? "Named" : "Numbered"}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-0.5 transition-colors group-hover:text-gray-300">
+                      {t === "named"
+                        ? "Pick your own corporate name (e.g. Acme Inc.)"
+                        : "Government-assigned (e.g. 1234567 Canada Inc.)"}
+                    </p>
+                  </button>
+                ))}
+              </div>
+              <input type="hidden" {...register("corpNameType")} />
+            </Field>
+          )}
 
           {corpNameType === "named" ? (
             <Field
@@ -1453,6 +1464,7 @@ export default function IncorporatePage() {
         {step === 2 && <Step2 jurisdiction={data.jurisdiction} value={data.pkg} onChange={(pkg) => patch({ pkg })} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
         {step === 3 && <Step3
           jurisdiction={data.jurisdiction}
+          pkg={data.pkg}
           def={{
             corpNameType: data.corpNameType,
             businessName: data.businessName,
