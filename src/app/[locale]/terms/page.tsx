@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 // addresses, confirmed filing timelines, any future user-account features,
 // etc.). Review by qualified legal counsel is required before deployment.
 
-const EFFECTIVE_DATE = "April 23, 2026";
+const EFFECTIVE_DATE = "May 12, 2026";
 
 export default function TermsPage() {
   return (

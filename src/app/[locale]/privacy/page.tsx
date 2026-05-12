@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 // is required before deployment. The Privacy Officer designation at
 // contact@korporex.ca should also be verified before launch.
 
-const EFFECTIVE_DATE = "April 23, 2026";
+const EFFECTIVE_DATE = "May 12, 2026";
 
 export default function PrivacyPage() {
   return (
@@ -203,6 +203,14 @@ export default function PrivacyPage() {
               data required to serve requests and deliver email to our mailbox.
             </p>
             <p>
+              <strong>(e2) Operational logging.</strong> We use Supabase Inc. (United States)
+              to store limited operational logs that help us maintain and improve the Site,
+              including a record of pages that returned a not-found (404) response. These
+              records may include the requested URL path, the referring URL, the visitor&rsquo;s
+              IP address, browser user-agent, and a timestamp. No wizard data, payment data,
+              or contact-form data is stored in Supabase.
+            </p>
+            <p>
               <strong>(f) Professional and business advisors.</strong> We may share limited
               information with our accountants, auditors, legal advisors, and insurers as
               necessary for them to provide services to Korporex, under appropriate
@@ -226,9 +234,9 @@ export default function PrivacyPage() {
 
           <Section n="5" title="International Transfers of Personal Information">
             <p>
-              Several of the service providers we use (including Stripe, Google, and Vercel)
-              are based outside Canada or process data on servers located outside Canada,
-              principally in the United States. Zoho Corporation is a multinational group
+              Several of the service providers we use (including Stripe, Google, Vercel, and
+              Supabase) are based outside Canada or process data on servers located outside
+              Canada, principally in the United States. Zoho Corporation is a multinational group
               with offices in India and the United States; mailbox data for
               <code>contact@korporex.ca</code> is stored in Zoho&rsquo;s Canadian data centre,
               but Zoho support and operations personnel based outside Canada may access it
