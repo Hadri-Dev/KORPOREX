@@ -1,5 +1,6 @@
 import type Stripe from "stripe";
 import { stripe } from "./stripe";
+import { listOrderOverrides, type AdminOrderStatus } from "./orderOverrides";
 
 // Korporex doesn't have a database — Stripe Checkout sessions ARE the order
 // log. This module wraps the Stripe API into shapes the dashboard pages
@@ -26,6 +27,7 @@ export interface OrderSummary {
   pkg: string | null;
   businessName: string | null;
   createdAt: number; // unix seconds
+  adminStatus: AdminOrderStatus | null;
 }
 
 export interface DashboardStats {
@@ -47,7 +49,10 @@ function classifySource(metadata: Stripe.Metadata | null): OrderSource {
   return "unknown";
 }
 
-function summarize(session: Stripe.Checkout.Session): OrderSummary {
+function summarize(
+  session: Stripe.Checkout.Session,
+  adminStatus: AdminOrderStatus | null = null,
+): OrderSummary {
   const md = session.metadata ?? null;
   const customerName =
     md?.billingName?.toString() ||
@@ -73,6 +78,7 @@ function summarize(session: Stripe.Checkout.Session): OrderSummary {
     pkg: md?.pkg?.toString() ?? null,
     businessName: md?.businessName?.toString() ?? null,
     createdAt: session.created,
+    adminStatus,
   };
 }
 
@@ -123,7 +129,15 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     }
   }
 
-  const recentOrders = sessions.slice(0, 8).map(summarize);
+  // Filter soft-deleted sessions out of the dashboard recent-orders list,
+  // then take the top 8. Stats counters above remain over the full Stripe
+  // session set — admin overrides shouldn't move financial metrics.
+  const recentSlice = sessions.slice(0, 32);
+  const recentOverrides = await listOrderOverrides(recentSlice.map((s) => s.id));
+  const recentOrders = recentSlice
+    .filter((s) => !recentOverrides.get(s.id)?.deleted)
+    .slice(0, 8)
+    .map((s) => summarize(s, recentOverrides.get(s.id)?.adminStatus ?? null));
 
   return {
     configured: true,
@@ -144,7 +158,10 @@ export interface OrdersPageResult {
 export async function getOrders(filter?: "paid" | "open" | "all"): Promise<OrdersPageResult> {
   if (!stripe) return { configured: false, orders: [] };
   const sessions = await listAllRecentSessions(200);
+  const overrides = await listOrderOverrides(sessions.map((s) => s.id));
+  // Hide soft-deleted orders from every dashboard tab; keep them in Stripe.
   const filtered = sessions.filter((s) => {
+    if (overrides.get(s.id)?.deleted) return false;
     if (!filter || filter === "all") return true;
     if (filter === "paid") return s.payment_status === "paid";
     if (filter === "open") {
@@ -152,7 +169,10 @@ export async function getOrders(filter?: "paid" | "open" | "all"): Promise<Order
     }
     return true;
   });
-  return { configured: true, orders: filtered.map(summarize) };
+  return {
+    configured: true,
+    orders: filtered.map((s) => summarize(s, overrides.get(s.id)?.adminStatus ?? null)),
+  };
 }
 
 export interface OrderDetail {

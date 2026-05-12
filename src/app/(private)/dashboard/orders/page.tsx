@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AlertCircle, Inbox } from "lucide-react";
-import { formatCurrency, formatRelative, getOrders } from "@/lib/dashboardData";
+import { getOrders } from "@/lib/dashboardData";
+import { OrdersTable } from "./OrdersTable";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -28,7 +29,8 @@ export default async function OrdersPage({
       <div>
         <h1 className="font-serif text-3xl font-semibold text-navy-900">Orders</h1>
         <p className="mt-1 text-sm text-gray-600">
-          Stripe Checkout sessions, newest first. Click an order for full detail.
+          Stripe Checkout sessions, newest first. Click an order for full detail, or use the row
+          menu to set an admin status or hide it from this view.
         </p>
       </div>
 
@@ -71,118 +73,8 @@ export default async function OrdersPage({
           <p className="mt-3 text-sm font-medium text-gray-700">No orders match this filter</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <Th>Order</Th>
-                <Th>Customer</Th>
-                <Th>Business</Th>
-                <Th>Status</Th>
-                <Th align="right">Amount</Th>
-                <Th align="right">Created</Th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {orders.map((order) => (
-                <tr key={order.sessionId} className="hover:bg-gray-50">
-                  <Td>
-                    <Link
-                      href={`/dashboard/orders/${order.sessionId}`}
-                      className="font-medium text-navy-900 hover:underline"
-                    >
-                      {order.orderRef ?? order.sessionId.slice(-10)}
-                    </Link>
-                    {order.source !== "incorporate" ? (
-                      <p className="text-xs text-gray-500">
-                        {order.source === "legal-consult"
-                          ? "Legal consultation"
-                          : "Other"}
-                      </p>
-                    ) : null}
-                  </Td>
-                  <Td>
-                    <div className="text-sm text-gray-900">
-                      {order.customerName ?? "—"}
-                    </div>
-                    <div className="text-xs text-gray-500">{order.customerEmail ?? ""}</div>
-                  </Td>
-                  <Td>
-                    <div className="text-sm text-gray-900">
-                      {order.businessName ?? "—"}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {[order.jurisdiction, order.pkg].filter(Boolean).join(" · ")}
-                    </div>
-                  </Td>
-                  <Td>
-                    <StatusPill paymentStatus={order.paymentStatus} status={order.status} />
-                  </Td>
-                  <Td align="right">
-                    <span className="font-medium text-navy-900">
-                      {formatCurrency(order.amountTotal, order.currency)}
-                    </span>
-                  </Td>
-                  <Td align="right">
-                    <span className="text-xs text-gray-500">{formatRelative(order.createdAt)}</span>
-                  </Td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <OrdersTable orders={orders} />
       )}
     </div>
-  );
-}
-
-function Th({ children, align }: { children: React.ReactNode; align?: "right" }) {
-  return (
-    <th
-      scope="col"
-      className={
-        align === "right"
-          ? "px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500"
-          : "px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"
-      }
-    >
-      {children}
-    </th>
-  );
-}
-
-function Td({ children, align }: { children: React.ReactNode; align?: "right" }) {
-  return (
-    <td className={align === "right" ? "px-5 py-3 text-right" : "px-5 py-3 text-left"}>
-      {children}
-    </td>
-  );
-}
-
-function StatusPill({
-  paymentStatus,
-  status,
-}: {
-  paymentStatus: string;
-  status: string | null;
-}) {
-  if (paymentStatus === "paid") {
-    return (
-      <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
-        Paid
-      </span>
-    );
-  }
-  if (status === "expired") {
-    return (
-      <span className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700">
-        Expired
-      </span>
-    );
-  }
-  return (
-    <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
-      Pending
-    </span>
   );
 }
