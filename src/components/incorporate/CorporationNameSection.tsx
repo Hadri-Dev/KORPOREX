@@ -56,6 +56,7 @@ export default function CorporationNameSection({
 
   const isNamed = value.corpNameType === "named";
   const hasChosenName = isNamed && value.businessName.length > 0;
+  const jurisdictionWord = jurisdiction === "ontario" ? "Ontario" : "Canada";
 
   function setCorpType(t: CorpNameType) {
     onChange({
@@ -142,7 +143,7 @@ export default function CorporationNameSection({
                   <div className="text-sm text-gray-500 leading-snug">
                     {t === "named"
                       ? "Pick your own corporate name (e.g. Acme Inc.)"
-                      : "Government-assigned (e.g. 1234567 Canada Inc.)"}
+                      : `Government-assigned (e.g. 1234567 ${jurisdictionWord} Inc.)`}
                   </div>
                 </button>
               );
@@ -159,7 +160,7 @@ export default function CorporationNameSection({
         <div className="bg-cream-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700 leading-relaxed">
           <strong className="text-gray-800">Numbered corporation:</strong> A unique number will be
           assigned by the government and combined with your selected legal ending below
-          (e.g. <em>1234567 Canada INC.</em>). No name search required.
+          (e.g. <em>1234567 {jurisdictionWord} INC.</em>). No name search required.
         </div>
       )}
 
