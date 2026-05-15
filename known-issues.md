@@ -2,6 +2,13 @@
 
 ## Open
 
+### [Severity: medium] `CorporationNameSection` component built but unwired; `/api/name-precheck` route missing
+- **Where**: component at [src/components/incorporate/CorporationNameSection.tsx](src/components/incorporate/CorporationNameSection.tsx); intended to replace lines 644-705 of [src/app/[locale]/incorporate/page.tsx](src/app/[locale]/incorporate/page.tsx) (the Corporation Name Type picker, Proposed Corporation Name input, and Legal Ending select); fetches `POST /api/name-precheck` which does not exist.
+- **Symptom**: Component is in the tree but not rendered anywhere. If wired in as-is, every name search would 404 and the catch-block would silently report "available" for every query, defeating the point of the precheck.
+- **Impact**: Pre-launch Step 3 still uses the original three fields, so the wizard works fine — no customer regression. The new UX (live name availability check before checkout) is on the bench until both pieces ship.
+- **Why not fixed yet**: Built today (2026-05-14) on user request. Wiring + API route was deliberately scoped out — user asked for the component as a drop-in only, with a TODO comment where the real fetch goes. Real precheck data source still needs deciding (NUANS has no free API; options are paid NUANS reseller, Corporations Canada open data snapshot, or a fuzzy match against a self-maintained registry mirror).
+- **Logged**: 2026-05-14
+
 ### [Severity: high] French + Spanish translations only cover chrome + soon page + homepage; the rest of the site still renders English under /fr/ and /es/ URLs
 - **Where**: every page under `src/app/[locale]/` except the homepage and `/soon` still has hardcoded English text in JSX (about, contact, faq, pricing, services, resources index, the 5 resource articles, terms, privacy, the 8-step incorporation wizard, legal-consultation, both confirmation pages).
 - **Symptom**: Visiting `/fr/about` or `/es/pricing` shows the navbar/footer/language switcher in the chosen language, but page content is English. Internal links use the locale-aware `Link` so the URL prefix is preserved when navigating between pages.
