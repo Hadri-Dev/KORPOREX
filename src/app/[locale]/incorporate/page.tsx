@@ -20,7 +20,8 @@ import {
   type Pkg,
   type RegOfficeAddon,
 } from "@/lib/pricing";
-import { LEGAL_ENDINGS, legalEndingSchema, type LegalEnding } from "@/lib/legalEndings";
+import { legalEndingSchema, type LegalEnding } from "@/lib/legalEndings";
+import CorporationNameSection from "@/components/incorporate/CorporationNameSection";
 import {
   OFFICER_POSITIONS,
   officerPositionSchema,
@@ -617,6 +618,8 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack }: {
   });
   const { register, handleSubmit, watch, setValue, formState: { errors } } = form;
   const corpNameType = watch("corpNameType");
+  const businessName = watch("businessName");
+  const legalEnding = watch("legalEnding");
   const month = watch("fiscalYearEndMonth");
   const naicsCode = watch("naicsCode");
 
@@ -636,73 +639,28 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack }: {
         <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Business Details</h2>
         <p className="text-gray-500 text-sm mb-8">Tell us about the business you&apos;re incorporating.</p>
         <form onSubmit={handleSubmit(onNext)} className="space-y-5">
-          {/* Corporation name type — picker hidden for Basic (numbered-only).
-              Standard and Premium expose both Named and Numbered options. */}
-          {basicLocked ? (
-            <input type="hidden" {...register("corpNameType")} value="numbered" />
-          ) : (
-            <Field label="Corporation Name Type *" error={errors.corpNameType?.message}>
-              <div className="grid grid-cols-2 gap-3">
-                {(["named", "numbered"] as const).map((t) => (
-                  <button
-                    type="button"
-                    key={t}
-                    onClick={() => setValue("corpNameType", t, { shouldValidate: true })}
-                    className={`group border px-4 py-3 text-left transition-colors hover:bg-navy-900 hover:border-navy-900 ${
-                      corpNameType === t
-                        ? "border-navy-900 bg-navy-50"
-                        : "border-gray-200"
-                    }`}
-                  >
-                    <p className="text-sm font-semibold text-navy-900 transition-colors group-hover:text-white">
-                      {t === "named" ? "Named" : "Numbered"}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-0.5 transition-colors group-hover:text-gray-300">
-                      {t === "named"
-                        ? "Pick your own corporate name (e.g. Acme Inc.)"
-                        : "Government-assigned (e.g. 1234567 Canada Inc.)"}
-                    </p>
-                  </button>
-                ))}
-              </div>
-              <input type="hidden" {...register("corpNameType")} />
-            </Field>
-          )}
-
-          {corpNameType === "named" ? (
-            <Field
-              label="Proposed Corporation Name *"
-              error={errors.businessName?.message}
-              hint="Enter the distinctive part of the name only. The legal ending is selected separately below."
-            >
-              <input {...register("businessName")} placeholder='e.g. "Acme Technologies"' className={iCls} />
-            </Field>
-          ) : (
-            <div className="bg-cream-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700 leading-relaxed">
-              <strong className="text-gray-800">Numbered corporation:</strong> A unique number will be assigned
-              by the government at incorporation and combined with your selected legal ending below
-              (e.g. <em>1234567 Canada INC.</em>). No name search is required, so no NUANS fee applies. You can
-              later file Articles of Amendment to adopt a name if you choose.
-            </div>
-          )}
-
-          {/* Legal ending — required for both named and numbered, all jurisdictions. */}
-          <Field
-            label="Legal Ending *"
-            error={errors.legalEnding?.message}
-            hint={
-              corpNameType === "named"
-                ? "Appears at the end of your full corporate name (e.g. Acme Technologies INC.)."
-                : "Combined with the government-assigned number to form your full corporate name."
-            }
-          >
-            <select {...register("legalEnding")} className={sCls}>
-              <option value="">-- Please Select --</option>
-              {LEGAL_ENDINGS.map((e) => (
-                <option key={e} value={e}>{e}</option>
-              ))}
-            </select>
-          </Field>
+          <CorporationNameSection
+            value={{
+              corpNameType,
+              businessName: businessName ?? "",
+              legalEnding: (legalEnding ?? "") as LegalEnding | "",
+            }}
+            onChange={(v) => {
+              setValue("corpNameType", v.corpNameType, { shouldValidate: true });
+              setValue("businessName", v.businessName, { shouldValidate: true });
+              setValue("legalEnding", v.legalEnding as LegalEnding, { shouldValidate: true });
+            }}
+            basicLocked={basicLocked}
+            jurisdiction={jurisdiction}
+            errors={{
+              corpNameType: errors.corpNameType?.message,
+              businessName: errors.businessName?.message,
+              legalEnding: errors.legalEnding?.message,
+            }}
+          />
+          <input type="hidden" {...register("corpNameType")} />
+          <input type="hidden" {...register("businessName")} />
+          <input type="hidden" {...register("legalEnding")} />
 
           {corpNameType === "named" && (
             <div className="bg-cream-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700 leading-relaxed">
