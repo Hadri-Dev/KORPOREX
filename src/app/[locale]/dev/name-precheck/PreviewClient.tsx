@@ -65,7 +65,7 @@ export default function PreviewClient() {
 
         {/* Live state inspector so the reviewer can see what onChange would feed react-hook-form */}
         <div className="mt-6 bg-gray-900 text-gray-100 rounded-lg p-4 text-xs font-mono">
-          <div className="text-gray-400 mb-2">// onChange payload</div>
+          <div className="text-gray-400 mb-2">onChange payload</div>
           <pre className="whitespace-pre-wrap break-all">{JSON.stringify(value, null, 2)}</pre>
         </div>
       </div>
