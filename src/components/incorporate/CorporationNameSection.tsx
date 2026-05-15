@@ -277,60 +277,58 @@ export default function CorporationNameSection({
         </div>
       )}
 
-      {/* Legal ending — required for both named (after a name is chosen) and numbered */}
-      {(!isNamed || hasChosenName) && (
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            {isNamed && (
-              <div className="w-7 h-7 rounded-full bg-navy-900 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
-                2
-              </div>
-            )}
-            <label className={`block text-xs font-semibold tracking-[0.15em] uppercase text-gray-900 ${isNamed ? "" : ""}`}>
-              Legal Ending <span className="text-red-600">*</span>
-            </label>
-          </div>
-          <p className={`text-sm text-gray-500 mb-3 leading-relaxed ${isNamed ? "ml-10" : ""}`}>
-            Every corporation needs a legal ending. They&apos;re interchangeable — pick whichever you
-            prefer the look of. <strong className="text-gray-900">The ending has no legal consequences.</strong>
-          </p>
-
-          <div className="grid grid-cols-3 gap-2">
-            {LEGAL_ENDINGS.map((ending) => {
-              const selected = value.legalEnding === ending;
-              return (
-                <button
-                  key={ending}
-                  type="button"
-                  onClick={() => setLegalEnding(ending)}
-                  className={`bg-white border-2 rounded-lg px-2 py-3 text-center transition-colors ${
-                    selected
-                      ? "border-navy-900 bg-navy-50"
-                      : "border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  <div className="font-bold text-navy-900 text-sm">{ending}</div>
-                </button>
-              );
-            })}
-          </div>
-
-          {value.legalEnding && (
-            <div className="bg-navy-900 text-white rounded-lg px-5 py-4 text-center mt-4">
-              <div className="text-[0.7rem] tracking-[0.15em] uppercase opacity-70 mb-1">
-                Your corporation will be
-              </div>
-              <div className="font-serif text-xl font-semibold">
-                {isNamed ? value.businessName : "[Government-assigned number]"} {value.legalEnding}
-              </div>
+      {/* Legal ending — always visible; required for both named and numbered. */}
+      <div>
+        <div className="flex items-center gap-3 mb-2">
+          {isNamed && (
+            <div className="w-7 h-7 rounded-full bg-navy-900 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+              2
             </div>
           )}
-
-          {errors?.legalEnding && (
-            <p className="text-sm text-red-600 mt-2">{errors.legalEnding}</p>
-          )}
+          <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-gray-900">
+            Legal Ending <span className="text-red-600">*</span>
+          </label>
         </div>
-      )}
+        <p className={`text-sm text-gray-500 mb-3 leading-relaxed ${isNamed ? "ml-10" : ""}`}>
+          Every corporation needs a legal ending. They&apos;re interchangeable — pick whichever you
+          prefer the look of. <strong className="text-gray-900">The ending has no legal consequences.</strong>
+        </p>
+
+        <div className="grid grid-cols-3 gap-2">
+          {LEGAL_ENDINGS.map((ending) => {
+            const selected = value.legalEnding === ending;
+            return (
+              <button
+                key={ending}
+                type="button"
+                onClick={() => setLegalEnding(ending)}
+                className={`bg-white border-2 rounded-lg px-2 py-3 text-center transition-colors ${
+                  selected
+                    ? "border-navy-900 bg-navy-50"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <div className="font-bold text-navy-900 text-sm">{ending}</div>
+              </button>
+            );
+          })}
+        </div>
+
+        {value.legalEnding && (
+          <div className="bg-navy-900 text-white rounded-lg px-5 py-4 text-center mt-4">
+            <div className="text-[0.7rem] tracking-[0.15em] uppercase opacity-70 mb-1">
+              Your corporation will be
+            </div>
+            <div className="font-serif text-xl font-semibold">
+              {isNamed ? value.businessName : "[Government-assigned number]"} {value.legalEnding}
+            </div>
+          </div>
+        )}
+
+        {errors?.legalEnding && (
+          <p className="text-sm text-red-600 mt-2">{errors.legalEnding}</p>
+        )}
+      </div>
 
       <p className="text-xs text-gray-500 italic leading-relaxed pt-3 border-t border-gray-200">
         This is a preliminary search powered by NUANS — Canada&apos;s official corporate name database.
