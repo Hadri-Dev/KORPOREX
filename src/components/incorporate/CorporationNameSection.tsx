@@ -169,13 +169,26 @@ export default function CorporationNameSection({
             {jurisdictionWord} site.
           </p>
 
-          <div className="bg-amber-50 border border-amber-300 rounded-lg p-3 mb-4 flex items-start gap-2 text-sm text-amber-900 leading-relaxed">
+          <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 mb-4 flex items-start gap-2 text-sm text-amber-900 leading-relaxed">
             <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
-            <div>
-              <strong>Check the name on the Canada&apos;s Business Registries before submitting.</strong>{" "}
-              We do not verify availability for you at this step. If the name is already taken or
-              too similar to an existing corporation, it will be rejected when your incorporation
-              is filed.
+            <div className="space-y-2">
+              <p>
+                <strong>Check the name on the Canada&apos;s Business Registries before submitting.</strong>{" "}
+                We do not verify availability for you at this step. If the name is already taken or
+                too similar to an existing corporation, it will be rejected when your incorporation
+                is filed.
+              </p>
+              <p>
+                <strong>This is not an official NUANS search.</strong> The registry lookup above is a
+                preliminary check against publicly available business registries only. The official
+                NUANS Name Reservation Report (required to incorporate) is included in your Korporex
+                package and is filed automatically after checkout.
+              </p>
+              <p>
+                <strong>Your business name is not guaranteed.</strong> Final approval rests with the
+                government. The name may still be rejected if it conflicts with an existing
+                corporation or fails the official NUANS review.
+              </p>
             </div>
           </div>
 
@@ -281,21 +294,6 @@ export default function CorporationNameSection({
         )}
       </div>
 
-      {isNamed && (
-        <p className="text-xs text-gray-500 italic leading-relaxed pt-3 border-t border-gray-200">
-          <strong className="not-italic text-gray-700">
-            This is not an official NUANS search.
-          </strong>{" "}
-          The registry lookup above is a preliminary check against publicly available business
-          registries only. The official NUANS Name Reservation Report (required to incorporate) is
-          included in your Korporex package and is filed automatically after checkout.{" "}
-          <strong className="not-italic text-gray-700">
-            Your chosen business name is not guaranteed
-          </strong>{" "}
-          until it passes the official NUANS review and final government approval, and may still be
-          rejected if it conflicts with an existing corporation.
-        </p>
-      )}
     </div>
   );
 }

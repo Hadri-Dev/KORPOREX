@@ -41,6 +41,10 @@
 
 ## Log
 
+### 2026-05-22 (Step 3 named: consolidated all 3 disclaimers into one prominent amber block)
+
+Previous pass put #2 ("not an official NUANS search") and #3 ("name not guaranteed") in the italic gray disclaimer at the bottom of the section, where they were easy to miss. User flagged this. Consolidated all three points into a single amber callout block above the inputs, each with a bold lead phrase: (1) Check the name on Canada's Business Registries before submitting, (2) This is not an official NUANS search, (3) Your business name is not guaranteed. Removed the now-redundant italic disclaimer at the bottom. Applies to both Federal and Ontario Named (shared code path).
+
 ### 2026-05-22 (Step 3 named: clearer NUANS + no-guarantee disclaimers)
 
 Further polish on Step 3 Named — three changes:
