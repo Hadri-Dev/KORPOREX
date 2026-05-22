@@ -26,25 +26,14 @@ type Props = {
   };
 };
 
-// Official corporate-name search portal per jurisdiction. We link customers
-// out to the government registry rather than running a precheck against a
-// snapshot — the binding check happens at filing time via NUANS.
-const REGISTRY: Record<
-  "federal" | "ontario",
-  { url: string; buttonLabel: string; intro: string }
-> = {
-  federal: {
-    url: "https://ised-isde.canada.ca/cbr-rec/",
-    buttonLabel: "Search the federal corporate registry",
-    intro:
-      "Federal corporate names must be unique across Canada. Use Corporations Canada's official registry to confirm your distinctive name isn't already in use.",
-  },
-  ontario: {
-    url: "https://www.appmybizaccount.gov.on.ca/onbis/master/viewInstance/view.pub?id=3abd3bce3cc0ad2a3553f516b33034b80328889fedae6186&_timestamp=1083695347310433",
-    buttonLabel: "Search the Ontario business registry",
-    intro:
-      "Ontario corporate names must be unique within the province. Use the Ontario Business Registry to confirm your distinctive name isn't already in use.",
-  },
+// Both jurisdictions link to Canada's Business Registries — a federated public
+// search across federal Corporations Canada and participating provincial
+// registries. The binding check happens at filing time via NUANS.
+const REGISTRY = {
+  url: "https://ised-isde.canada.ca/cbr-rec/",
+  buttonLabel: "Search Canada's Business Registries",
+  intro:
+    "Corporate names must be unique within their jurisdiction. Use Canada's Business Registries to confirm your distinctive name isn't already in use.",
 };
 
 export default function CorporationNameSection({
@@ -56,7 +45,6 @@ export default function CorporationNameSection({
 }: Props) {
   const isNamed = value.corpNameType === "named";
   const jurisdictionWord = jurisdiction === "ontario" ? "Ontario" : "Canada";
-  const registry = REGISTRY[jurisdiction === "ontario" ? "ontario" : "federal"];
 
   // Confirmation field is local: forces the customer to re-type the business
   // name so a typo in the main field is caught before submission. The main
@@ -150,23 +138,22 @@ export default function CorporationNameSection({
             </h3>
           </div>
           <p className="text-sm text-gray-500 ml-10 mb-4 leading-relaxed">
-            {registry.intro} Search the{" "}
+            {REGISTRY.intro} Search the{" "}
             <strong className="text-gray-900">distinctive part</strong> only. For example,
             &quot;Acme&quot;, not &quot;Acme Inc.&quot; Then enter your chosen name below.
           </p>
 
           <a
-            href={registry.url}
+            href={REGISTRY.url}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-navy-900 hover:bg-navy-950 text-white font-semibold text-sm px-5 py-3 rounded-lg transition-colors mb-2"
           >
             <ExternalLink className="w-4 h-4" />
-            {registry.buttonLabel}
+            {REGISTRY.buttonLabel}
           </a>
           <p className="text-xs text-gray-500 mb-4">
-            Opens in a new tab. Free, unlimited searches on the Government of{" "}
-            {jurisdictionWord} site.
+            Opens in a new tab. Free, unlimited searches on the Government of Canada site.
           </p>
 
           <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 mb-4 flex items-start gap-2 text-sm text-amber-900 leading-relaxed">

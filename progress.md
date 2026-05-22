@@ -41,6 +41,10 @@
 
 ## Log
 
+### 2026-05-22 (Step 3 named: Ontario unified to use the federal CBR link)
+
+User asked Ontario to look identical to Federal. Pointed Ontario to `https://ised-isde.canada.ca/cbr-rec/` (Canada's Business Registries — a federated public search across federal Corporations Canada plus participating provincial registries, including Ontario, so it's actually correct for both jurisdictions). Collapsed the per-jurisdiction `REGISTRY` record to a single const, removed the jurisdiction lookup, renamed the button to "Search Canada's Business Registries", made the intro jurisdiction-neutral, and pinned the "Opens in a new tab" caption to "Government of Canada site". The `jurisdiction` prop is still used in the Numbered branch for the "1234567 Canada/Ontario INC." example.
+
 ### 2026-05-22 (Step 3 named: consolidated all 3 disclaimers into one prominent amber block)
 
 Previous pass put #2 ("not an official NUANS search") and #3 ("name not guaranteed") in the italic gray disclaimer at the bottom of the section, where they were easy to miss. User flagged this. Consolidated all three points into a single amber callout block above the inputs, each with a bold lead phrase: (1) Check the name on Canada's Business Registries before submitting, (2) This is not an official NUANS search, (3) Your business name is not guaranteed. Removed the now-redundant italic disclaimer at the bottom. Applies to both Federal and Ontario Named (shared code path).
