@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/navigation";
-import { ArrowRight, Building2, FileText, Edit3, ClipboardCheck, RefreshCw, ScaleIcon } from "lucide-react";
+import { ArrowRight, Building2, FileText, Edit3, ClipboardCheck, RefreshCw, ScaleIcon, Check, Star } from "lucide-react";
 
 type Service = { name: string; from: string; href: string };
 type Category = {
@@ -9,21 +9,61 @@ type Category = {
   services: Service[];
 };
 
-const categories: Category[] = [
+const jurisdictionOptions = [
   {
-    icon: Building2,
-    title: "Incorporation",
-    description: "Incorporate your business federally or provincially. Choose from standard, professional, holding, or non-profit corporations.",
-    services: [
-      { name: "Federal Incorporation - Standard Corp", from: "$599", href: "/incorporate?jurisdiction=federal&type=standard" },
-      { name: "Federal Incorporation - Professional Corp", from: "$549", href: "/incorporate?jurisdiction=federal&type=professional" },
-      { name: "Federal Incorporation - Holding Corp", from: "$599", href: "/incorporate?jurisdiction=federal&type=holding" },
-      { name: "Ontario Incorporation - Standard Corp", from: "$599", href: "/incorporate?jurisdiction=ontario&type=standard" },
-      { name: "Ontario Incorporation - Professional Corp", from: "$449", href: "/incorporate?jurisdiction=ontario&type=professional" },
-      { name: "Ontario Incorporation - Non-Profit", from: "$599", href: "/incorporate?jurisdiction=ontario&type=nonprofit" },
-      { name: "Ontario Incorporation - Holding Corp", from: "$599", href: "/incorporate?jurisdiction=ontario&type=holding" },
+    id: "federal",
+    name: "Federal Incorporation",
+    statute: "Canada Business Corporations Act (CBCA)",
+    pitch: "Operate across Canada under one corporate name.",
+    href: "/incorporate?jurisdiction=federal",
+  },
+  {
+    id: "ontario",
+    name: "Ontario Incorporation",
+    statute: "Ontario Business Corporations Act (OBCA)",
+    pitch: "Operate as an Ontario corporation, with lower government filing fees.",
+    href: "/incorporate?jurisdiction=ontario",
+  },
+];
+
+const packageSummary = [
+  {
+    name: "Basic",
+    price: "$599",
+    audience: "For solo founders",
+    blurb: "Consultants, freelancers, and single-owner holding companies.",
+    highlights: [
+      "Numbered corporation",
+      "1 director, 1 shareholder, 1 officer",
+      "1 class of shares",
     ],
   },
+  {
+    name: "Standard",
+    price: "$899",
+    audience: "For founding teams",
+    blurb: "Co-founders, spouses incorporating together, and small partnerships ready to operate under a business name.",
+    highlights: [
+      "Named or numbered (NUANS included)",
+      "Up to 3 directors, 3 shareholders, 3 officers",
+      "Up to 3 classes of shares",
+    ],
+    popular: true,
+  },
+  {
+    name: "Premium",
+    price: "$1,199",
+    audience: "For multi-stakeholder businesses",
+    blurb: "Multiple founders, advisors, or family members with a layered share structure.",
+    highlights: [
+      "Named or numbered (NUANS included)",
+      "Up to 5 directors, 5 shareholders, 5 officers",
+      "Up to 5 classes of shares",
+    ],
+  },
+];
+
+const categories: Category[] = [
   {
     icon: FileText,
     title: "Registrations",
@@ -93,6 +133,100 @@ export default function ServicesPage() {
       {/* Service Categories */}
       <section className="bg-white py-16 px-6">
         <div className="max-w-6xl mx-auto space-y-16">
+          {/* Incorporation — custom block: two jurisdiction cards + 3-package summary */}
+          <div>
+            <div className="flex items-start gap-4 mb-8">
+              <div className="w-11 h-11 bg-navy-50 flex items-center justify-center shrink-0 mt-0.5">
+                <Building2 size={20} className="text-navy-900" />
+              </div>
+              <div>
+                <h2 className="font-serif text-2xl font-bold text-navy-900 mb-1">Incorporation</h2>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  Incorporate federally or in Ontario, fully online, in 24 hours. Pick your
+                  jurisdiction below, then choose the package that fits your business.
+                </p>
+              </div>
+            </div>
+
+            {/* Jurisdiction picker — primary action */}
+            <div className="grid md:grid-cols-2 gap-4 ml-0 md:ml-15 mb-12">
+              {jurisdictionOptions.map(({ id, name, statute, pitch, href }) => (
+                <Link
+                  key={id}
+                  href={href}
+                  className="group block bg-cream-50 border border-gray-200 rounded-lg p-6 hover:border-navy-900 hover:bg-white transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <h3 className="font-serif text-xl font-semibold text-navy-900">{name}</h3>
+                    <ArrowRight
+                      size={18}
+                      className="text-gray-400 group-hover:text-navy-900 shrink-0 mt-1 transition-colors"
+                    />
+                  </div>
+                  <p className="text-xs font-medium text-gold-600 tracking-wide mb-3">{statute}</p>
+                  <p className="text-sm text-gray-600 leading-relaxed mb-4">{pitch}</p>
+                  <p className="text-sm font-semibold text-navy-900">From $599</p>
+                </Link>
+              ))}
+            </div>
+
+            {/* Package summary — secondary, informational */}
+            <div className="ml-0 md:ml-15">
+              <div className="flex items-baseline justify-between flex-wrap gap-3 mb-5">
+                <h3 className="font-serif text-lg font-semibold text-navy-900">
+                  Three packages, one transparent price
+                </h3>
+                <Link
+                  href="/pricing"
+                  className="text-xs font-semibold uppercase tracking-[0.15em] text-navy-900 hover:text-navy-700 inline-flex items-center gap-1"
+                >
+                  Compare full features
+                  <ArrowRight size={12} />
+                </Link>
+              </div>
+              <div className="grid md:grid-cols-3 gap-4">
+                {packageSummary.map(({ name, price, audience, blurb, highlights, popular }) => (
+                  <div
+                    key={name}
+                    className={`relative bg-cream-50 rounded-lg p-6 border transition-colors ${
+                      popular ? "border-navy-900 bg-white shadow-sm" : "border-gray-200"
+                    }`}
+                  >
+                    {popular && (
+                      <div className="absolute -top-3 left-6 bg-navy-900 text-white text-[0.65rem] font-bold tracking-[0.15em] uppercase px-2.5 py-1 rounded-sm inline-flex items-center gap-1">
+                        <Star size={10} className="fill-gold-500 text-gold-500" />
+                        Most Popular
+                      </div>
+                    )}
+                    <div className="flex items-baseline gap-2 mb-1">
+                      <h4 className="font-serif text-xl font-bold text-navy-900">{name}</h4>
+                      <span className="text-sm font-semibold text-gray-500">{price}</span>
+                    </div>
+                    <p className="text-xs font-semibold text-gold-600 uppercase tracking-wide mb-3">
+                      {audience}
+                    </p>
+                    <p className="text-sm text-gray-600 leading-relaxed mb-4">{blurb}</p>
+                    <ul className="space-y-2">
+                      {highlights.map((h) => (
+                        <li key={h} className="flex items-start gap-2 text-sm text-gray-700">
+                          <Check size={14} className="text-navy-900 shrink-0 mt-0.5" />
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-gray-500 mt-4 leading-relaxed">
+                All packages include the Articles of Incorporation filing, Certificate of
+                Incorporation, Company key, Standard Digital Minute Book, all mandatory
+                post-incorporation filings, and 24-hour turnaround.
+              </p>
+            </div>
+
+            <div className="border-b border-gray-100 mt-14" />
+          </div>
+
           {categories.map(({ icon: Icon, title, description, services }) => (
             <div key={title}>
               <div className="flex items-start gap-4 mb-8">

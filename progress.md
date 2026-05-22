@@ -41,6 +41,19 @@
 
 ## Log
 
+### 2026-05-22 (Services page: replaced 7-entry Incorporation grid with 2 jurisdictions + 3-package summary)
+
+Hid the per-corporation-type variants ("Standard Corp", "Professional Corp", "Holding Corp", "Non-Profit") from the Services page Incorporation section, since we only file generic for-profit corporations under Basic / Standard / Premium today. Replaced with:
+
+1. **Two prominent jurisdiction cards** (Federal Incorporation / Ontario Incorporation), each with the statute citation (CBCA / OBCA), a one-line pitch, "From $599", and a click-through to `/incorporate?jurisdiction=...`.
+2. **Three-package summary cards** (Basic $599 / Standard $899 / Premium $1,199) below, each with audience tagline, blurb, and three key highlights. Standard carries a navy "Most Popular" badge with a small gold star.
+3. **"Compare full features" link** to `/pricing` for the full feature matrix.
+4. A short "All packages include..." footnote covering the shared deliverables (Articles + Certificate + Company Key + Digital Minute Book + post-incorporation filings + 24h turnaround) so each package card stays focused on what's different.
+
+The remaining service categories (Registrations, Changes & Amendments, Compliance Filings, Business Updates) render with the existing template, unchanged. The old 7-entry array is preserved in git history if Professional Corp / Holding Corp / Non-Profit variants get reintroduced as a separate offering later.
+
+[src/app/[locale]/services/page.tsx](src/app/[locale]/services/page.tsx).
+
 ### 2026-05-22 (Step 3 named: Ontario unified to use the federal CBR link)
 
 User asked Ontario to look identical to Federal. Pointed Ontario to `https://ised-isde.canada.ca/cbr-rec/` (Canada's Business Registries — a federated public search across federal Corporations Canada plus participating provincial registries, including Ontario, so it's actually correct for both jurisdictions). Collapsed the per-jurisdiction `REGISTRY` record to a single const, removed the jurisdiction lookup, renamed the button to "Search Canada's Business Registries", made the intro jurisdiction-neutral, and pinned the "Opens in a new tab" caption to "Government of Canada site". The `jurisdiction` prop is still used in the Numbered branch for the "1234567 Canada/Ontario INC." example.
