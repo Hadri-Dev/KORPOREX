@@ -43,6 +43,28 @@
 
 ## Log
 
+### 2026-05-22 (Standard package: customer-picked share classes in the incorporation wizard)
+
+Standard customers (Federal + Ontario) now choose which share classes their corporation is authorized to issue, as part of Step 5 (Shareholders). Three conventional classes are offered, each toggleable; default state is all three checked:
+
+- **Class A Common Shares** — voting, dividends, participation on dissolution. The workhorse founder shares.
+- **Class B Common Shares (non-voting)** — same economics as Class A but no vote. Used for spouses, family, passive co-owners.
+- **Class C Preferred Shares** — non-voting, fixed/preferential dividend, priority on return of capital, no growth participation. The classic "freeze" or investment shares.
+
+Each class is rendered as a checkbox card with the human-readable description (copy adapted from the user's spec). The shareholder dropdown further down the page is now driven by the selection — only checked classes appear there, so shareholders are always assigned to a class the corporation actually has in its Articles. Validation requires at least one class to be selected before the customer can advance to Step 6.
+
+**Flow through:**
+- `WizardData.shareClasses: string[]` (e.g. `["A", "B", "C"]`) carries the selection across steps. `init` defaults to all three.
+- `s5` Zod schema extended to accept `shareClasses`. Cross-field "must select ≥ 1 for Standard" rule is enforced in the component's submit handler (not in Zod) since it depends on `pkg`.
+- Step 8's POST payload to `/api/incorporate` includes `shareClasses`.
+- `/api/incorporate` schema accepts `shareClasses: z.array(z.string()).max(10).default([])`. The [PENDING] email gains a new "Share structure (Articles)" section between Directors and Shareholders — each selected class rendered with its conventional attributes (voting / dividend / participation) so the drafter doesn't need to look them up.
+- Stripe `metadata.shareClasses` carries the comma-joined codes; `/api/stripe-webhook` decodes them back to human labels and surfaces a "Share structure" row in the [PAID] email.
+
+**Out of scope for now:**
+- Basic stays single-class ("Common Shares", locked).
+- Premium retains the existing 4-option free-form dropdown (Common / Preferred / Class A / Class B). When Premium gets its own structured picker, it will mirror this pattern with up to 5 classes.
+- The customer cannot customize the attributes of each class (voting/dividend/participation). These are conventional and fixed per the screenshot spec; customization would require lawyer involvement and is intentionally not a self-serve option.
+
 ### 2026-05-22 (Registrations: 4 dedicated multi-step wizards with Stripe payment)
 
 Built four full multi-step wizards under `/services/<slug>/`, each with React Hook Form + Zod validation + Stripe Checkout + [PENDING]/[PAID] email flow, mirroring the `/incorporate` pattern at a smaller scope. Replaces the previous "go nowhere" Registration tiles.

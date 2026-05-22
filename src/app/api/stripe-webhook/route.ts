@@ -108,6 +108,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const pkg = session.metadata?.pkg ?? "(unknown)";
   const regOfficeAddon = (session.metadata?.regOfficeAddon ?? "none") as RegOfficeAddon;
   const legalEnding = session.metadata?.legalEnding ?? "";
+  const shareClassesRaw = session.metadata?.shareClasses ?? "";
 
   const jurisLabel = JURISDICTION_LABELS[jurisdiction as Jurisdiction] ?? jurisdiction;
   const pkgLabel = PKG_LABELS[pkg as Pkg] ?? pkg;
@@ -131,6 +132,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     pkg: pkgLabel,
     legalEnding,
     regOfficeAddon,
+    shareClassesRaw,
     sessionId: session.id,
     paymentIntent:
       typeof session.payment_intent === "string"
@@ -211,6 +213,7 @@ function buildPaidBody(d: {
   pkg: string;
   legalEnding: string;
   regOfficeAddon: RegOfficeAddon;
+  shareClassesRaw: string;
   sessionId: string;
   paymentIntent: string;
 }) {
@@ -224,6 +227,23 @@ function buildPaidBody(d: {
   const legalEndingRow: [string, string] | null = d.legalEnding
     ? ["Legal ending", d.legalEnding]
     : null;
+  // Standard-package share-class codes are stored comma-separated in Stripe
+  // metadata. Translate the A/B/C codes back to human labels for the email.
+  const SHARE_CLASS_LABELS: Record<string, string> = {
+    A: "Class A Common (voting)",
+    B: "Class B Common (non-voting)",
+    C: "Class C Preferred",
+  };
+  const shareClassesRow: [string, string] | null = d.shareClassesRaw
+    ? [
+        "Share structure",
+        d.shareClassesRaw
+          .split(",")
+          .map((c) => SHARE_CLASS_LABELS[c.trim()] ?? c.trim())
+          .filter(Boolean)
+          .join("; "),
+      ]
+    : null;
 
   const rows = ([
     ["Order reference", d.orderRef],
@@ -232,6 +252,7 @@ function buildPaidBody(d: {
     ["Jurisdiction", d.jurisdiction],
     ["Package", d.pkg],
     ...(legalEndingRow ? [legalEndingRow] : []),
+    ...(shareClassesRow ? [shareClassesRow] : []),
     ...(regOfficeRow ? [regOfficeRow] : []),
     ["Amount paid", `$${d.amountTotal} ${d.currency}`],
     ["Stripe session", d.sessionId],

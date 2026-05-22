@@ -80,6 +80,11 @@ const schema = z.object({
   fiscalYearEndDay: z.string().trim().min(1).max(2),
   directors: z.array(directorSchema).min(1).max(20),
   shareholders: z.array(shareholderSchema).min(1).max(50),
+  // Codes ("A" | "B" | "C") of the share classes the customer chose to
+  // include in the Articles. Standard-package only — Basic and Premium send
+  // an empty array. Server-side we accept any of A/B/C plus arbitrary
+  // strings (forward-compat for Premium when it gets its own picker).
+  shareClasses: z.array(z.string()).max(10).default([]),
   officers: z.array(officerSchema).min(1).max(50),
   regOffice: addressSchema,
   regOfficeAddon: z.enum(["none", "korporex"]).default("none"),
@@ -224,6 +229,7 @@ export async function POST(req: Request) {
         businessName: payload.businessName || "(numbered)",
         legalEnding: payload.legalEnding,
         regOfficeAddon: payload.regOfficeAddon,
+        shareClasses: payload.shareClasses.join(","),
         primaryDirectorEmail: primaryDirector.email,
         primaryDirectorName:
           `${primaryDirector.firstName} ${primaryDirector.lastName}`.trim(),
@@ -404,6 +410,32 @@ function buildHtmlBody(
     })
   );
 
+  // Share structure (Standard-package only). Lists the classes the customer
+  // chose to include in the Articles, each with its conventional attributes
+  // so the drafter doesn't need to look them up.
+  const shareClassDefs: Record<string, { label: string; voting: string; dividend: string; participation: string }> = {
+    A: { label: "Class A Common Shares", voting: "Yes", dividend: "Ordinary", participation: "Yes" },
+    B: { label: "Class B Common Shares (non-voting)", voting: "No", dividend: "Ordinary", participation: "Yes" },
+    C: { label: "Class C Preferred Shares", voting: "No", dividend: "Fixed / preferential", participation: "No" },
+  };
+  const shareStructureBlock =
+    d.shareClasses && d.shareClasses.length > 0
+      ? d.shareClasses
+          .map((code) => {
+            const def = shareClassDefs[code];
+            if (!def) {
+              return `<div style="padding:12px 16px;background:#fafaf8;border-left:3px solid #C5A35A;margin-bottom:8px;"><p style="margin:0;color:#111827;font-size:14px;">${escapeHtml(code)}</p></div>`;
+            }
+            return `<div style="padding:12px 16px;background:#fafaf8;border-left:3px solid #C5A35A;margin-bottom:8px;"><p style="margin:0 0 6px;color:#1B4332;font-size:14px;font-weight:700;">${escapeHtml(
+              def.label
+            )}</p><table style="width:100%;border-collapse:collapse;">${row("Voting", def.voting)}${row(
+              "Dividend",
+              def.dividend
+            )}${row("Participation on dissolution", def.participation)}</table></div>`;
+          })
+          .join("")
+      : "";
+
   const shareholders = personBlock(
     "Shareholder",
     d.shareholders.map((x) => {
@@ -462,7 +494,9 @@ function buildHtmlBody(
   )}${section(
     "Pricing",
     `<table style="width:100%;border-collapse:collapse;">${pricingRows}</table>`
-  )}${section("Directors", directors)}${section(
+  )}${section("Directors", directors)}${
+    shareStructureBlock ? section("Share structure (Articles)", shareStructureBlock) : ""
+  }${section(
     "Shareholders",
     shareholders
   )}${section("Officers", officers)}${section("Registered office", regOffice)}${section(

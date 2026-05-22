@@ -95,6 +95,8 @@ interface WizardData {
   fiscalYearEndDay: string;
   directors: Director[];
   shareholders: Shareholder[];
+  /** Standard package only: codes ("A" | "B" | "C") of share classes the customer chose to include in the Articles. Empty for Basic and Premium. */
+  shareClasses: string[];
   officers: Officer[];
   regOffice: Address;
   regOfficeAddon: RegOfficeAddon;
@@ -160,6 +162,53 @@ const MONTHS = [
 ];
 
 const SHARE_CLASSES = ["Common","Preferred","Class A","Class B"];
+
+// Conventional Standard-package share structure. Up to three classes drawn
+// from the typical Canadian closely-held-corp template. Customers can
+// include/exclude any of the three; the selected ones are what Korporex
+// declares in the Articles of Incorporation. Premium retains a free-form
+// dropdown until that tier gets its own structured picker.
+type StandardShareClass = {
+  code: "A" | "B" | "C";
+  label: string;
+  voting: boolean;
+  dividend: "ordinary" | "fixed";
+  participation: boolean;
+  short: string;
+  description: string;
+};
+const STANDARD_SHARE_CLASSES: StandardShareClass[] = [
+  {
+    code: "A",
+    label: "Class A Common Shares",
+    voting: true,
+    dividend: "ordinary",
+    participation: true,
+    short: "Voting, dividends, participation",
+    description:
+      "The workhorse founder shares. Voting, dividends, and participation in remaining property on dissolution. Founders typically hold these.",
+  },
+  {
+    code: "B",
+    label: "Class B Common Shares (non-voting)",
+    voting: false,
+    dividend: "ordinary",
+    participation: true,
+    short: "Same economics as A, but no vote",
+    description:
+      "Identical economic rights to Class A (dividends and capital), but non-voting. Useful for bringing in a spouse, family member, or passive co-owner who should share in profits and growth but not control decisions.",
+  },
+  {
+    code: "C",
+    label: "Class C Preferred Shares",
+    voting: false,
+    dividend: "fixed",
+    participation: false,
+    short: "Non-voting, fixed dividend, priority on capital",
+    description:
+      "Non-voting, with a fixed/preferential dividend and priority on return of capital ahead of the common shares, but no participation in growth beyond their fixed value. The classic \"freeze\" or investment shares.",
+  },
+];
 const STEP_LABELS = ["Jurisdiction","Package","Business Info","Directors","Shareholders","Officers","Office Address","Review & Pay"];
 
 // Non-superiority-language jurisdiction descriptions (each is a valid choice).
@@ -256,7 +305,10 @@ const s3 = z.object({
 );
 
 const s4 = z.object({ directors: z.array(directorSchema).min(1) });
-const s5 = z.object({ shareholders: z.array(shareholderSchema).min(1) });
+const s5 = z.object({
+  shareholders: z.array(shareholderSchema).min(1),
+  shareClasses: z.array(z.string()),
+});
 const s6 = z.object({ officers: z.array(officerSchema).min(1) });
 const s7 = z.object({
   regOffice: addressSchema,
@@ -917,15 +969,46 @@ const emptySH: Shareholder = {
 
 function Step5({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S5>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S5) => void; onBack: () => void }) {
   const basicLocked = pkg === "basic";
+  const isStandard = pkg === "standard";
   const initialSh = def.shareholders?.length ? def.shareholders : [emptySH];
+  const initialClasses = def.shareClasses?.length ? def.shareClasses : ["A", "B", "C"];
   const form = useForm<S5>({
     resolver: zodResolver(s5),
-    defaultValues: { shareholders: basicLocked ? initialSh.slice(0, 1) : initialSh },
+    defaultValues: {
+      shareholders: basicLocked ? initialSh.slice(0, 1) : initialSh,
+      shareClasses: isStandard ? initialClasses : [],
+    },
   });
-  const { register, handleSubmit, control, formState: { errors } } = form;
+  const { register, handleSubmit, control, formState: { errors }, watch, setValue } = form;
   const { fields, append, remove } = useFieldArray({ control, name: "shareholders" });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const se = (errors.shareholders as any) ?? [];
+
+  // For Standard: derive shareholder dropdown options from the customer's
+  // selected share classes. The shareholder's `shareClass` field stores the
+  // human-readable label so the API + email + downstream filings all read
+  // naturally without a code lookup.
+  const selectedClasses = (watch("shareClasses") as string[]) ?? [];
+  const standardOptions = STANDARD_SHARE_CLASSES.filter((c) =>
+    selectedClasses.includes(c.code)
+  ).map((c) => c.label);
+  const dropdownOptions: string[] = basicLocked
+    ? ["Common Shares"]
+    : isStandard
+      ? standardOptions
+      : SHARE_CLASSES;
+
+  function toggleClass(code: string) {
+    const next = selectedClasses.includes(code)
+      ? selectedClasses.filter((c) => c !== code)
+      : [...selectedClasses, code];
+    setValue("shareClasses", next, { shouldValidate: true, shouldDirty: true });
+  }
+
+  // Custom submit guard: Standard must have at least one class selected.
+  // Zod can't easily enforce a cross-field rule here without breaking the
+  // shareholder schema, so we gate at submit time and show an inline error.
+  const noClassesSelected = isStandard && selectedClasses.length === 0;
 
   return (
     <FormProvider {...form}>
@@ -933,7 +1016,77 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S5>; j
         <BackBtn onClick={onBack} />
         <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Shareholders</h2>
         <p className="text-gray-500 text-sm mb-8">List all initial shareholders of the corporation. International shareholders are supported.</p>
-        <form onSubmit={handleSubmit(onNext)} className="space-y-6">
+        <form
+          onSubmit={handleSubmit((d) => {
+            if (noClassesSelected) return;
+            onNext(d);
+          })}
+          className="space-y-6"
+        >
+          {isStandard && (
+            <div className="border border-gray-200 rounded-lg p-6 bg-cream-50">
+              <div className="mb-5">
+                <p className="font-serif font-bold text-navy-900 text-base mb-1">
+                  Share Classes for Your Corporation
+                </p>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Your Standard package includes up to three share classes in the Articles of
+                  Incorporation. The conventional set is shown below — include all three, or
+                  uncheck any you don&apos;t need. You can also choose which class each shareholder
+                  receives further down.
+                </p>
+              </div>
+              <div className="space-y-3">
+                {STANDARD_SHARE_CLASSES.map((c) => {
+                  const checked = selectedClasses.includes(c.code);
+                  return (
+                    <label
+                      key={c.code}
+                      className={`block border-2 rounded-lg p-4 cursor-pointer transition-colors ${
+                        checked
+                          ? "border-navy-900 bg-white"
+                          : "border-gray-200 bg-white hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => toggleClass(c.code)}
+                          className="mt-1 shrink-0"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-baseline justify-between gap-3 mb-1">
+                            <p className="font-semibold text-navy-900">{c.label}</p>
+                            <span className="text-xs font-medium text-gold-600 shrink-0">
+                              {c.short}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600 leading-relaxed">{c.description}</p>
+                        </div>
+                      </div>
+                    </label>
+                  );
+                })}
+              </div>
+              {noClassesSelected && (
+                <p className="text-sm text-red-600 mt-3">
+                  Select at least one share class for the corporation.
+                </p>
+              )}
+              <p className="text-xs text-gray-500 italic leading-relaxed mt-4 pt-4 border-t border-gray-200">
+                The selected classes are what Korporex will declare in the Articles of
+                Incorporation. Each shareholder below picks which of these classes they will hold.
+                Korporex does not provide legal or tax advice on share structure. If you&rsquo;re
+                unsure,{" "}
+                <Link href="/legal-consultation" className="text-navy-900 underline underline-offset-2">
+                  speak with a corporate lawyer
+                </Link>
+                .
+              </p>
+            </div>
+          )}
+
           {fields.map((field, i) => (
             <div key={field.id} className="border border-gray-200 rounded-lg p-6">
               <div className="flex items-center justify-between mb-5">
@@ -949,7 +1102,14 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S5>; j
                 <Field label="Last Name *" error={se[i]?.lastName?.message}><input {...register(`shareholders.${i}.lastName`)} className={iCls} /></Field>
                 <Field label="Share Class *" error={se[i]?.shareClass?.message}>
                   <select {...register(`shareholders.${i}.shareClass`)} className={sCls}>
-                    {SHARE_CLASSES.map((c) => <option key={c} value={c}>{c}</option>)}
+                    {dropdownOptions.length === 0 && (
+                      <option value="">— select a share class above first —</option>
+                    )}
+                    {dropdownOptions.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
                   </select>
                 </Field>
                 <Field label="Number of Shares *" error={se[i]?.numberOfShares?.message}>
@@ -1420,7 +1580,7 @@ const init: WizardData = {
   naicsCode: "",
   businessActivity: "",
   fiscalYearEndMonth: "", fiscalYearEndDay: "",
-  directors: [], shareholders: [], officers: [],
+  directors: [], shareholders: [], shareClasses: ["A", "B", "C"], officers: [],
   regOffice: { street: "", city: "", region: "", postalCode: "", country: "CA" },
   regOfficeAddon: "none",
   billingName: "",
@@ -1465,7 +1625,7 @@ export default function IncorporatePage() {
           onBack={() => setStep(2)}
         />}
         {step === 4 && <Step4 jurisdiction={data.jurisdiction} pkg={data.pkg} def={{ directors: data.directors }} onNext={(d) => { patch(d); setStep(5); }} onBack={() => setStep(3)} />}
-        {step === 5 && <Step5 jurisdiction={data.jurisdiction} pkg={data.pkg} def={{ shareholders: data.shareholders }} onNext={(d) => { patch(d); setStep(6); }} onBack={() => setStep(4)} />}
+        {step === 5 && <Step5 jurisdiction={data.jurisdiction} pkg={data.pkg} def={{ shareholders: data.shareholders, shareClasses: data.shareClasses }} onNext={(d) => { patch(d); setStep(6); }} onBack={() => setStep(4)} />}
         {step === 6 && <Step6 jurisdiction={data.jurisdiction} pkg={data.pkg} def={{ officers: data.officers }} onNext={(d) => { patch(d); setStep(7); }} onBack={() => setStep(5)} />}
         {step === 7 && <Step7 jurisdiction={data.jurisdiction}
           def={{ regOffice: data.regOffice, regOfficeAddon: data.regOfficeAddon }}
@@ -1488,6 +1648,7 @@ export default function IncorporatePage() {
               fiscalYearEndDay: data.fiscalYearEndDay,
               directors: data.directors,
               shareholders: data.shareholders,
+              shareClasses: data.shareClasses,
               officers: data.officers,
               regOffice: data.regOffice,
               regOfficeAddon: data.regOfficeAddon,
