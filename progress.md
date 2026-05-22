@@ -41,6 +41,10 @@
 
 ## Log
 
+### 2026-05-22 (Step 3 polish — em-dash purge + "check before submitting" warning)
+
+Same-day polish on Step 3 Named flow: removed customer-facing em dashes (search intro line, "Opens in a new tab" caption, Legal Ending intro paragraph) per the project-wide em-dash convention. Added an amber `AlertTriangle` callout between the registry link and the name input that reads: **"Check the name on the [Corporations Canada / Ontario Business Registry] registry before submitting. We do not verify availability for you at this step. If the name is already taken or too similar to an existing corporation, it will be rejected when your incorporation is filed."** Makes the customer responsibility explicit and sets correct expectations before they type.
+
 ### 2026-05-22 (Both jurisdictions now link out to official corporate registries)
 
 **Third follow-up same day:** extended the external-registry-link pattern to Ontario named too, and consolidated. Both jurisdictions now share a single branch: external link button + live-bound name input. Ontario links to `https://www.appmybizaccount.gov.on.ca/onbis/master/viewInstance/view.pub?id=3abd3bce3cc0ad2a3553f516b33034b80328889fedae6186&_timestamp=1083695347310433` (Ontario Business Registry). A `REGISTRY` const at the top of the component maps `federal` / `ontario` to `{ url, buttonLabel, intro, sourceName }` so the JSX stays single-branch. With both jurisdictions external, the mock precheck flow is fully retired — deleted `/api/name-precheck/route.ts`, `/[locale]/dev/name-precheck/` (page + PreviewClient), `runCheck`, `ResultPanel`, `historyBadge`, `statusLabel`, `clearChosenName`, all history/result/search state, and the `PrecheckMatch`/`PrecheckStatus`/`PrecheckResult`/`HistoryEntry` types. Component shrank from ~480 to ~230 lines.

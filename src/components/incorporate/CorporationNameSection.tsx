@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, AlertTriangle } from "lucide-react";
 import { LEGAL_ENDINGS, type LegalEnding } from "@/lib/legalEndings";
 
 export type CorpNameType = "named" | "numbered";
@@ -145,7 +145,7 @@ export default function CorporationNameSection({
           </div>
           <p className="text-sm text-gray-500 ml-10 mb-4 leading-relaxed">
             {registry.intro} Search the{" "}
-            <strong className="text-gray-900">distinctive part</strong> only — e.g.
+            <strong className="text-gray-900">distinctive part</strong> only. For example,
             &quot;Acme&quot;, not &quot;Acme Inc.&quot; Then enter your chosen name below.
           </p>
 
@@ -158,10 +158,20 @@ export default function CorporationNameSection({
             <ExternalLink className="w-4 h-4" />
             {registry.buttonLabel}
           </a>
-          <p className="text-xs text-gray-500 mb-5">
-            Opens in a new tab — free, unlimited searches on the Government of{" "}
+          <p className="text-xs text-gray-500 mb-4">
+            Opens in a new tab. Free, unlimited searches on the Government of{" "}
             {jurisdictionWord} site.
           </p>
+
+          <div className="bg-amber-50 border border-amber-300 rounded-lg p-3 mb-4 flex items-start gap-2 text-sm text-amber-900 leading-relaxed">
+            <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+            <div>
+              <strong>Check the name on the {registry.sourceName} registry before submitting.</strong>{" "}
+              We do not verify availability for you at this step. If the name is already taken or
+              too similar to an existing corporation, it will be rejected when your incorporation
+              is filed.
+            </div>
+          </div>
 
           <input
             type="text"
@@ -191,7 +201,7 @@ export default function CorporationNameSection({
           </label>
         </div>
         <p className={`text-sm text-gray-500 mb-3 leading-relaxed ${isNamed ? "ml-10" : ""}`}>
-          Every corporation needs a legal ending. They&apos;re interchangeable — pick whichever you
+          Every corporation needs a legal ending. They&apos;re interchangeable. Pick whichever you
           prefer the look of. <strong className="text-gray-900">The ending has no legal consequences.</strong>
         </p>
 
