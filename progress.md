@@ -43,6 +43,20 @@
 
 ## Log
 
+### 2026-05-22 (Share-class picker: descriptions tightened, no pre-checks, extended to Premium)
+
+Three follow-up changes on the Step-5 share-class picker:
+
+1. **Strictly descriptive copy.** Previous descriptions read like recommendations ("Founders typically hold these", "Useful for bringing in a spouse, family member", "the classic 'freeze' or investment shares"). Rewritten to describe only the rights attached to each class — voting, dividend, participation, redemption — with no commentary on who should hold them or when to use them. Korporex isn't a law firm, so the picker now reads like a rights spec rather than guidance.
+2. **No pre-checked classes.** `init.shareClasses` changed from `["A","B","C"]` to `[]`. Standard and Premium customers must manually tick the classes they want. The submit guard (≥1 class required) still blocks Step 6 advancement when nothing is selected.
+3. **Extended to Premium.** The structured picker now drives Premium too, with up to **five** classes: A, B, C (same as Standard) plus **D — Class D Special Shares** (non-voting, discretionary dividend, return of paid-up capital only) and **E — Class E Redeemable Preferred Shares** (non-voting, redeemable/retractable at a fixed redemption amount, capital priority). Premium's old free-form 4-option dropdown ("Common/Preferred/Class A/Class B") is gone.
+
+Code changes:
+- Renamed `STANDARD_SHARE_CLASSES` → `SHARE_CLASS_OPTIONS` with 5 entries. Code type widened from `"A"|"B"|"C"` to `"A"|"B"|"C"|"D"|"E"`. Dropped the `voting`/`dividend`/`participation` per-class typed metadata since the customer-facing copy is now self-contained; the API email reintroduces a small classification map for the drafter.
+- Removed the dead 4-element `SHARE_CLASSES` array (was the Premium fallback dropdown source — no longer referenced).
+- Step 5 logic: `useStructuredPicker = pkg === "standard" || pkg === "premium"`. `availableClasses` slices A/B/C for Standard or shows all 5 for Premium.
+- API email's `shareClassDefs` map extended with D and E. Stripe webhook's `SHARE_CLASS_LABELS` extended likewise.
+
 ### 2026-05-22 (Standard package: customer-picked share classes in the incorporation wizard)
 
 Standard customers (Federal + Ontario) now choose which share classes their corporation is authorized to issue, as part of Step 5 (Shareholders). Three conventional classes are offered, each toggleable; default state is all three checked:

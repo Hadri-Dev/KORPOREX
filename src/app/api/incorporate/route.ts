@@ -410,13 +410,15 @@ function buildHtmlBody(
     })
   );
 
-  // Share structure (Standard-package only). Lists the classes the customer
-  // chose to include in the Articles, each with its conventional attributes
-  // so the drafter doesn't need to look them up.
+  // Share structure (Standard or Premium). Lists the classes the customer
+  // chose to include in the Articles, each with its rights, so the drafter
+  // doesn't need to look them up.
   const shareClassDefs: Record<string, { label: string; voting: string; dividend: string; participation: string }> = {
-    A: { label: "Class A Common Shares", voting: "Yes", dividend: "Ordinary", participation: "Yes" },
-    B: { label: "Class B Common Shares (non-voting)", voting: "No", dividend: "Ordinary", participation: "Yes" },
-    C: { label: "Class C Preferred Shares", voting: "No", dividend: "Fixed / preferential", participation: "No" },
+    A: { label: "Class A Common Shares", voting: "Yes", dividend: "Discretionary (when declared)", participation: "Yes" },
+    B: { label: "Class B Common Shares (non-voting)", voting: "No", dividend: "Discretionary (when declared)", participation: "Yes" },
+    C: { label: "Class C Preferred Shares", voting: "No", dividend: "Fixed / preferential", participation: "No (capped at redemption amount); redeemable + retractable" },
+    D: { label: "Class D Special Shares", voting: "No", dividend: "Discretionary; separate from other classes", participation: "No (return of paid-up capital only)" },
+    E: { label: "Class E Redeemable Preferred Shares", voting: "No", dividend: "—", participation: "No (capped at redemption amount); redeemable + retractable" },
   };
   const shareStructureBlock =
     d.shareClasses && d.shareClasses.length > 0

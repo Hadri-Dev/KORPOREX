@@ -233,6 +233,8 @@ function buildPaidBody(d: {
     A: "Class A Common (voting)",
     B: "Class B Common (non-voting)",
     C: "Class C Preferred",
+    D: "Class D Special",
+    E: "Class E Redeemable Preferred",
   };
   const shareClassesRow: [string, string] | null = d.shareClassesRaw
     ? [

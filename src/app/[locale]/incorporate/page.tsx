@@ -161,52 +161,55 @@ const MONTHS = [
   { name: "October", days: 31 }, { name: "November", days: 30 }, { name: "December", days: 31 },
 ];
 
-const SHARE_CLASSES = ["Common","Preferred","Class A","Class B"];
-
-// Conventional Standard-package share structure. Up to three classes drawn
-// from the typical Canadian closely-held-corp template. Customers can
-// include/exclude any of the three; the selected ones are what Korporex
-// declares in the Articles of Incorporation. Premium retains a free-form
-// dropdown until that tier gets its own structured picker.
-type StandardShareClass = {
-  code: "A" | "B" | "C";
+// Share-class options offered as a structured picker on Standard and Premium.
+// Standard gets A/B/C; Premium gets all five. Descriptions are strictly
+// factual: they state the rights attached to each class and nothing else —
+// no recommendations on who should hold them or when to use them. Korporex
+// does not provide legal or tax advice; the customer chooses which classes
+// to include in their corporation's Articles of Incorporation.
+type ShareClassDef = {
+  code: "A" | "B" | "C" | "D" | "E";
   label: string;
-  voting: boolean;
-  dividend: "ordinary" | "fixed";
-  participation: boolean;
+  /** Short factual summary of rights, shown on the right of each card. */
   short: string;
+  /** Full description of rights attached to the class. */
   description: string;
 };
-const STANDARD_SHARE_CLASSES: StandardShareClass[] = [
+const SHARE_CLASS_OPTIONS: ShareClassDef[] = [
   {
     code: "A",
     label: "Class A Common Shares",
-    voting: true,
-    dividend: "ordinary",
-    participation: true,
     short: "Voting, dividends, participation",
     description:
-      "The workhorse founder shares. Voting, dividends, and participation in remaining property on dissolution. Founders typically hold these.",
+      "Carry one vote per share. Entitled to receive dividends if, as, and when declared by the directors. Entitled to participate in the remaining property of the corporation on dissolution.",
   },
   {
     code: "B",
     label: "Class B Common Shares (non-voting)",
-    voting: false,
-    dividend: "ordinary",
-    participation: true,
-    short: "Same economics as A, but no vote",
+    short: "Non-voting, dividends, participation",
     description:
-      "Identical economic rights to Class A (dividends and capital), but non-voting. Useful for bringing in a spouse, family member, or passive co-owner who should share in profits and growth but not control decisions.",
+      "Carry no voting rights. Entitled to receive dividends if, as, and when declared by the directors. Entitled to participate in the remaining property of the corporation on dissolution.",
   },
   {
     code: "C",
     label: "Class C Preferred Shares",
-    voting: false,
-    dividend: "fixed",
-    participation: false,
-    short: "Non-voting, fixed dividend, priority on capital",
+    short: "Non-voting, fixed dividend, capital priority",
     description:
-      "Non-voting, with a fixed/preferential dividend and priority on return of capital ahead of the common shares, but no participation in growth beyond their fixed value. The classic \"freeze\" or investment shares.",
+      "Carry no voting rights. Entitled to a fixed or preferential dividend if, as, and when declared by the directors. Entitled to priority over the common shares for the return of the redemption amount on dissolution. Do not participate in the remaining property of the corporation beyond the redemption amount. Redeemable by the corporation and retractable by the holder at a set redemption amount.",
+  },
+  {
+    code: "D",
+    label: "Class D Special Shares",
+    short: "Non-voting, discretionary dividend",
+    description:
+      "Carry no voting rights and no fixed entitlement to dividends. Eligible to receive dividends if, as, and when declared by the directors, separately and in different amounts from other classes. Entitled to the return of the amount paid up on the shares on dissolution, without further participation.",
+  },
+  {
+    code: "E",
+    label: "Class E Redeemable Preferred Shares",
+    short: "Non-voting, redeemable, capital priority",
+    description:
+      "Carry no voting rights. Redeemable by the corporation and retractable by the holder at a fixed redemption amount. Entitled to priority over the common shares for the return of the redemption amount on dissolution. Do not participate in the remaining property of the corporation beyond the redemption amount.",
   },
 ];
 const STEP_LABELS = ["Jurisdiction","Package","Business Info","Directors","Shareholders","Officers","Office Address","Review & Pay"];
@@ -969,14 +972,13 @@ const emptySH: Shareholder = {
 
 function Step5({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S5>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S5) => void; onBack: () => void }) {
   const basicLocked = pkg === "basic";
-  const isStandard = pkg === "standard";
+  const useStructuredPicker = pkg === "standard" || pkg === "premium";
   const initialSh = def.shareholders?.length ? def.shareholders : [emptySH];
-  const initialClasses = def.shareClasses?.length ? def.shareClasses : ["A", "B", "C"];
   const form = useForm<S5>({
     resolver: zodResolver(s5),
     defaultValues: {
       shareholders: basicLocked ? initialSh.slice(0, 1) : initialSh,
-      shareClasses: isStandard ? initialClasses : [],
+      shareClasses: def.shareClasses ?? [],
     },
   });
   const { register, handleSubmit, control, formState: { errors }, watch, setValue } = form;
@@ -984,19 +986,20 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S5>; j
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const se = (errors.shareholders as any) ?? [];
 
-  // For Standard: derive shareholder dropdown options from the customer's
-  // selected share classes. The shareholder's `shareClass` field stores the
-  // human-readable label so the API + email + downstream filings all read
-  // naturally without a code lookup.
+  // Classes offered for this package — Standard sees the first three,
+  // Premium sees all five.
+  const availableClasses = pkg === "premium"
+    ? SHARE_CLASS_OPTIONS
+    : SHARE_CLASS_OPTIONS.slice(0, 3);
+
+  // Shareholder dropdown is populated from the customer's selection so a
+  // shareholder can only ever be assigned to a class the corporation
+  // actually has in its Articles. The label (human-readable) is the value
+  // so downstream emails read naturally without a code lookup.
   const selectedClasses = (watch("shareClasses") as string[]) ?? [];
-  const standardOptions = STANDARD_SHARE_CLASSES.filter((c) =>
-    selectedClasses.includes(c.code)
-  ).map((c) => c.label);
   const dropdownOptions: string[] = basicLocked
     ? ["Common Shares"]
-    : isStandard
-      ? standardOptions
-      : SHARE_CLASSES;
+    : SHARE_CLASS_OPTIONS.filter((c) => selectedClasses.includes(c.code)).map((c) => c.label);
 
   function toggleClass(code: string) {
     const next = selectedClasses.includes(code)
@@ -1005,10 +1008,10 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S5>; j
     setValue("shareClasses", next, { shouldValidate: true, shouldDirty: true });
   }
 
-  // Custom submit guard: Standard must have at least one class selected.
-  // Zod can't easily enforce a cross-field rule here without breaking the
+  // Submit guard: Standard/Premium must select at least one class. Zod
+  // can't easily enforce a cross-field rule here without breaking the
   // shareholder schema, so we gate at submit time and show an inline error.
-  const noClassesSelected = isStandard && selectedClasses.length === 0;
+  const noClassesSelected = useStructuredPicker && selectedClasses.length === 0;
 
   return (
     <FormProvider {...form}>
@@ -1023,21 +1026,22 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S5>; j
           })}
           className="space-y-6"
         >
-          {isStandard && (
+          {useStructuredPicker && (
             <div className="border border-gray-200 rounded-lg p-6 bg-cream-50">
               <div className="mb-5">
                 <p className="font-serif font-bold text-navy-900 text-base mb-1">
                   Share Classes for Your Corporation
                 </p>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  Your Standard package includes up to three share classes in the Articles of
-                  Incorporation. The conventional set is shown below — include all three, or
-                  uncheck any you don&apos;t need. You can also choose which class each shareholder
-                  receives further down.
+                  Your {pkg === "premium" ? "Premium" : "Standard"} package allows up to{" "}
+                  {pkg === "premium" ? "five" : "three"} share classes in the Articles of
+                  Incorporation. Select the class(es) you want the corporation to be authorized to
+                  issue. Each shareholder below can then be assigned to one of the classes you
+                  select.
                 </p>
               </div>
               <div className="space-y-3">
-                {STANDARD_SHARE_CLASSES.map((c) => {
+                {availableClasses.map((c) => {
                   const checked = selectedClasses.includes(c.code);
                   return (
                     <label
@@ -1580,7 +1584,7 @@ const init: WizardData = {
   naicsCode: "",
   businessActivity: "",
   fiscalYearEndMonth: "", fiscalYearEndDay: "",
-  directors: [], shareholders: [], shareClasses: ["A", "B", "C"], officers: [],
+  directors: [], shareholders: [], shareClasses: [], officers: [],
   regOffice: { street: "", city: "", region: "", postalCode: "", country: "CA" },
   regOfficeAddon: "none",
   billingName: "",
