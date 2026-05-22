@@ -85,6 +85,10 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     await handleLegalConsultPaid(session);
     return;
   }
+  if (productType === "registration") {
+    await handleRegistrationPaid(session);
+    return;
+  }
 
   const orderRef = session.metadata?.orderRef ?? "(no ref)";
   const amountTotal = ((session.amount_total ?? 0) / 100).toFixed(2);
@@ -141,6 +145,10 @@ async function handleCheckoutFailed(session: Stripe.Checkout.Session) {
   const productType = session.metadata?.productType ?? "incorporation";
   if (productType === "legal-consult") {
     await handleLegalConsultFailed(session);
+    return;
+  }
+  if (productType === "registration") {
+    await handleRegistrationFailed(session);
     return;
   }
 
@@ -322,4 +330,64 @@ async function sendNotificationToMany(
     },
     "stripe-webhook"
   );
+}
+
+// ─── Registration product type ──────────────────────────────────────────────
+
+async function handleRegistrationPaid(session: Stripe.Checkout.Session) {
+  const orderRef = session.metadata?.orderRef ?? "(no ref)";
+  const service = session.metadata?.service ?? "(unknown)";
+  const serviceLabel = session.metadata?.serviceLabel ?? service;
+  const amountTotal = ((session.amount_total ?? 0) / 100).toFixed(2);
+  const currency = (session.currency ?? "cad").toUpperCase();
+  const customerEmail =
+    session.customer_details?.email ||
+    session.customer_email ||
+    session.metadata?.customerEmail ||
+    "(unknown)";
+  const customerName =
+    session.customer_details?.name ||
+    session.metadata?.customerName ||
+    "(unknown)";
+
+  const subject = `[PAID] ${orderRef} — ${serviceLabel} — $${amountTotal} ${currency}`;
+  const rows: Array<[string, string]> = [
+    ["Order reference", orderRef],
+    ["Service", serviceLabel],
+    ["Customer", `${customerName} <${customerEmail}>`],
+    ["Amount paid", `$${amountTotal} ${currency}`],
+    ["Stripe session", session.id],
+    [
+      "Payment intent",
+      typeof session.payment_intent === "string"
+        ? session.payment_intent
+        : session.payment_intent?.id ?? "(none)",
+    ],
+  ];
+  const rowHtml = rows
+    .map(
+      ([k, v]) =>
+        `<tr><td style="padding:6px 16px 6px 0;color:#6b7280;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;vertical-align:top;white-space:nowrap;">${escapeHtml(
+          k
+        )}</td><td style="padding:6px 0;color:#111827;font-size:14px;">${escapeHtml(v)}</td></tr>`
+    )
+    .join("");
+
+  const html = `<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#FAFAF8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;"><div style="max-width:600px;margin:0 auto;background:#ffffff;padding:32px;border:1px solid #e5e7eb;"><div style="width:32px;height:2px;background:#C5A35A;margin-bottom:20px;"></div><h1 style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#1B4332;">Registration payment received — ${escapeHtml(
+    orderRef
+  )}</h1><p style="margin:0 0 24px;color:#6b7280;font-size:13px;">Stripe <code>checkout.session.completed</code></p><table style="width:100%;border-collapse:collapse;">${rowHtml}</table><p style="margin:24px 0 0;padding:12px 16px;background:#d1fae5;border-left:3px solid #059669;color:#065f46;font-size:13px;line-height:1.6;">Cross-reference with the earlier <strong>[PENDING]</strong> email for this order reference to see the full submission. Customer receives their Stripe receipt automatically; no customer-facing email is sent from this webhook.</p></div></body></html>`;
+
+  await sendNotification(subject, html, customerEmail, customerName);
+}
+
+async function handleRegistrationFailed(session: Stripe.Checkout.Session) {
+  const orderRef = session.metadata?.orderRef ?? "(no ref)";
+  const serviceLabel = session.metadata?.serviceLabel ?? "Registration";
+  const subject = `[PAYMENT FAILED] ${orderRef} — ${serviceLabel}`;
+  const html = `<p>Async payment for registration order <strong>${escapeHtml(
+    orderRef
+  )}</strong> failed. Customer may retry from the confirmation page or a recovery email.</p><p>Stripe session: ${escapeHtml(
+    session.id
+  )}</p>`;
+  await sendNotification(subject, html);
 }

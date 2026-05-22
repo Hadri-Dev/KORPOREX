@@ -43,6 +43,27 @@
 
 ## Log
 
+### 2026-05-22 (Registrations: 4 dedicated multi-step wizards with Stripe payment)
+
+Built four full multi-step wizards under `/services/<slug>/`, each with React Hook Form + Zod validation + Stripe Checkout + [PENDING]/[PAID] email flow, mirroring the `/incorporate` pattern at a smaller scope. Replaces the previous "go nowhere" Registration tiles.
+
+**New surface area:**
+- `/services/sole-proprietorship` — Sole Proprietorship Registration (Ontario) — **$99 CAD** — 3 steps (Business details, Owner details, Billing & Review)
+- `/services/business-name` — Business Name Registration (Ontario) — **$79 CAD** — 3 steps; branches between Individual vs Existing Corporation in step 2
+- `/services/business-number` — Business Number Registration (CRA) — **$99 CAD** — 3 steps (Entity, Programs+Contact, Billing & Review). Lets the customer pick which CRA program accounts to open (GST/HST, Payroll, Import/Export, Corporate income tax)
+- `/services/extra-provincial` — Extra-Provincial Registration — **$199 CAD** — 3 steps (Home corp, Target province + Agent for service, Billing & Review)
+- `/services/confirmation` — shared confirmation page (verifies Stripe session, surfaces order ref + amount paid)
+
+**Infrastructure:**
+- `src/lib/registrationServices.ts` — slug → metadata registry (label, price, path, descriptions). Single source of truth for prices.
+- `src/lib/registrationSchemas.ts` — Zod schemas (one per service) + a discriminated-union wrapper for the API route. Schemas are imported by both client (via `zodResolver`) and server (validation).
+- `src/components/wizard/WizardUI.tsx` — extracted Field / BackBtn / NextBtn / StepProgress helpers. Reusable across all wizards.
+- `src/components/wizard/AddressFields.tsx` — multi-field address sub-form with Google Places autocomplete, CA province dropdown, and graceful RHF nested-error handling.
+- `src/app/api/service-request/route.ts` — single POST endpoint handling all 4 services via discriminated union. Recomputes pricing server-side, sends [PENDING] intake email to `contact@korporex.ca`, creates Stripe Checkout Session with `productType: "registration"` metadata, returns the hosted checkout URL.
+- `src/app/api/stripe-webhook/route.ts` — extended `handleCheckoutCompleted` and `handleCheckoutFailed` to route the new `registration` productType to dedicated [PAID] / [PAYMENT FAILED] handlers. Existing `incorporation` + `legal-consult` paths untouched.
+
+**Other categories unchanged:** Changes & Amendments, Compliance Filings, Business Updates still point to `/services` (placeholder) — those are the next wave to build out as wizards.
+
 ### 2026-05-22 (Services page: replaced 7-entry Incorporation grid with 2 jurisdictions + 3-package summary)
 
 Hid the per-corporation-type variants ("Standard Corp", "Professional Corp", "Holding Corp", "Non-Profit") from the Services page Incorporation section, since we only file generic for-profit corporations under Basic / Standard / Premium today. Replaced with:
