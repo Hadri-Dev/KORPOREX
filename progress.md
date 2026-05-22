@@ -41,6 +41,12 @@
 
 ## Log
 
+### 2026-05-22 (Both jurisdictions now link out to official corporate registries)
+
+**Third follow-up same day:** extended the external-registry-link pattern to Ontario named too, and consolidated. Both jurisdictions now share a single branch: external link button + live-bound name input. Ontario links to `https://www.appmybizaccount.gov.on.ca/onbis/master/viewInstance/view.pub?id=3abd3bce3cc0ad2a3553f516b33034b80328889fedae6186&_timestamp=1083695347310433` (Ontario Business Registry). A `REGISTRY` const at the top of the component maps `federal` / `ontario` to `{ url, buttonLabel, intro, sourceName }` so the JSX stays single-branch. With both jurisdictions external, the mock precheck flow is fully retired — deleted `/api/name-precheck/route.ts`, `/[locale]/dev/name-precheck/` (page + PreviewClient), `runCheck`, `ResultPanel`, `historyBadge`, `statusLabel`, `clearChosenName`, all history/result/search state, and the `PrecheckMatch`/`PrecheckStatus`/`PrecheckResult`/`HistoryEntry` types. Component shrank from ~480 to ~230 lines.
+
+⚠️ **Heads-up on the Ontario URL:** the `_timestamp=...` and `id=...` query params look session-scoped (typical of JBoss SeamPages-style portals on `.gov.on.ca`). If the link expires or routes everyone to the same opaque deep-link, find the canonical entry-point at `appmybizaccount.gov.on.ca/onbis/` and we can swap it. I used the exact URL you provided.
+
 ### 2026-05-22 (Federal named search → external Corporations Canada link)
 
 **Follow-up same day:** simplified the federal flow further — dropped the "YOUR CHOSEN DISTINCTIVE NAME" label and the "Use this name" button. The input is now bound live to `businessName` (typing immediately updates the chosen name; the "Your corporation will be" preview at the bottom of the section reflects it as the user types). STEP B's "Your chosen name + Change" card is also skipped for federal since the input is always visible inline. Ontario keeps the search → choose → STEP B preview flow.

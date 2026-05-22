@@ -1,23 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { Check, AlertTriangle, X, Loader2, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { LEGAL_ENDINGS, type LegalEnding } from "@/lib/legalEndings";
 
 export type CorpNameType = "named" | "numbered";
-
-export type PrecheckMatch = {
-  name: string;
-  jurisdiction: string;
-  status: string;
-};
-
-export type PrecheckStatus = "available" | "similar" | "taken";
-
-export type PrecheckResult = {
-  status: PrecheckStatus;
-  matches: PrecheckMatch[];
-};
 
 export type CorporationNameValue = {
   corpNameType: CorpNameType;
@@ -30,7 +16,7 @@ type Props = {
   onChange: (next: CorporationNameValue) => void;
   /** When true, hides the Named/Numbered picker and forces "numbered" (Basic package). */
   basicLocked?: boolean;
-  /** Jurisdiction passed to /api/name-precheck so the backend can scope its lookup. */
+  /** Jurisdiction controls which official corporate registry the customer is sent to. */
   jurisdiction?: "federal" | "ontario" | "bc";
   errors?: {
     corpNameType?: string;
@@ -39,7 +25,28 @@ type Props = {
   };
 };
 
-type HistoryEntry = { name: string; status: PrecheckStatus };
+// Official corporate-name search portal per jurisdiction. We link customers
+// out to the government registry rather than running a precheck against a
+// snapshot — the binding check happens at filing time via NUANS.
+const REGISTRY: Record<
+  "federal" | "ontario",
+  { url: string; buttonLabel: string; intro: string; sourceName: string }
+> = {
+  federal: {
+    url: "https://ised-isde.canada.ca/cbr-rec/",
+    buttonLabel: "Search the federal corporate registry",
+    intro:
+      "Federal corporate names must be unique across Canada. Use Corporations Canada's official registry to confirm your distinctive name isn't already in use.",
+    sourceName: "Corporations Canada",
+  },
+  ontario: {
+    url: "https://www.appmybizaccount.gov.on.ca/onbis/master/viewInstance/view.pub?id=3abd3bce3cc0ad2a3553f516b33034b80328889fedae6186&_timestamp=1083695347310433",
+    buttonLabel: "Search the Ontario business registry",
+    intro:
+      "Ontario corporate names must be unique within the province. Use the Ontario Business Registry to confirm your distinctive name isn't already in use.",
+    sourceName: "Ontario Business Registry",
+  },
+};
 
 export default function CorporationNameSection({
   value,
@@ -48,19 +55,9 @@ export default function CorporationNameSection({
   jurisdiction,
   errors,
 }: Props) {
-  const [searchInput, setSearchInput] = useState(value.businessName);
-  const [searching, setSearching] = useState(false);
-  const [result, setResult] = useState<PrecheckResult | null>(null);
-  const [history, setHistory] = useState<HistoryEntry[]>([]);
-  const [searchCount, setSearchCount] = useState(0);
-
   const isNamed = value.corpNameType === "named";
-  const hasChosenName = isNamed && value.businessName.length > 0;
   const jurisdictionWord = jurisdiction === "ontario" ? "Ontario" : "Canada";
-  // Federal name uniqueness is checked against Corporations Canada's official
-  // public registry. Rather than calling an unofficial precheck, we send
-  // customers to the government search and capture the name they confirmed.
-  const useExternalRegistrySearch = jurisdiction === "federal";
+  const registry = REGISTRY[jurisdiction === "ontario" ? "ontario" : "federal"];
 
   function setCorpType(t: CorpNameType) {
     onChange({
@@ -68,47 +65,14 @@ export default function CorporationNameSection({
       businessName: t === "numbered" ? "" : value.businessName,
       legalEnding: value.legalEnding,
     });
-    setResult(null);
   }
 
-  async function runCheck() {
-    const name = searchInput.trim();
-    if (!name) return;
-    setSearching(true);
-    try {
-      // TODO: replace with the real NUANS-backed endpoint once /api/name-precheck
-      // is wired up. Expected response shape: PrecheckResult.
-      const res = await fetch("/api/name-precheck", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, jurisdiction }),
-      });
-      const data: PrecheckResult = await res.json();
-      setResult(data);
-      setHistory((h) => [{ name, status: data.status }, ...h.filter((e) => e.name !== name)].slice(0, 5));
-      setSearchCount((c) => c + 1);
-    } catch {
-      setResult({ status: "available", matches: [] });
-    } finally {
-      setSearching(false);
-    }
-  }
-
-  function chooseName(name: string) {
+  function setBusinessName(name: string) {
     onChange({
       corpNameType: "named",
       businessName: name,
       legalEnding: value.legalEnding,
     });
-  }
-
-  function clearChosenName() {
-    onChange({
-      corpNameType: "named",
-      businessName: "",
-      legalEnding: value.legalEnding,
-    });
-    setResult(null);
   }
 
   function setLegalEnding(ending: LegalEnding) {
@@ -168,162 +132,48 @@ export default function CorporationNameSection({
         </div>
       )}
 
-      {/* Named branch: search → choose → confirm */}
+      {/* Named branch: external registry link + inline name input bound live to businessName */}
       {isNamed && (
         <div className="bg-cream-100 border border-gray-200 rounded-xl p-7">
-          {/* Federal: external registry link + inline name input bound live to businessName */}
-          {useExternalRegistrySearch && (
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-7 h-7 rounded-full bg-navy-900 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
-                  1
-                </div>
-                <h3 className="font-serif text-xl font-semibold text-navy-900">
-                  Search for your business name
-                </h3>
-              </div>
-              <p className="text-sm text-gray-500 ml-10 mb-4 leading-relaxed">
-                Federal corporate names must be unique across Canada. Use Corporations
-                Canada&apos;s official registry to confirm your{" "}
-                <strong className="text-gray-900">distinctive name</strong> isn&apos;t already
-                in use — e.g. search &quot;Acme&quot;, not &quot;Acme Inc.&quot; Then enter
-                your chosen name below.
-              </p>
-
-              <a
-                href="https://ised-isde.canada.ca/cbr-rec/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-navy-900 hover:bg-navy-950 text-white font-semibold text-sm px-5 py-3 rounded-lg transition-colors mb-2"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Search the federal corporate registry
-              </a>
-              <p className="text-xs text-gray-500 mb-5">
-                Opens in a new tab — free, unlimited searches on the Government of Canada
-                site.
-              </p>
-
-              <input
-                type="text"
-                value={value.businessName}
-                onChange={(e) => chooseName(e.target.value)}
-                placeholder='e.g. "Maple Ridge Consulting"'
-                autoComplete="off"
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors bg-white"
-              />
-
-              {errors?.businessName && (
-                <p className="text-sm text-red-600 mt-2">{errors.businessName}</p>
-              )}
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-7 h-7 rounded-full bg-navy-900 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+              1
             </div>
-          )}
+            <h3 className="font-serif text-xl font-semibold text-navy-900">
+              Search for your business name
+            </h3>
+          </div>
+          <p className="text-sm text-gray-500 ml-10 mb-4 leading-relaxed">
+            {registry.intro} Search the{" "}
+            <strong className="text-gray-900">distinctive part</strong> only — e.g.
+            &quot;Acme&quot;, not &quot;Acme Inc.&quot; Then enter your chosen name below.
+          </p>
 
-          {!useExternalRegistrySearch && !hasChosenName && (
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-7 h-7 rounded-full bg-navy-900 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
-                  1
-                </div>
-                <h3 className="font-serif text-xl font-semibold text-navy-900">
-                  Search for your business name
-                </h3>
-              </div>
-              <p className="text-sm text-gray-500 ml-10 mb-4 leading-relaxed">
-                Enter the <strong className="text-gray-900">distinctive part</strong> of your name
-                only — e.g. &quot;Acme&quot; not &quot;Acme Inc.&quot; You can search unlimited times
-                until you find one that&apos;s available.
-              </p>
+          <a
+            href={registry.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-navy-900 hover:bg-navy-950 text-white font-semibold text-sm px-5 py-3 rounded-lg transition-colors mb-2"
+          >
+            <ExternalLink className="w-4 h-4" />
+            {registry.buttonLabel}
+          </a>
+          <p className="text-xs text-gray-500 mb-5">
+            Opens in a new tab — free, unlimited searches on the Government of{" "}
+            {jurisdictionWord} site.
+          </p>
 
-              <div className="flex gap-2 mb-2">
-                <input
-                  type="text"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      runCheck();
-                    }
-                  }}
-                  placeholder='e.g. "Maple Ridge Consulting"'
-                  autoComplete="off"
-                  className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors bg-white"
-                />
-                <button
-                  type="button"
-                  onClick={runCheck}
-                  disabled={searching || !searchInput.trim()}
-                  className="bg-navy-900 hover:bg-navy-950 text-white font-semibold px-6 rounded-lg text-sm transition-colors whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed inline-flex items-center gap-2"
-                >
-                  {searching ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Checking
-                    </>
-                  ) : (
-                    "Check name"
-                  )}
-                </button>
-              </div>
-              <p className="text-xs text-gray-500 mb-3">
-                {searchCount === 0 ? "Unlimited free searches" : `${searchCount} searches so far`}
-              </p>
+          <input
+            type="text"
+            value={value.businessName}
+            onChange={(e) => setBusinessName(e.target.value)}
+            placeholder='e.g. "Maple Ridge Consulting"'
+            autoComplete="off"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors bg-white"
+          />
 
-              {result && (
-                <ResultPanel
-                  result={result}
-                  searchedName={searchInput.trim()}
-                  onUseName={chooseName}
-                />
-              )}
-
-              {history.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-dashed border-gray-200">
-                  <div className="text-[0.7rem] font-bold tracking-[0.12em] uppercase text-gray-500 mb-2">
-                    Previously searched
-                  </div>
-                  <div className="space-y-1.5">
-                    {history.map((h) => (
-                      <div
-                        key={h.name}
-                        className="flex items-center justify-between bg-white border border-gray-200 rounded-md px-3 py-2 text-sm"
-                      >
-                        <span className="text-gray-900">{h.name}</span>
-                        <span className={historyBadge(h.status)}>{statusLabel(h.status)}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {errors?.businessName && !result && (
-                <p className="text-sm text-red-600 mt-2">{errors.businessName}</p>
-              )}
-            </div>
-          )}
-
-          {/* STEP B — selected name preview (Ontario only; federal shows the input inline) */}
-          {hasChosenName && !useExternalRegistrySearch && (
-            <div>
-              <div className="bg-white border-2 border-navy-900 rounded-lg p-4 mb-5 flex items-center justify-between gap-3">
-                <div>
-                  <div className="text-[0.7rem] font-bold tracking-[0.12em] uppercase text-gray-500 mb-1">
-                    Your chosen name
-                  </div>
-                  <div className="font-serif text-2xl font-semibold text-navy-900">
-                    {value.businessName}
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={clearChosenName}
-                  className="border border-gray-200 text-gray-500 hover:border-navy-900 hover:text-navy-900 text-xs px-3 py-1.5 rounded-md transition-colors"
-                >
-                  Change
-                </button>
-              </div>
-            </div>
+          {errors?.businessName && (
+            <p className="text-sm text-red-600 mt-2">{errors.businessName}</p>
           )}
         </div>
       )}
@@ -381,99 +231,14 @@ export default function CorporationNameSection({
         )}
       </div>
 
-      <p className="text-xs text-gray-500 italic leading-relaxed pt-3 border-t border-gray-200">
-        {useExternalRegistrySearch ? (
-          <>
-            The Corporations Canada registry search above is preliminary only. The official
-            NUANS Name Reservation Report, required to incorporate, is included in your Korporex
-            incorporation package and is filed automatically after checkout. Final name approval
-            is at the discretion of the government.
-          </>
-        ) : (
-          <>
-            This is a preliminary search powered by NUANS — Canada&apos;s official corporate name database.
-            It is not an official NUANS Name Reservation Report. The official report, required to
-            incorporate, is included in your Korporex incorporation package and is filed automatically
-            after checkout. Final name approval is at the discretion of the government.
-          </>
-        )}
-      </p>
-    </div>
-  );
-}
-
-function ResultPanel({
-  result,
-  searchedName,
-  onUseName,
-}: {
-  result: PrecheckResult;
-  searchedName: string;
-  onUseName: (name: string) => void;
-}) {
-  const palette = {
-    available: { bg: "bg-emerald-50", border: "border-emerald-200", text: "text-emerald-800", Icon: Check },
-    similar: { bg: "bg-amber-50", border: "border-amber-200", text: "text-amber-800", Icon: AlertTriangle },
-    taken: { bg: "bg-red-50", border: "border-red-200", text: "text-red-800", Icon: X },
-  }[result.status];
-
-  const headline = {
-    available: "Looks available",
-    similar: "Similar names exist",
-    taken: "This name is taken",
-  }[result.status];
-
-  const body = {
-    available: `No exact or close matches found for "${searchedName}". You can use this name.`,
-    similar: `We found names that share the same distinctive element. You may still be able to use "${searchedName}", but the government may flag it during NUANS review.`,
-    taken: `An active corporation already uses "${searchedName}" or a near-identical variant. Choose a different distinctive name.`,
-  }[result.status];
-
-  const canUse = result.status !== "taken";
-
-  return (
-    <div className={`mt-3 p-4 rounded-lg border ${palette.bg} ${palette.border}`}>
-      <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
-        <div className={`flex items-center gap-2 font-bold text-sm ${palette.text}`}>
-          <palette.Icon className="w-4 h-4" />
-          {headline}
-        </div>
-        {canUse && (
-          <button
-            type="button"
-            onClick={() => onUseName(searchedName)}
-            className="bg-navy-900 hover:bg-navy-950 text-white font-semibold text-xs px-3 py-1.5 rounded-md transition-colors"
-          >
-            Use this name
-          </button>
-        )}
-      </div>
-      <p className="text-sm text-gray-900 leading-relaxed">{body}</p>
-      {result.matches.length > 0 && (
-        <ul className="mt-3 pt-3 border-t border-black/10 space-y-1">
-          {result.matches.map((m) => (
-            <li key={m.name} className="flex justify-between text-sm">
-              <span className="text-gray-900">{m.name}</span>
-              <span className="text-xs text-gray-500">
-                {m.jurisdiction} · {m.status}
-              </span>
-            </li>
-          ))}
-        </ul>
+      {isNamed && (
+        <p className="text-xs text-gray-500 italic leading-relaxed pt-3 border-t border-gray-200">
+          The {registry.sourceName} registry search above is preliminary only. The official NUANS
+          Name Reservation Report, required to incorporate, is included in your Korporex
+          incorporation package and is filed automatically after checkout. Final name approval is at
+          the discretion of the government.
+        </p>
       )}
     </div>
   );
-}
-
-function historyBadge(status: PrecheckStatus): string {
-  const base = "text-xs font-semibold px-2 py-0.5 rounded";
-  if (status === "available") return `${base} bg-emerald-100 text-emerald-800`;
-  if (status === "similar") return `${base} bg-amber-100 text-amber-800`;
-  return `${base} bg-red-100 text-red-800`;
-}
-
-function statusLabel(status: PrecheckStatus): string {
-  if (status === "available") return "Available";
-  if (status === "similar") return "Similar exists";
-  return "Taken";
 }
