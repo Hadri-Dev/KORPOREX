@@ -1,6 +1,7 @@
 "use client";
 
-import { ExternalLink, AlertTriangle } from "lucide-react";
+import { useState } from "react";
+import { ExternalLink, AlertTriangle, Check } from "lucide-react";
 import { LEGAL_ENDINGS, type LegalEnding } from "@/lib/legalEndings";
 
 export type CorpNameType = "named" | "numbered";
@@ -58,6 +59,13 @@ export default function CorporationNameSection({
   const isNamed = value.corpNameType === "named";
   const jurisdictionWord = jurisdiction === "ontario" ? "Ontario" : "Canada";
   const registry = REGISTRY[jurisdiction === "ontario" ? "ontario" : "federal"];
+
+  // Confirmation field is local: forces the customer to re-type the business
+  // name so a typo in the main field is caught before submission. The main
+  // field is the canonical source of truth fed back to the parent form.
+  const [nameConfirm, setNameConfirm] = useState("");
+  const confirmMatches = nameConfirm.length > 0 && nameConfirm === value.businessName;
+  const confirmMismatch = nameConfirm.length > 0 && nameConfirm !== value.businessName;
 
   function setCorpType(t: CorpNameType) {
     onChange({
@@ -173,14 +181,48 @@ export default function CorporationNameSection({
             </div>
           </div>
 
+          <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-gray-900 mb-2">
+            Business name <span className="text-red-600">*</span>
+          </label>
           <input
             type="text"
             value={value.businessName}
             onChange={(e) => setBusinessName(e.target.value)}
             placeholder='e.g. "Maple Ridge Consulting"'
             autoComplete="off"
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors bg-white"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors bg-white mb-4"
           />
+
+          <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-gray-900 mb-2">
+            Retype your business name <span className="text-red-600">*</span>
+          </label>
+          <input
+            type="text"
+            value={nameConfirm}
+            onChange={(e) => setNameConfirm(e.target.value)}
+            onPaste={(e) => e.preventDefault()}
+            placeholder="Retype the exact name above"
+            autoComplete="off"
+            className={`w-full px-4 py-3 border-2 rounded-lg text-sm text-gray-900 focus:outline-none transition-colors bg-white ${
+              confirmMismatch
+                ? "border-red-300 focus:border-red-500"
+                : confirmMatches
+                  ? "border-emerald-400 focus:border-emerald-500"
+                  : "border-gray-200 focus:border-navy-900"
+            }`}
+          />
+          {confirmMismatch && (
+            <p className="text-sm text-red-600 mt-2 flex items-center gap-1.5">
+              <AlertTriangle className="w-4 h-4" />
+              Names don&apos;t match. Please retype it exactly as above.
+            </p>
+          )}
+          {confirmMatches && (
+            <p className="text-sm text-emerald-700 mt-2 flex items-center gap-1.5">
+              <Check className="w-4 h-4" />
+              Names match.
+            </p>
+          )}
 
           {errors?.businessName && (
             <p className="text-sm text-red-600 mt-2">{errors.businessName}</p>
