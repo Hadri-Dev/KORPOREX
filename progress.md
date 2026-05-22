@@ -41,6 +41,13 @@
 
 ## Log
 
+### 2026-05-22 (Step 3 named: clearer NUANS + no-guarantee disclaimers)
+
+Further polish on Step 3 Named — three changes:
+1. Amber warning text now reads jurisdiction-agnostic: "Check the name on the Canada's Business Registries before submitting. We do not verify availability for you at this step. If the name is already taken or too similar to an existing corporation, it will be rejected when your incorporation is filed."
+2. Bottom italic disclaimer rewritten to open with a bold non-italic "**This is not an official NUANS search.**" so customers don't confuse the link-out with a binding lookup.
+3. Disclaimer also clearly labels that the **business name is not guaranteed** until it passes the official NUANS review + final government approval. Both clarifications are bold + non-italic to break through the gray-italic body. Dropped the now-unused `sourceName` field from REGISTRY.
+
 ### 2026-05-22 (Step 3 named: required labels + "retype business name" confirmation)
 
 Added labels with red asterisks to both name inputs in the Step 3 Named flow (both Federal and Ontario), and added a second "Retype your business name" input below the first. The confirm field disables paste so customers actually retype (catching typos in the canonical field). Live indicator shows red `AlertTriangle` + "Names don't match" if they diverge, or green `Check` + "Names match" when they align. Border color matches the state (red on mismatch, emerald on match). Local-only state — the primary `businessName` is still the source of truth fed to the wizard, so a mismatch shows as a visual warning rather than blocking parent-form submission.

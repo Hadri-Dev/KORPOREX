@@ -31,21 +31,19 @@ type Props = {
 // snapshot — the binding check happens at filing time via NUANS.
 const REGISTRY: Record<
   "federal" | "ontario",
-  { url: string; buttonLabel: string; intro: string; sourceName: string }
+  { url: string; buttonLabel: string; intro: string }
 > = {
   federal: {
     url: "https://ised-isde.canada.ca/cbr-rec/",
     buttonLabel: "Search the federal corporate registry",
     intro:
       "Federal corporate names must be unique across Canada. Use Corporations Canada's official registry to confirm your distinctive name isn't already in use.",
-    sourceName: "Corporations Canada",
   },
   ontario: {
     url: "https://www.appmybizaccount.gov.on.ca/onbis/master/viewInstance/view.pub?id=3abd3bce3cc0ad2a3553f516b33034b80328889fedae6186&_timestamp=1083695347310433",
     buttonLabel: "Search the Ontario business registry",
     intro:
       "Ontario corporate names must be unique within the province. Use the Ontario Business Registry to confirm your distinctive name isn't already in use.",
-    sourceName: "Ontario Business Registry",
   },
 };
 
@@ -174,7 +172,7 @@ export default function CorporationNameSection({
           <div className="bg-amber-50 border border-amber-300 rounded-lg p-3 mb-4 flex items-start gap-2 text-sm text-amber-900 leading-relaxed">
             <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
             <div>
-              <strong>Check the name on the {registry.sourceName} registry before submitting.</strong>{" "}
+              <strong>Check the name on the Canada&apos;s Business Registries before submitting.</strong>{" "}
               We do not verify availability for you at this step. If the name is already taken or
               too similar to an existing corporation, it will be rejected when your incorporation
               is filed.
@@ -285,10 +283,17 @@ export default function CorporationNameSection({
 
       {isNamed && (
         <p className="text-xs text-gray-500 italic leading-relaxed pt-3 border-t border-gray-200">
-          The {registry.sourceName} registry search above is preliminary only. The official NUANS
-          Name Reservation Report, required to incorporate, is included in your Korporex
-          incorporation package and is filed automatically after checkout. Final name approval is at
-          the discretion of the government.
+          <strong className="not-italic text-gray-700">
+            This is not an official NUANS search.
+          </strong>{" "}
+          The registry lookup above is a preliminary check against publicly available business
+          registries only. The official NUANS Name Reservation Report (required to incorporate) is
+          included in your Korporex package and is filed automatically after checkout.{" "}
+          <strong className="not-italic text-gray-700">
+            Your chosen business name is not guaranteed
+          </strong>{" "}
+          until it passes the official NUANS review and final government approval, and may still be
+          rejected if it conflicts with an existing corporation.
         </p>
       )}
     </div>
