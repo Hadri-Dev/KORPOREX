@@ -15,6 +15,7 @@ const jurisdictionOptions = [
     name: "Federal Incorporation",
     statute: "Canada Business Corporations Act (CBCA)",
     pitch: "Operate across Canada under one corporate name.",
+    from: "$749",
     href: "/incorporate?jurisdiction=federal",
   },
   {
@@ -22,6 +23,7 @@ const jurisdictionOptions = [
     name: "Ontario Incorporation",
     statute: "Ontario Business Corporations Act (OBCA)",
     pitch: "Operate as an Ontario corporation, with lower government filing fees.",
+    from: "$599",
     href: "/incorporate?jurisdiction=ontario",
   },
 ];
@@ -67,11 +69,12 @@ const categories: Category[] = [
   {
     icon: FileText,
     title: "Registrations",
-    description: "Register a sole proprietorship, business name, or expand your existing corporation to operate in a new province.",
+    description: "Register a sole proprietorship, business name, business number, or expand your existing corporation to operate in a new province.",
     services: [
-      { name: "Sole Proprietorship Registration - Ontario", from: "$99", href: "/services" },
-      { name: "Business Name Registration - Ontario", from: "$79", href: "/services" },
-      { name: "Extra-Provincial Registration", from: "$199", href: "/services" },
+      { name: "Sole Proprietorship Registration - Ontario", from: "$99", href: "/services/sole-proprietorship" },
+      { name: "Business Name Registration - Ontario", from: "$79", href: "/services/business-name" },
+      { name: "Business Number Registration - CRA", from: "$99", href: "/services/business-number" },
+      { name: "Extra-Provincial Registration", from: "$199", href: "/services/extra-provincial" },
     ],
   },
   {
@@ -150,7 +153,7 @@ export default function ServicesPage() {
 
             {/* Jurisdiction picker — primary action */}
             <div className="grid md:grid-cols-2 gap-4 ml-0 md:ml-15 mb-12">
-              {jurisdictionOptions.map(({ id, name, statute, pitch, href }) => (
+              {jurisdictionOptions.map(({ id, name, statute, pitch, from, href }) => (
                 <Link
                   key={id}
                   href={href}
@@ -165,7 +168,7 @@ export default function ServicesPage() {
                   </div>
                   <p className="text-xs font-medium text-gold-600 tracking-wide mb-3">{statute}</p>
                   <p className="text-sm text-gray-600 leading-relaxed mb-4">{pitch}</p>
-                  <p className="text-sm font-semibold text-navy-900">From $599</p>
+                  <p className="text-sm font-semibold text-navy-900">From {from}</p>
                 </Link>
               ))}
             </div>

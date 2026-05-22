@@ -48,7 +48,7 @@ export function regOfficeAddonAvailable(jurisdiction: Jurisdiction): boolean {
 }
 
 export const PRICES: Record<Jurisdiction, Record<Pkg, number>> = {
-  federal: { basic: 599, standard: 899, premium: 1199 },
+  federal: { basic: 749, standard: 1049, premium: 1349 },
   ontario: { basic: 599, standard: 899, premium: 1199 },
 };
 

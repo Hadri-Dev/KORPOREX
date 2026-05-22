@@ -21,7 +21,7 @@ const pricingData: Record<Jurisdiction, {
   federal: [
     {
       name: "Basic",
-      price: "$599",
+      price: "$749",
       description: "For solo founders.\nThe simplest way to incorporate. Ideal for consultants, Freelancers, and single-owner holding companies.",
       features: [
         "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
@@ -35,7 +35,7 @@ const pricingData: Record<Jurisdiction, {
     },
     {
       name: "Standard",
-      price: "$899",
+      price: "$1,049",
       description: "For founding teams.\nBuilt for co-founders, spouses incorporating together, and small partnerships ready to operate under a business name.",
       features: [
         "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
@@ -49,7 +49,7 @@ const pricingData: Record<Jurisdiction, {
     },
     {
       name: "Premium",
-      price: "$1,199",
+      price: "$1,349",
       description: "For multi-stakeholder Businesses.\nDesigned for businesses with multiple founders, advisors, or family members, and the share structure to match.",
       features: [
         "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
