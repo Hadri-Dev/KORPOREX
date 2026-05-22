@@ -171,8 +171,8 @@ export default function CorporationNameSection({
       {/* Named branch: search → choose → confirm */}
       {isNamed && (
         <div className="bg-cream-100 border border-gray-200 rounded-xl p-7">
-          {/* STEP A — search for the distinctive name (until one is chosen) */}
-          {!hasChosenName && useExternalRegistrySearch && (
+          {/* Federal: external registry link + inline name input bound live to businessName */}
+          {useExternalRegistrySearch && (
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-7 h-7 rounded-full bg-navy-900 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
@@ -204,37 +204,14 @@ export default function CorporationNameSection({
                 site.
               </p>
 
-              <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-gray-900 mb-2">
-                Your chosen distinctive name <span className="text-red-600">*</span>
-              </label>
-              <div className="flex gap-2 mb-2">
-                <input
-                  type="text"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      const n = searchInput.trim();
-                      if (n) chooseName(n);
-                    }
-                  }}
-                  placeholder='e.g. "Maple Ridge Consulting"'
-                  autoComplete="off"
-                  className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors bg-white"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    const n = searchInput.trim();
-                    if (n) chooseName(n);
-                  }}
-                  disabled={!searchInput.trim()}
-                  className="bg-navy-900 hover:bg-navy-950 text-white font-semibold px-6 rounded-lg text-sm transition-colors whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  Use this name
-                </button>
-              </div>
+              <input
+                type="text"
+                value={value.businessName}
+                onChange={(e) => chooseName(e.target.value)}
+                placeholder='e.g. "Maple Ridge Consulting"'
+                autoComplete="off"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors bg-white"
+              />
 
               {errors?.businessName && (
                 <p className="text-sm text-red-600 mt-2">{errors.businessName}</p>
@@ -242,7 +219,7 @@ export default function CorporationNameSection({
             </div>
           )}
 
-          {!hasChosenName && !useExternalRegistrySearch && (
+          {!useExternalRegistrySearch && !hasChosenName && (
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-7 h-7 rounded-full bg-navy-900 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
@@ -326,8 +303,8 @@ export default function CorporationNameSection({
             </div>
           )}
 
-          {/* STEP B — selected name preview + legal ending picker */}
-          {hasChosenName && (
+          {/* STEP B — selected name preview (Ontario only; federal shows the input inline) */}
+          {hasChosenName && !useExternalRegistrySearch && (
             <div>
               <div className="bg-white border-2 border-navy-900 rounded-lg p-4 mb-5 flex items-center justify-between gap-3">
                 <div>
