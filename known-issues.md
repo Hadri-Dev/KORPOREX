@@ -2,12 +2,12 @@
 
 ## Open
 
-### [Severity: medium] `CorporationNameSection` component built but unwired; `/api/name-precheck` route missing
-- **Where**: component at [src/components/incorporate/CorporationNameSection.tsx](src/components/incorporate/CorporationNameSection.tsx); intended to replace lines 644-705 of [src/app/[locale]/incorporate/page.tsx](src/app/[locale]/incorporate/page.tsx) (the Corporation Name Type picker, Proposed Corporation Name input, and Legal Ending select); fetches `POST /api/name-precheck` which does not exist.
-- **Symptom**: Component is in the tree but not rendered anywhere. If wired in as-is, every name search would 404 and the catch-block would silently report "available" for every query, defeating the point of the precheck.
-- **Impact**: Pre-launch Step 3 still uses the original three fields, so the wizard works fine — no customer regression. The new UX (live name availability check before checkout) is on the bench until both pieces ship.
-- **Why not fixed yet**: Built today (2026-05-14) on user request. Wiring + API route was deliberately scoped out — user asked for the component as a drop-in only, with a TODO comment where the real fetch goes. Real precheck data source still needs deciding (NUANS has no free API; options are paid NUANS reseller, Corporations Canada open data snapshot, or a fuzzy match against a self-maintained registry mirror).
-- **Logged**: 2026-05-14
+### [Severity: low] Ontario named precheck still backed by mock data
+- **Where**: Ontario branch of [src/components/incorporate/CorporationNameSection.tsx](src/components/incorporate/CorporationNameSection.tsx) calls [src/app/api/name-precheck/route.ts](src/app/api/name-precheck/route.ts), which queries a 10-row mock list. The component **is** wired into wizard Step 3 in [src/app/[locale]/incorporate/page.tsx](src/app/[locale]/incorporate/page.tsx).
+- **Symptom**: Ontario "named" customers can type any name and the precheck will return "available" unless their name happens to contain one of the mocked stems (ACME, MAPLE, TORONTO, BLUE WATER, NORTHERN PINE, KORPOREX). No real Ontario Business Registry lookup is performed.
+- **Impact**: Sets false expectations of availability. Final NUANS report at filing time is the only binding check, so the customer's order isn't actually broken — the worst case is the NUANS report flags a conflict that the wizard's preliminary search missed, and the operator handles it. Federal customers are unaffected because the federal branch was redirected on 2026-05-22 to Corporations Canada's official public registry (`https://ised-isde.canada.ca/cbr-rec/`) instead of the mock precheck.
+- **Why not fixed yet**: Real Ontario precheck data source still needs deciding (paid NUANS reseller, Ontario open-data snapshot, or linking out to the Ontario Business Registry search the same way federal does now). Decision deferred to post-launch.
+- **Logged**: 2026-05-14 (revised 2026-05-22 — federal branch switched to external Corporations Canada link, severity dropped from medium to low since only Ontario remains on the mock; previous entry framing was also stale — component is wired into the wizard).
 
 ### [Severity: high] French + Spanish translations only cover chrome + soon page + homepage; the rest of the site still renders English under /fr/ and /es/ URLs
 - **Where**: every page under `src/app/[locale]/` except the homepage and `/soon` still has hardcoded English text in JSX (about, contact, faq, pricing, services, resources index, the 5 resource articles, terms, privacy, the 8-step incorporation wizard, legal-consultation, both confirmation pages).

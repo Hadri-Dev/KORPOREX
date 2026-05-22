@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, AlertTriangle, X, Loader2 } from "lucide-react";
+import { Check, AlertTriangle, X, Loader2, ExternalLink } from "lucide-react";
 import { LEGAL_ENDINGS, type LegalEnding } from "@/lib/legalEndings";
 
 export type CorpNameType = "named" | "numbered";
@@ -57,6 +57,10 @@ export default function CorporationNameSection({
   const isNamed = value.corpNameType === "named";
   const hasChosenName = isNamed && value.businessName.length > 0;
   const jurisdictionWord = jurisdiction === "ontario" ? "Ontario" : "Canada";
+  // Federal name uniqueness is checked against Corporations Canada's official
+  // public registry. Rather than calling an unofficial precheck, we send
+  // customers to the government search and capture the name they confirmed.
+  const useExternalRegistrySearch = jurisdiction === "federal";
 
   function setCorpType(t: CorpNameType) {
     onChange({
@@ -168,7 +172,77 @@ export default function CorporationNameSection({
       {isNamed && (
         <div className="bg-cream-100 border border-gray-200 rounded-xl p-7">
           {/* STEP A — search for the distinctive name (until one is chosen) */}
-          {!hasChosenName && (
+          {!hasChosenName && useExternalRegistrySearch && (
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-7 h-7 rounded-full bg-navy-900 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+                  1
+                </div>
+                <h3 className="font-serif text-xl font-semibold text-navy-900">
+                  Search for your business name
+                </h3>
+              </div>
+              <p className="text-sm text-gray-500 ml-10 mb-4 leading-relaxed">
+                Federal corporate names must be unique across Canada. Use Corporations
+                Canada&apos;s official registry to confirm your{" "}
+                <strong className="text-gray-900">distinctive name</strong> isn&apos;t already
+                in use — e.g. search &quot;Acme&quot;, not &quot;Acme Inc.&quot; Then enter
+                your chosen name below.
+              </p>
+
+              <a
+                href="https://ised-isde.canada.ca/cbr-rec/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-navy-900 hover:bg-navy-950 text-white font-semibold text-sm px-5 py-3 rounded-lg transition-colors mb-2"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Search the federal corporate registry
+              </a>
+              <p className="text-xs text-gray-500 mb-5">
+                Opens in a new tab — free, unlimited searches on the Government of Canada
+                site.
+              </p>
+
+              <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-gray-900 mb-2">
+                Your chosen distinctive name <span className="text-red-600">*</span>
+              </label>
+              <div className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      const n = searchInput.trim();
+                      if (n) chooseName(n);
+                    }
+                  }}
+                  placeholder='e.g. "Maple Ridge Consulting"'
+                  autoComplete="off"
+                  className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors bg-white"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const n = searchInput.trim();
+                    if (n) chooseName(n);
+                  }}
+                  disabled={!searchInput.trim()}
+                  className="bg-navy-900 hover:bg-navy-950 text-white font-semibold px-6 rounded-lg text-sm transition-colors whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  Use this name
+                </button>
+              </div>
+
+              {errors?.businessName && (
+                <p className="text-sm text-red-600 mt-2">{errors.businessName}</p>
+              )}
+            </div>
+          )}
+
+          {!hasChosenName && !useExternalRegistrySearch && (
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-7 h-7 rounded-full bg-navy-900 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
@@ -331,10 +405,21 @@ export default function CorporationNameSection({
       </div>
 
       <p className="text-xs text-gray-500 italic leading-relaxed pt-3 border-t border-gray-200">
-        This is a preliminary search powered by NUANS — Canada&apos;s official corporate name database.
-        It is not an official NUANS Name Reservation Report. The official report, required to
-        incorporate, is included in your Korporex incorporation package and is filed automatically
-        after checkout. Final name approval is at the discretion of the government.
+        {useExternalRegistrySearch ? (
+          <>
+            The Corporations Canada registry search above is preliminary only. The official
+            NUANS Name Reservation Report, required to incorporate, is included in your Korporex
+            incorporation package and is filed automatically after checkout. Final name approval
+            is at the discretion of the government.
+          </>
+        ) : (
+          <>
+            This is a preliminary search powered by NUANS — Canada&apos;s official corporate name database.
+            It is not an official NUANS Name Reservation Report. The official report, required to
+            incorporate, is included in your Korporex incorporation package and is filed automatically
+            after checkout. Final name approval is at the discretion of the government.
+          </>
+        )}
       </p>
     </div>
   );

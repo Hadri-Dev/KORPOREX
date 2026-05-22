@@ -41,6 +41,12 @@
 
 ## Log
 
+### 2026-05-22 (Federal named search → external Corporations Canada link)
+
+Replaced the inline name-precheck UI in [`CorporationNameSection`](src/components/incorporate/CorporationNameSection.tsx) with a link out to `https://ised-isde.canada.ca/cbr-rec/` for **Federal named** corporations. Customers click through to the Government of Canada's official registry (opens in a new tab), confirm uniqueness on the official source, then type the chosen distinctive name into a "Use this name" input — same downstream flow (preview + legal ending picker). Ontario named keeps the existing search-box behaviour. The footer disclaimer is now jurisdiction-aware: federal users see "Corporations Canada registry search above is preliminary only…", Ontario users keep the NUANS wording. Rationale: the precheck endpoint is mock data — sending federal customers to the real registry is more honest than a fake "available/taken" response, and it sets correct expectations that the binding check is the NUANS report Korporex files after checkout. Component still routes Ontario through `/api/name-precheck` (still mock), tracked separately in known-issues.
+
+- Next: when a real data source for Ontario name precheck is decided (paid NUANS reseller vs. ON-registry snapshot), update the Ontario branch too — or, if that's deferred, consider linking Ontario users to the Ontario Business Registry name search the same way.
+
 ### 2026-05-12 (afternoon — Standard/Premium overhaul + admin order overrides + pre-launch audit + pricing-card polish)
 
 Continuation of the morning session. Picked up after the user signed off on the morning Basic-package changes and asked for the rest of the wizard / pricing system.
