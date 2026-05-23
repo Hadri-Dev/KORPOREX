@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { ExternalLink, AlertTriangle, Check } from "lucide-react";
 import { LEGAL_ENDINGS, type LegalEnding } from "@/lib/legalEndings";
 
@@ -10,6 +9,9 @@ export type CorporationNameValue = {
   corpNameType: CorpNameType;
   businessName: string;
   legalEnding: LegalEnding | "";
+  // Customer must re-type the business name to confirm spelling. Lifted to the
+  // parent form so the Zod schema can enforce the match and block submit.
+  nameConfirmation: string;
 };
 
 type Props = {
@@ -23,6 +25,7 @@ type Props = {
     corpNameType?: string;
     businessName?: string;
     legalEnding?: string;
+    nameConfirmation?: string;
   };
 };
 
@@ -46,18 +49,19 @@ export default function CorporationNameSection({
   const isNamed = value.corpNameType === "named";
   const jurisdictionWord = jurisdiction === "ontario" ? "Ontario" : "Canada";
 
-  // Confirmation field is local: forces the customer to re-type the business
-  // name so a typo in the main field is caught before submission. The main
-  // field is the canonical source of truth fed back to the parent form.
-  const [nameConfirm, setNameConfirm] = useState("");
-  const confirmMatches = nameConfirm.length > 0 && nameConfirm === value.businessName;
-  const confirmMismatch = nameConfirm.length > 0 && nameConfirm !== value.businessName;
+  // Match feedback compares the canonical business name to the confirmation
+  // field (now lifted to the parent form so Zod can block submit on mismatch).
+  const confirmMatches =
+    value.nameConfirmation.length > 0 && value.nameConfirmation === value.businessName;
+  const confirmMismatch =
+    value.nameConfirmation.length > 0 && value.nameConfirmation !== value.businessName;
 
   function setCorpType(t: CorpNameType) {
     onChange({
       corpNameType: t,
       businessName: t === "numbered" ? "" : value.businessName,
       legalEnding: value.legalEnding,
+      nameConfirmation: t === "numbered" ? "" : value.nameConfirmation,
     });
   }
 
@@ -66,6 +70,16 @@ export default function CorporationNameSection({
       corpNameType: "named",
       businessName: name,
       legalEnding: value.legalEnding,
+      nameConfirmation: value.nameConfirmation,
+    });
+  }
+
+  function setNameConfirmation(name: string) {
+    onChange({
+      corpNameType: value.corpNameType,
+      businessName: value.businessName,
+      legalEnding: value.legalEnding,
+      nameConfirmation: name,
     });
   }
 
@@ -74,6 +88,7 @@ export default function CorporationNameSection({
       corpNameType: value.corpNameType,
       businessName: value.businessName,
       legalEnding: ending,
+      nameConfirmation: value.nameConfirmation,
     });
   }
 
@@ -196,8 +211,8 @@ export default function CorporationNameSection({
           </label>
           <input
             type="text"
-            value={nameConfirm}
-            onChange={(e) => setNameConfirm(e.target.value)}
+            value={value.nameConfirmation}
+            onChange={(e) => setNameConfirmation(e.target.value)}
             onPaste={(e) => e.preventDefault()}
             placeholder="Retype the exact name above"
             autoComplete="off"
@@ -224,6 +239,9 @@ export default function CorporationNameSection({
 
           {errors?.businessName && (
             <p className="text-sm text-red-600 mt-2">{errors.businessName}</p>
+          )}
+          {errors?.nameConfirmation && !confirmMismatch && (
+            <p className="text-sm text-red-600 mt-2">{errors.nameConfirmation}</p>
           )}
         </div>
       )}

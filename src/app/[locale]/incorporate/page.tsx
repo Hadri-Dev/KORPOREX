@@ -296,6 +296,7 @@ const officerSchema = z.object({
 const s3 = z.object({
   corpNameType: z.enum(["named", "numbered"]),
   businessName: z.string().max(120),
+  nameConfirmation: z.string().max(120),
   legalEnding: legalEndingSchema,
   officialEmail: z.string().email("Valid email required").max(320),
   naicsCode: z.string().min(4, "Please select an industry classification"),
@@ -305,6 +306,9 @@ const s3 = z.object({
 }).refine(
   (v) => v.corpNameType === "numbered" || v.businessName.length >= 2,
   { message: "At least 2 characters required", path: ["businessName"] }
+).refine(
+  (v) => v.corpNameType === "numbered" || v.nameConfirmation === v.businessName,
+  { message: "Names don't match. Please retype it exactly as above.", path: ["nameConfirmation"] }
 );
 
 const s4 = z.object({ directors: z.array(directorSchema).min(1) });
@@ -657,6 +661,7 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack }: {
     defaultValues: {
       corpNameType: basicLocked ? "numbered" : "named",
       businessName: "",
+      nameConfirmation: "",
       // Cast: the wizard's WizardData allows "" for unset, but the Zod schema
       // (and therefore S3) restricts to the LegalEnding union. The UI shows
       // a "Please select…" placeholder for the empty state and validation
@@ -674,6 +679,7 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack }: {
   const { register, handleSubmit, watch, setValue, formState: { errors } } = form;
   const corpNameType = watch("corpNameType");
   const businessName = watch("businessName");
+  const nameConfirmation = watch("nameConfirmation");
   const legalEnding = watch("legalEnding");
   const month = watch("fiscalYearEndMonth");
   const naicsCode = watch("naicsCode");
@@ -698,11 +704,13 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack }: {
             value={{
               corpNameType,
               businessName: businessName ?? "",
+              nameConfirmation: nameConfirmation ?? "",
               legalEnding: (legalEnding ?? "") as LegalEnding | "",
             }}
             onChange={(v) => {
               setValue("corpNameType", v.corpNameType, { shouldValidate: true });
               setValue("businessName", v.businessName, { shouldValidate: true });
+              setValue("nameConfirmation", v.nameConfirmation, { shouldValidate: true });
               setValue("legalEnding", v.legalEnding as LegalEnding, { shouldValidate: true });
             }}
             basicLocked={basicLocked}
@@ -710,11 +718,13 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack }: {
             errors={{
               corpNameType: errors.corpNameType?.message,
               businessName: errors.businessName?.message,
+              nameConfirmation: errors.nameConfirmation?.message,
               legalEnding: errors.legalEnding?.message,
             }}
           />
           <input type="hidden" {...register("corpNameType")} />
           <input type="hidden" {...register("businessName")} />
+          <input type="hidden" {...register("nameConfirmation")} />
           <input type="hidden" {...register("legalEnding")} />
 
           {corpNameType === "named" && (
