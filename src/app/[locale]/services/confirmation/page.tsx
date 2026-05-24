@@ -3,6 +3,7 @@ import { CheckCircle, ArrowRight, Mail, Clock, FileText } from "lucide-react";
 import { stripe } from "@/lib/stripe";
 import { REGISTRATION_SERVICES, isRegistrationSlug } from "@/lib/registrationServices";
 import { AMENDMENT_SERVICES, isAmendmentSlug } from "@/lib/amendmentServices";
+import { COMPLIANCE_SERVICES, isComplianceSlug } from "@/lib/complianceServices";
 
 // Render on demand so we can verify the Stripe session when the user arrives
 // from a successful checkout redirect.
@@ -50,7 +51,9 @@ export default async function ServiceConfirmationPage({ searchParams }: PageProp
       ? REGISTRATION_SERVICES[serviceParam]
       : isAmendmentSlug(serviceParam)
         ? AMENDMENT_SERVICES[serviceParam]
-        : null
+        : isComplianceSlug(serviceParam)
+          ? COMPLIANCE_SERVICES[serviceParam]
+          : null
     : null;
 
   let displayRef = refFromUrl;

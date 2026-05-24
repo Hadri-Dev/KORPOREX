@@ -2,12 +2,12 @@
 
 ## Open
 
-### [Severity: medium] Compliance Filings + Business Updates service tiles still point to /services placeholder
-- **Where**: [src/app/[locale]/services/page.tsx](src/app/[locale]/services/page.tsx) — `categories[2]` (Compliance Filings: Initial Return, Annual Returns, Notice of Change) and `categories[3]` (Business Updates: Dissolve, Revive, Amalgamation, Continuance) — 8 tiles total, all with `href: "/services"`.
-- **Symptom**: Clicking any of these 8 tiles scrolls back to the top of the services page instead of opening a dedicated wizard.
-- **Impact**: Customers can't order these services online — they'd have to use the contact form. The Registrations (4) and Changes & Amendments (4) categories are fully wired. Incorporation is via `/incorporate`.
-- **Why not fixed yet**: Scoped out of the 2026-05-24 Changes & Amendments build per user direction (one category per session). The infrastructure is ready — adding a third service family takes ~half a session per category (new `xxxServices.ts` registry + `xxxSchemas.ts` + `/api/xxx-request` route + per-service wizard pages + a `productType` branch in [src/app/api/stripe-webhook/route.ts](src/app/api/stripe-webhook/route.ts), all mirrored from the existing Registration and Amendment families).
-- **Logged**: 2026-05-24
+### [Severity: medium] Business Updates service tiles still point to /services placeholder
+- **Where**: [src/app/[locale]/services/page.tsx](src/app/[locale]/services/page.tsx) — `categories[3]` (Business Updates: Dissolve a Business, Revive a Business, Amalgamation, Continuance Between Jurisdictions) — 4 tiles, all with `href: "/services"`.
+- **Symptom**: Clicking any of these 4 tiles scrolls back to the top of the services page instead of opening a dedicated wizard.
+- **Impact**: Customers can't order corporate-restructuring services online — they'd have to use the contact form. Incorporation, Registrations (4), Changes & Amendments (4), and Compliance Filings (4) are all fully wired.
+- **Why not fixed yet**: Scoped out of the 2026-05-24 Compliance Filings build per user direction (one category per session). The infrastructure is ready — adding the Business Updates family takes ~half a session (new `businessUpdatesServices.ts` registry + `businessUpdatesSchemas.ts` + `/api/business-update-request` route + per-service wizard pages + a `productType` branch in [src/app/api/stripe-webhook/route.ts](src/app/api/stripe-webhook/route.ts), all mirrored from the existing Registration / Amendment / Compliance families).
+- **Logged**: 2026-05-24 (revised same day — Compliance Filings shipped)
 
 ### [Severity: high] French + Spanish translations only cover chrome + soon page + homepage; the rest of the site still renders English under /fr/ and /es/ URLs
 - **Where**: every page under `src/app/[locale]/` except the homepage and `/soon` still has hardcoded English text in JSX (about, contact, faq, pricing, services, resources index, the 5 resource articles, terms, privacy, the 8-step incorporation wizard, legal-consultation, both confirmation pages).

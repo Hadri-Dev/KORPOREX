@@ -93,10 +93,10 @@ const categories: Category[] = [
     title: "Compliance Filings",
     description: "Stay in good standing with required government filings for Ontario and federal corporations.",
     services: [
-      { name: "Initial Return (Ontario)", from: "$99", href: "/services" },
-      { name: "Annual Return - Ontario", from: "$149", href: "/services" },
-      { name: "Annual Return - Federal", from: "$149", href: "/services" },
-      { name: "Notice of Change", from: "$129", href: "/services" },
+      { name: "Initial Return (Ontario)", from: "$99", href: "/services/initial-return-on" },
+      { name: "Annual Return - Ontario", from: "$149", href: "/services/annual-return-on" },
+      { name: "Annual Return - Federal", from: "$149", href: "/services/annual-return-federal" },
+      { name: "Notice of Change", from: "$129", href: "/services/notice-of-change" },
     ],
   },
   {

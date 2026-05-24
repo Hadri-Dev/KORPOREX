@@ -18,11 +18,16 @@ type CorporationFields = {
 
 export default function CorporationIdSection({
   errors,
+  lockedJurisdiction,
 }: {
   errors?: FieldErrors | CorporationFields;
+  /** Hide the jurisdiction picker (the parent form has fixed it). The label
+   *  still adapts the corp-number field to match. */
+  lockedJurisdiction?: "federal" | "ontario";
 }) {
   const { register, watch } = useFormContext();
-  const jurisdiction = watch("corporation.jurisdiction") as "federal" | "ontario" | undefined;
+  const watchedJurisdiction = watch("corporation.jurisdiction") as "federal" | "ontario" | undefined;
+  const jurisdiction = lockedJurisdiction ?? watchedJurisdiction;
   const e = (errors ?? {}) as CorporationFields;
 
   const numberLabel = jurisdiction === "ontario" ? "OCN (Ontario Corporation Number) *" : "Corporation number *";
@@ -33,13 +38,17 @@ export default function CorporationIdSection({
 
   return (
     <div className="space-y-5">
-      <Field label="Jurisdiction *" error={e.jurisdiction?.message} hint="The registry that issued your incorporation.">
-        <select {...register("corporation.jurisdiction")} className={sCls}>
-          <option value="">Select…</option>
-          <option value="federal">Federal (CBCA — Corporations Canada)</option>
-          <option value="ontario">Ontario (OBCA — Ontario Business Registry)</option>
-        </select>
-      </Field>
+      {lockedJurisdiction ? (
+        <input type="hidden" {...register("corporation.jurisdiction")} value={lockedJurisdiction} />
+      ) : (
+        <Field label="Jurisdiction *" error={e.jurisdiction?.message} hint="The registry that issued your incorporation.">
+          <select {...register("corporation.jurisdiction")} className={sCls}>
+            <option value="">Select…</option>
+            <option value="federal">Federal (CBCA — Corporations Canada)</option>
+            <option value="ontario">Ontario (OBCA — Ontario Business Registry)</option>
+          </select>
+        </Field>
+      )}
 
       <Field
         label="Corporation legal name *"
