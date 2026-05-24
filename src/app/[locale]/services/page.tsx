@@ -104,10 +104,10 @@ const categories: Category[] = [
     title: "Business Updates",
     description: "Dissolve, revive, amalgamate, or continue your corporation between jurisdictions.",
     services: [
-      { name: "Dissolve a Business", from: "$199", href: "/services" },
-      { name: "Revive a Business", from: "$249", href: "/services" },
-      { name: "Amalgamation", from: "$499", href: "/services" },
-      { name: "Continuance Between Jurisdictions", from: "$349", href: "/services" },
+      { name: "Dissolve a Business", from: "$199", href: "/services/dissolve-business" },
+      { name: "Revive a Business", from: "$249", href: "/services/revive-business" },
+      { name: "Amalgamation", from: "$499", href: "/services/amalgamation" },
+      { name: "Continuance Between Jurisdictions", from: "$349", href: "/services/continuance" },
     ],
   },
 ];
