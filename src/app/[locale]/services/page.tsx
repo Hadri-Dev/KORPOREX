@@ -82,10 +82,10 @@ const categories: Category[] = [
     title: "Changes & Amendments",
     description: "Update your corporation's directors, officers, address, or articles after incorporation.",
     services: [
-      { name: "Change of Director / Officer", from: "$149", href: "/services" },
-      { name: "Change of Shareholder", from: "$149", href: "/services" },
-      { name: "Corporation Address Change", from: "$99", href: "/services" },
-      { name: "Articles of Amendment", from: "$199", href: "/services" },
+      { name: "Change of Director / Officer", from: "$149", href: "/services/change-director" },
+      { name: "Change of Shareholder", from: "$149", href: "/services/change-shareholder" },
+      { name: "Corporation Address Change", from: "$99", href: "/services/change-address" },
+      { name: "Articles of Amendment", from: "$199", href: "/services/articles-amendment" },
     ],
   },
   {

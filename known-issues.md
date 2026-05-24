@@ -2,6 +2,13 @@
 
 ## Open
 
+### [Severity: medium] Compliance Filings + Business Updates service tiles still point to /services placeholder
+- **Where**: [src/app/[locale]/services/page.tsx](src/app/[locale]/services/page.tsx) — `categories[2]` (Compliance Filings: Initial Return, Annual Returns, Notice of Change) and `categories[3]` (Business Updates: Dissolve, Revive, Amalgamation, Continuance) — 8 tiles total, all with `href: "/services"`.
+- **Symptom**: Clicking any of these 8 tiles scrolls back to the top of the services page instead of opening a dedicated wizard.
+- **Impact**: Customers can't order these services online — they'd have to use the contact form. The Registrations (4) and Changes & Amendments (4) categories are fully wired. Incorporation is via `/incorporate`.
+- **Why not fixed yet**: Scoped out of the 2026-05-24 Changes & Amendments build per user direction (one category per session). The infrastructure is ready — adding a third service family takes ~half a session per category (new `xxxServices.ts` registry + `xxxSchemas.ts` + `/api/xxx-request` route + per-service wizard pages + a `productType` branch in [src/app/api/stripe-webhook/route.ts](src/app/api/stripe-webhook/route.ts), all mirrored from the existing Registration and Amendment families).
+- **Logged**: 2026-05-24
+
 ### [Severity: high] French + Spanish translations only cover chrome + soon page + homepage; the rest of the site still renders English under /fr/ and /es/ URLs
 - **Where**: every page under `src/app/[locale]/` except the homepage and `/soon` still has hardcoded English text in JSX (about, contact, faq, pricing, services, resources index, the 5 resource articles, terms, privacy, the 8-step incorporation wizard, legal-consultation, both confirmation pages).
 - **Symptom**: Visiting `/fr/about` or `/es/pricing` shows the navbar/footer/language switcher in the chosen language, but page content is English. Internal links use the locale-aware `Link` so the URL prefix is preserved when navigating between pages.

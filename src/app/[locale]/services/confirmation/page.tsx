@@ -2,6 +2,7 @@ import { Link } from "@/i18n/navigation";
 import { CheckCircle, ArrowRight, Mail, Clock, FileText } from "lucide-react";
 import { stripe } from "@/lib/stripe";
 import { REGISTRATION_SERVICES, isRegistrationSlug } from "@/lib/registrationServices";
+import { AMENDMENT_SERVICES, isAmendmentSlug } from "@/lib/amendmentServices";
 
 // Render on demand so we can verify the Stripe session when the user arrives
 // from a successful checkout redirect.
@@ -44,8 +45,13 @@ export default async function ServiceConfirmationPage({ searchParams }: PageProp
   const refFromUrl = firstParam(searchParams?.ref);
   const isDev = firstParam(searchParams?.dev) === "1";
   const serviceParam = firstParam(searchParams?.service);
-  const service =
-    serviceParam && isRegistrationSlug(serviceParam) ? REGISTRATION_SERVICES[serviceParam] : null;
+  const service = serviceParam
+    ? isRegistrationSlug(serviceParam)
+      ? REGISTRATION_SERVICES[serviceParam]
+      : isAmendmentSlug(serviceParam)
+        ? AMENDMENT_SERVICES[serviceParam]
+        : null
+    : null;
 
   let displayRef = refFromUrl;
   let amountPaid: string | null = null;
@@ -66,7 +72,7 @@ export default async function ServiceConfirmationPage({ searchParams }: PageProp
     paid = true;
   }
 
-  const serviceLabel = service?.longLabel ?? "Your Registration";
+  const serviceLabel = service?.longLabel ?? "Your Order";
 
   return (
     <>
