@@ -26,10 +26,7 @@ import { ADMIN_COOKIE_NAME, verifyAdminSession } from "@/lib/adminAuth";
 //   - /_next/*        — framework assets
 //   - /favicon.ico    — browser probe
 
-const LAUNCH_MODE_HOSTS = new Set([
-  "korporex.ca",
-  "www.korporex.ca",
-]);
+const LAUNCH_MODE_HOSTS = new Set<string>();
 
 const intlMiddleware = createIntlMiddleware(routing);
 
