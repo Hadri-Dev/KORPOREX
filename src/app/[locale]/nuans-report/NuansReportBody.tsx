@@ -168,11 +168,14 @@ export default function NuansReportBody() {
         <div className="max-w-4xl mx-auto">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
             {/* ── Names table ────────────────────────────────────────────── */}
-            <div>
-              <h2 className="font-serif text-2xl font-bold text-navy-900 mb-2">
+            {/* Visually elevated card so the "proposed names" step reads as
+                the headline action on the page. Cream bg + thick gold-500
+                left stripe + subtle shadow + slightly larger title. */}
+            <div className="relative bg-cream-50 border border-gray-200 border-l-4 border-l-gold-500 rounded-lg shadow-sm p-5 md:p-8">
+              <h2 className="font-serif text-2xl md:text-3xl font-bold text-navy-900 mb-2">
                 Your proposed names
               </h2>
-              <p className="text-sm text-gray-500 mb-6">
+              <p className="text-sm text-gray-600 mb-6 leading-relaxed">
                 Add one name per row. The first proposed name is $40 + HST. Each
                 additional name in the same order is $45 + HST. Every name you
                 enter is searched and the results are bundled into a single
@@ -181,10 +184,11 @@ export default function NuansReportBody() {
 
               {/* Single responsive layout: stacked card on mobile, table-style
                   grid on md+. Rendered ONCE so every form path is registered
-                  with react-hook-form exactly once per row. */}
-              <div className="border border-gray-200 rounded-md overflow-hidden">
+                  with react-hook-form exactly once per row. White inner bg
+                  keeps the inputs legible against the cream card. */}
+              <div className="border border-gray-200 rounded-md overflow-hidden bg-white">
                 {/* Column headers (md+ only) */}
-                <div className="hidden md:grid grid-cols-[1.6fr_1.4fr_1.4fr_44px] gap-3 bg-cream-50 px-4 py-3 text-xs font-bold tracking-[0.08em] uppercase text-navy-900">
+                <div className="hidden md:grid grid-cols-[1.6fr_1.4fr_1.4fr_44px] gap-3 bg-navy-900 px-4 py-3 text-xs font-bold tracking-[0.08em] uppercase text-gold-500">
                   <div>
                     Proposed Name<span className="text-red-500 ml-0.5">*</span>
                   </div>
@@ -302,12 +306,12 @@ export default function NuansReportBody() {
                 type="button"
                 onClick={() => append({ ...initialRow })}
                 disabled={fields.length >= 10}
-                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-navy-900 hover:text-gold-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-navy-900 bg-white border-2 border-dashed border-navy-900/30 hover:border-gold-500 hover:text-gold-600 hover:bg-gold-500/5 transition-colors px-5 py-3 rounded-md disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <Plus size={16} /> Add another name
               </button>
               {fields.length >= 10 && (
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 mt-2">
                   Maximum of 10 names per order.
                 </p>
               )}
