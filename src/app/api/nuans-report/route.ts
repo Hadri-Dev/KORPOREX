@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
 import {
-  nuansRequestSchema,
-  type NuansReportSubmission,
-  type NuansJurisdiction,
-  type NuansIntendedUse,
-} from "@/lib/nuansSchemas";
-import { NUANS_SERVICES } from "@/lib/nuansServices";
+  nuansReportRequestSchema,
+  type NuansReportRequest,
+  NUANS_REPORT,
+  getJurisdictionLabel,
+} from "@/lib/nuansReport";
 import { getTaxRate } from "@/lib/pricing";
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
@@ -16,11 +14,8 @@ export const runtime = "nodejs";
 
 type Pricing = { subtotal: number; taxRate: number; tax: number; total: number };
 
-function computeNuansPricing(
-  billingCountry: string,
-  billingRegion: string
-): Pricing {
-  const subtotal = NUANS_SERVICES["nuans-report"].price;
+function computePricing(billingCountry: string, billingRegion: string): Pricing {
+  const subtotal = NUANS_REPORT.price;
   const taxRate = getTaxRate(billingCountry, billingRegion);
   const tax = Math.round(subtotal * taxRate * 100) / 100;
   const total = Math.round((subtotal + tax) * 100) / 100;
@@ -28,42 +23,33 @@ function computeNuansPricing(
 }
 
 export async function POST(req: Request) {
-  let parsed: z.infer<typeof nuansRequestSchema>;
+  let parsed: NuansReportRequest;
   try {
     const body = await req.json();
-    parsed = nuansRequestSchema.parse(body);
+    parsed = nuansReportRequestSchema.parse(body);
   } catch {
     return NextResponse.json({ error: "Invalid submission." }, { status: 400 });
   }
 
-  const { payload } = parsed;
-  const meta = NUANS_SERVICES["nuans-report"];
-
-  const billing = payload.billingAddress;
-  const billingName = payload.billingName;
-  const pricing = computeNuansPricing(billing.country, billing.region);
+  const billing = parsed.billingAddress;
+  const pricing = computePricing(billing.country, billing.region);
   const orderRef = generateOrderRef();
-
-  const customerEmail = payload.contact.contactEmail;
-  const customerName = `${payload.contact.contactFirstName} ${payload.contact.contactLastName}`.trim();
+  const customerEmail = parsed.contact.contactEmail;
+  const customerName = `${parsed.contact.contactFirstName} ${parsed.contact.contactLastName}`.trim();
 
   // 1. [PENDING PAYMENT] intake email
-  await sendIntakeEmail({
-    payload,
-    pricing,
-    orderRef,
-    customerEmail,
-    customerName,
-  }).catch((err) => {
-    console.error("[nuans-request-api] intake email failed:", err);
-  });
+  await sendIntakeEmail({ payload: parsed, pricing, orderRef, customerEmail, customerName }).catch(
+    (err) => {
+      console.error("[nuans-report-api] intake email failed:", err);
+    }
+  );
 
   // 2. Stripe Checkout
   if (!stripe) {
-    console.warn("[nuans-request-api] STRIPE_SECRET_KEY not set — skipping Checkout Session");
+    console.warn("[nuans-report-api] STRIPE_SECRET_KEY not set — skipping Checkout Session");
     const siteUrl = getSiteUrl();
     return NextResponse.json({
-      url: `${siteUrl}/services/confirmation?ref=${orderRef}&dev=1&service=nuans-report`,
+      url: `${siteUrl}/nuans-report/confirmation?ref=${orderRef}&dev=1`,
       orderRef,
       dev: true,
     });
@@ -77,7 +63,10 @@ export async function POST(req: Request) {
     {
       price_data: {
         currency: "cad",
-        product_data: { name: meta.longLabel, description: meta.tagline },
+        product_data: {
+          name: NUANS_REPORT.longLabel,
+          description: `${parsed.rows.length} proposed ${parsed.rows.length === 1 ? "name" : "names"} searched and bundled into a single PDF report`,
+        },
         unit_amount: Math.round(pricing.subtotal * 100),
       },
       quantity: 1,
@@ -98,27 +87,37 @@ export async function POST(req: Request) {
     });
   }
 
+  // Stripe metadata is ~500 chars per value. Truncate the names summary so
+  // it always fits, even for 10-row orders. The full list lives in the
+  // [PENDING] intake email which the operator cross-references by orderRef.
+  const namesSummary = parsed.rows
+    .map((r) => `${r.proposedName} [${getJurisdictionLabel(r.jurisdiction)}]`)
+    .join("; ");
+  const namesSummaryTrunc =
+    namesSummary.length > 450 ? namesSummary.slice(0, 447) + "..." : namesSummary;
+
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       customer_email: customerEmail,
       line_items: lineItems,
-      success_url: `${siteUrl}/services/confirmation?session_id={CHECKOUT_SESSION_ID}&ref=${orderRef}&service=nuans-report`,
-      cancel_url: `${siteUrl}${meta.path}?cancelled=1&ref=${orderRef}`,
+      success_url: `${siteUrl}/nuans-report/confirmation?session_id={CHECKOUT_SESSION_ID}&ref=${orderRef}`,
+      cancel_url: `${siteUrl}/nuans-report?cancelled=1&ref=${orderRef}`,
       metadata: {
         productType: "nuans",
         service: "nuans-report",
         orderRef,
         customerEmail,
         customerName,
-        billingName,
-        serviceLabel: meta.longLabel,
-        jurisdiction: payload.jurisdiction,
-        proposedName: payload.proposedName,
-        intendedUse: payload.intendedUse,
+        billingName: parsed.billingName,
+        serviceLabel: NUANS_REPORT.longLabel,
+        rowCount: String(parsed.rows.length),
+        namesSummary: namesSummaryTrunc,
+        primaryName: parsed.rows[0]?.proposedName ?? "",
+        primaryJurisdiction: parsed.rows[0]?.jurisdiction ?? "",
       },
       payment_intent_data: {
-        description: `Korporex - ${orderRef} - ${meta.longLabel}`,
+        description: `Korporex - ${orderRef} - ${NUANS_REPORT.longLabel}`,
         metadata: { orderRef, productType: "nuans", service: "nuans-report" },
       },
     });
@@ -126,10 +125,9 @@ export async function POST(req: Request) {
     if (!session.url) {
       throw new Error("Stripe returned a session without a URL");
     }
-
     return NextResponse.json({ url: session.url, orderRef });
   } catch (err) {
-    console.error("[nuans-request-api] Stripe Checkout Session error:", err);
+    console.error("[nuans-report-api] Stripe Checkout Session error:", err);
     return NextResponse.json(
       { error: `We couldn't start checkout. Please try again or email us at ${CONTACT_ADDRESS}.` },
       { status: 502 }
@@ -140,15 +138,14 @@ export async function POST(req: Request) {
 // ── Intake email ────────────────────────────────────────────────────────────
 
 async function sendIntakeEmail(args: {
-  payload: NuansReportSubmission;
+  payload: NuansReportRequest;
   pricing: Pricing;
   orderRef: string;
   customerEmail: string;
   customerName: string;
 }): Promise<void> {
   const { pricing, orderRef, customerEmail, customerName } = args;
-  const meta = NUANS_SERVICES["nuans-report"];
-  const subject = `[PENDING] ${orderRef} — ${meta.longLabel} — $${pricing.total.toFixed(2)} CAD`;
+  const subject = `[PENDING] ${orderRef} — ${NUANS_REPORT.longLabel} (${args.payload.rows.length}) — $${pricing.total.toFixed(2)} CAD`;
   const html = buildHtmlBody(args);
   await sendMail(
     {
@@ -157,7 +154,7 @@ async function sendIntakeEmail(args: {
       to: [{ email: CONTACT_ADDRESS, name: "Korporex" }],
       replyTo: { email: customerEmail, name: customerName || customerEmail },
     },
-    "nuans-request-api"
+    "nuans-report-api"
   );
 }
 
@@ -186,45 +183,34 @@ function section(title: string, inner: string) {
   )}</p>${inner}</div>`;
 }
 
-const JURISDICTION_LABEL: Record<NuansJurisdiction, string> = {
-  federal: "Federal (CBCA)",
-  ontario: "Ontario (OBCA)",
-};
-
-const INTENDED_USE_LABEL: Record<NuansIntendedUse, string> = {
-  new_incorporation: "New incorporation",
-  name_change: "Name change (existing corporation)",
-  amalgamation: "Amalgamation",
-  trademark_screening: "Trademark pre-screening",
-  other: "Other",
-};
-
 function buildHtmlBody(args: {
-  payload: NuansReportSubmission;
+  payload: NuansReportRequest;
   pricing: Pricing;
   orderRef: string;
   customerEmail: string;
   customerName: string;
 }): string {
   const { payload, pricing, orderRef } = args;
-  const meta = NUANS_SERVICES["nuans-report"];
 
   const orderRows = [
     row("Order reference", orderRef),
-    row("Service", meta.longLabel),
-    row("Jurisdiction", JURISDICTION_LABEL[payload.jurisdiction]),
-    row("Intended use", INTENDED_USE_LABEL[payload.intendedUse]),
+    row("Service", NUANS_REPORT.longLabel),
+    row("Names submitted", String(payload.rows.length)),
   ].join("");
 
-  const nameRows = [
-    row("Primary name", payload.proposedName),
-    ...(payload.alternativeName1 ? [row("Alternative 1", payload.alternativeName1)] : []),
-    ...(payload.alternativeName2 ? [row("Alternative 2", payload.alternativeName2)] : []),
-  ].join("");
-
-  const descBlock = `<div style="margin-top:12px;padding:12px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:13px;line-height:1.6;color:#111827;">${escapeHtml(
-    payload.businessDescription
-  )}</div>`;
+  const namesTable = payload.rows
+    .map(
+      (r, i) =>
+        `<tr><td style="padding:8px 12px;border-bottom:1px solid #E5E7EB;font-size:13px;color:#6b7280;vertical-align:top;white-space:nowrap;">#${
+          i + 1
+        }</td><td style="padding:8px 12px;border-bottom:1px solid #E5E7EB;font-size:13px;color:#111827;"><strong>Proposed:</strong> ${escapeHtml(
+          r.proposedName
+        )}<br><strong>Distinctive:</strong> ${escapeHtml(
+          r.distinctiveTerm
+        )}<br><strong>Jurisdiction:</strong> ${escapeHtml(getJurisdictionLabel(r.jurisdiction))}</td></tr>`
+    )
+    .join("");
+  const namesHtml = `<table style="width:100%;border-collapse:collapse;border:1px solid #E5E7EB;border-radius:6px;overflow:hidden;">${namesTable}</table>`;
 
   const contactRows = [
     row("Contact", `${payload.contact.contactFirstName} ${payload.contact.contactLastName}`.trim()),
@@ -243,24 +229,24 @@ function buildHtmlBody(args: {
       ? `Tax (${(pricing.taxRate * 100).toFixed(pricing.taxRate === 0.14975 ? 3 : 0)}% — ${payload.billingAddress.region})`
       : "Tax";
   const pricingRows = [
-    row(meta.longLabel, `$${pricing.subtotal.toFixed(2)}`),
+    row(`${NUANS_REPORT.longLabel} (flat order fee)`, `$${pricing.subtotal.toFixed(2)}`),
     row(taxLabel, `$${pricing.tax.toFixed(2)}`),
     row("Total (CAD)", `$${pricing.total.toFixed(2)}`),
   ].join("");
 
-  const note = `<p style="margin:24px 0 0;padding:12px 16px;background:#fef3c7;border-left:3px solid #C5A35A;color:#78350f;font-size:13px;line-height:1.6;"><strong>Status: PENDING PAYMENT.</strong> Run the NUANS search on the primary name only once the [PAID] email arrives. If no "[PAID]" email arrives for <strong>${escapeHtml(
+  const note = `<p style="margin:24px 0 0;padding:12px 16px;background:#fef3c7;border-left:3px solid #C5A35A;color:#78350f;font-size:13px;line-height:1.6;"><strong>Status: PENDING PAYMENT.</strong> Wait for the [PAID] email before running the NUANS searches. Once paid, run a NUANS search on each row's distinctive term against the registry indicated, then consolidate the results into a single PDF and email it to the customer. If no "[PAID]" email arrives for <strong>${escapeHtml(
     orderRef
   )}</strong>, the customer did not finish checkout.</p>`;
 
-  return `<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#FAFAF8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;"><div style="max-width:640px;margin:0 auto;background:#ffffff;padding:32px;border:1px solid #e5e7eb;"><div style="width:32px;height:2px;background:#C5A35A;margin-bottom:20px;"></div><h1 style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#1B4332;">New NUANS order — ${escapeHtml(
+  return `<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#FAFAF8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;"><div style="max-width:680px;margin:0 auto;background:#ffffff;padding:32px;border:1px solid #e5e7eb;"><div style="width:32px;height:2px;background:#C5A35A;margin-bottom:20px;"></div><h1 style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#1B4332;">New NUANS report order — ${escapeHtml(
     orderRef
-  )}</h1><p style="margin:0 0 24px;color:#6b7280;font-size:13px;">Submitted from the korporex.ca services page</p>${section(
+  )}</h1><p style="margin:0 0 24px;color:#6b7280;font-size:13px;">Submitted from /nuans-report</p>${section(
     "Order",
     `<table style="width:100%;border-collapse:collapse;">${orderRows}</table>`
   )}${section(
-    "Names to search",
-    `<table style="width:100%;border-collapse:collapse;">${nameRows}</table>`
-  )}${section("Business description", descBlock)}${section(
+    `Names to search (${payload.rows.length})`,
+    namesHtml
+  )}${section(
     "Contact",
     `<table style="width:100%;border-collapse:collapse;">${contactRows}</table>`
   )}${section(

@@ -247,7 +247,7 @@ export default function ArticlePage({ params }: Params) {
               Get Started <ArrowRight size={16} />
             </Link>
             <Link
-              href="/services/nuans-report"
+              href="/nuans-report"
               className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
             >
               NUANS Report

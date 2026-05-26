@@ -1,63 +1,46 @@
 import { Link } from "@/i18n/navigation";
-import { CheckCircle, ArrowRight, Mail, Clock, FileText } from "lucide-react";
+import { CheckCircle, ArrowRight, Mail, Clock, FileSearch } from "lucide-react";
 import { stripe } from "@/lib/stripe";
-import { REGISTRATION_SERVICES, isRegistrationSlug } from "@/lib/registrationServices";
-import { AMENDMENT_SERVICES, isAmendmentSlug } from "@/lib/amendmentServices";
-import { COMPLIANCE_SERVICES, isComplianceSlug } from "@/lib/complianceServices";
-import { BUSINESS_UPDATE_SERVICES, isBusinessUpdateSlug } from "@/lib/businessUpdateServices";
+import { NUANS_REPORT } from "@/lib/nuansReport";
 
-// Render on demand so we can verify the Stripe session when the user arrives
-// from a successful checkout redirect.
 export const dynamic = "force-dynamic";
 
 type SearchParams = {
   session_id?: string | string[];
   ref?: string | string[];
   dev?: string | string[];
-  service?: string | string[];
 };
 
-type PageProps = { searchParams?: SearchParams };
-
-const nextSteps = [
-  {
-    icon: Clock,
-    title: "Filing in Progress",
-    body: "Your application will be submitted to the appropriate registry within 1–2 business days.",
-  },
-  {
-    icon: Mail,
-    title: "Check Your Email",
-    body: "You'll receive a Stripe receipt immediately. Once your documents are ready, we'll send them as PDF attachments to the email you provided.",
-  },
-  {
-    icon: FileText,
-    title: "Your Documents",
-    body: "Filing confirmation, certificates, and any related registry documents will be delivered by email and stored in your Korporex account.",
-  },
-];
+type PageProps = { searchParams?: Promise<SearchParams> };
 
 function firstParam(v: string | string[] | undefined): string | undefined {
   if (Array.isArray(v)) return v[0];
   return v;
 }
 
-export default async function ServiceConfirmationPage({ searchParams }: PageProps) {
-  const sessionId = firstParam(searchParams?.session_id);
-  const refFromUrl = firstParam(searchParams?.ref);
-  const isDev = firstParam(searchParams?.dev) === "1";
-  const serviceParam = firstParam(searchParams?.service);
-  const service = serviceParam
-    ? isRegistrationSlug(serviceParam)
-      ? REGISTRATION_SERVICES[serviceParam]
-      : isAmendmentSlug(serviceParam)
-        ? AMENDMENT_SERVICES[serviceParam]
-        : isComplianceSlug(serviceParam)
-          ? COMPLIANCE_SERVICES[serviceParam]
-          : isBusinessUpdateSlug(serviceParam)
-            ? BUSINESS_UPDATE_SERVICES[serviceParam]
-            : null
-    : null;
+const nextSteps = [
+  {
+    icon: FileSearch,
+    title: "Search in Progress",
+    body: "Our team runs the NUANS preliminary search against each proposed name in your order. Results are reviewed before the report is finalized.",
+  },
+  {
+    icon: Mail,
+    title: "Check Your Email",
+    body: "You'll receive a Stripe receipt immediately. The consolidated NUANS report PDF arrives within one business day at the email address you provided.",
+  },
+  {
+    icon: Clock,
+    title: "90-Day Validity",
+    body: "A NUANS preliminary search is valid for 90 days from the date it is generated. File your incorporation within that window to avoid having to re-run the search.",
+  },
+];
+
+export default async function NuansReportConfirmationPage({ searchParams }: PageProps) {
+  const sp = (await searchParams) ?? {};
+  const sessionId = firstParam(sp.session_id);
+  const refFromUrl = firstParam(sp.ref);
+  const isDev = firstParam(sp.dev) === "1";
 
   let displayRef = refFromUrl;
   let amountPaid: string | null = null;
@@ -72,13 +55,11 @@ export default async function ServiceConfirmationPage({ searchParams }: PageProp
         amountPaid = `$${(session.amount_total / 100).toFixed(2)} ${(session.currency ?? "cad").toUpperCase()}`;
       }
     } catch (err) {
-      console.error("[services/confirmation] failed to retrieve Stripe session:", err);
+      console.error("[nuans-report/confirmation] failed to retrieve Stripe session:", err);
     }
   } else if (isDev) {
     paid = true;
   }
-
-  const serviceLabel = service?.longLabel ?? "Your Order";
 
   return (
     <>
@@ -93,27 +74,28 @@ export default async function ServiceConfirmationPage({ searchParams }: PageProp
             {paid ? "Payment Confirmed" : "Order Received"}
           </p>
           <h1 className="font-serif text-5xl md:text-6xl font-bold text-navy-900 leading-tight mb-6">
-            {serviceLabel}
+            {NUANS_REPORT.longLabel}
             <br />
-            Is Being Processed
+            Is Being Prepared
           </h1>
           <p className="text-lg text-gray-600 max-w-xl mx-auto">
-            Thank you, your application has been received. You&apos;ll get an update by email within
-            1–2 business days.
+            Thanks — your order has been received. The PDF report will land in
+            your inbox within one business day.
           </p>
           {(displayRef || amountPaid) && (
             <div className="mt-8 inline-block bg-white border border-gray-200 rounded-lg px-6 py-4 text-left">
               {displayRef && (
-                <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-1">
-                  Order Reference
-                </p>
-              )}
-              {displayRef && (
-                <p className="font-mono text-sm font-semibold text-navy-900">{displayRef}</p>
+                <>
+                  <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-1">
+                    Order Reference
+                  </p>
+                  <p className="font-mono text-sm font-semibold text-navy-900">{displayRef}</p>
+                </>
               )}
               {amountPaid && (
                 <p className="text-xs text-gray-500 mt-2">
-                  Amount paid: <span className="font-medium text-gray-800">{amountPaid}</span>
+                  Amount paid:{" "}
+                  <span className="font-medium text-gray-800">{amountPaid}</span>
                 </p>
               )}
             </div>
@@ -124,7 +106,9 @@ export default async function ServiceConfirmationPage({ searchParams }: PageProp
       <section className="bg-white py-16 px-6">
         <div className="max-w-3xl mx-auto">
           <div className="w-8 h-0.5 bg-gold-500 mb-8" />
-          <h2 className="font-serif text-2xl font-bold text-navy-900 mb-10">What Happens Next</h2>
+          <h2 className="font-serif text-2xl font-bold text-navy-900 mb-10">
+            What Happens Next
+          </h2>
           <div className="space-y-8">
             {nextSteps.map(({ icon: Icon, title, body }, idx) => (
               <div key={title} className="flex gap-5">
@@ -150,29 +134,27 @@ export default async function ServiceConfirmationPage({ searchParams }: PageProp
         <div className="max-w-3xl mx-auto">
           <div className="bg-white border border-gray-200 rounded-lg p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <p className="font-serif text-base font-bold text-navy-900 mb-1">Have a Question?</p>
+              <p className="font-serif text-base font-bold text-navy-900 mb-1">
+                Ready to incorporate?
+              </p>
               <p className="text-sm text-gray-600">
-                Our support team responds within one business day.{" "}
-                <Link href="/contact" className="text-navy-900 underline underline-offset-2">
-                  Contact us
-                </Link>{" "}
-                or{" "}
-                <Link href="/faq" className="text-navy-900 underline underline-offset-2">
-                  browse the FAQ
-                </Link>
+                Once your NUANS report comes back clean, the next step is filing
+                the Articles of Incorporation. Korporex handles federal and
+                Ontario filings end-to-end.{" "}
                 {displayRef && (
                   <>
-                    {" "}- please quote <span className="font-mono text-navy-900">{displayRef}</span>
+                    Quote{" "}
+                    <span className="font-mono text-navy-900">{displayRef}</span>{" "}
+                    if you have questions about this order.
                   </>
                 )}
-                .
               </p>
             </div>
             <Link
-              href="/"
+              href="/incorporate"
               className="inline-flex items-center gap-2 bg-navy-900 text-white font-medium px-6 py-3 text-sm tracking-wide hover:bg-navy-800 transition-colors shrink-0"
             >
-              Back to Home <ArrowRight size={15} />
+              Incorporate Now <ArrowRight size={15} />
             </Link>
           </div>
         </div>

@@ -664,15 +664,9 @@ async function handleBusinessUpdateFailed(session: Stripe.Checkout.Session) {
 async function handleNuansPaid(session: Stripe.Checkout.Session) {
   const orderRef = session.metadata?.orderRef ?? "(no ref)";
   const serviceLabel = session.metadata?.serviceLabel ?? "NUANS Report";
-  const proposedName = session.metadata?.proposedName ?? "";
-  const jurisdictionRaw = session.metadata?.jurisdiction ?? "";
-  const jurisdictionLabel =
-    jurisdictionRaw === "federal"
-      ? "Federal (CBCA)"
-      : jurisdictionRaw === "ontario"
-        ? "Ontario (OBCA)"
-        : jurisdictionRaw || "(unknown)";
-  const intendedUse = session.metadata?.intendedUse ?? "(unknown)";
+  const rowCount = session.metadata?.rowCount ?? "?";
+  const primaryName = session.metadata?.primaryName ?? "";
+  const namesSummary = session.metadata?.namesSummary ?? "(see [PENDING] email)";
   const amountTotal = ((session.amount_total ?? 0) / 100).toFixed(2);
   const currency = (session.currency ?? "cad").toUpperCase();
   const customerEmail =
@@ -683,13 +677,12 @@ async function handleNuansPaid(session: Stripe.Checkout.Session) {
   const customerName =
     session.customer_details?.name || session.metadata?.customerName || "(unknown)";
 
-  const subject = `[PAID] ${orderRef} — ${serviceLabel}${proposedName ? ` — ${proposedName}` : ""} — $${amountTotal} ${currency}`;
+  const subject = `[PAID] ${orderRef} — ${serviceLabel} (${rowCount})${primaryName ? ` — ${primaryName}` : ""} — $${amountTotal} ${currency}`;
   const rows: Array<[string, string]> = [
     ["Order reference", orderRef],
     ["Service", serviceLabel],
-    ["Jurisdiction", jurisdictionLabel],
-    ...(proposedName ? ([["Primary name", proposedName]] as Array<[string, string]>) : []),
-    ["Intended use", intendedUse],
+    ["Names submitted", rowCount],
+    ["Names summary", namesSummary],
     ["Customer", `${customerName} <${customerEmail}>`],
     ["Amount paid", `$${amountTotal} ${currency}`],
     ["Stripe session", session.id],
@@ -711,7 +704,7 @@ async function handleNuansPaid(session: Stripe.Checkout.Session) {
 
   const html = `<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#FAFAF8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;"><div style="max-width:600px;margin:0 auto;background:#ffffff;padding:32px;border:1px solid #e5e7eb;"><div style="width:32px;height:2px;background:#C5A35A;margin-bottom:20px;"></div><h1 style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#1B4332;">NUANS payment received — ${escapeHtml(
     orderRef
-  )}</h1><p style="margin:0 0 24px;color:#6b7280;font-size:13px;">Stripe <code>checkout.session.completed</code></p><table style="width:100%;border-collapse:collapse;">${rowHtml}</table><p style="margin:24px 0 0;padding:12px 16px;background:#d1fae5;border-left:3px solid #059669;color:#065f46;font-size:13px;line-height:1.6;">Cross-reference with the earlier <strong>[PENDING]</strong> email for this order reference to see the alternative names and business description. Run the NUANS search on the primary name and email the PDF report to the customer. Customer receives their Stripe receipt automatically.</p></div></body></html>`;
+  )}</h1><p style="margin:0 0 24px;color:#6b7280;font-size:13px;">Stripe <code>checkout.session.completed</code></p><table style="width:100%;border-collapse:collapse;">${rowHtml}</table><p style="margin:24px 0 0;padding:12px 16px;background:#d1fae5;border-left:3px solid #059669;color:#065f46;font-size:13px;line-height:1.6;">Cross-reference with the earlier <strong>[PENDING]</strong> email for this order reference to see the full list of names + distinctive terms + per-row jurisdictions. Run the NUANS search on each row, consolidate into a single PDF, and email to the customer. Customer receives their Stripe receipt automatically.</p></div></body></html>`;
 
   await sendNotification(subject, html, customerEmail, customerName);
 }
