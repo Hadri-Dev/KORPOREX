@@ -6,7 +6,8 @@
   "common": {
     "appName": "Korporex",
     "incorporateNow": "Constituer maintenant",
-    "viewPricing": "Voir les tarifs",
+    "viewPricing": "Tarifs",
+    "nuansReport": "Rapport NUANS",
     "getStarted": "Commencer",
     "learnMore": "En savoir plus",
     "back": "Retour",

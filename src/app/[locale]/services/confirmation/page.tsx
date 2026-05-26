@@ -5,6 +5,7 @@ import { REGISTRATION_SERVICES, isRegistrationSlug } from "@/lib/registrationSer
 import { AMENDMENT_SERVICES, isAmendmentSlug } from "@/lib/amendmentServices";
 import { COMPLIANCE_SERVICES, isComplianceSlug } from "@/lib/complianceServices";
 import { BUSINESS_UPDATE_SERVICES, isBusinessUpdateSlug } from "@/lib/businessUpdateServices";
+import { NUANS_SERVICES, isNuansSlug } from "@/lib/nuansServices";
 
 // Render on demand so we can verify the Stripe session when the user arrives
 // from a successful checkout redirect.
@@ -56,7 +57,9 @@ export default async function ServiceConfirmationPage({ searchParams }: PageProp
           ? COMPLIANCE_SERVICES[serviceParam]
           : isBusinessUpdateSlug(serviceParam)
             ? BUSINESS_UPDATE_SERVICES[serviceParam]
-            : null
+            : isNuansSlug(serviceParam)
+              ? NUANS_SERVICES[serviceParam]
+              : null
     : null;
 
   let displayRef = refFromUrl;

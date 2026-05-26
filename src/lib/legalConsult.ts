@@ -76,13 +76,14 @@ export const legalConsultSchema = z.object({
 
 export type LegalConsultInput = z.infer<typeof legalConsultSchema>;
 
-// Calendly inline-embed URL. Hadri Law's dedicated Korporex consultation
-// event. The `NEXT_PUBLIC_CALENDLY_LAWYER_URL` env var still overrides this
-// at build time if it's ever set on Vercel — useful for swapping to a
-// different referral lawyer or test event later without a code change.
+// Calendly inline-embed URL for the "Speak with a lawyer" booking flow,
+// hosted on Korporex's own Calendly account. The
+// `NEXT_PUBLIC_CALENDLY_LAWYER_URL` env var still overrides this at build
+// time if it's ever set on Vercel — useful for swapping to a different
+// referral lawyer or test event later without a code change.
 export const CALENDLY_LAWYER_URL =
   process.env.NEXT_PUBLIC_CALENDLY_LAWYER_URL ??
-  "https://calendly.com/hadrilaw/consultation-korporex";
+  "https://calendly.com/korporex/speak-with-a-lawyer";
 
 // Recipient list for the [PENDING] / [PAID] consultation emails. The
 // trusted-network lawyer is currently Hadri Law (`contact@hadrilaw.com`);

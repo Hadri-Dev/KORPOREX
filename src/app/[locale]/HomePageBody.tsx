@@ -77,6 +77,12 @@ export default function HomePageBody() {
                 <ArrowRight size={16} />
               </Link>
               <Link
+                href="/services/nuans-report"
+                className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
+              >
+                {tCommon("nuansReport")}
+              </Link>
+              <Link
                 href="/pricing"
                 className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
               >

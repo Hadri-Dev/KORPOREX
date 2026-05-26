@@ -2,6 +2,12 @@
 
 ## Open
 
+### [Severity: low] NUANS Report flat $40 price is below Ontario pass-through cost
+- **Where**: [src/lib/nuansServices.ts](src/lib/nuansServices.ts) `price: 40`; pass-through reference in [src/lib/pricing.ts](src/lib/pricing.ts) `NUANS_FEES` (federal $20, Ontario $60).
+- **Symptom**: Customers ordering an Ontario-jurisdiction NUANS report pay $40 + tax while the search-house pass-through cost is approximately $60 — Korporex loses ~$20 per Ontario report. Federal reports net ~$20 margin.
+- **Impact**: Per-order margin negative on Ontario NUANS orders. Volume is expected to be low (this is a niche standalone service; most NUANS searches are bundled with incorporation packages where the fee is already passed through). Acceptable as a marketing loss-leader until volume justifies revisiting.
+- **Why not fixed yet**: Per user direction during the 2026-05-26 build — keep pricing simple at flat $40 to launch. Per-jurisdiction pricing ($40 federal / $80 Ontario) is a one-line change in `NUANS_SERVICES["nuans-report"].price` plus a small refactor of `computeNuansPricing` in `/api/nuans-request/route.ts` to accept jurisdiction.
+- **Logged**: 2026-05-26
 
 ### [Severity: high] French + Spanish translations only cover chrome + soon page + homepage; the rest of the site still renders English under /fr/ and /es/ URLs
 - **Where**: every page under `src/app/[locale]/` except the homepage and `/soon` still has hardcoded English text in JSX (about, contact, faq, pricing, services, resources index, the 5 resource articles, terms, privacy, the 8-step incorporation wizard, legal-consultation, both confirmation pages).
