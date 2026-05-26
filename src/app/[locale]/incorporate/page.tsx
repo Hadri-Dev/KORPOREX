@@ -515,35 +515,43 @@ function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPref
 // ─── Progress Bar ─────────────────────────────────────────────────────────────
 
 function ProgressBar({ current }: { current: number }) {
+  const total = STEP_LABELS.length;
   return (
-    <div className="bg-white border-b border-gray-100 px-6 py-4 sticky top-[72px] z-40">
-      <div className="max-w-4xl mx-auto">
+    <div className="bg-white border-b border-gray-100 px-6 py-6 sticky top-[72px] z-40">
+      <div className="max-w-5xl mx-auto">
+        {/* mobile */}
         <div className="flex md:hidden items-center justify-between mb-2">
-          <span className="text-sm font-medium text-navy-900">Step {current} of {STEP_LABELS.length}</span>
+          <span className="text-sm font-medium text-navy-900">Step {current} of {total}</span>
           <span className="text-sm text-gray-500 font-medium">{STEP_LABELS[current - 1]}</span>
         </div>
         <div className="md:hidden w-full bg-gray-100 h-1.5 rounded-full">
-          <div className="bg-navy-900 h-1.5 rounded-full transition-all" style={{ width: `${(current / STEP_LABELS.length) * 100}%` }} />
+          <div className="bg-gold-500 h-1.5 rounded-full transition-all" style={{ width: `${(current / total) * 100}%` }} />
         </div>
-        <div className="hidden md:flex items-center gap-0">
+        {/* desktop */}
+        <div className="hidden md:flex items-start">
           {STEP_LABELS.map((label, idx) => {
             const num = idx + 1;
             const done = num < current;
             const active = num === current;
             return (
-              <div key={label} className="flex items-center flex-1 last:flex-none">
-                <div className="flex flex-col items-center shrink-0">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors
-                    ${done ? "bg-navy-900 text-white" : active ? "border-2 border-navy-900 text-navy-900" : "border border-gray-300 text-gray-400"}`}>
-                    {done ? <Check size={14} /> : num}
+              <div key={label} className="flex items-start flex-1 last:flex-none">
+                <div className="flex flex-col items-center shrink-0 w-24">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all
+                    ${done
+                      ? "bg-navy-900 text-white shadow-sm"
+                      : active
+                        ? "bg-white text-navy-900 ring-2 ring-gold-500 ring-offset-2 ring-offset-white shadow-md"
+                        : "bg-white text-gray-400 border border-gray-200"}`}>
+                    {done ? <Check size={16} strokeWidth={2.5} /> : num}
                   </div>
-                  <span className={`text-[10px] mt-1 whitespace-nowrap font-medium
-                    ${active ? "text-navy-900" : done ? "text-gray-600" : "text-gray-400"}`}>
+                  <span className={`text-xs mt-2 whitespace-nowrap text-center tracking-wide
+                    ${active ? "text-navy-900 font-semibold" : done ? "text-gray-700 font-medium" : "text-gray-400 font-medium"}`}>
                     {label}
                   </span>
                 </div>
                 {idx < STEP_LABELS.length - 1 && (
-                  <div className={`flex-1 h-px mx-1 mb-4 transition-colors ${done ? "bg-navy-900" : "bg-gray-200"}`} />
+                  <div className={`flex-1 h-0.5 mx-1 mt-5 rounded-full transition-colors
+                    ${done ? "bg-navy-900" : "bg-gray-200"}`} />
                 )}
               </div>
             );
