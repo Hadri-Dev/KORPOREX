@@ -133,17 +133,18 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Service Categories */}
+      {/* Service Categories — each in an elevated cream card with gold stripe,
+          matching the /nuans-report 'Your proposed names' card treatment. */}
       <section className="bg-white py-16 px-6">
-        <div className="max-w-6xl mx-auto space-y-16">
+        <div className="max-w-6xl mx-auto space-y-8">
           {/* Incorporation — custom block: two jurisdiction cards + 3-package summary */}
-          <div>
+          <div className="relative bg-cream-50 border border-gray-200 border-l-4 border-l-gold-500 rounded-lg shadow-sm p-6 md:p-8">
             <div className="flex items-start gap-4 mb-8">
-              <div className="w-11 h-11 bg-navy-50 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-11 h-11 bg-white border border-gray-200 flex items-center justify-center shrink-0 mt-0.5 rounded-sm">
                 <Building2 size={20} className="text-navy-900" />
               </div>
               <div>
-                <h2 className="font-serif text-2xl font-bold text-navy-900 mb-1">Incorporation</h2>
+                <h2 className="font-serif text-2xl md:text-3xl font-bold text-navy-900 mb-1">Incorporation</h2>
                 <p className="text-gray-600 text-sm leading-relaxed">
                   Incorporate federally or in Ontario, fully online, in 24 hours. Pick your
                   jurisdiction below, then choose the package that fits your business.
@@ -152,12 +153,12 @@ export default function ServicesPage() {
             </div>
 
             {/* Jurisdiction picker — primary action */}
-            <div className="grid md:grid-cols-2 gap-4 ml-0 md:ml-15 mb-12">
+            <div className="grid md:grid-cols-2 gap-4 mb-12">
               {jurisdictionOptions.map(({ id, name, statute, pitch, from, href }) => (
                 <Link
                   key={id}
                   href={href}
-                  className="group block bg-cream-50 border border-gray-200 rounded-lg p-6 hover:border-navy-900 hover:bg-white transition-colors"
+                  className="group block bg-white border border-gray-200 rounded-lg p-6 hover:border-navy-900 hover:shadow-sm transition-all"
                 >
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <h3 className="font-serif text-xl font-semibold text-navy-900">{name}</h3>
@@ -174,7 +175,7 @@ export default function ServicesPage() {
             </div>
 
             {/* Package summary — secondary, informational */}
-            <div className="ml-0 md:ml-15">
+            <div>
               <div className="flex items-baseline justify-between flex-wrap gap-3 mb-5">
                 <h3 className="font-serif text-lg font-semibold text-navy-900">
                   Three packages, one transparent price
@@ -191,8 +192,8 @@ export default function ServicesPage() {
                 {packageSummary.map(({ name, price, audience, blurb, highlights, popular }) => (
                   <div
                     key={name}
-                    className={`relative bg-cream-50 rounded-lg p-6 border transition-colors ${
-                      popular ? "border-navy-900 bg-white shadow-sm" : "border-gray-200"
+                    className={`relative bg-white rounded-lg p-6 border transition-colors ${
+                      popular ? "border-navy-900 shadow-sm" : "border-gray-200"
                     }`}
                   >
                     {popular && (
@@ -226,27 +227,28 @@ export default function ServicesPage() {
                 post-incorporation filings, and 24-hour turnaround.
               </p>
             </div>
-
-            <div className="border-b border-gray-100 mt-14" />
           </div>
 
           {categories.map(({ icon: Icon, title, description, services }) => (
-            <div key={title}>
+            <div
+              key={title}
+              className="relative bg-cream-50 border border-gray-200 border-l-4 border-l-gold-500 rounded-lg shadow-sm p-6 md:p-8"
+            >
               <div className="flex items-start gap-4 mb-8">
-                <div className="w-11 h-11 bg-navy-50 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="w-11 h-11 bg-white border border-gray-200 flex items-center justify-center shrink-0 mt-0.5 rounded-sm">
                   <Icon size={20} className="text-navy-900" />
                 </div>
                 <div>
-                  <h2 className="font-serif text-2xl font-bold text-navy-900 mb-1">{title}</h2>
+                  <h2 className="font-serif text-2xl md:text-3xl font-bold text-navy-900 mb-1">{title}</h2>
                   <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
                 </div>
               </div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 ml-0 md:ml-15">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {services.map(({ name, from, href }) => (
                   <Link
                     key={name}
                     href={href}
-                    className="flex items-center justify-between bg-cream-50 border border-gray-100 rounded-md px-5 py-4 hover:border-navy-900 hover:bg-white group transition-colors"
+                    className="flex items-center justify-between bg-white border border-gray-200 rounded-md px-5 py-4 hover:border-navy-900 hover:shadow-sm group transition-all"
                   >
                     <div>
                       <p className="text-sm font-medium text-gray-800 group-hover:text-navy-900 transition-colors">
@@ -258,7 +260,6 @@ export default function ServicesPage() {
                   </Link>
                 ))}
               </div>
-              <div className="border-b border-gray-100 mt-14" />
             </div>
           ))}
         </div>
