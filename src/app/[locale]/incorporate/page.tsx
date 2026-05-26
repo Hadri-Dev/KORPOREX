@@ -349,8 +349,11 @@ function Field({ label, error, hint, children }: { label: string; error?: string
 
 function BackBtn({ onClick }: { onClick: () => void }) {
   return (
-    <button onClick={onClick} className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-navy-900 mb-8 transition-colors">
-      <ChevronLeft size={16} /> Back
+    <button
+      onClick={onClick}
+      className="inline-flex items-center gap-1.5 text-sm font-semibold text-navy-900 border border-navy-900 px-4 py-2 mb-8 hover:bg-navy-900 hover:text-white transition-colors"
+    >
+      <ChevronLeft size={16} strokeWidth={2.5} /> Back
     </button>
   );
 }
