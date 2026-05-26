@@ -116,17 +116,17 @@ export default function ServicesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
+      <section className="bg-navy-900 text-white py-16 px-6">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             All Services
           </p>
-          <h1 className="font-serif text-5xl md:text-6xl font-bold text-navy-900 leading-tight mb-6">
+          <h1 className="font-serif text-5xl md:text-6xl font-bold leading-tight mb-6">
             Everything Your Business
             <br />
             Needs to Stay Compliant
           </h1>
-          <p className="text-lg text-gray-600 leading-relaxed max-w-2xl">
+          <p className="text-lg text-gray-300 leading-relaxed max-w-2xl">
             From your first incorporation to ongoing compliance filings, Korporex handles
             every government filing your business needs: fast, online, and at a fixed price.
           </p>
