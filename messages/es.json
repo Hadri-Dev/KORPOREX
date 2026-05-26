@@ -36,10 +36,10 @@
   "nav": {
     "services": "Servicios",
     "nuansReport": "NUANS",
-    "pricing": "Precios",
+    "pricing": "Comprar",
     "about": "Acerca de",
     "faq": "Preguntas frecuentes",
-    "resources": "Recursos",
+    "resources": "Guías",
     "contact": "Contacto",
     "toggleMenu": "Abrir/cerrar menú"
   },
@@ -52,10 +52,10 @@
     "responseLine": "Respondemos a todas las consultas en un día hábil.",
     "companyLinks": {
       "services": "Servicios",
-      "pricing": "Precios",
+      "pricing": "Comprar",
       "about": "Acerca de",
       "faq": "Preguntas frecuentes",
-      "resources": "Recursos",
+      "resources": "Guías",
       "contact": "Contacto"
     },
     "links": {

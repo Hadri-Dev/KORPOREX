@@ -36,10 +36,10 @@
   "nav": {
     "services": "Services",
     "nuansReport": "NUANS",
-    "pricing": "Tarifs",
+    "pricing": "Commander",
     "about": "À propos",
     "faq": "FAQ",
-    "resources": "Ressources",
+    "resources": "Guides",
     "contact": "Contact",
     "toggleMenu": "Ouvrir/fermer le menu"
   },
@@ -52,10 +52,10 @@
     "responseLine": "Nous répondons à toutes les demandes en un jour ouvrable.",
     "companyLinks": {
       "services": "Services",
-      "pricing": "Tarifs",
+      "pricing": "Commander",
       "about": "À propos",
       "faq": "FAQ",
-      "resources": "Ressources",
+      "resources": "Guides",
       "contact": "Contact"
     },
     "links": {
