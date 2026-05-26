@@ -3,6 +3,7 @@ import {
   nuansReportRequestSchema,
   type NuansReportRequest,
   NUANS_REPORT,
+  nuansSubtotal,
   getJurisdictionLabel,
 } from "@/lib/nuansReport";
 import { getTaxRate } from "@/lib/pricing";
@@ -12,14 +13,30 @@ import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
 
 export const runtime = "nodejs";
 
-type Pricing = { subtotal: number; taxRate: number; tax: number; total: number };
+type Pricing = {
+  baseFee: number;
+  additionalCount: number;
+  additionalTotal: number;
+  subtotal: number;
+  taxRate: number;
+  tax: number;
+  total: number;
+};
 
-function computePricing(billingCountry: string, billingRegion: string): Pricing {
-  const subtotal = NUANS_REPORT.price;
+function computePricing(
+  rowCount: number,
+  billingCountry: string,
+  billingRegion: string
+): Pricing {
+  const safeCount = Math.max(1, rowCount);
+  const baseFee = NUANS_REPORT.basePrice;
+  const additionalCount = safeCount - 1;
+  const additionalTotal = NUANS_REPORT.additionalPrice * additionalCount;
+  const subtotal = nuansSubtotal(safeCount);
   const taxRate = getTaxRate(billingCountry, billingRegion);
   const tax = Math.round(subtotal * taxRate * 100) / 100;
   const total = Math.round((subtotal + tax) * 100) / 100;
-  return { subtotal, taxRate, tax, total };
+  return { baseFee, additionalCount, additionalTotal, subtotal, taxRate, tax, total };
 }
 
 export async function POST(req: Request) {
@@ -32,7 +49,7 @@ export async function POST(req: Request) {
   }
 
   const billing = parsed.billingAddress;
-  const pricing = computePricing(billing.country, billing.region);
+  const pricing = computePricing(parsed.rows.length, billing.country, billing.region);
   const orderRef = generateOrderRef();
   const customerEmail = parsed.contact.contactEmail;
   const customerName = `${parsed.contact.contactFirstName} ${parsed.contact.contactLastName}`.trim();
@@ -64,14 +81,27 @@ export async function POST(req: Request) {
       price_data: {
         currency: "cad",
         product_data: {
-          name: NUANS_REPORT.longLabel,
-          description: `${parsed.rows.length} proposed ${parsed.rows.length === 1 ? "name" : "names"} searched and bundled into a single PDF report`,
+          name: `${NUANS_REPORT.longLabel} (first name)`,
+          description: "Base fee covering the first proposed name in the order.",
         },
-        unit_amount: Math.round(pricing.subtotal * 100),
+        unit_amount: Math.round(pricing.baseFee * 100),
       },
       quantity: 1,
     },
   ];
+  if (pricing.additionalCount > 0) {
+    lineItems.push({
+      price_data: {
+        currency: "cad",
+        product_data: {
+          name: "Additional proposed name",
+          description: "Surcharge for each proposed name beyond the first.",
+        },
+        unit_amount: Math.round(NUANS_REPORT.additionalPrice * 100),
+      },
+      quantity: pricing.additionalCount,
+    });
+  }
   if (pricing.tax > 0) {
     const taxPct = pricing.taxRate === 0.14975 ? "14.975" : (pricing.taxRate * 100).toFixed(0);
     lineItems.push({
@@ -226,10 +256,21 @@ function buildHtmlBody(args: {
 
   const taxLabel =
     pricing.taxRate > 0
-      ? `Tax (${(pricing.taxRate * 100).toFixed(pricing.taxRate === 0.14975 ? 3 : 0)}% — ${payload.billingAddress.region})`
+      ? `Tax (${(pricing.taxRate * 100).toFixed(pricing.taxRate === 0.14975 ? 3 : 0)}% in ${payload.billingAddress.region})`
       : "Tax";
   const pricingRows = [
-    row(`${NUANS_REPORT.longLabel} (flat order fee)`, `$${pricing.subtotal.toFixed(2)}`),
+    row(`${NUANS_REPORT.longLabel} (first name)`, `$${pricing.baseFee.toFixed(2)}`),
+    ...(pricing.additionalCount > 0
+      ? [
+          row(
+            `Additional names (${pricing.additionalCount} × $${NUANS_REPORT.additionalPrice.toFixed(
+              2
+            )})`,
+            `$${pricing.additionalTotal.toFixed(2)}`
+          ),
+        ]
+      : []),
+    row("Subtotal", `$${pricing.subtotal.toFixed(2)}`),
     row(taxLabel, `$${pricing.tax.toFixed(2)}`),
     row("Total (CAD)", `$${pricing.total.toFixed(2)}`),
   ].join("");

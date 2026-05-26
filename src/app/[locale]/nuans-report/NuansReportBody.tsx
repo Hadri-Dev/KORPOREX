@@ -9,6 +9,7 @@ import {
   type NuansReportRequest,
   NUANS_JURISDICTIONS,
   NUANS_REPORT,
+  nuansSubtotal,
 } from "@/lib/nuansReport";
 import { Field, iCls, sCls } from "@/components/wizard/WizardUI";
 import AddressFields from "@/components/wizard/AddressFields";
@@ -76,8 +77,12 @@ export default function NuansReportBody() {
   const region = watch("billingAddress.region") || "";
   const country = watch("billingAddress.country") || "CA";
   const taxRate = getTaxRate(country, region);
-  const tax = Math.round(NUANS_REPORT.price * taxRate * 100) / 100;
-  const total = Math.round((NUANS_REPORT.price + tax) * 100) / 100;
+  const rowCount = fields.length;
+  const additionalCount = Math.max(0, rowCount - 1);
+  const additionalTotal = NUANS_REPORT.additionalPrice * additionalCount;
+  const subtotal = nuansSubtotal(rowCount);
+  const tax = Math.round(subtotal * taxRate * 100) / 100;
+  const total = Math.round((subtotal + tax) * 100) / 100;
 
   return (
     <FormProvider {...form}>
@@ -107,7 +112,7 @@ export default function NuansReportBody() {
               PDF emailed to you
             </span>
             <span className="flex items-center gap-2 font-semibold text-white">
-              $40 + HST
+              From $40 + HST
             </span>
           </div>
         </div>
@@ -171,9 +176,10 @@ export default function NuansReportBody() {
                 Your proposed names
               </h2>
               <p className="text-sm text-gray-500 mb-6">
-                Add one name per row. Every name in the list is searched and the
-                results are bundled into a single PDF report. You pay one flat
-                $40 + HST fee no matter how many names you include.
+                Add one name per row. The first proposed name is $40 + HST. Each
+                additional name in the same order is $45 + HST. Every name you
+                enter is searched and the results are bundled into a single
+                emailed PDF.
               </p>
 
               {/* Single responsive layout: stacked card on mobile, table-style
@@ -393,12 +399,26 @@ export default function NuansReportBody() {
                 <div className="space-y-1.5 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-700">
-                      {NUANS_REPORT.longLabel} ({fields.length}{" "}
-                      {fields.length === 1 ? "name" : "names"})
+                      {NUANS_REPORT.longLabel} (first name)
                     </span>
                     <span className="text-gray-900">
-                      ${NUANS_REPORT.price.toFixed(2)}
+                      ${NUANS_REPORT.basePrice.toFixed(2)}
                     </span>
+                  </div>
+                  {additionalCount > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-700">
+                        Additional names ({additionalCount} ×{" "}
+                        ${NUANS_REPORT.additionalPrice.toFixed(2)})
+                      </span>
+                      <span className="text-gray-900">
+                        ${additionalTotal.toFixed(2)}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex justify-between text-gray-500 text-xs pt-1">
+                    <span>Subtotal</span>
+                    <span>${subtotal.toFixed(2)}</span>
                   </div>
                   {tax > 0 && (
                     <div className="flex justify-between text-gray-500 text-xs">

@@ -99,11 +99,20 @@ export const NUANS_REPORT = {
   label: "NUANS Report",
   longLabel: "NUANS Preliminary Name-Search Report",
   path: "/nuans-report",
-  /** Flat fee per order. Multiple names in the table are bundled into a
-   *  single emailed PDF — the customer pays one fee regardless of row count. */
-  price: 40,
+  /** Base fee covering the first proposed name in the order. */
+  basePrice: 40,
+  /** Surcharge for every proposed name beyond the first. Each name in the
+   *  table is a separate NUANS search; the extras cover the additional
+   *  pass-through cost from the search house. */
+  additionalPrice: 45,
   tagline:
     "Pre-screen one or more proposed Canadian corporation names against the NUANS database before you file.",
 };
 
 export type NuansReportMeta = typeof NUANS_REPORT;
+
+/** Pre-tax subtotal for a NUANS report order with `rowCount` proposed names. */
+export function nuansSubtotal(rowCount: number): number {
+  const safeCount = Math.max(1, rowCount);
+  return NUANS_REPORT.basePrice + NUANS_REPORT.additionalPrice * (safeCount - 1);
+}

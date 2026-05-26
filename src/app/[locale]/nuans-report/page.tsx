@@ -13,20 +13,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: "Rapport NUANS Canada | Recherche préliminaire de nom commercial | Korporex",
       description:
-        "Commandez un rapport NUANS officiel pour pré-vérifier un nom de société canadienne avant la constitution. 40 $ + TVH. Livré sous un jour ouvrable.",
+        "Commandez un rapport NUANS officiel pour pré-vérifier un nom de société canadienne avant la constitution. À partir de 40 $ + TVH (45 $ par nom supplémentaire). Livré sous un jour ouvrable.",
     };
   }
   if (isEs) {
     return {
       title: "Informe NUANS Canadá | Búsqueda preliminar de nombre corporativo | Korporex",
       description:
-        "Solicite un informe NUANS oficial para verificar un nombre de corporación canadiense antes de incorporar. $40 + HST. Entrega en 1 día hábil.",
+        "Solicite un informe NUANS oficial para verificar un nombre de corporación canadiense antes de incorporar. Desde $40 + HST ($45 por nombre adicional). Entrega en 1 día hábil.",
     };
   }
   return {
     title: "NUANS Report Canada | Pre-Screen a Corporate Name | Korporex",
     description:
-      "Order an official NUANS preliminary name-search report before you incorporate in Canada. Federal and provincial filings supported. Flat $40 + HST, delivered within one business day.",
+      "Order an official NUANS preliminary name-search report before you incorporate in Canada. Federal and provincial filings supported. From $40 + HST for the first name, $45 + HST for each additional name. Delivered within one business day.",
     alternates: {
       canonical: "https://korporex.ca/nuans-report",
     },
