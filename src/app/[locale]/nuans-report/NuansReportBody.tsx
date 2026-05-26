@@ -122,8 +122,8 @@ export default function NuansReportBody() {
           <p className="text-sm text-gray-700 leading-relaxed mb-6">
             Type the name you intend to register, then pick the jurisdiction where
             the corporation will be filed. Each jurisdiction has its own naming
-            conventions — follow the rules below so the registry examiner can
-            evaluate your name without ambiguity.
+            conventions, so follow the rules below to make sure the registry
+            examiner can evaluate your name without ambiguity.
           </p>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white border border-gray-200 rounded-md p-5">
@@ -131,10 +131,10 @@ export default function NuansReportBody() {
                 Provincial filings (Ontario and others)
               </h3>
               <p className="text-sm text-gray-700 leading-relaxed">
-                The proposed name must match the corporation name as it will appear
-                on the certificate of incorporation. Include a legal ending —
-                abbreviated endings such as <strong>Inc.</strong>, <strong>Ltd.</strong>,
-                or <strong>Corp.</strong> must end with a period.
+                The proposed name must match the corporation name exactly as it
+                will appear on the certificate of incorporation. Include a legal
+                ending. Abbreviated endings such as <strong>Inc.</strong>,{" "}
+                <strong>Ltd.</strong>, or <strong>Corp.</strong> must end with a period.
               </p>
             </div>
             <div className="bg-white border border-gray-200 rounded-md p-5">
@@ -154,7 +154,7 @@ export default function NuansReportBody() {
             </h3>
             <p className="text-sm text-gray-700 leading-relaxed">
               Corp., Corporation, Inc., Incorporated, Incorporée, Ltd., Ltée,
-              Limited, Limitée — plus their French-language equivalents where the
+              Limited, Limitée, plus their French-language equivalents where the
               jurisdiction permits French wording.
             </p>
           </div>
@@ -172,18 +172,21 @@ export default function NuansReportBody() {
               </h2>
               <p className="text-sm text-gray-500 mb-6">
                 Add one name per row. Every name in the list is searched and the
-                results are consolidated into a single PDF report — you pay one
-                flat $40 + HST fee no matter how many names you include.
+                results are bundled into a single PDF report. You pay one flat
+                $40 + HST fee no matter how many names you include.
               </p>
 
-              {/* Desktop / tablet table */}
-              <div className="hidden md:block border border-gray-200 rounded-md overflow-hidden">
-                <div className="grid grid-cols-[1.6fr_1.4fr_1.4fr_44px] gap-3 bg-cream-50 px-4 py-3 text-xs font-bold tracking-[0.08em] uppercase text-navy-900">
+              {/* Single responsive layout: stacked card on mobile, table-style
+                  grid on md+. Rendered ONCE so every form path is registered
+                  with react-hook-form exactly once per row. */}
+              <div className="border border-gray-200 rounded-md overflow-hidden">
+                {/* Column headers (md+ only) */}
+                <div className="hidden md:grid grid-cols-[1.6fr_1.4fr_1.4fr_44px] gap-3 bg-cream-50 px-4 py-3 text-xs font-bold tracking-[0.08em] uppercase text-navy-900">
                   <div>Proposed Name</div>
                   <div className="flex items-center gap-1.5">
                     Distinctive Term
                     <span
-                      title="The distinctive element is the unique part of your name (e.g. for 'Maple Ridge Logistics Inc.' the distinctive element is 'Maple Ridge'). NUANS compares this against the database."
+                      title="The distinctive element is the unique part of your name (for example, in 'Maple Ridge Logistics Inc.' the distinctive element is 'Maple Ridge'). NUANS compares this against the database."
                       className="cursor-help text-gray-400"
                     >
                       <HelpCircle size={13} />
@@ -192,14 +195,26 @@ export default function NuansReportBody() {
                   <div>Jurisdiction</div>
                   <div className="sr-only">Remove row</div>
                 </div>
+
                 {fields.map((field, i) => {
                   const rowErr = errors.rows?.[i];
                   return (
                     <div
                       key={field.id}
-                      className="grid grid-cols-[1.6fr_1.4fr_1.4fr_44px] gap-3 px-4 py-3 border-t border-gray-100 items-start"
+                      className="grid grid-cols-1 md:grid-cols-[1.6fr_1.4fr_1.4fr_44px] gap-x-3 gap-y-3 px-4 py-4 md:py-3 border-t border-gray-100 md:items-start first:border-t-0 md:first:border-t"
                     >
+                      {/* Row label on mobile only */}
+                      <div className="md:hidden flex items-center justify-between -mb-1">
+                        <span className="text-xs font-bold tracking-[0.08em] uppercase text-navy-900">
+                          Name #{i + 1}
+                        </span>
+                      </div>
+
+                      {/* Proposed Name */}
                       <div>
+                        <label className="md:hidden block text-xs font-semibold text-gray-600 mb-1">
+                          Proposed name
+                        </label>
                         <input
                           type="text"
                           {...register(`rows.${i}.proposedName`)}
@@ -212,7 +227,12 @@ export default function NuansReportBody() {
                           </p>
                         )}
                       </div>
+
+                      {/* Distinctive Term */}
                       <div>
+                        <label className="md:hidden block text-xs font-semibold text-gray-600 mb-1">
+                          Distinctive term
+                        </label>
                         <input
                           type="text"
                           {...register(`rows.${i}.distinctiveTerm`)}
@@ -225,7 +245,12 @@ export default function NuansReportBody() {
                           </p>
                         )}
                       </div>
+
+                      {/* Jurisdiction */}
                       <div>
+                        <label className="md:hidden block text-xs font-semibold text-gray-600 mb-1">
+                          Jurisdiction
+                        </label>
                         <select
                           {...register(`rows.${i}.jurisdiction`)}
                           className={sCls}
@@ -242,81 +267,19 @@ export default function NuansReportBody() {
                           </p>
                         )}
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => remove(i)}
-                        disabled={fields.length === 1}
-                        aria-label={`Remove row ${i + 1}`}
-                        className="self-center text-gray-400 hover:text-red-600 transition-colors disabled:opacity-30 disabled:hover:text-gray-400 disabled:cursor-not-allowed p-2"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
 
-              {/* Mobile stacked cards */}
-              <div className="md:hidden space-y-4">
-                {fields.map((field, i) => {
-                  const rowErr = errors.rows?.[i];
-                  return (
-                    <div
-                      key={field.id}
-                      className="border border-gray-200 rounded-md p-4 space-y-3"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold tracking-[0.08em] uppercase text-navy-900">
-                          Name #{i + 1}
-                        </span>
+                      {/* Remove-row button */}
+                      <div className="flex md:block justify-end">
                         <button
                           type="button"
                           onClick={() => remove(i)}
                           disabled={fields.length === 1}
                           aria-label={`Remove row ${i + 1}`}
-                          className="text-gray-400 hover:text-red-600 transition-colors disabled:opacity-30 disabled:hover:text-gray-400 disabled:cursor-not-allowed"
+                          className="md:self-center text-gray-400 hover:text-red-600 transition-colors disabled:opacity-30 disabled:hover:text-gray-400 disabled:cursor-not-allowed p-2"
                         >
                           <Trash2 size={16} />
                         </button>
                       </div>
-                      <Field
-                        label="Proposed name *"
-                        error={rowErr?.proposedName?.message}
-                      >
-                        <input
-                          type="text"
-                          {...register(`rows.${i}.proposedName`)}
-                          className={iCls}
-                          placeholder="e.g. Maple Ridge Logistics Inc."
-                        />
-                      </Field>
-                      <Field
-                        label="Distinctive term *"
-                        error={rowErr?.distinctiveTerm?.message}
-                        hint="The unique part of the name (e.g. 'Maple Ridge')."
-                      >
-                        <input
-                          type="text"
-                          {...register(`rows.${i}.distinctiveTerm`)}
-                          className={iCls}
-                          placeholder="e.g. Maple Ridge"
-                        />
-                      </Field>
-                      <Field
-                        label="Jurisdiction *"
-                        error={rowErr?.jurisdiction?.message}
-                      >
-                        <select
-                          {...register(`rows.${i}.jurisdiction`)}
-                          className={sCls}
-                        >
-                          {NUANS_JURISDICTIONS.map((j) => (
-                            <option key={j.value} value={j.value}>
-                              {j.label}
-                            </option>
-                          ))}
-                        </select>
-                      </Field>
                     </div>
                   );
                 })}
@@ -383,7 +346,7 @@ export default function NuansReportBody() {
                 <Field
                   label="Your role"
                   error={errors.contact?.contactRole?.message}
-                  hint="Optional — e.g. founder, lawyer, accountant."
+                  hint="Optional. For example: founder, lawyer, accountant."
                 >
                   <input
                     type="text"
@@ -440,7 +403,7 @@ export default function NuansReportBody() {
                   {tax > 0 && (
                     <div className="flex justify-between text-gray-500 text-xs">
                       <span>
-                        Tax ({(taxRate * 100).toFixed(taxRate === 0.14975 ? 3 : 0)}% — {region || "—"})
+                        Tax ({(taxRate * 100).toFixed(taxRate === 0.14975 ? 3 : 0)}% in {region || "your province"})
                       </span>
                       <span>${tax.toFixed(2)}</span>
                     </div>
@@ -475,7 +438,7 @@ export default function NuansReportBody() {
                 NUANS report is a database search, not an opinion on whether your
                 name will be approved by a registry examiner or whether it
                 infringes a trademark. Korporex is a document preparation and
-                filing service — not a law firm.
+                filing service, not a law firm.
               </p>
             </div>
           </form>

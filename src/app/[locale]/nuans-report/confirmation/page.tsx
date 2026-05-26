@@ -11,7 +11,7 @@ type SearchParams = {
   dev?: string | string[];
 };
 
-type PageProps = { searchParams?: Promise<SearchParams> };
+type PageProps = { searchParams?: SearchParams };
 
 function firstParam(v: string | string[] | undefined): string | undefined {
   if (Array.isArray(v)) return v[0];
@@ -37,10 +37,9 @@ const nextSteps = [
 ];
 
 export default async function NuansReportConfirmationPage({ searchParams }: PageProps) {
-  const sp = (await searchParams) ?? {};
-  const sessionId = firstParam(sp.session_id);
-  const refFromUrl = firstParam(sp.ref);
-  const isDev = firstParam(sp.dev) === "1";
+  const sessionId = firstParam(searchParams?.session_id);
+  const refFromUrl = firstParam(searchParams?.ref);
+  const isDev = firstParam(searchParams?.dev) === "1";
 
   let displayRef = refFromUrl;
   let amountPaid: string | null = null;
@@ -79,8 +78,8 @@ export default async function NuansReportConfirmationPage({ searchParams }: Page
             Is Being Prepared
           </h1>
           <p className="text-lg text-gray-600 max-w-xl mx-auto">
-            Thanks — your order has been received. The PDF report will land in
-            your inbox within one business day.
+            Thanks. Your order has been received and the PDF report will land
+            in your inbox within one business day.
           </p>
           {(displayRef || amountPaid) && (
             <div className="mt-8 inline-block bg-white border border-gray-200 rounded-lg px-6 py-4 text-left">
