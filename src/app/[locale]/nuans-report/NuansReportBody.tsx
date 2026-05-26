@@ -188,7 +188,7 @@ export default function NuansReportBody() {
                   keeps the inputs legible against the cream card. */}
               <div className="border border-gray-200 rounded-md overflow-hidden bg-white">
                 {/* Column headers (md+ only) */}
-                <div className="hidden md:grid grid-cols-[1.6fr_1.4fr_1.4fr_44px] gap-3 bg-navy-900 px-4 py-3 text-xs font-bold tracking-[0.08em] uppercase text-gold-500">
+                <div className="hidden md:grid grid-cols-[1.6fr_1.4fr_1.4fr_44px] gap-3 bg-navy-900 px-4 py-3 text-xs font-bold tracking-[0.08em] uppercase text-white">
                   <div>
                     Proposed Name<span className="text-red-500 ml-0.5">*</span>
                   </div>
