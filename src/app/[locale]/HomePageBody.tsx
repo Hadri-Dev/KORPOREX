@@ -68,7 +68,7 @@ export default function HomePageBody() {
             <p className="text-sm md:text-base text-gold-400 leading-relaxed mb-8 border-l-2 border-gold-500 pl-4">
               {t("hero.guarantee")}
             </p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
               <Link
                 href="/incorporate"
                 className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors"
@@ -76,23 +76,11 @@ export default function HomePageBody() {
                 {tCommon("incorporateNow")}
                 <ArrowRight size={16} />
               </Link>
-              <Link
-                href="/services/nuans-report"
-                className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
-              >
-                {tCommon("nuansReport")}
-              </Link>
-              <Link
-                href="/pricing"
-                className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
-              >
-                {tCommon("viewPricing")}
-              </Link>
-            </div>
-            <div className="mt-8 flex flex-wrap gap-6 text-sm text-gray-400">
-              <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> {t("hero.trust.fees")}</span>
-              <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> {t("hero.trust.speed")}</span>
-              <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> {t("hero.trust.online")}</span>
+              <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400">
+                <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> {t("hero.trust.fees")}</span>
+                <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> {t("hero.trust.speed")}</span>
+                <span className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500" /> {t("hero.trust.online")}</span>
+              </div>
             </div>
           </div>
 
