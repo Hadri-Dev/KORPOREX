@@ -154,20 +154,20 @@ export default function FAQPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
+      <section className="bg-navy-900 text-white py-16 px-6">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             FAQ
           </p>
-          <h1 className="font-serif text-5xl md:text-6xl font-bold text-navy-900 leading-tight mb-6">
+          <h1 className="font-serif text-5xl md:text-6xl font-bold leading-tight mb-6">
             Frequently Asked
             <br />
             Questions
           </h1>
-          <p className="text-lg text-gray-600 max-w-xl">
+          <p className="text-lg text-gray-300 max-w-xl">
             Everything you need to know about incorporating your business in Canada with Korporex.
             Can&apos;t find your answer?{" "}
-            <Link href="/contact" className="text-navy-900 underline underline-offset-2">Contact our support team.</Link>
+            <Link href="/contact" className="text-white underline underline-offset-2 hover:text-gold-500 transition-colors">Contact our support team.</Link>
           </p>
         </div>
       </section>

@@ -37,15 +37,15 @@ export default function ContactPage() {
 
   return (
     <>
-      <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
+      <section className="bg-navy-900 text-white py-16 px-6">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             Contact Us
           </p>
-          <h1 className="font-serif text-5xl md:text-6xl font-bold text-navy-900 leading-tight mb-6">
+          <h1 className="font-serif text-5xl md:text-6xl font-bold leading-tight mb-6">
             We&apos;re Here to Help
           </h1>
-          <p className="text-lg text-gray-600 max-w-xl">
+          <p className="text-lg text-gray-300 max-w-xl">
             Have a question about incorporating your business? Our support team responds
             within one business day.
           </p>

@@ -124,15 +124,15 @@ export default function PricingPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-cream-50 py-12 px-6 border-b border-gray-100 text-center">
+      <section className="bg-navy-900 text-white py-16 px-6 text-center">
         <div className="max-w-3xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             Pricing
           </p>
-          <h1 className="font-serif text-5xl md:text-6xl font-bold text-navy-900 mb-6">
+          <h1 className="font-serif text-5xl md:text-6xl font-bold mb-6">
             Simple, Transparent Pricing
           </h1>
-          <p className="text-lg text-gray-600 max-w-xl mx-auto">
+          <p className="text-lg text-gray-300 max-w-xl mx-auto">
             All prices are in Canadian dollars and include government filing fees.
             Applicable taxes and NUANS name-search fees are not included and will be shown separately at checkout.
           </p>
