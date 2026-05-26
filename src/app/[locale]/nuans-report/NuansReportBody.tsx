@@ -105,14 +105,11 @@ export default function NuansReportBody() {
             </span>
             <span className="flex items-center gap-2">
               <Clock size={16} className="text-gold-500" />
-              Delivered within 1 business day
+              Delivered within a few hours
             </span>
             <span className="flex items-center gap-2">
               <Mail size={16} className="text-gold-500" />
               PDF emailed to you
-            </span>
-            <span className="flex items-center gap-2 font-semibold text-white">
-              From $40 + HST
             </span>
           </div>
         </div>
@@ -322,7 +319,7 @@ export default function NuansReportBody() {
                 Contact information
               </h2>
               <p className="text-sm text-gray-500 mb-6">
-                The PDF report is emailed to the address below within one business day of payment.
+                The PDF report is emailed to the address below within a few hours of payment.
               </p>
               <div className="grid md:grid-cols-2 gap-4">
                 <Field label="First name *" error={errors.contact?.contactFirstName?.message}>
@@ -457,7 +454,7 @@ export default function NuansReportBody() {
               <p className="text-xs text-gray-500 mt-3 max-w-md">
                 Payment is processed securely by Stripe. Card details never touch
                 our server. After payment you&apos;ll receive a Stripe receipt and
-                the PDF report by email within one business day.
+                the PDF report by email within a few hours.
               </p>
               <p className="text-xs text-gray-500 mt-2 max-w-md">
                 <strong className="text-navy-900">Not legal advice.</strong> A

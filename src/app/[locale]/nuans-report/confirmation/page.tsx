@@ -27,7 +27,7 @@ const nextSteps = [
   {
     icon: Mail,
     title: "Check Your Email",
-    body: "You'll receive a Stripe receipt immediately. The consolidated NUANS report PDF arrives within one business day at the email address you provided.",
+    body: "You'll receive a Stripe receipt immediately. The consolidated NUANS report PDF arrives within a few hours at the email address you provided.",
   },
   {
     icon: Clock,
@@ -79,7 +79,7 @@ export default async function NuansReportConfirmationPage({ searchParams }: Page
           </h1>
           <p className="text-lg text-gray-600 max-w-xl mx-auto">
             Thanks. Your order has been received and the PDF report will land
-            in your inbox within one business day.
+            in your inbox within a few hours.
           </p>
           {(displayRef || amountPaid) && (
             <div className="mt-8 inline-block bg-white border border-gray-200 rounded-lg px-6 py-4 text-left">
