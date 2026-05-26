@@ -138,7 +138,7 @@ export default function ServicesPage() {
       <section className="bg-white py-16 px-6">
         <div className="max-w-6xl mx-auto space-y-8">
           {/* Incorporation — custom block: two jurisdiction cards + 3-package summary */}
-          <div className="relative bg-cream-50 border border-gray-200 border-l-4 border-l-gold-500 rounded-lg shadow-sm p-6 md:p-8">
+          <div className="relative bg-cream-50 border border-gray-200 border-l-4 border-l-gold-500 border-r-4 border-r-gold-500 rounded-lg shadow-sm p-6 md:p-8">
             <div className="flex items-start gap-4 mb-8">
               <div className="w-11 h-11 bg-white border border-gray-200 flex items-center justify-center shrink-0 mt-0.5 rounded-sm">
                 <Building2 size={20} className="text-navy-900" />
@@ -232,7 +232,7 @@ export default function ServicesPage() {
           {categories.map(({ icon: Icon, title, description, services }) => (
             <div
               key={title}
-              className="relative bg-cream-50 border border-gray-200 border-l-4 border-l-gold-500 rounded-lg shadow-sm p-6 md:p-8"
+              className="relative bg-cream-50 border border-gray-200 border-l-4 border-l-gold-500 border-r-4 border-r-gold-500 rounded-lg shadow-sm p-6 md:p-8"
             >
               <div className="flex items-start gap-4 mb-8">
                 <div className="w-11 h-11 bg-white border border-gray-200 flex items-center justify-center shrink-0 mt-0.5 rounded-sm">
