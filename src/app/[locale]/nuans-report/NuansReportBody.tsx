@@ -188,9 +188,13 @@ export default function NuansReportBody() {
               <div className="border border-gray-200 rounded-md overflow-hidden">
                 {/* Column headers (md+ only) */}
                 <div className="hidden md:grid grid-cols-[1.6fr_1.4fr_1.4fr_44px] gap-3 bg-cream-50 px-4 py-3 text-xs font-bold tracking-[0.08em] uppercase text-navy-900">
-                  <div>Proposed Name</div>
+                  <div>
+                    Proposed Name<span className="text-red-500 ml-0.5">*</span>
+                  </div>
                   <div className="flex items-center gap-1.5">
-                    Distinctive Term
+                    <span>
+                      Distinctive Term<span className="text-red-500 ml-0.5">*</span>
+                    </span>
                     <span
                       title="The distinctive element is the unique part of your name (for example, in 'Maple Ridge Logistics Inc.' the distinctive element is 'Maple Ridge'). NUANS compares this against the database."
                       className="cursor-help text-gray-400"
@@ -198,7 +202,9 @@ export default function NuansReportBody() {
                       <HelpCircle size={13} />
                     </span>
                   </div>
-                  <div>Jurisdiction</div>
+                  <div>
+                    Jurisdiction<span className="text-red-500 ml-0.5">*</span>
+                  </div>
                   <div className="sr-only">Remove row</div>
                 </div>
 
@@ -219,7 +225,7 @@ export default function NuansReportBody() {
                       {/* Proposed Name */}
                       <div>
                         <label className="md:hidden block text-xs font-semibold text-gray-600 mb-1">
-                          Proposed name
+                          Proposed name<span className="text-red-500 ml-0.5">*</span>
                         </label>
                         <input
                           type="text"
@@ -237,7 +243,7 @@ export default function NuansReportBody() {
                       {/* Distinctive Term */}
                       <div>
                         <label className="md:hidden block text-xs font-semibold text-gray-600 mb-1">
-                          Distinctive term
+                          Distinctive term<span className="text-red-500 ml-0.5">*</span>
                         </label>
                         <input
                           type="text"
@@ -255,7 +261,7 @@ export default function NuansReportBody() {
                       {/* Jurisdiction */}
                       <div>
                         <label className="md:hidden block text-xs font-semibold text-gray-600 mb-1">
-                          Jurisdiction
+                          Jurisdiction<span className="text-red-500 ml-0.5">*</span>
                         </label>
                         <select
                           {...register(`rows.${i}.jurisdiction`)}
