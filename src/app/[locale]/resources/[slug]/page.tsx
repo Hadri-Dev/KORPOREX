@@ -50,7 +50,21 @@ function renderSection(section: ArticleSection, index: number) {
     case "paragraph":
       return (
         <p key={index} className="text-gray-700 leading-relaxed mb-5">
-          {section.text}
+          {section.parts
+            ? section.parts.map((part, i) =>
+                typeof part === "string" ? (
+                  <span key={i}>{part}</span>
+                ) : (
+                  <Link
+                    key={i}
+                    href={part.href}
+                    className="text-navy-900 underline underline-offset-2 hover:text-gold-500 transition-colors"
+                  >
+                    {part.text}
+                  </Link>
+                ),
+              )
+            : section.text}
         </p>
       );
     case "list":
@@ -247,7 +261,7 @@ export default function ArticlePage({ params }: Params) {
               Get Started <ArrowRight size={16} />
             </Link>
             <Link
-              href="/nuans-report"
+              href="/nuans"
               className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
             >
               NUANS Report

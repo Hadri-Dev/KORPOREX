@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description:
       "Order an official NUANS preliminary name-search report before you incorporate in Canada. Federal and provincial filings supported. From $40 + HST for the first name, $45 + HST for each additional name. Delivered within a few hours.",
     alternates: {
-      canonical: "https://korporex.ca/nuans-report",
+      canonical: "https://korporex.ca/nuans",
     },
   };
 }

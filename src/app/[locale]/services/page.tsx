@@ -134,7 +134,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Service Categories — each in an elevated cream card with gold stripe,
-          matching the /nuans-report 'Your proposed names' card treatment. */}
+          matching the /nuans 'Your proposed names' card treatment. */}
       <section className="bg-white py-16 px-6">
         <div className="max-w-6xl mx-auto space-y-8">
           {/* Incorporation — custom block: two jurisdiction cards + 3-package summary */}

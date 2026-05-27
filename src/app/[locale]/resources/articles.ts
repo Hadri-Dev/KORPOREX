@@ -3,9 +3,12 @@ export type ArticleCategory =
   | "Compliance & Maintenance"
   | "Jurisdiction Comparisons";
 
+export type ArticleLink = { text: string; href: string };
+export type ArticleInline = string | ArticleLink;
+
 export type ArticleSection =
   | { type: "heading"; id: string; text: string }
-  | { type: "paragraph"; text: string }
+  | { type: "paragraph"; text: string; parts?: ArticleInline[] }
   | { type: "list"; items: string[] }
   | { type: "callout"; title?: string; text: string }
   | { type: "table"; head: string[]; rows: string[][] };
@@ -142,6 +145,11 @@ export const articles: Article[] = [
       {
         type: "paragraph",
         text: "A NUANS report is ordered through an authorized NUANS search house. You submit the proposed corporate name, the search house runs it against the database, and you receive a report (usually within minutes) listing approximately 20 to 30 similar names already in use. A NUANS report is valid for 90 days from the date it is generated. The filing must be completed within that window or the report expires and a new one is required.",
+        parts: [
+          "A ",
+          { text: "NUANS report", href: "/nuans" },
+          " is ordered through an authorized NUANS search house. You submit the proposed corporate name, the search house runs it against the database, and you receive a report (usually within minutes) listing approximately 20 to 30 similar names already in use. A NUANS report is valid for 90 days from the date it is generated. The filing must be completed within that window or the report expires and a new one is required.",
+        ],
       },
       {
         type: "paragraph",

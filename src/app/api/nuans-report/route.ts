@@ -66,7 +66,7 @@ export async function POST(req: Request) {
     console.warn("[nuans-report-api] STRIPE_SECRET_KEY not set — skipping Checkout Session");
     const siteUrl = getSiteUrl();
     return NextResponse.json({
-      url: `${siteUrl}/nuans-report/confirmation?ref=${orderRef}&dev=1`,
+      url: `${siteUrl}/nuans/confirmation?ref=${orderRef}&dev=1`,
       orderRef,
       dev: true,
     });
@@ -131,8 +131,8 @@ export async function POST(req: Request) {
       mode: "payment",
       customer_email: customerEmail,
       line_items: lineItems,
-      success_url: `${siteUrl}/nuans-report/confirmation?session_id={CHECKOUT_SESSION_ID}&ref=${orderRef}`,
-      cancel_url: `${siteUrl}/nuans-report?cancelled=1&ref=${orderRef}`,
+      success_url: `${siteUrl}/nuans/confirmation?session_id={CHECKOUT_SESSION_ID}&ref=${orderRef}`,
+      cancel_url: `${siteUrl}/nuans?cancelled=1&ref=${orderRef}`,
       metadata: {
         productType: "nuans",
         service: "nuans-report",
@@ -281,7 +281,7 @@ function buildHtmlBody(args: {
 
   return `<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#FAFAF8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;"><div style="max-width:680px;margin:0 auto;background:#ffffff;padding:32px;border:1px solid #e5e7eb;"><div style="width:32px;height:2px;background:#C5A35A;margin-bottom:20px;"></div><h1 style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#1B4332;">New NUANS report order — ${escapeHtml(
     orderRef
-  )}</h1><p style="margin:0 0 24px;color:#6b7280;font-size:13px;">Submitted from /nuans-report</p>${section(
+  )}</h1><p style="margin:0 0 24px;color:#6b7280;font-size:13px;">Submitted from /nuans</p>${section(
     "Order",
     `<table style="width:100%;border-collapse:collapse;">${orderRows}</table>`
   )}${section(

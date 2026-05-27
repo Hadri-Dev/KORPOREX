@@ -98,7 +98,7 @@ export const NUANS_REPORT = {
   slug: "nuans-report" as const,
   label: "NUANS Report",
   longLabel: "NUANS Preliminary Name-Search Report",
-  path: "/nuans-report",
+  path: "/nuans",
   /** Base fee covering the first proposed name in the order. */
   basePrice: 40,
   /** Surcharge for every proposed name beyond the first. Each name in the

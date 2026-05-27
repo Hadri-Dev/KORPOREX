@@ -12,6 +12,15 @@ const nextConfig = {
       { source: "/.well-known/llms.txt", destination: "/api/llms-txt" },
     ];
   },
+  async redirects() {
+    return [
+      // Route renamed 2026-05-27 — preserve any external links / bookmarks.
+      { source: "/nuans-report", destination: "/nuans", permanent: true },
+      { source: "/nuans-report/:path*", destination: "/nuans/:path*", permanent: true },
+      { source: "/:locale(fr|es)/nuans-report", destination: "/:locale/nuans", permanent: true },
+      { source: "/:locale(fr|es)/nuans-report/:path*", destination: "/:locale/nuans/:path*", permanent: true },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);
