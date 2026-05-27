@@ -77,7 +77,7 @@ export default function ResourcesPage() {
             {articles.map(({ slug, category, title, excerpt, readTime }) => (
               <Link
                 key={slug}
-                href={`/resources/${slug}`}
+                href={`/guides/${slug}`}
                 className="group flex flex-col border border-gray-100 rounded-lg hover:border-navy-900 transition-colors bg-cream-50 hover:bg-white"
               >
                 <div className="p-6 flex flex-col flex-1">

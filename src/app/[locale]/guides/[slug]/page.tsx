@@ -140,10 +140,10 @@ export default function ArticlePage({ params }: Params) {
       <section className="bg-cream-50 py-16 px-6 border-b border-gray-100">
         <div className="max-w-4xl mx-auto">
           <Link
-            href="/resources"
+            href="/guides"
             className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.15em] uppercase text-gray-500 hover:text-navy-900 transition-colors mb-8"
           >
-            <ArrowLeft size={14} /> Back to Resources
+            <ArrowLeft size={14} /> Back to Guides
           </Link>
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             {article.category}
@@ -217,7 +217,7 @@ export default function ArticlePage({ params }: Params) {
               {related.map((r) => (
                 <Link
                   key={r.slug}
-                  href={`/resources/${r.slug}`}
+                  href={`/guides/${r.slug}`}
                   className="group flex flex-col border border-gray-100 hover:border-navy-900 transition-colors bg-white"
                 >
                   <div className="p-6 flex flex-col flex-1">
@@ -267,10 +267,10 @@ export default function ArticlePage({ params }: Params) {
               NUANS Report
             </Link>
             <Link
-              href="/pricing"
+              href="/order"
               className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
             >
-              Pricing
+              Order
             </Link>
           </div>
         </div>

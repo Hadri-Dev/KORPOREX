@@ -159,7 +159,7 @@ Each entry covers: current state in Korporex, target features, acceptance criter
 
 **De-scopes:** No SERP-API integration in v1 — local rankings are manual-entry. Status-bucket thresholds tuned for incorporation queries (lower-volume than legal queries).
 
-**Korporex money pages:** `/incorporate`, `/incorporate?jurisdiction=federal`, `/incorporate?jurisdiction=ontario`, `/pricing`, `/services`, `/legal-consultation`, `/resources`, `/about`.
+**Korporex money pages:** `/incorporate`, `/incorporate?jurisdiction=federal`, `/incorporate?jurisdiction=ontario`, `/order`, `/services`, `/legal-consultation`, `/guides`, `/about`.
 
 ---
 

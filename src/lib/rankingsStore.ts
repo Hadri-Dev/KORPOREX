@@ -14,10 +14,10 @@ export const KORPOREX_MONEY_PAGES: Array<{ path: string; label: string }> = [
   { path: "/incorporate", label: "Incorporate (overview)" },
   { path: "/incorporate?jurisdiction=federal", label: "Federal incorporation" },
   { path: "/incorporate?jurisdiction=ontario", label: "Ontario incorporation" },
-  { path: "/pricing", label: "Pricing" },
+  { path: "/order", label: "Order (pricing comparison)" },
   { path: "/services", label: "Services" },
   { path: "/legal-consultation", label: "Talk to a Lawyer" },
-  { path: "/resources", label: "Resources" },
+  { path: "/guides", label: "Guides" },
   { path: "/about", label: "About" },
 ];
 

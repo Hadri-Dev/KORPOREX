@@ -181,7 +181,7 @@ export default function ServicesPage() {
                   Three packages, one transparent price
                 </h3>
                 <Link
-                  href="/pricing"
+                  href="/order"
                   className="text-xs font-semibold uppercase tracking-[0.15em] text-navy-900 hover:text-navy-700 inline-flex items-center gap-1"
                 >
                   Compare full features

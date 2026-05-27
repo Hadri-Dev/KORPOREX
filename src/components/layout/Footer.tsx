@@ -51,10 +51,10 @@ const SOCIALS: { label: string; href: string; icon: React.ReactNode }[] = [
 
 const COMPANY_LINKS = [
   { href: "/services", labelKey: "services" },
-  { href: "/pricing", labelKey: "pricing" },
+  { href: "/order", labelKey: "pricing" },
   { href: "/about", labelKey: "about" },
   { href: "/faq", labelKey: "faq" },
-  { href: "/resources", labelKey: "resources" },
+  { href: "/guides", labelKey: "resources" },
   { href: "/contact", labelKey: "contact" },
 ] as const;
 

@@ -14,11 +14,20 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // Route renamed 2026-05-27 — preserve any external links / bookmarks.
+      // Routes renamed 2026-05-27 — preserve any external links / bookmarks.
+      // /nuans-report -> /nuans
       { source: "/nuans-report", destination: "/nuans", permanent: true },
       { source: "/nuans-report/:path*", destination: "/nuans/:path*", permanent: true },
       { source: "/:locale(fr|es)/nuans-report", destination: "/:locale/nuans", permanent: true },
       { source: "/:locale(fr|es)/nuans-report/:path*", destination: "/:locale/nuans/:path*", permanent: true },
+      // /pricing -> /order
+      { source: "/pricing", destination: "/order", permanent: true },
+      { source: "/:locale(fr|es)/pricing", destination: "/:locale/order", permanent: true },
+      // /resources -> /guides (root + article slugs)
+      { source: "/resources", destination: "/guides", permanent: true },
+      { source: "/resources/:path*", destination: "/guides/:path*", permanent: true },
+      { source: "/:locale(fr|es)/resources", destination: "/:locale/guides", permanent: true },
+      { source: "/:locale(fr|es)/resources/:path*", destination: "/:locale/guides/:path*", permanent: true },
     ];
   },
 };

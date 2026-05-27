@@ -9,10 +9,10 @@ import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
 const linkHrefs = [
   { href: "/services", labelKey: "services" },
   { href: "/nuans", labelKey: "nuansReport" },
-  { href: "/pricing", labelKey: "pricing" },
+  { href: "/order", labelKey: "pricing" },
   { href: "/about", labelKey: "about" },
   { href: "/faq", labelKey: "faq" },
-  { href: "/resources", labelKey: "resources" },
+  { href: "/guides", labelKey: "resources" },
   { href: "/contact", labelKey: "contact" },
 ] as const;
 

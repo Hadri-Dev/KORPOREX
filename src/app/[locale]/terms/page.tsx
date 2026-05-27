@@ -145,7 +145,7 @@ export default function TermsPage() {
           <Section n="5" title="Fees, Taxes, and Third-Party Pass-Throughs">
             <p>
               Our current fees are displayed on the{" "}
-              <Link href="/pricing" className="text-navy-900 underline underline-offset-2">Pricing</Link>{" "}
+              <Link href="/order" className="text-navy-900 underline underline-offset-2">Order</Link>{" "}
               page and on the review screen before you submit payment. All amounts are in
               Canadian dollars (CAD) unless stated otherwise.
             </p>

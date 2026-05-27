@@ -33,8 +33,8 @@ const SUGGESTED_KEYWORDS: Array<{ keyword: string; target_page: string; priority
   { keyword: "incorporation", target_page: "/incorporate", priority: 100 },
   { keyword: "business formation", target_page: "/services", priority: 110 },
   { keyword: "registered office", target_page: "/services", priority: 120 },
-  { keyword: "NUANS search", target_page: "/resources/what-is-nuans-name-search", priority: 130 },
-  { keyword: "annual returns", target_page: "/resources/corporate-annual-returns-canada", priority: 140 },
+  { keyword: "NUANS search", target_page: "/guides/what-is-nuans-name-search", priority: 130 },
+  { keyword: "annual returns", target_page: "/guides/corporate-annual-returns-canada", priority: 140 },
 ];
 
 export default function LinkHealthClient() {
