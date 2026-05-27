@@ -33,7 +33,7 @@ export const PAGE_REGISTRY: RegistryPage[] = [
   { path: "/contact", title: "Contact", type: "marketing" },
   { path: "/faq", title: "FAQ", type: "marketing" },
   { path: "/terms-of-service", title: "Terms of Service", type: "legal" },
-  { path: "/privacy", title: "Privacy Policy", type: "legal" },
+  { path: "/privacy-policy", title: "Privacy Policy", type: "legal" },
 ];
 
 export const PAGE_TYPE_LABELS: Record<PageType, string> = {

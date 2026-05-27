@@ -48,7 +48,7 @@ export default function TermsPage() {
             the &ldquo;<strong>Services</strong>&rdquo;). By creating an order, submitting
             information through our wizard, or otherwise using the Services, you agree to be
             bound by these Terms and by our{" "}
-            <Link href="/privacy" className="text-navy-900 underline underline-offset-2">Privacy Policy</Link>,
+            <Link href="/privacy-policy" className="text-navy-900 underline underline-offset-2">Privacy Policy</Link>,
             which is incorporated by reference. If you do not agree, do not use the Services.
           </p>
 
@@ -278,7 +278,7 @@ export default function TermsPage() {
               filings, communicating with registries, and sending you communications about
               your order). This licence ends when we no longer need Your Content to provide
               the Services to you, subject to our retention obligations described in the{" "}
-              <Link href="/privacy" className="text-navy-900 underline underline-offset-2">Privacy Policy</Link>.
+              <Link href="/privacy-policy" className="text-navy-900 underline underline-offset-2">Privacy Policy</Link>.
             </p>
           </Section>
 

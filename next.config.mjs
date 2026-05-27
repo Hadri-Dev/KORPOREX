@@ -31,6 +31,9 @@ const nextConfig = {
       // /terms -> /terms-of-service
       { source: "/terms", destination: "/terms-of-service", permanent: true },
       { source: "/:locale(fr|es)/terms", destination: "/:locale/terms-of-service", permanent: true },
+      // /privacy -> /privacy-policy
+      { source: "/privacy", destination: "/privacy-policy", permanent: true },
+      { source: "/:locale(fr|es)/privacy", destination: "/:locale/privacy-policy", permanent: true },
     ];
   },
 };
