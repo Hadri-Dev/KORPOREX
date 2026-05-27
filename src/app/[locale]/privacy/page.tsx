@@ -85,7 +85,7 @@ export default function PrivacyPage() {
               registered office add-on, we receive and handle physical mail addressed to your
               corporation at our address. The content of that mail is opened, scanned, and
               emailed to the primary director&rsquo;s email address on file as described in the{" "}
-              <Link href="/terms" className="text-navy-900 underline underline-offset-2">Terms of Service</Link>.
+              <Link href="/terms-of-service" className="text-navy-900 underline underline-offset-2">Terms of Service</Link>.
               Scanned copies of mail and a log of items received are retained as described in
               Section 6.
             </p>
@@ -131,7 +131,7 @@ export default function PrivacyPage() {
               </li>
               <li>
                 Maintain security of the Site, detect and prevent fraud, and enforce our{" "}
-                <Link href="/terms" className="text-navy-900 underline underline-offset-2">Terms of Service</Link>;
+                <Link href="/terms-of-service" className="text-navy-900 underline underline-offset-2">Terms of Service</Link>;
               </li>
               <li>
                 Comply with legal, tax, and regulatory obligations, including record-keeping

@@ -32,7 +32,7 @@ export const PAGE_REGISTRY: RegistryPage[] = [
   { path: "/about", title: "About", type: "marketing" },
   { path: "/contact", title: "Contact", type: "marketing" },
   { path: "/faq", title: "FAQ", type: "marketing" },
-  { path: "/terms", title: "Terms of Service", type: "legal" },
+  { path: "/terms-of-service", title: "Terms of Service", type: "legal" },
   { path: "/privacy", title: "Privacy Policy", type: "legal" },
 ];
 

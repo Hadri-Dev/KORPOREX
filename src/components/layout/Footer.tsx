@@ -160,7 +160,7 @@ export default function Footer() {
             <Link href="/privacy" className="hover:text-gray-400 transition-colors">
               {t("links.privacy")}
             </Link>
-            <Link href="/terms" className="hover:text-gray-400 transition-colors">
+            <Link href="/terms-of-service" className="hover:text-gray-400 transition-colors">
               {t("links.terms")}
             </Link>
           </div>

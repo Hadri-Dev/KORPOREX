@@ -1585,7 +1585,7 @@ function Step8({ data, onBack, onPay }: {
           </form>
           <p className="text-xs text-gray-400 text-center mt-4">
             By continuing you agree to our{" "}
-            <Link href="/terms" className="underline underline-offset-2">Terms of Service</Link> and{" "}
+            <Link href="/terms-of-service" className="underline underline-offset-2">Terms of Service</Link> and{" "}
             <Link href="/privacy" className="underline underline-offset-2">Privacy Policy</Link>.
           </p>
         </div>

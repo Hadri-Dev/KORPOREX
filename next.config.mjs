@@ -28,6 +28,9 @@ const nextConfig = {
       { source: "/resources/:path*", destination: "/guides/:path*", permanent: true },
       { source: "/:locale(fr|es)/resources", destination: "/:locale/guides", permanent: true },
       { source: "/:locale(fr|es)/resources/:path*", destination: "/:locale/guides/:path*", permanent: true },
+      // /terms -> /terms-of-service
+      { source: "/terms", destination: "/terms-of-service", permanent: true },
+      { source: "/:locale(fr|es)/terms", destination: "/:locale/terms-of-service", permanent: true },
     ];
   },
 };
