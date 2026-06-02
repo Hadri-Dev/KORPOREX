@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, Building2, FileText, Edit3, ClipboardCheck, RefreshCw, ScaleIcon, Check, Star } from "lucide-react";
+import type { Locale } from "@/i18n/routing";
+import { buildSeoMetadata } from "@/lib/seoMeta";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return buildSeoMetadata(locale, "services", "/services");
+}
 
 type Service = { name: string; from: string; href: string };
 type Category = {

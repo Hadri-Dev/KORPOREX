@@ -1,11 +1,12 @@
 import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
+import type { Locale } from "@/i18n/routing";
+import { buildSeoMetadata } from "@/lib/seoMeta";
 
-export const metadata: Metadata = {
-  title: "Terms of Service | Korporex",
-  description:
-    "Terms of Service for Korporex: the agreement between you and Korporex for use of the incorporation platform and related services.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return buildSeoMetadata(locale, "terms", "/terms-of-service");
+}
 
 // NOTE TO REVIEWERS:
 // This is a living draft Terms of Service for the Korporex platform. Legal

@@ -566,5 +566,99 @@
         ]
       }
     }
+  },
+  "seo": {
+    "home": {
+      "title": "Constitución de Empresas en Línea en Canadá | Korporex",
+      "description": "Constituye tu sociedad canadiense en línea en unos 10 minutos. Korporex prepara y presenta constituciones federales (CBCA) y de Ontario (OBCA) en 24 horas."
+    },
+    "services": {
+      "title": "Servicios de Constitución y Trámites | Korporex",
+      "description": "Explora todos los servicios de Korporex: constitución federal y de Ontario, registros, modificaciones, declaraciones anuales y trámites de reestructuración societaria."
+    },
+    "incorporate": {
+      "title": "Constituir una Empresa en Canadá en Línea | Korporex",
+      "description": "Inicia tu constitución federal o de Ontario en línea. Korporex prepara tus estatutos constitutivos y los presenta ante el registro, entregados en 24 horas."
+    },
+    "order": {
+      "title": "Paquetes y Precios de Constitución | Korporex",
+      "description": "Compara los paquetes de constitución de Korporex para sociedades federales y de Ontario. Precios fijos transparentes en CAD, con tasas de registro aparte."
+    },
+    "legalConsultation": {
+      "title": "Reserva una Consulta Legal con un Abogado | Korporex",
+      "description": "Reserva una consulta pagada con un abogado canadiense independiente a través de Korporex para asesorarte sobre tu empresa. Korporex no es un bufete de abogados."
+    },
+    "terms": {
+      "title": "Términos del Servicio | Korporex",
+      "description": "Lee los Términos del Servicio de Korporex que rigen el uso de nuestra plataforma de constitución y trámites societarios, incluidos tarifas, reembolsos y tus responsabilidades."
+    },
+    "privacy": {
+      "title": "Política de Privacidad | Korporex",
+      "description": "Cómo Korporex recopila, usa y protege tu información personal cuando utilizas nuestros servicios de constitución y trámites societarios en línea en Canadá."
+    },
+    "soleProprietorship": {
+      "title": "Registrar una Empresa Individual en Ontario | Korporex",
+      "description": "Registra tu empresa individual de Ontario en línea. Korporex prepara y presenta el registro de tu nombre comercial para que operes bajo tu nombre comercial."
+    },
+    "businessName": {
+      "title": "Registrar un Nombre Comercial en Ontario | Korporex",
+      "description": "Registra un nombre operativo o comercial en Ontario en línea. Korporex prepara y presenta el registro de tu nombre comercial ante el Ontario Business Registry."
+    },
+    "businessNumber": {
+      "title": "Registrar un Número de Empresa de la CRA | Korporex",
+      "description": "Obtén un número de empresa de la CRA para tu sociedad o empresa individual. Korporex prepara y presenta el registro de tu número de empresa en línea."
+    },
+    "extraProvincial": {
+      "title": "Registro Extraprovincial en Canadá | Korporex",
+      "description": "Expande tu sociedad a una nueva provincia. Korporex prepara y presenta tu registro extraprovincial para que operes fuera de tu jurisdicción de origen."
+    },
+    "changeDirector": {
+      "title": "Trámite de Cambio de Director o Directivo | Korporex",
+      "description": "Actualiza los directores o directivos de tu sociedad. Korporex prepara y presenta el cambio requerido ante Corporations Canada o el Ontario Business Registry."
+    },
+    "changeShareholder": {
+      "title": "Trámite de Cambio de Accionista | Korporex",
+      "description": "Registra un cambio de accionista en los libros de tu sociedad. Korporex prepara los documentos de transferencia de acciones y actualiza tu libro de actas."
+    },
+    "changeAddress": {
+      "title": "Trámite de Cambio de Domicilio Social | Korporex",
+      "description": "Cambia el domicilio social o postal de tu sociedad. Korporex prepara y presenta el cambio de domicilio ante el registro federal o de Ontario."
+    },
+    "articlesAmendment": {
+      "title": "Presentar Estatutos de Modificación en Canadá | Korporex",
+      "description": "Modifica los estatutos de tu sociedad para cambiar su nombre, estructura de acciones u otras disposiciones. Korporex prepara y presenta tus estatutos de modificación."
+    },
+    "initialReturnOn": {
+      "title": "Presentar la Declaración Inicial de Ontario | Korporex",
+      "description": "Presenta la declaración inicial de Ontario debida dentro de 60 días de la constitución. Korporex la prepara y la envía al Ontario Business Registry por ti."
+    },
+    "annualReturnOn": {
+      "title": "Presentar la Declaración Anual de Ontario | Korporex",
+      "description": "Mantén tu sociedad de Ontario en regla. Korporex prepara y presenta tu declaración anual de Ontario ante el Ontario Business Registry."
+    },
+    "annualReturnFederal": {
+      "title": "Presentar la Declaración Anual Federal | Korporex",
+      "description": "Presenta la declaración anual de tu sociedad federal (CBCA) ante Corporations Canada. Korporex la prepara y la envía para mantener tu sociedad en regla."
+    },
+    "noticeOfChange": {
+      "title": "Presentar un Aviso de Cambio | Korporex",
+      "description": "Reporta cambios en los directores o el domicilio social de tu sociedad. Korporex prepara y presenta el Aviso de Cambio requerido ante el registro."
+    },
+    "dissolveBusiness": {
+      "title": "Disolver una Sociedad en Canadá | Korporex",
+      "description": "Liquida voluntariamente tu sociedad. Korporex prepara y presenta tus estatutos de disolución ante el registro federal o de Ontario."
+    },
+    "reviveBusiness": {
+      "title": "Reactivar una Sociedad Disuelta | Korporex",
+      "description": "Restablece una sociedad disuelta a estado activo. Korporex prepara y presenta tus estatutos de reactivación ante el registro federal o de Ontario."
+    },
+    "amalgamation": {
+      "title": "Fusionar Sociedades en Canadá | Korporex",
+      "description": "Fusiona dos o más sociedades en una sola. Korporex prepara y presenta tus estatutos de fusión para sociedades federales o de Ontario."
+    },
+    "continuance": {
+      "title": "Continuar una Sociedad Entre Jurisdicciones | Korporex",
+      "description": "Traslada tu sociedad a una nueva jurisdicción. Korporex prepara y presenta tus estatutos de continuación para importar o exportar entre el nivel federal y Ontario."
+    }
   }
 }

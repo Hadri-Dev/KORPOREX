@@ -1,11 +1,12 @@
 import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
+import type { Locale } from "@/i18n/routing";
+import { buildSeoMetadata } from "@/lib/seoMeta";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy | Korporex",
-  description:
-    "Privacy Policy for Korporex: how we collect, use, share, and protect personal information in connection with our Canadian incorporation and registered office services.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return buildSeoMetadata(locale, "privacy", "/privacy-policy");
+}
 
 // NOTE TO REVIEWERS:
 // This is a living draft Privacy Policy for the Korporex platform. Legal

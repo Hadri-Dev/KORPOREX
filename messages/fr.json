@@ -566,5 +566,99 @@
         ]
       }
     }
+  },
+  "seo": {
+    "home": {
+      "title": "Constitution d'entreprise en ligne au Canada | Korporex",
+      "description": "Constituez votre entreprise canadienne en ligne en environ 10 minutes. Korporex prépare et dépose les constitutions fédérales (LCSA) et ontariennes (LSAO) sous 24 heures."
+    },
+    "services": {
+      "title": "Services de constitution et de dépôt corporatif | Korporex",
+      "description": "Parcourez tous les services Korporex : constitution fédérale et ontarienne, enregistrements d'entreprise, modifications, rapports annuels et dépôts de restructuration."
+    },
+    "incorporate": {
+      "title": "Constituer une entreprise en ligne au Canada | Korporex",
+      "description": "Lancez votre constitution fédérale ou ontarienne en ligne. Korporex prépare vos statuts constitutifs et les dépose au registre, livrés sous 24 heures."
+    },
+    "order": {
+      "title": "Forfaits et tarifs de constitution | Korporex",
+      "description": "Comparez les forfaits de constitution Korporex pour les sociétés fédérales et ontariennes. Tarifs forfaitaires transparents en CAD, frais de dépôt gouvernementaux indiqués à part."
+    },
+    "legalConsultation": {
+      "title": "Consultation juridique avec un avocat | Korporex",
+      "description": "Réservez une consultation payante avec un avocat canadien indépendant via Korporex pour des conseils sur votre entreprise. Korporex n'est pas un cabinet d'avocats."
+    },
+    "terms": {
+      "title": "Conditions d'utilisation | Korporex",
+      "description": "Consultez les conditions d'utilisation de Korporex régissant l'usage de notre plateforme de constitution et de dépôt corporatif en ligne : frais, remboursements et vos responsabilités."
+    },
+    "privacy": {
+      "title": "Politique de confidentialité | Korporex",
+      "description": "Comment Korporex recueille, utilise et protège vos renseignements personnels lorsque vous utilisez nos services de constitution et de dépôt corporatif en ligne au Canada."
+    },
+    "soleProprietorship": {
+      "title": "Enregistrer une entreprise individuelle en Ontario | Korporex",
+      "description": "Enregistrez votre entreprise individuelle ontarienne en ligne. Korporex prépare et dépose l'enregistrement de votre nom commercial pour exercer sous celui-ci."
+    },
+    "businessName": {
+      "title": "Enregistrer un nom commercial en Ontario | Korporex",
+      "description": "Enregistrez un nom commercial ou d'exploitation en Ontario en ligne. Korporex prépare et dépose votre enregistrement au Registre des entreprises de l'Ontario."
+    },
+    "businessNumber": {
+      "title": "Obtenir un numéro d'entreprise de l'ARC | Korporex",
+      "description": "Obtenez un numéro d'entreprise de l'ARC pour votre société par actions ou entreprise individuelle. Korporex prépare et dépose votre enregistrement en ligne."
+    },
+    "extraProvincial": {
+      "title": "Enregistrement extraprovincial au Canada | Korporex",
+      "description": "Étendez votre société dans une nouvelle province. Korporex prépare et dépose votre enregistrement extraprovincial pour exercer hors de votre territoire d'origine."
+    },
+    "changeDirector": {
+      "title": "Changement d'administrateur ou de dirigeant | Korporex",
+      "description": "Mettez à jour les administrateurs ou dirigeants de votre société. Korporex prépare et dépose le changement requis auprès de Corporations Canada ou du registre ontarien."
+    },
+    "changeShareholder": {
+      "title": "Dépôt de changement d'actionnaire | Korporex",
+      "description": "Inscrivez un changement d'actionnaire dans les registres de votre société. Korporex prépare les documents de transfert d'actions et met à jour votre livre de procès-verbaux."
+    },
+    "changeAddress": {
+      "title": "Changement d'adresse de société | Korporex",
+      "description": "Modifiez le siège social ou l'adresse postale de votre société. Korporex prépare et dépose le changement d'adresse auprès du registre fédéral ou ontarien."
+    },
+    "articlesAmendment": {
+      "title": "Déposer des statuts de modification au Canada | Korporex",
+      "description": "Modifiez les statuts de votre société pour changer son nom, sa structure d'actions ou d'autres dispositions. Korporex prépare et dépose vos statuts de modification."
+    },
+    "initialReturnOn": {
+      "title": "Déposer un rapport initial de l'Ontario | Korporex",
+      "description": "Déposez le rapport initial de l'Ontario dû dans les 60 jours suivant la constitution. Korporex le prépare et le soumet au Registre des entreprises de l'Ontario pour vous."
+    },
+    "annualReturnOn": {
+      "title": "Déposer un rapport annuel de l'Ontario | Korporex",
+      "description": "Maintenez votre société ontarienne en règle. Korporex prépare et dépose votre rapport annuel de l'Ontario auprès du Registre des entreprises de l'Ontario."
+    },
+    "annualReturnFederal": {
+      "title": "Déposer un rapport annuel fédéral | Korporex",
+      "description": "Déposez le rapport annuel de votre société fédérale (LCSA) auprès de Corporations Canada. Korporex le prépare et le soumet pour garder votre société en règle."
+    },
+    "noticeOfChange": {
+      "title": "Déposer un avis de changement | Korporex",
+      "description": "Signalez les changements aux administrateurs ou au siège social de votre société. Korporex prépare et dépose l'avis de changement requis auprès du registre."
+    },
+    "dissolveBusiness": {
+      "title": "Dissoudre une société au Canada | Korporex",
+      "description": "Liquidez volontairement votre société. Korporex prépare et dépose vos statuts de dissolution auprès du registre fédéral ou ontarien."
+    },
+    "reviveBusiness": {
+      "title": "Reconstituer une société dissoute | Korporex",
+      "description": "Rétablissez une société dissoute en statut actif. Korporex prépare et dépose vos statuts de reconstitution auprès du registre fédéral ou ontarien."
+    },
+    "amalgamation": {
+      "title": "Fusionner des sociétés au Canada | Korporex",
+      "description": "Fusionnez deux sociétés ou plus en une seule. Korporex prépare et dépose vos statuts de fusion pour les sociétés fédérales ou ontariennes."
+    },
+    "continuance": {
+      "title": "Proroger une société entre territoires | Korporex",
+      "description": "Transférez votre société vers un nouveau territoire. Korporex prépare et dépose vos statuts de prorogation pour importer ou exporter entre le fédéral et l'Ontario."
+    }
   }
 }
