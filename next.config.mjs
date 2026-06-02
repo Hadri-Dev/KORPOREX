@@ -5,12 +5,23 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async rewrites() {
-    return [
-      // Serve dynamic LLMs.txt content from the Supabase-backed API route.
-      // Editable from /dashboard/seo/llms-txt; falls back to a static default
-      // when no row exists yet.
-      { source: "/.well-known/llms.txt", destination: "/api/llms-txt" },
-    ];
+    // beforeFiles: these run before filesystem AND dynamic-route resolution.
+    // Required for `/llms.txt` — as a single URL segment it would otherwise be
+    // captured by the `[locale]` dynamic route and 404, instead of reaching the
+    // API route. (The two-segment `.well-known` variant never collides, but we
+    // keep it here for consistency.)
+    return {
+      beforeFiles: [
+        // Serve dynamic LLMs.txt content from the Supabase-backed API route.
+        // Editable from /dashboard/seo/llms-txt; falls back to a static default
+        // when no row exists yet.
+        // `/llms.txt` is the canonical root location per the llmstxt.org spec —
+        // it's what AI crawlers and SEO audits (SEMRUSH) probe. The `.well-known`
+        // alias is kept so the dashboard's existing link keeps working.
+        { source: "/llms.txt", destination: "/api/llms-txt" },
+        { source: "/.well-known/llms.txt", destination: "/api/llms-txt" },
+      ],
+    };
   },
   async redirects() {
     return [
