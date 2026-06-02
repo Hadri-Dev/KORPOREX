@@ -1461,7 +1461,7 @@ export const articles: Article[] = [
       { type: "heading", id: "couts-optionnels", text: "Des coûts optionnels à connaître" },
       { type: "list", items: ["Mise en place du livre des procès-verbaux. Les sociétés ontariennes doivent légalement en tenir un. Vous pouvez l'assembler vous-même ou le faire préparer, ce que la plupart des propriétaires trouvent utile.", "Service de siège social ou d'adresse. Si vous ne voulez pas que votre adresse personnelle figure au dossier public, un service d'adresse est un coût additionnel.", "Aide professionnelle. Un avocat ou un service de constitution facture des honoraires en plus du coût gouvernemental, en échange d'une structure d'actions et de documents bien faits."] },
       { type: "heading", id: "couts-annuels", text: "Ce que cela coûte chaque année ensuite" },
-      { type: "paragraph", text: "La constitution n'est pas un coût unique. Chaque année, une société ontarienne produit une déclaration annuelle et une déclaration de revenus des sociétés (T2) distincte, et tient son livre des procès-verbaux à jour. Prévoyez surtout la déclaration de revenus des sociétés, qui implique généralement un comptable.", parts: ["La constitution n'est pas un coût unique. Chaque année, une société ontarienne produit une ", { text: "déclaration annuelle", href: "/guides/corporate-annual-returns-canada" }, " et une déclaration de revenus des sociétés (T2) distincte, et tient son livre des procès-verbaux à jour. Prévoyez surtout la déclaration de revenus des sociétés, qui implique généralement un comptable."] },
+      { type: "paragraph", text: "La constitution n'est pas un coût unique. Chaque année, une société ontarienne produit une déclaration annuelle et une déclaration de revenus des sociétés (T2) distincte, et tient son livre des procès-verbaux à jour. Prévoyez surtout la déclaration de revenus des sociétés, qui implique généralement un comptable.", parts: ["La constitution n'est pas un coût unique. Chaque année, une société ontarienne produit une ", { text: "déclaration annuelle", href: "/guides/declarations-annuelles-societes-canada" }, " et une déclaration de revenus des sociétés (T2) distincte, et tient son livre des procès-verbaux à jour. Prévoyez surtout la déclaration de revenus des sociétés, qui implique généralement un comptable."] },
       { type: "heading", id: "soi-meme-service", text: "Le faire soi-même ou recourir à un service" },
       { type: "paragraph", text: "Vous pouvez déposer directement au Registre des entreprises de l'Ontario et ne payer que le coût gouvernemental, mais vous êtes alors responsable vous-même de la recherche de nom, de la structure d'actions et du livre des procès-verbaux. Un service à prix fixe regroupe le tout. Korporex constitue les sociétés ontariennes et fédérales en ligne à prix fixe, ce qui comprend le dépôt, la recherche de nom, la structure d'actions et le livre des procès-verbaux, avec livraison des documents en 24 heures.", parts: ["Vous pouvez déposer directement au Registre des entreprises de l'Ontario et ne payer que le coût gouvernemental, mais vous êtes alors responsable vous-même de la recherche de nom, de la structure d'actions et du livre des procès-verbaux. Un service à prix fixe regroupe le tout. Korporex constitue les sociétés ontariennes et fédérales en ligne ", { text: "à prix fixe", href: "/order" }, ", ce qui comprend le dépôt, la recherche de nom, la structure d'actions et le livre des procès-verbaux, avec livraison des documents en 24 heures."] },
     ],
@@ -1636,9 +1636,294 @@ export const articles: Article[] = [
       { type: "heading", id: "costos-opcionales", text: "Costos opcionales que conviene conocer" },
       { type: "list", items: ["Montaje del libro de actas. Las sociedades de Ontario están legalmente obligadas a llevar uno. Puede armarlo usted mismo o hacerlo preparar, lo que la mayoría de los dueños considera que vale la pena.", "Servicio de domicilio social o dirección. Si no quiere que su dirección personal figure en el registro público, un servicio de dirección es un costo adicional.", "Ayuda profesional. Un abogado o servicio de constitución cobra honorarios además del costo del gobierno, a cambio de dejar bien la estructura de acciones y los documentos."] },
       { type: "heading", id: "costos-anuales", text: "Qué cuesta cada año después" },
-      { type: "paragraph", text: "Constituirse no es un costo único. Cada año, una sociedad de Ontario presenta una declaración anual y una declaración del impuesto de sociedades (T2) aparte, y mantiene su libro de actas al día. Presupueste sobre todo la declaración del impuesto de sociedades, que suele implicar un contador.", parts: ["Constituirse no es un costo único. Cada año, una sociedad de Ontario presenta una ", { text: "declaración anual", href: "/guides/corporate-annual-returns-canada" }, " y una declaración del impuesto de sociedades (T2) aparte, y mantiene su libro de actas al día. Presupueste sobre todo la declaración del impuesto de sociedades, que suele implicar un contador."] },
+      { type: "paragraph", text: "Constituirse no es un costo único. Cada año, una sociedad de Ontario presenta una declaración anual y una declaración del impuesto de sociedades (T2) aparte, y mantiene su libro de actas al día. Presupueste sobre todo la declaración del impuesto de sociedades, que suele implicar un contador.", parts: ["Constituirse no es un costo único. Cada año, una sociedad de Ontario presenta una ", { text: "declaración anual", href: "/guides/declaraciones-anuales-sociedades-canada" }, " y una declaración del impuesto de sociedades (T2) aparte, y mantiene su libro de actas al día. Presupueste sobre todo la declaración del impuesto de sociedades, que suele implicar un contador."] },
       { type: "heading", id: "propio-servicio", text: "Hacerlo por su cuenta o usar un servicio" },
       { type: "paragraph", text: "Puede presentar directamente ante el Registro de Empresas de Ontario y pagar solo el costo del gobierno, pero entonces usted es responsable de la búsqueda de nombre, la estructura de acciones y el libro de actas. Un servicio de tarifa fija agrupa todo eso. Korporex constituye sociedades de Ontario y federales en línea por un precio fijo que incluye la presentación, la búsqueda de nombre, la estructura de acciones y el libro de actas, con documentos entregados en 24 horas.", parts: ["Puede presentar directamente ante el Registro de Empresas de Ontario y pagar solo el costo del gobierno, pero entonces usted es responsable de la búsqueda de nombre, la estructura de acciones y el libro de actas. Un servicio de tarifa fija agrupa todo eso. Korporex constituye sociedades de Ontario y federales en línea ", { text: "por un precio fijo", href: "/order" }, " que incluye la presentación, la búsqueda de nombre, la estructura de acciones y el libro de actas, con documentos entregados en 24 horas."] },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // Backfill translations (FR + ES) for the three English-only guides:
+  // nuans-name-search, annual-returns, incorporating-ontario.
+  // ─────────────────────────────────────────────────────────────
+
+  // ── French ──
+  {
+    slug: "recherche-de-nom-nuans",
+    locale: "fr",
+    group: "nuans-name-search",
+    category: "Incorporation Guides",
+    title: "Qu'est-ce qu'une recherche de nom NUANS, et en avez-vous besoin ?",
+    excerpt:
+      "Si vous vous constituez en société au fédéral ou dans certaines provinces, une recherche NUANS est obligatoire. Voici ce que c'est, comment ça fonctionne, et que faire si votre premier choix de nom n'est pas disponible.",
+    metaTitle: "Qu'est-ce qu'une recherche de nom NUANS ? | Korporex",
+    metaDescription:
+      "Une recherche de nom NUANS compare le nom proposé de votre société aux noms enregistrés partout au Canada. Voyez quand elle est requise, comment elle fonctionne et que faire si votre premier choix est pris.",
+    readTime: "4 min de lecture",
+    updated: "2026-04-21",
+    content: [
+      { type: "paragraph", text: "NUANS est l'acronyme de Newly Upgraded Automated Name Search. Il s'agit d'une base de données exploitée en vertu d'un contrat avec le gouvernement fédéral, qui contient les dénominations sociales, les noms commerciaux et les marques de commerce enregistrés partout au Canada. Un rapport NUANS compare un nom de société proposé à cette base de données et produit une liste de noms existants similaires, afin que le gouvernement puisse déterminer si le vôtre est suffisamment distinctif pour être enregistré." },
+      { type: "heading", id: "quand-requis", text: "Quand un rapport NUANS est requis" },
+      { type: "list", items: [
+        "Constitution fédérale en vertu de la LCSA : toujours requise si vous enregistrez une société avec un nom.",
+        "Constitution en Ontario en vertu de la LSAO : requise pour les sociétés avec un nom.",
+        "Alberta, Saskatchewan, Manitoba, Nouveau-Brunswick, Nouvelle-Écosse, Terre-Neuve-et-Labrador, Île-du-Prince-Édouard : toutes utilisent NUANS pour les sociétés avec un nom.",
+        "Québec, Colombie-Britannique et les territoires : utilisent des systèmes de noms distincts, pas NUANS.",
+        "Sociétés à matricule (p. ex. 1234567 Canada Inc.) : aucune recherche NUANS requise dans aucune province ou territoire.",
+      ] },
+      { type: "heading", id: "comment-ca-fonctionne", text: "Comment fonctionne une recherche NUANS" },
+      { type: "paragraph", text: "Un rapport NUANS est commandé auprès d'une maison de recherche NUANS autorisée. Vous soumettez le nom de société proposé, la maison de recherche le compare à la base de données, et vous recevez un rapport (habituellement en quelques minutes) répertoriant environ 20 à 30 noms similaires déjà utilisés. Un rapport NUANS est valide pendant 90 jours à compter de sa date de production. Le dépôt doit être réalisé pendant cette période, sinon le rapport expire et un nouveau est requis.", parts: ["Un ", { text: "rapport NUANS", href: "/nuans" }, " est commandé auprès d'une maison de recherche NUANS autorisée. Vous soumettez le nom de société proposé, la maison de recherche le compare à la base de données, et vous recevez un rapport (habituellement en quelques minutes) répertoriant environ 20 à 30 noms similaires déjà utilisés. Un rapport NUANS est valide pendant 90 jours à compter de sa date de production. Le dépôt doit être réalisé pendant cette période, sinon le rapport expire et un nouveau est requis."] },
+      { type: "paragraph", text: "Le gouvernement ne prend pas la décision finale uniquement à partir du rapport. Un examinateur des sociétés (fédéral ou provincial) examine le rapport et le nom proposé, soupèse le caractère distinctif et le risque de confusion avec des noms existants, puis approuve ou refuse le nom." },
+      { type: "heading", id: "anatomie-du-nom", text: "L'anatomie d'une dénomination sociale" },
+      { type: "paragraph", text: "Une dénomination sociale canadienne conforme comporte trois parties :" },
+      { type: "list", items: [
+        "L'élément distinctif : un mot unique ou inventé (p. ex. « Maplewind »).",
+        "L'élément descriptif : il décrit l'activité de l'entreprise (p. ex. « Consultation »).",
+        "L'élément juridique : il indique la responsabilité limitée : Inc., Incorporée, Corp., Corporation, Ltd., Limited, Limitée ou Ltée.",
+      ] },
+      { type: "paragraph", text: "Un nom uniquement descriptif (« Consultation Canadienne Inc. ») sera presque toujours refusé. Un nom distinctif mais très proche d'un nom déjà enregistré (« Maplewind Consultation Inc. » par rapport à un « MapleWynd Consultation Ltée » existant) peut aussi être refusé pour cause de confusion." },
+      { type: "heading", id: "si-indisponible", text: "Si votre premier choix n'est pas disponible" },
+      { type: "paragraph", text: "Il existe trois solutions de rechange courantes. Vous pouvez proposer une variante avec un élément distinctif plus marqué; vous pouvez ajouter un modificateur géographique ou descriptif qui crée une séparation réelle; ou vous pouvez vous constituer dès maintenant comme société à matricule (par exemple, 1234567 Canada Inc.) et adopter plus tard un nom commercial par l'enregistrement d'un nom d'entreprise. La voie de la société à matricule est la plus rapide lorsque la vitesse compte plus que l'image de marque." },
+      { type: "callout", text: "Un rapport NUANS n'accorde pas de marque de commerce. Si votre nom est au cœur de votre marque, vous devriez aussi envisager l'enregistrement d'une marque de commerce auprès de l'Office de la propriété intellectuelle du Canada. C'est un processus distinct de la constitution en société." },
+    ],
+  },
+  {
+    slug: "declarations-annuelles-societes-canada",
+    locale: "fr",
+    group: "annual-returns",
+    category: "Compliance & Maintenance",
+    title: "Les déclarations annuelles des sociétés au Canada : guide complet",
+    excerpt:
+      "Toute société canadienne doit produire une déclaration annuelle. Les échéances, les frais et les conséquences d'un défaut varient selon la province. Voici tout ce qu'il faut savoir.",
+    metaTitle: "Déclarations annuelles des sociétés au Canada | Korporex",
+    metaDescription:
+      "Toute société canadienne doit produire une déclaration annuelle chaque année. Découvrez les échéances et frais fédéraux et ontariens, et ce qui arrive en cas de défaut de production.",
+    readTime: "5 min de lecture",
+    updated: "2026-04-21",
+    content: [
+      { type: "callout", title: "À ne pas confondre avec", text: "Une déclaration annuelle est un dépôt qui confirme les renseignements de la société auprès du registre. Ce n'est pas une déclaration de revenus. La déclaration de revenus des sociétés T2 se produit séparément auprès de l'Agence du revenu du Canada. Les deux ont des échéances différentes, des destinataires différents et des conséquences différentes en cas de défaut." },
+      { type: "heading", id: "ce-quest", text: "Ce qu'est une déclaration annuelle" },
+      { type: "paragraph", text: "Une déclaration annuelle confirme que les renseignements au dossier de la société (adresse du siège social, administrateurs, dirigeants et, dans certaines provinces, actionnaires) sont toujours exacts. Si quelque chose a changé au cours de l'année, c'est dans la déclaration annuelle que ces changements sont signalés. Toute société canadienne active est tenue par la loi d'en produire une chaque année." },
+      { type: "heading", id: "federal", text: "Les sociétés fédérales" },
+      { type: "list", items: [
+        "Produite auprès de Corporations Canada.",
+        "Exigible dans les 60 jours suivant l'anniversaire de la constitution ou de la fusion.",
+        "Frais de dépôt en ligne : 12 $.",
+        "Le défaut de produire deux déclarations annuelles consécutives peut entraîner la dissolution de la société.",
+      ] },
+      { type: "heading", id: "ontario", text: "Les sociétés ontariennes" },
+      { type: "paragraph", text: "Depuis octobre 2021, les déclarations annuelles de l'Ontario se produisent directement par l'entremise du Registre des entreprises de l'Ontario. Avant cette date, la plupart des sociétés produisaient la déclaration avec leur T2 par l'intermédiaire de l'ARC; cette voie a été abandonnée. Les déclarations annuelles de l'Ontario sont exigibles dans les six mois suivant la fin de l'exercice de la société." },
+      { type: "list", items: [
+        "Produite par l'entremise du Registre des entreprises de l'Ontario.",
+        "Exigible dans les six mois suivant la fin de l'exercice de la société.",
+        "Frais de dépôt : actuellement aucuns frais pour la déclaration annuelle elle-même en Ontario.",
+        "Le défaut de produire peut entraîner l'annulation de l'enregistrement de la société.",
+      ] },
+      { type: "heading", id: "consequences", text: "Ce qui arrive en cas de défaut" },
+      { type: "paragraph", text: "Le schéma est semblable d'une province à l'autre. Une déclaration manquée génère habituellement un rappel. Deux déclarations consécutives manquées peuvent faire passer la société à un statut de « non-conformité » ou de « non en règle », qui devient visible lors de toute recherche au registre public. Le défaut persistant mène à la dissolution administrative, moment où la société cesse d'exister comme entité juridique. Son nom redevient disponible, ses contrats et droits de propriété entrent dans une zone grise juridique, et ses administrateurs peuvent être exposés personnellement aux obligations contractées pendant qu'elle était dissoute." },
+      { type: "paragraph", text: "Reconstituer une société dissoute est possible dans la plupart des provinces, mais cela suppose une demande distincte, des frais et, en général, le paiement des dépôts en souffrance. Il est toujours plus économique et plus simple de produire à temps." },
+      { type: "heading", id: "rester-a-jour", text: "Rester à jour" },
+      { type: "paragraph", text: "L'approche la plus fiable consiste à inscrire l'anniversaire de constitution de la société à un calendrier avec un rappel 30 jours à l'avance, et à tenir une courte liste de vérification des personnes dont les renseignements ont pu changer durant l'année : administrateurs, dirigeants, siège social. La production de la déclaration elle-même prend habituellement moins de dix minutes une fois ces renseignements en main." },
+    ],
+  },
+  {
+    slug: "se-constituer-en-societe-en-ontario",
+    locale: "fr",
+    group: "incorporating-ontario",
+    category: "Jurisdiction Comparisons",
+    title: "Se constituer en société en Ontario : tout ce qu'il faut savoir",
+    excerpt:
+      "L'Ontario abrite la majorité des petites entreprises canadiennes. Ce guide passe en revue la Loi sur les sociétés par actions de l'Ontario, les coûts, les délais et ce que vous recevez après le dépôt.",
+    metaTitle: "Se constituer en société en Ontario : le guide | Korporex",
+    metaDescription:
+      "Guide complet de la constitution en société en Ontario en vertu de la LSAO : ce qui est requis, les coûts, les délais et ce que vous recevez après le dépôt auprès du Registre des entreprises de l'Ontario.",
+    readTime: "7 min de lecture",
+    updated: "2026-04-21",
+    content: [
+      { type: "paragraph", text: "Les constitutions en société de l'Ontario sont régies par la Loi sur les sociétés par actions de l'Ontario (LSAO) et traitées par le Registre des entreprises de l'Ontario (REO), lancé en octobre 2021. Le REO a remplacé un processus lourd en paperasse par un système entièrement en ligne, et la plupart des constitutions se réalisent désormais en quelques minutes plutôt qu'en quelques semaines." },
+      { type: "heading", id: "ce-qui-est-requis", text: "Ce qui est requis pour se constituer en Ontario" },
+      { type: "list", items: [
+        "Une dénomination sociale (soit une société avec un nom accompagnée d'un rapport NUANS, soit une société à matricule).",
+        "Des statuts constitutifs décrivant la structure d'actions et toute restriction au transfert d'actions ou aux activités.",
+        "Un ou plusieurs fondateurs (des particuliers ou des sociétés).",
+        "Au moins un administrateur. L'Ontario a supprimé son exigence de 25 % d'administrateurs résidents canadiens en juillet 2021.",
+        "Une adresse de siège social en Ontario. Une simple case postale n'est pas acceptable; une adresse municipale est requise.",
+        "Les noms et adresses des administrateurs et dirigeants pour le premier avis.",
+      ] },
+      { type: "heading", id: "couts", text: "Coûts" },
+      { type: "table", head: ["Élément", "Coût (Ontario)"], rows: [
+        ["Frais de dépôt gouvernementaux (en ligne)", "300 $"],
+        ["Rapport NUANS (pour une société avec un nom)", "Environ 8 $ à 40 $ selon la maison de recherche"],
+        ["Présearch de nom (facultative, réduit le risque de refus NUANS)", "Variable"],
+        ["Montage du livre des procès-verbaux (facultatif mais recommandé)", "Variable selon le fournisseur"],
+      ] },
+      { type: "paragraph", text: "Les sociétés à matricule sautent entièrement l'étape NUANS, ce qui est à la fois plus rapide et plus économique. La contrepartie est que la société devra enregistrer un nom commercial distinct si elle veut faire affaire sous un nom de marque plutôt que sous « 1234567 Ontario Inc. »" },
+      { type: "heading", id: "delais", text: "Délais" },
+      { type: "paragraph", text: "Pour une constitution ontarienne simple, le calendrier type est le suivant :" },
+      { type: "list", items: [
+        "Choix du nom et rapport NUANS : le jour même (un rapport est produit en quelques minutes).",
+        "Rédaction des statuts constitutifs : le jour même.",
+        "Dépôt auprès du Registre des entreprises de l'Ontario : habituellement traité immédiatement ou dans les 24 heures.",
+        "Déclaration initiale (formulaire 1) confirmant les administrateurs et le siège social : exigible dans les 60 jours suivant la constitution.",
+      ] },
+      { type: "heading", id: "ce-que-vous-recevez", text: "Ce que vous recevez après le dépôt" },
+      { type: "list", items: [
+        "Le certificat de constitution avec votre date de constitution et votre numéro de société de l'Ontario (NSO).",
+        "Les statuts constitutifs estampillés.",
+        "Le profil de la société indiquant les administrateurs, dirigeants et siège social actuels.",
+        "Les identifiants d'accès au Registre des entreprises de l'Ontario.",
+      ] },
+      { type: "heading", id: "apres-constitution", text: "Après la constitution" },
+      { type: "paragraph", text: "Une nouvelle société ontarienne a habituellement quelques tâches de suivi immédiates :" },
+      { type: "list", items: [
+        "Adopter une résolution d'organisation émettant les actions initiales et nommant les dirigeants.",
+        "Adopter des règlements administratifs (les règles générales régissant les affaires internes de la société).",
+        "S'inscrire pour un numéro d'entreprise de l'ARC et tout compte fiscal pertinent (TVH, paie, impôt des sociétés).",
+        "Ouvrir un compte bancaire d'entreprise (les banques exigeront les statuts, le certificat et un profil de société récent).",
+        "Monter le livre des procès-verbaux et y consigner les résolutions d'organisation.",
+        "Inscrire au calendrier l'échéance de la déclaration annuelle (exigible dans les six mois suivant la fin de l'exercice).",
+      ] },
+      { type: "callout", title: "Un oubli fréquent", text: "L'Ontario exige une déclaration initiale dans les 60 jours suivant la constitution, confirmant les administrateurs et le siège social nommés dans les statuts. Le défaut de produire ce dépôt met la société en non-conformité presque immédiatement. C'est un dépôt en ligne rapide; faites-le la semaine même où vous vous constituez." },
+    ],
+  },
+
+  // ── Spanish ──
+  {
+    slug: "busqueda-de-nombre-nuans",
+    locale: "es",
+    group: "nuans-name-search",
+    category: "Incorporation Guides",
+    title: "¿Qué es una búsqueda de nombre NUANS y la necesita?",
+    excerpt:
+      "Si se constituye en sociedad a nivel federal o en ciertas provincias, una búsqueda NUANS es obligatoria. Vea qué es, cómo funciona y qué hacer si su primera opción de nombre no está disponible.",
+    metaTitle: "¿Qué es una búsqueda de nombre NUANS? | Korporex",
+    metaDescription:
+      "Una búsqueda de nombre NUANS coteja el nombre propuesto de su sociedad con los nombres registrados en todo Canadá. Vea cuándo es obligatoria, cómo funciona y qué hacer si su primera opción está tomada.",
+    readTime: "4 min de lectura",
+    updated: "2026-04-21",
+    content: [
+      { type: "paragraph", text: "NUANS es la sigla de Newly Upgraded Automated Name Search. Es una base de datos operada bajo contrato con el gobierno federal que contiene denominaciones sociales, nombres comerciales y marcas registradas en todo Canadá. Un informe NUANS compara un nombre de sociedad propuesto con esa base de datos y produce una lista de nombres existentes similares, para que el gobierno pueda decidir si el suyo es lo bastante distintivo como para registrarse." },
+      { type: "heading", id: "cuando-se-requiere", text: "Cuándo se requiere un informe NUANS" },
+      { type: "list", items: [
+        "Constitución federal bajo la CBCA: siempre obligatoria si registra una sociedad con nombre.",
+        "Constitución en Ontario bajo la OBCA: obligatoria para las sociedades con nombre.",
+        "Alberta, Saskatchewan, Manitoba, Nuevo Brunswick, Nueva Escocia, Terranova y Labrador, Isla del Príncipe Eduardo: todas usan NUANS para las sociedades con nombre.",
+        "Quebec, Columbia Británica y los territorios: usan sistemas de nombres distintos, no NUANS.",
+        "Sociedades numéricas (p. ej. 1234567 Canada Inc.): no requieren búsqueda NUANS en ninguna jurisdicción.",
+      ] },
+      { type: "heading", id: "como-funciona", text: "Cómo funciona una búsqueda NUANS" },
+      { type: "paragraph", text: "Un informe NUANS se solicita a través de una casa de búsqueda NUANS autorizada. Usted presenta el nombre de sociedad propuesto, la casa de búsqueda lo coteja con la base de datos y usted recibe un informe (por lo general en minutos) que enumera entre 20 y 30 nombres similares ya en uso. Un informe NUANS es válido por 90 días desde la fecha en que se genera. La presentación debe completarse dentro de ese plazo o el informe vence y se requiere uno nuevo.", parts: ["Un ", { text: "informe NUANS", href: "/nuans" }, " se solicita a través de una casa de búsqueda NUANS autorizada. Usted presenta el nombre de sociedad propuesto, la casa de búsqueda lo coteja con la base de datos y usted recibe un informe (por lo general en minutos) que enumera entre 20 y 30 nombres similares ya en uso. Un informe NUANS es válido por 90 días desde la fecha en que se genera. La presentación debe completarse dentro de ese plazo o el informe vence y se requiere uno nuevo."] },
+      { type: "paragraph", text: "El gobierno no toma la decisión final basándose únicamente en el informe. Un examinador de sociedades (federal o provincial) revisa el informe y el nombre propuesto, sopesa el carácter distintivo y el posible riesgo de confusión con nombres existentes, y aprueba o rechaza el nombre." },
+      { type: "heading", id: "anatomia-del-nombre", text: "La anatomía de una denominación social" },
+      { type: "paragraph", text: "Una denominación social canadiense conforme tiene tres partes:" },
+      { type: "list", items: [
+        "Elemento distintivo: una palabra única o inventada (p. ej. «Maplewind»).",
+        "Elemento descriptivo: describe la actividad del negocio (p. ej. «Consultoría»).",
+        "Elemento legal: indica responsabilidad limitada: Inc., Incorporated, Corp., Corporation, Ltd., Limited, Limitée o Ltée.",
+      ] },
+      { type: "paragraph", text: "Un nombre que es solo descriptivo («Consultoría Canadiense Inc.») casi siempre será rechazado. Un nombre que es distintivo pero muy parecido a un nombre ya registrado («Maplewind Consultoría Inc.» frente a un «MapleWynd Consulting Ltd.» existente) también puede ser rechazado por riesgo de confusión." },
+      { type: "heading", id: "si-no-disponible", text: "Qué hacer si su primera opción no está disponible" },
+      { type: "paragraph", text: "Hay tres alternativas comunes. Puede proponer una variación con un elemento distintivo más marcado; puede agregar un modificador geográfico o descriptivo que cree una separación real; o puede constituirse ahora como sociedad numérica (por ejemplo, 1234567 Canada Inc.) y adoptar un nombre comercial más adelante mediante el registro de un nombre de negocio. La vía numérica es la más rápida cuando la velocidad importa más que la marca." },
+      { type: "callout", text: "Un informe NUANS no otorga una marca registrada. Si su nombre es central para su marca, también debería considerar registrar una marca ante la Oficina de Propiedad Intelectual de Canadá. Ese es un proceso distinto de la constitución en sociedad." },
+    ],
+  },
+  {
+    slug: "declaraciones-anuales-sociedades-canada",
+    locale: "es",
+    group: "annual-returns",
+    category: "Compliance & Maintenance",
+    title: "Las declaraciones anuales de sociedades en Canadá: guía completa",
+    excerpt:
+      "Toda sociedad canadiense debe presentar una declaración anual. Los plazos, las tarifas y las consecuencias de no presentarla varían según la jurisdicción. Esto es todo lo que necesita saber.",
+    metaTitle: "Declaraciones anuales de sociedades en Canadá | Korporex",
+    metaDescription:
+      "Toda sociedad canadiense debe presentar una declaración anual cada año. Conozca los plazos y tarifas federales y de Ontario, y qué pasa si omite una presentación.",
+    readTime: "5 min de lectura",
+    updated: "2026-04-21",
+    content: [
+      { type: "callout", title: "No confundir con", text: "Una declaración anual es una presentación que confirma la información de la sociedad ante el registro. No es una declaración de impuestos. La declaración del impuesto de sociedades T2 se presenta por separado ante la Agencia de Ingresos de Canadá (CRA). Las dos tienen plazos distintos, destinatarios distintos y consecuencias distintas si se omiten." },
+      { type: "heading", id: "que-es", text: "Qué es una declaración anual" },
+      { type: "paragraph", text: "Una declaración anual confirma que la información en el expediente de la sociedad (domicilio social, directores, funcionarios y, en algunas provincias, accionistas) sigue siendo exacta. Si algo cambió durante el año, la declaración anual es donde se informan esos cambios. Toda sociedad canadiense activa está obligada por ley a presentar una cada año." },
+      { type: "heading", id: "federal", text: "Las sociedades federales" },
+      { type: "list", items: [
+        "Se presenta ante Corporations Canada.",
+        "Vence dentro de los 60 días del aniversario de la constitución o fusión.",
+        "Tarifa de presentación en línea: 12 $.",
+        "Omitir dos declaraciones anuales consecutivas puede provocar la disolución de la sociedad.",
+      ] },
+      { type: "heading", id: "ontario", text: "Las sociedades de Ontario" },
+      { type: "paragraph", text: "Desde octubre de 2021, las declaraciones anuales de Ontario se presentan directamente a través del Registro de Empresas de Ontario. Antes de esa fecha, la mayoría de las sociedades presentaban la declaración junto con su T2 mediante la CRA; esa vía se descontinuó. Las declaraciones anuales de Ontario vencen dentro de los seis meses posteriores al cierre del ejercicio de la sociedad." },
+      { type: "list", items: [
+        "Se presenta a través del Registro de Empresas de Ontario.",
+        "Vence dentro de los seis meses posteriores al cierre del ejercicio de la sociedad.",
+        "Tarifa de presentación: actualmente no hay tarifa por la declaración anual en sí en Ontario.",
+        "No presentarla puede provocar la cancelación del registro de la sociedad.",
+      ] },
+      { type: "heading", id: "consecuencias", text: "Qué pasa si omite una presentación" },
+      { type: "paragraph", text: "El patrón es similar en todas las jurisdicciones. Una declaración omitida suele generar un recordatorio. Dos declaraciones consecutivas omitidas pueden poner a la sociedad en estado de «no conforme» o «no en regla», lo cual se vuelve visible en cualquier búsqueda del registro público. La omisión continuada lleva a la disolución administrativa, momento en que la sociedad deja de existir como entidad legal. Su nombre vuelve a estar disponible para otros, sus contratos y derechos de propiedad entran en una zona gris legal, y sus directores pueden quedar expuestos personalmente por las obligaciones contraídas mientras estuvo disuelta." },
+      { type: "paragraph", text: "Revivir una sociedad disuelta es posible en la mayoría de las jurisdicciones, pero implica una solicitud aparte, tarifas y, por lo general, el pago de cualquier presentación pendiente. Siempre es más barato y más simple presentar a tiempo." },
+      { type: "heading", id: "mantenerse-al-dia", text: "Mantenerse al día" },
+      { type: "paragraph", text: "El enfoque más confiable es agregar el aniversario de constitución de la sociedad a un calendario con un recordatorio 30 días antes, y llevar una breve lista de quién pudo haber cambiado su información durante el año: directores, funcionarios, domicilio social. Presentar la declaración en sí suele tomar menos de diez minutos una vez que tiene esos datos a mano." },
+    ],
+  },
+  {
+    slug: "constituirse-en-sociedad-en-ontario",
+    locale: "es",
+    group: "incorporating-ontario",
+    category: "Jurisdiction Comparisons",
+    title: "Constituirse en sociedad en Ontario: todo lo que necesita saber",
+    excerpt:
+      "Ontario alberga a la mayoría de las pequeñas empresas canadienses. Esta guía recorre la Ley de Sociedades por Acciones de Ontario, los costos, los plazos y lo que recibe después de presentar.",
+    metaTitle: "Constituirse en sociedad en Ontario: la guía | Korporex",
+    metaDescription:
+      "Guía completa para constituirse en sociedad en Ontario bajo la OBCA: qué se requiere, costos, plazos y qué recibe después de presentar ante el Registro de Empresas de Ontario.",
+    readTime: "7 min de lectura",
+    updated: "2026-04-21",
+    content: [
+      { type: "paragraph", text: "Las constituciones en Ontario se rigen por la Ley de Sociedades por Acciones de Ontario (OBCA) y se tramitan a través del Registro de Empresas de Ontario (OBR), que se lanzó en octubre de 2021. El OBR reemplazó un proceso cargado de papeleo por un sistema totalmente en línea, y la mayoría de las constituciones ahora se completan en minutos en lugar de semanas." },
+      { type: "heading", id: "que-se-requiere", text: "Qué se requiere para constituirse en Ontario" },
+      { type: "list", items: [
+        "Un nombre de sociedad (ya sea una sociedad con nombre acompañada de un informe NUANS, o una sociedad numérica).",
+        "Estatutos de constitución que describan la estructura de acciones y cualquier restricción a la transferencia de acciones o a las actividades.",
+        "Uno o más constituyentes (pueden ser personas físicas o sociedades).",
+        "Al menos un director. Ontario eliminó su requisito de 25 % de directores residentes canadienses en julio de 2021.",
+        "Un domicilio social en Ontario. Una simple casilla de correo no es aceptable; se requiere una dirección física.",
+        "Los nombres y direcciones de los directores y funcionarios para el primer aviso.",
+      ] },
+      { type: "heading", id: "costos", text: "Costos" },
+      { type: "table", head: ["Concepto", "Costo (Ontario)"], rows: [
+        ["Tarifa de presentación del gobierno (en línea)", "300 $"],
+        ["Informe NUANS (para una sociedad con nombre)", "Aproximadamente 8 $ a 40 $ según la casa de búsqueda"],
+        ["Pre-búsqueda de nombre (opcional, reduce el riesgo de rechazo NUANS)", "Variable"],
+        ["Montaje del libro de actas (opcional pero recomendado)", "Variable según el proveedor"],
+      ] },
+      { type: "paragraph", text: "Las sociedades numéricas se saltan por completo el paso NUANS, lo cual es más rápido y más barato. La contrapartida es que la sociedad tendrá que registrar un nombre comercial aparte si quiere operar bajo un nombre de marca en lugar de «1234567 Ontario Inc.»" },
+      { type: "heading", id: "plazos", text: "Plazos" },
+      { type: "paragraph", text: "Para una constitución sencilla en Ontario, el calendario típico es:" },
+      { type: "list", items: [
+        "Selección del nombre e informe NUANS: el mismo día (un informe se genera en minutos).",
+        "Redacción de los estatutos de constitución: el mismo día.",
+        "Presentación ante el Registro de Empresas de Ontario: por lo general se tramita de inmediato o dentro de las 24 horas.",
+        "Declaración inicial (Formulario 1) que confirma directores y domicilio social: vence dentro de los 60 días de la constitución.",
+      ] },
+      { type: "heading", id: "que-recibe", text: "Qué recibe después de presentar" },
+      { type: "list", items: [
+        "Certificado de constitución con su fecha de constitución y el número de sociedad de Ontario (OCN).",
+        "Estatutos de constitución sellados.",
+        "Perfil de la sociedad que muestra los directores, funcionarios y domicilio social actuales.",
+        "Credenciales de acceso al Registro de Empresas de Ontario.",
+      ] },
+      { type: "heading", id: "despues-de-constituir", text: "Después de la constitución" },
+      { type: "paragraph", text: "Una nueva sociedad de Ontario suele tener algunas tareas de seguimiento inmediatas:" },
+      { type: "list", items: [
+        "Aprobar una resolución de organización que emita las acciones iniciales y nombre a los funcionarios.",
+        "Adoptar estatutos internos (las reglas generales que rigen los asuntos internos de la sociedad).",
+        "Inscribirse para obtener un número de negocio de la CRA y las cuentas fiscales pertinentes (HST, nómina, impuesto de sociedades).",
+        "Abrir una cuenta bancaria empresarial (los bancos exigirán los estatutos, el certificado y un perfil de sociedad reciente).",
+        "Montar el libro de actas y registrar en él las resoluciones de organización.",
+        "Agendar el plazo de la declaración anual (vence dentro de los seis meses posteriores al cierre del ejercicio).",
+      ] },
+      { type: "callout", title: "Un descuido común", text: "Ontario exige una declaración inicial dentro de los 60 días de la constitución, que confirma los directores y el domicilio social nombrados en los estatutos. Omitir esta presentación pone a la sociedad fuera de conformidad casi de inmediato. Es una presentación en línea rápida; hágala la misma semana en que se constituye." },
     ],
   },
 ];
@@ -1686,6 +1971,24 @@ export function getRelatedArticles(
     (a) => a.slug !== slug && a.category !== source.category,
   );
   return [...sameCategory, ...others].slice(0, limit);
+}
+
+// Given a slug that may belong to ANY locale's version of an article, return
+// the slug for the requested locale. This is what lets the language switcher
+// keep the same path while we redirect to the correct translated slug — e.g.
+// switching to French on /guides/<en-slug> resolves to the fr slug for the
+// same article group. Returns undefined if no such article or no version in
+// the requested locale exists. Works for every current and future article.
+export function resolveLocalizedSlug(
+  locale: Locale,
+  slug: string,
+): string | undefined {
+  const match = articles.find((a) => a.slug === slug);
+  if (!match) return undefined;
+  const target = articles.find(
+    (a) => a.group === match.group && a.locale === locale,
+  );
+  return target?.slug;
 }
 
 // Map of locale -> slug for every language version of an article group. Used to

@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/navigation";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowLeft, ArrowRight, Calendar, Clock } from "lucide-react";
@@ -11,6 +11,7 @@ import {
   getRelatedArticles,
   guideUrl,
   isPublished,
+  resolveLocalizedSlug,
   type ArticleSection,
   type Locale,
 } from "../articles";
@@ -170,7 +171,19 @@ export default async function ArticlePage({ params }: Params) {
   setRequestLocale(locale);
 
   const article = getArticle(locale, slug);
-  if (!article || !isPublished(article)) notFound();
+  if (!article || !isPublished(article)) {
+    // The visitor likely switched language on an article page: the slug in the
+    // URL is another locale's slug. Redirect to this locale's slug for the same
+    // article group so language switching never 404s when a translation exists.
+    const localized = resolveLocalizedSlug(locale, slug);
+    if (localized && localized !== slug) {
+      const target = getArticle(locale, localized);
+      if (target && isPublished(target)) {
+        redirect(`${locale === "en" ? "" : `/${locale}`}/guides/${localized}`);
+      }
+    }
+    notFound();
+  }
 
   const t = await getTranslations("guides");
 
