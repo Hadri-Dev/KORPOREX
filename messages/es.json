@@ -381,5 +381,190 @@
     "faqBody": "La mayoría de las preguntas comunes se responden en nuestras preguntas frecuentes: elegir entre federal y provincial, qué está incluido y cuánto tarda la constitución.",
     "faqCta": "Ver las preguntas frecuentes",
     "quote": "Respondemos a cada mensaje en un día hábil. Korporex es 100 % en línea. Atendemos a emprendedores canadienses y clientes internacionales desde cualquier lugar."
+  },
+  "about": {
+    "metaTitle": "Acerca de Korporex | Constitución de sociedades en línea en Canadá",
+    "metaDescription": "Korporex es una empresa tecnológica canadiense que hace que constituir y administrar una sociedad sea simple, rápido y totalmente en línea, para fundadores canadienses e internacionales.",
+    "eyebrow": "Acerca de Korporex",
+    "heroTitle": "Simplificamos la constitución de sociedades en Canadá para todos",
+    "heroSubtitle": "Korporex es una empresa tecnológica canadiense que permite a los emprendedores constituir y administrar su sociedad totalmente en línea: rápido, transparente y accesible para fundadores canadienses e internacionales.",
+    "storyTitle": "Nuestra historia",
+    "story1": "Korporex se creó para que la constitución de una sociedad canadiense sea sencilla y asequible. Con demasiada frecuencia, los fundadores posponían por completo la constitución en sociedad porque el proceso parecía intimidante, o pagaban más de lo necesario por lo que es, para la mayoría de las empresas, un trámite gubernamental estándar.",
+    "story2": "Al combinar la tecnología con un conocimiento práctico de los requisitos canadienses de registro de sociedades, construimos una plataforma que permite a cualquier fundador, radicado en Canadá o en el extranjero, constituir y administrar una sociedad canadiense totalmente en línea, en una fracción del tiempo y del costo de la vía tradicional.",
+    "story3": "Nuestra misión es simple: hacer que la constitución de una sociedad canadiense sea tan fácil como abrir una cuenta bancaria, para cualquiera que quiera iniciar una empresa aquí.",
+    "valuesEyebrow": "Lo que defendemos",
+    "valuesTitle": "Nuestros valores",
+    "values": {
+      "speed": {
+        "title": "Rapidez",
+        "description": "Cuando está listo para iniciar su empresa, cada día cuenta. Hemos diseñado todo nuestro proceso en torno a un plazo de 24 h, porque su tiempo es valioso."
+      },
+      "transparency": {
+        "title": "Transparencia",
+        "description": "Sin cargos ocultos. Sin facturas sorpresa. Cada precio incluye los cargos gubernamentales. Usted sabe exactamente cuánto pagará antes de comenzar."
+      },
+      "reliability": {
+        "title": "Confiabilidad",
+        "description": "Cada presentación cumple con los requisitos federales y provinciales vigentes de los registros de sociedades. Integramos verificaciones en la plataforma para que su solicitud se presente correctamente desde la primera vez."
+      },
+      "accessibility": {
+        "title": "Accesibilidad",
+        "description": "Constituir una sociedad no debería exigir un viaje a una oficina gubernamental. Lo hemos hecho tan sencillo como comprar en línea, accesible para fundadores canadienses e internacionales."
+      }
+    },
+    "stats": {
+      "incorporated": {
+        "value": "5,000+",
+        "label": "Empresas constituidas"
+      },
+      "turnaround": {
+        "value": "24 h",
+        "label": "Plazo de tramitación promedio"
+      },
+      "accuracy": {
+        "value": "99.8%",
+        "label": "Tasa de exactitud de las presentaciones"
+      },
+      "jurisdictions": {
+        "value": "3",
+        "label": "Jurisdicciones admitidas"
+      }
+    },
+    "disclaimerLabel": "Aviso importante:",
+    "disclaimerBody": "Korporex es un servicio de preparación y presentación de documentos. No somos un bufete de abogados ni brindamos asesoramiento legal. Para preguntas específicas sobre la estructura de su empresa, su situación fiscal o sus obligaciones legales, le recomendamos consultar a un profesional calificado.",
+    "ctaTitle": "¿Listo para constituir su sociedad?",
+    "ctaText": "Comience su constitución en sociedad en línea hoy mismo. Toma alrededor de 10 minutos y nosotros nos encargamos del resto.",
+    "getStarted": "Comenzar"
+  },
+  "faq": {
+    "metaTitle": "Preguntas frecuentes | Korporex",
+    "metaDescription": "Respuestas sobre la constitución en sociedad de una empresa en Canadá con Korporex: federal o provincial, NUANS, plazos, precios, reembolsos y lo que recibe después de la presentación.",
+    "eyebrow": "Preguntas frecuentes",
+    "heroTitle": "Preguntas frecuentes",
+    "heroSubtitlePrefix": "Todo lo que necesita saber sobre la constitución en sociedad de su empresa en Canadá con Korporex. ¿No encuentra su respuesta? ",
+    "heroSubtitleLink": "Comuníquese con nuestro equipo de soporte.",
+    "categoriesLabel": "Categorías",
+    "ctaTitle": "¿Listo para constituir su sociedad?",
+    "ctaText": "Comience su constitución en sociedad en línea en unos 10 minutos. Nos encargamos de la presentación y le entregamos sus documentos en menos de 24 horas.",
+    "getStarted": "Comenzar",
+    "categories": {
+      "general": {
+        "title": "Generalidades",
+        "items": [
+          {
+            "q": "¿Qué es Korporex?",
+            "a": "Korporex es una plataforma en línea de constitución en sociedad y registro de empresas. Facilitamos la constitución en sociedad de una empresa canadiense, el registro de un nombre comercial y la presentación de documentos de cumplimiento, todo en línea. Atendemos tanto a empresarios canadienses como a fundadores internacionales que desean constituir una sociedad canadiense."
+          },
+          {
+            "q": "¿Para quién es Korporex?",
+            "a": "Korporex está diseñada para empresarios, trabajadores independientes, propietarios de pequeñas empresas, empresas emergentes y fundadores internacionales que desean constituir en sociedad o registrar rápidamente una empresa canadiense. Ya sea que sea un fundador primerizo residente en Canadá o un fundador en el extranjero que establece una entidad canadiense, nuestra plataforma lo guía en cada paso."
+          },
+          {
+            "q": "¿Es Korporex un bufete de abogados?",
+            "a": "No. Korporex es una empresa de tecnología y un servicio de preparación y presentación de documentos. No somos un bufete de abogados y no brindamos asesoría legal. Si necesita asesoría legal específica para su situación, podemos ponerlo en contacto con un abogado independiente especializado en derecho corporativo de nuestra red de referencia de confianza. Consulte «¿Qué hago si necesito asesoría legal personalizada?» a continuación."
+          },
+          {
+            "q": "¿Qué hago si necesito asesoría legal personalizada?",
+            "a": "Podemos ponerlo en contacto con un abogado independiente y colegiado especializado en derecho corporativo, de nuestra red de referencia de confianza, para una consulta de 30 minutos ($150 + HST, facturada por adelantado). Complete un breve cuestionario que describa su situación, elija un horario en el Calendly del abogado y pague para confirmar. El abogado revisa su cuestionario y los documentos que cargue antes de la llamada. Korporex no es un bufete de abogados y no es parte de la consulta; no se crea ninguna relación abogado-cliente con Korporex. Visite /legal-consultation para reservar."
+          },
+          {
+            "q": "¿Está segura mi información personal?",
+            "a": "Sí. Nos tomamos la seguridad de los datos en serio. Su información personal y empresarial se cifra en tránsito y en reposo mediante prácticas de seguridad conformes a los estándares de la industria. Nunca compartimos sus datos con terceros, salvo en la medida necesaria para completar sus presentaciones gubernamentales."
+          }
+        ]
+      },
+      "incorporation": {
+        "title": "Constitución en sociedad",
+        "items": [
+          {
+            "q": "¿Cuál es la diferencia entre la constitución federal y la provincial?",
+            "a": "Una sociedad federal (constituida conforme a la Ley Canadiense de Sociedades por Acciones) tiene su nombre protegido a nivel nacional y puede ejercer actividades en cualquier provincia, sujeto a un registro extraprovincial en cada una. Una sociedad provincial (como en Ontario) se crea conforme a la ley provincial y queda automáticamente autorizada a ejercer actividades en la provincia de constitución, con una protección de nombre limitada a esa provincia. Cada vía produce una sociedad válida; las diferencias prácticas son el alcance de la protección del nombre, las tarifas gubernamentales y las presentaciones continuas."
+          },
+          {
+            "q": "¿Qué jurisdicción debería elegir?",
+            "a": "No existe una jurisdicción universalmente superior; la elección correcta depende de sus necesidades particulares. La constitución federal y la de Ontario son cada una una vía válida, y la decisión por lo general se basa en dónde planea operar, qué tan importante es la protección de nombre a nivel nacional y su presupuesto. Nuestra sección de Guías incluye guías dedicadas a cada jurisdicción, y nuestro asistente recopila la información necesaria para cualquiera de las dos."
+          },
+          {
+            "q": "¿Qué es una búsqueda de nombre NUANS?",
+            "a": "NUANS (Newly Upgraded Automated Name Search) es una búsqueda en una base de datos gubernamental que compara el nombre propuesto de su sociedad con las sociedades y marcas comerciales ya registradas. Es obligatoria para las constituciones federales, las de Ontario y varias otras constituciones provinciales con denominación. Si se constituye como una sociedad numérica (p. ej., 1234567 Canada Inc.), no se requiere ninguna búsqueda NUANS. Korporex coordina la búsqueda NUANS por usted cuando es necesario, pero la tarifa del informe NUANS no está incluida en el precio de nuestro paquete y se cobra por separado."
+          },
+          {
+            "q": "¿Qué tipos de sociedades puedo constituir?",
+            "a": "A través de Korporex puede constituir sociedades estándar (con fines de lucro), sociedades profesionales (para profesionales regulados como médicos, dentistas y contadores), sociedades de cartera (para administrar inversiones o activos) y sociedades sin fines de lucro. La disponibilidad varía según la jurisdicción: las constituciones federales admiten actualmente sociedades estándar y de cartera; Ontario admite los cuatro tipos."
+          },
+          {
+            "q": "¿Necesito una dirección de oficina física para constituirme en sociedad?",
+            "a": "Sí, toda sociedad requiere una dirección de domicilio social en su jurisdicción de constitución. Esta dirección debe ser una ubicación física (no un apartado postal) donde se puedan recibir los avisos oficiales y la correspondencia de la sociedad. Si no tiene una, Korporex ofrece un servicio de dirección de domicilio social al momento del pago para las constituciones federales y de Ontario: $99.99/mes, facturados anualmente por adelantado a $1,199.88 + HST. La dirección está en la región del Gran Toronto, elegida por Korporex a su discreción, e incluye una copia escaneada mensual del correo recibido enviada por correo electrónico. La tarifa anual no es reembolsable, incluso si obtiene su propia dirección antes de que finalice el plazo."
+          }
+        ]
+      },
+      "process": {
+        "title": "Proceso",
+        "items": [
+          {
+            "q": "¿Cuánto tiempo toma la constitución en sociedad?",
+            "a": "La mayoría de las constituciones se presentan ante el gobierno dentro de las 24 horas posteriores al envío de su solicitud y el procesamiento del pago. Las constituciones federales pueden tomar ocasionalmente de 1 a 3 días hábiles según los tiempos de procesamiento del gobierno. Los clientes del paquete Premium reciben procesamiento prioritario en 12 horas. Se le notificará por correo electrónico tan pronto como sus documentos estén listos."
+          },
+          {
+            "q": "¿Qué información necesito para constituirme en sociedad?",
+            "a": "Necesitará: (1) el nombre propuesto de su sociedad (y al menos una alternativa en caso de que su primera opción no esté disponible); (2) la dirección de su domicilio social; (3) el nombre completo y la dirección de al menos un director; y (4) el nombre del o de los accionistas iniciales y el número y la clase de acciones que se emiten. Nuestro formulario en línea lo guía a través de cada uno de estos requisitos, paso a paso."
+          },
+          {
+            "q": "¿Puedo cambiar los datos de mi sociedad después de la constitución?",
+            "a": "Sí. Los directores, los accionistas, las direcciones y otros datos pueden actualizarse mediante presentaciones gubernamentales después de la constitución. Algunos cambios (como un cambio de denominación social o cambios en la estructura accionaria) requieren Estatutos de Modificación. Korporex ofrece todos los cambios comunes posteriores a la constitución como servicios separados; los encontrará en nuestra página de Servicios."
+          },
+          {
+            "q": "¿Necesito un abogado para usar Korporex?",
+            "a": "Korporex es un servicio de preparación y presentación de documentos; usar nuestra plataforma no requiere contratar a un abogado. Dicho esto, si su situación implica acuerdos de accionistas complejos, requisitos de licencia profesional, planificación fiscal u otras cuestiones que requieren un juicio legal o fiscal, le recomendamos consultar a un profesional calificado además de usar nuestro servicio."
+          }
+        ]
+      },
+      "pricing": {
+        "title": "Precios y pago",
+        "items": [
+          {
+            "q": "¿Las tarifas de presentación gubernamentales están incluidas en sus precios?",
+            "a": "Sí. Todos los precios de Korporex incluyen las tarifas de presentación gubernamentales. No hay cargos ocultos; el precio que ve en nuestra página de precios es el monto total que pagará (excluyendo los impuestos aplicables)."
+          },
+          {
+            "q": "¿Qué métodos de pago aceptan?",
+            "a": "Aceptamos todas las principales tarjetas de crédito y débito, incluidas Visa, Mastercard y American Express. El pago se procesa de forma segura al momento de la compra."
+          },
+          {
+            "q": "¿Cuál es su política de reembolso?",
+            "a": "Todas las tarifas no son reembolsables una vez enviado el pago. Esto incluye las tarifas del paquete, las tarifas NUANS trasladadas al costo, las tarifas del servicio de domicilio social y los impuestos aplicables. La razón es que el trabajo de constitución en sociedad, incluidas las tarifas de terceros y las presentaciones gubernamentales, comienza de inmediato al efectuarse el pago. Si una presentación es rechazada debido a un error de nuestra parte, la presentaremos de nuevo sin costo de servicio adicional (eso es una rectificación, no un reembolso). Las solicitudes por circunstancias excepcionales pueden enviarse por correo electrónico a contact@korporex.ca con su número de referencia de pedido, pero no estamos obligados a emitir un reembolso. Consulte nuestros Términos del Servicio para conocer la política completa."
+          },
+          {
+            "q": "¿Los precios incluyen impuestos?",
+            "a": "No. Todos los precios se muestran en dólares canadienses (CAD) y excluyen los impuestos federales y provinciales canadienses aplicables (GST/HST/QST). El monto del impuesto aplicable se calcula en tiempo real mientras completa el formulario de constitución, según su dirección de facturación, y se muestra claramente al momento del pago. A los clientes internacionales (facturación fuera de Canadá) por lo general no se les cobra el impuesto sobre las ventas canadiense."
+          },
+          {
+            "q": "¿Las tarifas NUANS están incluidas?",
+            "a": "No. Las tarifas del informe de búsqueda de nombre NUANS exigido por el gobierno no están incluidas en los precios de nuestros paquetes. Si su constitución requiere un informe NUANS (sociedades federales, de Ontario y ciertas otras sociedades provinciales con denominación), la tarifa del informe se cobra por separado. Puede evitar por completo la tarifa NUANS eligiendo una sociedad numérica."
+          }
+        ]
+      },
+      "after": {
+        "title": "Después de la constitución",
+        "items": [
+          {
+            "q": "¿Qué documentos recibiré?",
+            "a": "Todos los paquetes incluyen su Certificado de Constitución y sus Estatutos de Constitución, entregados por correo electrónico como documentos PDF. Los paquetes Standard y Premium también incluyen un libro de actas corporativo completo con resoluciones de organización, certificados de acciones y estatutos internos. Sus documentos también se almacenan de forma segura en su cuenta de Korporex."
+          },
+          {
+            "q": "¿Qué es un libro de actas y necesito uno?",
+            "a": "Un libro de actas corporativo es un conjunto de los documentos clave de su sociedad: estatutos, estatutos internos, registros de accionistas y directores, resoluciones y certificados de acciones. Las sociedades canadienses están legalmente obligadas a mantener estos registros. Los paquetes Standard y Premium de Korporex incluyen un libro de actas digital. Si elige el paquete Basic, usted es responsable de preparar y mantener estos registros por separado."
+          },
+          {
+            "q": "¿Qué presentaciones anuales se requieren después de la constitución?",
+            "a": "Los requisitos varían según la jurisdicción. Las sociedades de Ontario deben presentar una declaración anual ante el gobierno de Ontario cada año (por lo general dentro de los 60 días de su fecha de aniversario). Las sociedades federales deben presentar una declaración anual ante Corporations Canada. No presentarla puede resultar en la disolución de su sociedad. Korporex ofrece servicios de presentación de declaración anual, disponibles en nuestra página de Servicios."
+          },
+          {
+            "q": "¿Necesito una cuenta bancaria empresarial después de constituirme?",
+            "a": "No está legalmente obligado a tener una cuenta bancaria empresarial separada, pero es muy recomendable. Mantener separadas sus finanzas personales y empresariales simplifica la contabilidad y protege su responsabilidad limitada. La mayoría de los bancos canadienses requieren su Certificado de Constitución y sus Estatutos al abrir una cuenta empresarial."
+          }
+        ]
+      }
+    }
   }
 }
