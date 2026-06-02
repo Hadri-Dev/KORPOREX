@@ -1,48 +1,65 @@
 import { Link } from "@/i18n/navigation";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowRight, BookOpen, FileText, HelpCircle } from "lucide-react";
-import { articles } from "./articles";
+import {
+  CATEGORY_KEY,
+  getArticlesByLocale,
+  SITE_URL,
+  type Locale,
+} from "./articles";
 
-type ResourceCategory = {
-  icon: React.ElementType;
-  title: string;
-  description: string;
-};
+type Params = { params: { locale: Locale } };
 
-const categories: ResourceCategory[] = [
-  {
-    icon: BookOpen,
-    title: "Incorporation Guides",
-    description: "Step-by-step guides to incorporating your business federally or provincially in Canada.",
-  },
-  {
-    icon: FileText,
-    title: "Compliance & Maintenance",
-    description: "How to keep your corporation in good standing: annual returns, record-keeping, and more.",
-  },
-  {
-    icon: HelpCircle,
-    title: "Jurisdiction Comparisons",
-    description: "Federal vs. Ontario: understand the differences before you choose.",
-  },
+// Fixed category list for the overview cards. Titles/descriptions are pulled
+// from the `guides` translation namespace so they localize per locale.
+const CATEGORY_CARDS: { key: string; icon: React.ElementType }[] = [
+  { key: "incorporation", icon: BookOpen },
+  { key: "compliance", icon: FileText },
+  { key: "jurisdiction", icon: HelpCircle },
 ];
 
-export default function ResourcesPage() {
+function indexUrl(locale: Locale): string {
+  return `${SITE_URL}${locale === "en" ? "" : `/${locale}`}/guides`;
+}
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const { locale } = params;
+  const t = await getTranslations({ locale, namespace: "guides" });
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+    alternates: {
+      canonical: indexUrl(locale),
+      languages: {
+        en: indexUrl("en"),
+        fr: indexUrl("fr"),
+        es: indexUrl("es"),
+        "x-default": indexUrl("en"),
+      },
+    },
+  };
+}
+
+export default async function GuidesPage({ params }: Params) {
+  const { locale } = params;
+  setRequestLocale(locale);
+  const t = await getTranslations("guides");
+  const articles = getArticlesByLocale(locale);
+
   return (
     <>
       {/* Hero */}
       <section className="bg-navy-900 text-white py-16 px-6">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
-            Resources
+            {t("eyebrow")}
           </p>
           <h1 className="font-serif text-5xl md:text-6xl font-bold leading-tight mb-6">
-            Guides &amp; Articles for
-            <br />
-            Canadian Entrepreneurs
+            {t("heroTitle")}
           </h1>
           <p className="text-lg text-gray-300 max-w-xl leading-relaxed">
-            Plain-language guides on incorporation, compliance, and corporate maintenance
-            to help you make informed decisions about your business.
+            {t("heroSubtitle")}
           </p>
         </div>
       </section>
@@ -50,14 +67,18 @@ export default function ResourcesPage() {
       {/* Category overview */}
       <section className="bg-white py-14 px-6 border-b border-gray-100">
         <div className="max-w-6xl mx-auto grid sm:grid-cols-3 gap-6">
-          {categories.map(({ icon: Icon, title, description }) => (
-            <div key={title} className="flex gap-4 items-start p-6 bg-cream-50 border border-gray-100 rounded-lg">
+          {CATEGORY_CARDS.map(({ key, icon: Icon }) => (
+            <div key={key} className="flex gap-4 items-start p-6 bg-cream-50 border border-gray-100 rounded-lg">
               <div className="w-10 h-10 bg-navy-900 flex items-center justify-center shrink-0">
                 <Icon size={18} className="text-gold-500" />
               </div>
               <div>
-                <p className="font-serif text-base font-bold text-navy-900 mb-1">{title}</p>
-                <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
+                <p className="font-serif text-base font-bold text-navy-900 mb-1">
+                  {t(`categories.${key}.label`)}
+                </p>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {t(`categories.${key}.description`)}
+                </p>
               </div>
             </div>
           ))}
@@ -68,10 +89,10 @@ export default function ResourcesPage() {
       <section className="bg-white py-16 px-6">
         <div className="max-w-6xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-2">
-            All Articles
+            {t("allArticles")}
           </p>
           <h2 className="font-serif text-3xl font-bold text-navy-900 mb-10">
-            Latest Resources
+            {t("latestResources")}
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {articles.map(({ slug, category, title, excerpt, readTime }) => (
@@ -82,7 +103,7 @@ export default function ResourcesPage() {
               >
                 <div className="p-6 flex flex-col flex-1">
                   <p className="text-xs font-semibold tracking-[0.1em] uppercase text-gold-500 mb-3">
-                    {category}
+                    {t(`categories.${CATEGORY_KEY[category]}.label`)}
                   </p>
                   <h3 className="font-serif text-lg font-bold text-navy-900 leading-snug mb-3 group-hover:text-navy-700 transition-colors">
                     {title}
@@ -100,10 +121,8 @@ export default function ResourcesPage() {
           </div>
 
           <div className="mt-12 border border-dashed border-gray-200 rounded-lg p-8 text-center">
-            <p className="font-serif text-lg font-bold text-navy-900 mb-2">More Articles Coming Soon</p>
-            <p className="text-sm text-gray-600">
-              We&apos;re regularly publishing new guides on incorporation, compliance, and running a Canadian corporation.
-            </p>
+            <p className="font-serif text-lg font-bold text-navy-900 mb-2">{t("moreComingTitle")}</p>
+            <p className="text-sm text-gray-600">{t("moreComingText")}</p>
           </div>
         </div>
       </section>
@@ -111,23 +130,20 @@ export default function ResourcesPage() {
       {/* CTA */}
       <section className="bg-navy-900 py-12 px-6 text-center text-white">
         <div className="max-w-xl mx-auto">
-          <h2 className="font-serif text-4xl font-bold mb-4">Ready to Incorporate?</h2>
-          <p className="text-gray-300 mb-8">
-            Start your incorporation online in about 10 minutes. We&apos;ll handle the
-            filing and deliver your documents within 24 hours.
-          </p>
+          <h2 className="font-serif text-4xl font-bold mb-4">{t("ctaTitle")}</h2>
+          <p className="text-gray-300 mb-8">{t("ctaText")}</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/incorporate"
               className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-gold-600 transition-colors"
             >
-              Get Started <ArrowRight size={16} />
+              {t("getStarted")} <ArrowRight size={16} />
             </Link>
             <Link
               href="/faq"
               className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
             >
-              Browse the FAQ
+              {t("browseFaq")}
             </Link>
           </div>
         </div>

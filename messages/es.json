@@ -89,11 +89,26 @@
     "responseWindow": "Respondemos en {hours} horas.",
     "capabilitiesEyebrow": "Lo que hacemos",
     "capabilities": {
-      "incorporation": { "label": "Constitución", "sub": "Federal · Ontario" },
-      "registrations": { "label": "Registros", "sub": "Empresa individual y nombre comercial" },
-      "amendments": { "label": "Modificaciones", "sub": "Directores · estatutos · domicilio" },
-      "compliance": { "label": "Cumplimiento", "sub": "Declaraciones anuales y trámites" },
-      "businessUpdates": { "label": "Cambios empresariales", "sub": "Disolución · reactivación · fusión" }
+      "incorporation": {
+        "label": "Constitución",
+        "sub": "Federal · Ontario"
+      },
+      "registrations": {
+        "label": "Registros",
+        "sub": "Empresa individual y nombre comercial"
+      },
+      "amendments": {
+        "label": "Modificaciones",
+        "sub": "Directores · estatutos · domicilio"
+      },
+      "compliance": {
+        "label": "Cumplimiento",
+        "sub": "Declaraciones anuales y trámites"
+      },
+      "businessUpdates": {
+        "label": "Cambios empresariales",
+        "sub": "Disolución · reactivación · fusión"
+      }
     },
     "form": {
       "headline": "Háblenos de su empresa",
@@ -144,7 +159,10 @@
   },
   "home": {
     "hero": {
-      "rotating": ["Constitución de empresas.", "Servicios corporativos."],
+      "rotating": [
+        "Constitución de empresas.",
+        "Servicios corporativos."
+      ],
       "tagline": "Sencillo. Rápido.\nAsequible.",
       "lead": "Constituya su empresa en Canadá en tan solo 24 horas. 100 % en línea, trámites conformes a las normativas gubernamentales y precios transparentes, disponibles para emprendedores canadienses y fundadores internacionales.",
       "guarantee": "Precios todo incluido, sin sorpresas. Su cotización es su total final, garantizado de principio a fin.",
@@ -185,25 +203,41 @@
           "title": "Registros",
           "description": "Empresas individuales, nombres comerciales y registros extraprovinciales.",
           "from": "Desde 79 $",
-          "items": ["Empresas individuales", "Registro de nombre comercial", "Registro extraprovincial"]
+          "items": [
+            "Empresas individuales",
+            "Registro de nombre comercial",
+            "Registro extraprovincial"
+          ]
         },
         "amendments": {
           "title": "Modificaciones y cambios",
           "description": "Actualice directores, funcionarios, accionistas, domicilios o estatutos.",
           "from": "Desde 99 $",
-          "items": ["Cambio de director / funcionario", "Cambio de accionista", "Modificación de estatutos"]
+          "items": [
+            "Cambio de director / funcionario",
+            "Cambio de accionista",
+            "Modificación de estatutos"
+          ]
         },
         "compliance": {
           "title": "Trámites de cumplimiento",
           "description": "Declaraciones anuales y trámites estatutarios para mantener su sociedad en regla.",
           "from": "Desde 99 $",
-          "items": ["Declaraciones anuales (federal y Ontario)", "Declaración inicial (Ontario)", "Aviso de cambio"]
+          "items": [
+            "Declaraciones anuales (federal y Ontario)",
+            "Declaración inicial (Ontario)",
+            "Aviso de cambio"
+          ]
         },
         "businessUpdates": {
           "title": "Cambios empresariales",
           "description": "Disuelva, reactive, fusione o continúe su sociedad entre jurisdicciones.",
           "from": "Desde 199 $",
-          "items": ["Disolución y reactivación", "Fusión", "Continuación entre jurisdicciones"]
+          "items": [
+            "Disolución y reactivación",
+            "Fusión",
+            "Continuación entre jurisdicciones"
+          ]
         }
       }
     },
@@ -279,5 +313,42 @@
     },
     "starting": "Desde",
     "learnMoreArrow": "Más información →"
+  },
+  "guides": {
+    "eyebrow": "Recursos",
+    "heroTitle": "Guías y artículos para emprendedores canadienses",
+    "heroSubtitle": "Guías en lenguaje claro sobre constitución de sociedades, cumplimiento y mantenimiento corporativo para ayudarle a tomar decisiones informadas sobre su negocio.",
+    "metaTitle": "Guías y artículos para emprendedores canadienses | Korporex",
+    "metaDescription": "Guías en lenguaje claro sobre cómo constituirse en sociedad en Canadá, el GST/HST, la estructura de negocio y el cumplimiento para ayudarle a iniciar y gestionar su negocio.",
+    "allArticles": "Todos los artículos",
+    "latestResources": "Últimos artículos",
+    "moreComingTitle": "Más artículos próximamente",
+    "moreComingText": "Publicamos regularmente nuevas guías sobre constitución de sociedades, cumplimiento y gestión de una sociedad canadiense.",
+    "backToGuides": "Volver a las guías",
+    "onThisPage": "En esta página",
+    "keepReading": "Seguir leyendo",
+    "relatedArticles": "Artículos relacionados",
+    "updated": "Actualizado el {date}",
+    "disclaimer": "Korporex no es un bufete de abogados y no brinda asesoría legal. Este artículo ofrece información general sobre la constitución de sociedades y el cumplimiento en Canadá; no sustituye la asesoría legal o fiscal profesional para su situación particular.",
+    "ctaTitle": "¿Listo para constituirse en sociedad?",
+    "ctaText": "Inicie su constitución en línea en unos 10 minutos. Nos encargamos del trámite y le entregamos sus documentos en 24 horas.",
+    "getStarted": "Comenzar",
+    "nuansReport": "Informe NUANS",
+    "order": "Solicitar",
+    "browseFaq": "Ver las preguntas frecuentes",
+    "categories": {
+      "incorporation": {
+        "label": "Guías de constitución",
+        "description": "Guías paso a paso para constituir su negocio en sociedad a nivel federal o provincial en Canadá."
+      },
+      "compliance": {
+        "label": "Cumplimiento y mantenimiento",
+        "description": "Cómo mantener su sociedad en regla: declaraciones anuales, registros y más."
+      },
+      "jurisdiction": {
+        "label": "Comparaciones de jurisdicciones",
+        "description": "Federal o provincial, y cómo iniciar un negocio en Ontario: entienda las diferencias antes de elegir."
+      }
+    }
   }
 }

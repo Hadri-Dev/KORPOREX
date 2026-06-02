@@ -1,33 +1,68 @@
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowLeft, ArrowRight, Calendar, Clock } from "lucide-react";
 import {
-  articles,
-  getArticleBySlug,
+  CATEGORY_KEY,
+  getArticle,
+  getArticlesByLocale,
+  getAlternateSlugs,
   getRelatedArticles,
+  guideUrl,
   type ArticleSection,
+  type Locale,
 } from "../articles";
 
-type Params = { params: { slug: string } };
+type Params = { params: { locale: Locale; slug: string } };
 
-export function generateStaticParams() {
-  return articles.map((article) => ({ slug: article.slug }));
+// One static page per (locale, slug). The [locale] parent provides the locale,
+// so each language only prerenders its own slugs (fr/es get their own URLs).
+export function generateStaticParams({
+  params,
+}: {
+  params: { locale: Locale };
+}) {
+  return getArticlesByLocale(params.locale).map((article) => ({
+    slug: article.slug,
+  }));
 }
 
-export function generateMetadata({ params }: Params): Metadata {
-  const article = getArticleBySlug(params.slug);
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const { locale, slug } = params;
+  const article = getArticle(locale, slug);
   if (!article) return { title: "Article not found | Korporex" };
+
+  // hreflang: link every language version of this article so Google treats
+  // them as translations, not duplicate content. x-default points to English.
+  const alternates = getAlternateSlugs(article.group);
+  const languages: Record<string, string> = {};
+  (Object.keys(alternates) as Locale[]).forEach((loc) => {
+    const altSlug = alternates[loc];
+    if (altSlug) languages[loc] = guideUrl(loc, altSlug);
+  });
+  if (alternates.en) languages["x-default"] = guideUrl("en", alternates.en);
+
   return {
-    title: `${article.title} | Korporex`,
-    description: article.excerpt,
+    title: article.metaTitle,
+    description: article.metaDescription,
+    alternates: {
+      canonical: guideUrl(locale, slug),
+      languages,
+    },
   };
 }
 
-function formatDate(iso: string): string {
+const DATE_LOCALE: Record<Locale, string> = {
+  en: "en-CA",
+  fr: "fr-CA",
+  es: "es",
+};
+
+function formatDate(iso: string, locale: Locale): string {
   const [year, month, day] = iso.split("-").map(Number);
   const date = new Date(Date.UTC(year, month - 1, day));
-  return date.toLocaleDateString("en-CA", {
+  return date.toLocaleDateString(DATE_LOCALE[locale], {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -125,14 +160,19 @@ function renderSection(section: ArticleSection, index: number) {
   }
 }
 
-export default function ArticlePage({ params }: Params) {
-  const article = getArticleBySlug(params.slug);
+export default async function ArticlePage({ params }: Params) {
+  const { locale, slug } = params;
+  setRequestLocale(locale);
+
+  const article = getArticle(locale, slug);
   if (!article) notFound();
+
+  const t = await getTranslations("guides");
 
   const headings = article.content.filter(
     (s): s is Extract<ArticleSection, { type: "heading" }> => s.type === "heading",
   );
-  const related = getRelatedArticles(article.slug);
+  const related = getRelatedArticles(locale, slug);
 
   return (
     <>
@@ -143,10 +183,10 @@ export default function ArticlePage({ params }: Params) {
             href="/guides"
             className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.15em] uppercase text-gray-500 hover:text-navy-900 transition-colors mb-8"
           >
-            <ArrowLeft size={14} /> Back to Guides
+            <ArrowLeft size={14} /> {t("backToGuides")}
           </Link>
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
-            {article.category}
+            {t(`categories.${CATEGORY_KEY[article.category]}.label`)}
           </p>
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-navy-900 leading-tight mb-6">
             {article.title}
@@ -159,7 +199,7 @@ export default function ArticlePage({ params }: Params) {
               <Clock size={14} /> {article.readTime}
             </span>
             <span className="inline-flex items-center gap-2">
-              <Calendar size={14} /> Updated {formatDate(article.updated)}
+              <Calendar size={14} /> {t("updated", { date: formatDate(article.updated, locale) })}
             </span>
           </div>
         </div>
@@ -172,10 +212,7 @@ export default function ArticlePage({ params }: Params) {
             {article.content.map((section, i) => renderSection(section, i))}
 
             <div className="mt-16 pt-8 border-t border-gray-100 text-xs text-gray-500 leading-relaxed">
-              Korporex is not a law firm and does not provide legal advice. This
-              article is general information about Canadian incorporation and
-              compliance; it is not a substitute for professional legal or tax
-              advice for your specific situation.
+              {t("disclaimer")}
             </div>
           </article>
 
@@ -183,7 +220,7 @@ export default function ArticlePage({ params }: Params) {
             <aside className="hidden lg:block">
               <div className="sticky top-24">
                 <p className="text-xs font-semibold tracking-[0.15em] uppercase text-gold-500 mb-4">
-                  On this page
+                  {t("onThisPage")}
                 </p>
                 <ul className="space-y-2 text-sm">
                   {headings.map((h) => (
@@ -208,10 +245,10 @@ export default function ArticlePage({ params }: Params) {
         <section className="bg-cream-50 py-16 px-6 border-t border-gray-100">
           <div className="max-w-6xl mx-auto">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-2">
-              Keep reading
+              {t("keepReading")}
             </p>
             <h2 className="font-serif text-3xl font-bold text-navy-900 mb-10">
-              Related Articles
+              {t("relatedArticles")}
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((r) => (
@@ -222,7 +259,7 @@ export default function ArticlePage({ params }: Params) {
                 >
                   <div className="p-6 flex flex-col flex-1">
                     <p className="text-xs font-semibold tracking-[0.1em] uppercase text-gold-500 mb-3">
-                      {r.category}
+                      {t(`categories.${CATEGORY_KEY[r.category]}.label`)}
                     </p>
                     <h3 className="font-serif text-lg font-bold text-navy-900 leading-snug mb-3 group-hover:text-navy-700 transition-colors">
                       {r.title}
@@ -248,29 +285,26 @@ export default function ArticlePage({ params }: Params) {
       {/* CTA */}
       <section className="bg-navy-900 py-12 px-6 text-center text-white">
         <div className="max-w-xl mx-auto">
-          <h2 className="font-serif text-4xl font-bold mb-4">Ready to Incorporate?</h2>
-          <p className="text-gray-300 mb-8">
-            Start your incorporation online in about 10 minutes. We&apos;ll handle
-            the filing and deliver your documents within 24 hours.
-          </p>
+          <h2 className="font-serif text-4xl font-bold mb-4">{t("ctaTitle")}</h2>
+          <p className="text-gray-300 mb-8">{t("ctaText")}</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/incorporate"
               className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-gold-600 transition-colors"
             >
-              Get Started <ArrowRight size={16} />
+              {t("getStarted")} <ArrowRight size={16} />
             </Link>
             <Link
               href="/nuans"
               className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
             >
-              NUANS Report
+              {t("nuansReport")}
             </Link>
             <Link
               href="/order"
               className="inline-flex items-center gap-2 border border-white/30 text-white font-medium px-7 py-3.5 text-sm tracking-wide hover:bg-white hover:text-navy-900 transition-colors"
             >
-              Order
+              {t("order")}
             </Link>
           </div>
         </div>

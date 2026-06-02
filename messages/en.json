@@ -89,11 +89,26 @@
     "responseWindow": "We respond within {hours} hours.",
     "capabilitiesEyebrow": "What we do",
     "capabilities": {
-      "incorporation": { "label": "Incorporation", "sub": "Federal · Ontario" },
-      "registrations": { "label": "Registrations", "sub": "Sole prop & business name" },
-      "amendments": { "label": "Amendments", "sub": "Directors · articles · address" },
-      "compliance": { "label": "Compliance", "sub": "Annual returns & filings" },
-      "businessUpdates": { "label": "Business Updates", "sub": "Dissolve · revive · amalgamate" }
+      "incorporation": {
+        "label": "Incorporation",
+        "sub": "Federal · Ontario"
+      },
+      "registrations": {
+        "label": "Registrations",
+        "sub": "Sole prop & business name"
+      },
+      "amendments": {
+        "label": "Amendments",
+        "sub": "Directors · articles · address"
+      },
+      "compliance": {
+        "label": "Compliance",
+        "sub": "Annual returns & filings"
+      },
+      "businessUpdates": {
+        "label": "Business Updates",
+        "sub": "Dissolve · revive · amalgamate"
+      }
     },
     "form": {
       "headline": "Tell Us About Your Business",
@@ -144,7 +159,10 @@
   },
   "home": {
     "hero": {
-      "rotating": ["Business Incorporation.", "Corporate Services."],
+      "rotating": [
+        "Business Incorporation.",
+        "Corporate Services."
+      ],
       "tagline": "Easy. Fast.\nAffordable.",
       "lead": "Incorporate your business in Canada in as little as 24 hours. 100% online, government-compliant filings, and transparent pricing, available to Canadian entrepreneurs and international founders.",
       "guarantee": "All-inclusive pricing with no surprises. Your quote is your final total, guaranteed from start to finish.",
@@ -185,25 +203,41 @@
           "title": "Registrations",
           "description": "Sole proprietorships, business names, and extra-provincial registrations.",
           "from": "From $79",
-          "items": ["Sole proprietorships", "Business name registration", "Extra-provincial registration"]
+          "items": [
+            "Sole proprietorships",
+            "Business name registration",
+            "Extra-provincial registration"
+          ]
         },
         "amendments": {
           "title": "Changes & Amendments",
           "description": "Update directors, officers, shareholders, addresses, or articles.",
           "from": "From $99",
-          "items": ["Director / officer changes", "Shareholder changes", "Articles of amendment"]
+          "items": [
+            "Director / officer changes",
+            "Shareholder changes",
+            "Articles of amendment"
+          ]
         },
         "compliance": {
           "title": "Compliance Filings",
           "description": "Annual returns and statutory filings to keep your corporation in good standing.",
           "from": "From $99",
-          "items": ["Annual returns (federal & Ontario)", "Initial return (Ontario)", "Notice of change"]
+          "items": [
+            "Annual returns (federal & Ontario)",
+            "Initial return (Ontario)",
+            "Notice of change"
+          ]
         },
         "businessUpdates": {
           "title": "Business Updates",
           "description": "Dissolve, revive, amalgamate, or continue your corporation across jurisdictions.",
           "from": "From $199",
-          "items": ["Dissolution & revival", "Amalgamation", "Continuance between jurisdictions"]
+          "items": [
+            "Dissolution & revival",
+            "Amalgamation",
+            "Continuance between jurisdictions"
+          ]
         }
       }
     },
@@ -279,5 +313,42 @@
     },
     "starting": "Starting from",
     "learnMoreArrow": "Learn more →"
+  },
+  "guides": {
+    "eyebrow": "Resources",
+    "heroTitle": "Guides & Articles for Canadian Entrepreneurs",
+    "heroSubtitle": "Plain-language guides on incorporation, compliance, and corporate maintenance to help you make informed decisions about your business.",
+    "metaTitle": "Guides & Articles for Canadian Entrepreneurs | Korporex",
+    "metaDescription": "Plain-language guides on incorporating in Canada, GST/HST, business structure, and corporate compliance to help you start and run your business with confidence.",
+    "allArticles": "All Articles",
+    "latestResources": "Latest Resources",
+    "moreComingTitle": "More Articles Coming Soon",
+    "moreComingText": "We're regularly publishing new guides on incorporation, compliance, and running a Canadian corporation.",
+    "backToGuides": "Back to Guides",
+    "onThisPage": "On this page",
+    "keepReading": "Keep reading",
+    "relatedArticles": "Related Articles",
+    "updated": "Updated {date}",
+    "disclaimer": "Korporex is not a law firm and does not provide legal advice. This article is general information about Canadian incorporation and compliance; it is not a substitute for professional legal or tax advice for your specific situation.",
+    "ctaTitle": "Ready to Incorporate?",
+    "ctaText": "Start your incorporation online in about 10 minutes. We'll handle the filing and deliver your documents within 24 hours.",
+    "getStarted": "Get Started",
+    "nuansReport": "NUANS Report",
+    "order": "Order",
+    "browseFaq": "Browse the FAQ",
+    "categories": {
+      "incorporation": {
+        "label": "Incorporation Guides",
+        "description": "Step-by-step guides to incorporating your business federally or provincially in Canada."
+      },
+      "compliance": {
+        "label": "Compliance & Maintenance",
+        "description": "How to keep your corporation in good standing: annual returns, record-keeping, and more."
+      },
+      "jurisdiction": {
+        "label": "Jurisdiction Comparisons",
+        "description": "Federal vs. provincial, and starting a business in Ontario: understand the differences before you choose."
+      }
+    }
   }
 }

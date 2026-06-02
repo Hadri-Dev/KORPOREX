@@ -89,11 +89,26 @@
     "responseWindow": "Nous répondons dans les {hours} heures.",
     "capabilitiesEyebrow": "Ce que nous offrons",
     "capabilities": {
-      "incorporation": { "label": "Constitution", "sub": "Fédérale · Ontario" },
-      "registrations": { "label": "Enregistrements", "sub": "Entreprise individuelle et nom commercial" },
-      "amendments": { "label": "Modifications", "sub": "Administrateurs · statuts · adresse" },
-      "compliance": { "label": "Conformité", "sub": "Déclarations annuelles et dépôts" },
-      "businessUpdates": { "label": "Changements d'entreprise", "sub": "Dissolution · reconstitution · fusion" }
+      "incorporation": {
+        "label": "Constitution",
+        "sub": "Fédérale · Ontario"
+      },
+      "registrations": {
+        "label": "Enregistrements",
+        "sub": "Entreprise individuelle et nom commercial"
+      },
+      "amendments": {
+        "label": "Modifications",
+        "sub": "Administrateurs · statuts · adresse"
+      },
+      "compliance": {
+        "label": "Conformité",
+        "sub": "Déclarations annuelles et dépôts"
+      },
+      "businessUpdates": {
+        "label": "Changements d'entreprise",
+        "sub": "Dissolution · reconstitution · fusion"
+      }
     },
     "form": {
       "headline": "Parlez-nous de votre entreprise",
@@ -144,7 +159,10 @@
   },
   "home": {
     "hero": {
-      "rotating": ["Constitution d'entreprise.", "Services aux sociétés."],
+      "rotating": [
+        "Constitution d'entreprise.",
+        "Services aux sociétés."
+      ],
       "tagline": "Simple. Rapide.\nAbordable.",
       "lead": "Constituez votre entreprise au Canada en aussi peu que 24 heures. 100 % en ligne, dépôts conformes aux exigences gouvernementales et tarification transparente, offerts aux entrepreneurs canadiens et aux fondateurs internationaux.",
       "guarantee": "Tarification tout inclus, sans surprises. Votre devis est votre total final, garanti du début à la fin.",
@@ -185,25 +203,41 @@
           "title": "Enregistrements",
           "description": "Entreprises individuelles, noms commerciaux et enregistrements extra-provinciaux.",
           "from": "À partir de 79 $",
-          "items": ["Entreprises individuelles", "Enregistrement de nom commercial", "Enregistrement extra-provincial"]
+          "items": [
+            "Entreprises individuelles",
+            "Enregistrement de nom commercial",
+            "Enregistrement extra-provincial"
+          ]
         },
         "amendments": {
           "title": "Modifications et changements",
           "description": "Mettez à jour les administrateurs, dirigeants, actionnaires, adresses ou statuts.",
           "from": "À partir de 99 $",
-          "items": ["Changement d'administrateur / dirigeant", "Changement d'actionnaire", "Statuts modificateurs"]
+          "items": [
+            "Changement d'administrateur / dirigeant",
+            "Changement d'actionnaire",
+            "Statuts modificateurs"
+          ]
         },
         "compliance": {
           "title": "Dépôts de conformité",
           "description": "Déclarations annuelles et dépôts statutaires pour maintenir votre société en règle.",
           "from": "À partir de 99 $",
-          "items": ["Déclarations annuelles (fédérale et Ontario)", "Déclaration initiale (Ontario)", "Avis de changement"]
+          "items": [
+            "Déclarations annuelles (fédérale et Ontario)",
+            "Déclaration initiale (Ontario)",
+            "Avis de changement"
+          ]
         },
         "businessUpdates": {
           "title": "Changements d'entreprise",
           "description": "Dissolvez, reconstituez, fusionnez ou continuez votre société entre juridictions.",
           "from": "À partir de 199 $",
-          "items": ["Dissolution et reconstitution", "Fusion", "Continuation entre juridictions"]
+          "items": [
+            "Dissolution et reconstitution",
+            "Fusion",
+            "Continuation entre juridictions"
+          ]
         }
       }
     },
@@ -279,5 +313,42 @@
     },
     "starting": "À partir de",
     "learnMoreArrow": "En savoir plus →"
+  },
+  "guides": {
+    "eyebrow": "Ressources",
+    "heroTitle": "Guides et articles pour les entrepreneurs canadiens",
+    "heroSubtitle": "Des guides en langage clair sur la constitution en société, la conformité et l'entretien corporatif pour vous aider à prendre des décisions éclairées pour votre entreprise.",
+    "metaTitle": "Guides et articles pour les entrepreneurs canadiens | Korporex",
+    "metaDescription": "Des guides en langage clair sur la constitution en société au Canada, la TPS/TVH, la structure d'entreprise et la conformité pour vous aider à démarrer et gérer votre entreprise.",
+    "allArticles": "Tous les articles",
+    "latestResources": "Derniers articles",
+    "moreComingTitle": "D'autres articles à venir",
+    "moreComingText": "Nous publions régulièrement de nouveaux guides sur la constitution en société, la conformité et la gestion d'une société canadienne.",
+    "backToGuides": "Retour aux guides",
+    "onThisPage": "Sur cette page",
+    "keepReading": "À lire ensuite",
+    "relatedArticles": "Articles connexes",
+    "updated": "Mis à jour le {date}",
+    "disclaimer": "Korporex n'est pas un cabinet d'avocats et ne fournit pas de conseils juridiques. Cet article présente de l'information générale sur la constitution en société et la conformité au Canada; il ne remplace pas les conseils juridiques ou fiscaux professionnels adaptés à votre situation.",
+    "ctaTitle": "Prêt à vous constituer en société ?",
+    "ctaText": "Lancez votre constitution en ligne en une dizaine de minutes. Nous nous occupons du dépôt et vous livrons vos documents en 24 heures.",
+    "getStarted": "Commencer",
+    "nuansReport": "Rapport NUANS",
+    "order": "Commander",
+    "browseFaq": "Consulter la FAQ",
+    "categories": {
+      "incorporation": {
+        "label": "Guides de constitution",
+        "description": "Des guides étape par étape pour constituer votre entreprise en société à l'échelle fédérale ou provinciale au Canada."
+      },
+      "compliance": {
+        "label": "Conformité et entretien",
+        "description": "Comment garder votre société en règle : déclarations annuelles, tenue de registres et plus encore."
+      },
+      "jurisdiction": {
+        "label": "Comparaisons de juridictions",
+        "description": "Fédéral ou provincial, et démarrer une entreprise en Ontario : comprenez les différences avant de choisir."
+      }
+    }
   }
 }
