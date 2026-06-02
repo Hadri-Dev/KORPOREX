@@ -349,6 +349,9 @@
         "label": "Comparaisons de juridictions",
         "description": "Fédéral ou provincial, et démarrer une entreprise en Ontario : comprenez les différences avant de choisir."
       }
-    }
+    },
+    "previous": "Précédent",
+    "next": "Suivant",
+    "paginationLabel": "Pagination des guides"
   }
 }

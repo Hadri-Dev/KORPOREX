@@ -1,7 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ArrowRight, BookOpen, FileText, HelpCircle } from "lucide-react";
+import { ArrowRight, BookOpen, ChevronLeft, ChevronRight, FileText, HelpCircle } from "lucide-react";
 import {
   CATEGORY_KEY,
   getArticlesByLocale,
@@ -9,7 +9,16 @@ import {
   type Locale,
 } from "./articles";
 
-type Params = { params: { locale: Locale } };
+type Params = {
+  params: { locale: Locale };
+  searchParams: { page?: string };
+};
+
+const PAGE_SIZE = 9;
+
+// Re-render periodically so scheduled articles appear (and the pagination
+// control shows once there are more than PAGE_SIZE published) without a redeploy.
+export const revalidate = 300;
 
 // Fixed category list for the overview cards. Titles/descriptions are pulled
 // from the `guides` translation namespace so they localize per locale.
@@ -41,11 +50,25 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   };
 }
 
-export default async function GuidesPage({ params }: Params) {
+export default async function GuidesPage({ params, searchParams }: Params) {
   const { locale } = params;
   setRequestLocale(locale);
   const t = await getTranslations("guides");
-  const articles = getArticlesByLocale(locale);
+
+  const allArticles = getArticlesByLocale(locale);
+  const totalPages = Math.max(1, Math.ceil(allArticles.length / PAGE_SIZE));
+
+  // Clamp the requested page into the valid range.
+  const requested = Number.parseInt(searchParams.page ?? "1", 10);
+  const currentPage = Number.isNaN(requested)
+    ? 1
+    : Math.min(Math.max(requested, 1), totalPages);
+
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const articles = allArticles.slice(start, start + PAGE_SIZE);
+
+  // Page 1 has no query string so the canonical URL stays clean.
+  const pageHref = (page: number) => (page <= 1 ? "/guides" : `/guides?page=${page}`);
 
   return (
     <>
@@ -119,6 +142,62 @@ export default async function GuidesPage({ params }: Params) {
               </Link>
             ))}
           </div>
+
+          {/* Pagination — green (navy-900 theme) active page */}
+          {totalPages > 1 ? (
+            <nav
+              className="mt-12 flex items-center justify-center gap-2"
+              aria-label={t("paginationLabel")}
+            >
+              {currentPage > 1 ? (
+                <Link
+                  href={pageHref(currentPage - 1)}
+                  className="inline-flex items-center gap-1 px-3 h-10 text-xs font-semibold tracking-wide uppercase text-navy-900 border border-gray-200 rounded hover:border-navy-900 transition-colors"
+                  rel="prev"
+                >
+                  <ChevronLeft size={14} /> {t("previous")}
+                </Link>
+              ) : (
+                <span className="inline-flex items-center gap-1 px-3 h-10 text-xs font-semibold tracking-wide uppercase text-gray-300 border border-gray-100 rounded cursor-default">
+                  <ChevronLeft size={14} /> {t("previous")}
+                </span>
+              )}
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) =>
+                page === currentPage ? (
+                  <span
+                    key={page}
+                    aria-current="page"
+                    className="inline-flex items-center justify-center w-10 h-10 text-sm font-semibold text-white bg-navy-900 border border-navy-900 rounded"
+                  >
+                    {page}
+                  </span>
+                ) : (
+                  <Link
+                    key={page}
+                    href={pageHref(page)}
+                    className="inline-flex items-center justify-center w-10 h-10 text-sm font-semibold text-navy-900 border border-gray-200 rounded hover:border-navy-900 transition-colors"
+                  >
+                    {page}
+                  </Link>
+                ),
+              )}
+
+              {currentPage < totalPages ? (
+                <Link
+                  href={pageHref(currentPage + 1)}
+                  className="inline-flex items-center gap-1 px-3 h-10 text-xs font-semibold tracking-wide uppercase text-navy-900 border border-gray-200 rounded hover:border-navy-900 transition-colors"
+                  rel="next"
+                >
+                  {t("next")} <ChevronRight size={14} />
+                </Link>
+              ) : (
+                <span className="inline-flex items-center gap-1 px-3 h-10 text-xs font-semibold tracking-wide uppercase text-gray-300 border border-gray-100 rounded cursor-default">
+                  {t("next")} <ChevronRight size={14} />
+                </span>
+              )}
+            </nav>
+          ) : null}
 
           <div className="mt-12 border border-dashed border-gray-200 rounded-lg p-8 text-center">
             <p className="font-serif text-lg font-bold text-navy-900 mb-2">{t("moreComingTitle")}</p>

@@ -41,6 +41,11 @@ export type Article = {
   metaDescription: string;
   readTime: string;
   updated: string;
+  // Optional scheduled-publish timestamp (ISO 8601 with offset, e.g.
+  // "2026-06-04T11:00:00-04:00"). When set and in the future, the article is
+  // hidden from listings and its page 404s until the time arrives. Omit for
+  // articles that are live immediately.
+  publishedAt?: string;
   content: ArticleSection[];
 };
 
@@ -1106,7 +1111,543 @@ export const articles: Article[] = [
       { type: "paragraph", text: "Si se constituyó en sociedad y no está seguro de si su libro de actas está completo o al día, vale la pena revisarlo antes de necesitarlo y no después. Korporex monta un libro de actas completo al momento de la constitución, y puede preparar uno para una sociedad existente, para que los registros estén ahí y correctos el día en que alguien los pida." },
     ],
   },
+
+  // ═════════════════════════════════════════════════════════════
+  // BATCH 2 — scheduled to publish 2026-06-04 11:00 ET
+  // ═════════════════════════════════════════════════════════════
+
+  // ── English (batch 2) ─────────────────────────────────────────
+  {
+    slug: "how-to-confirm-a-gst-hst-number",
+    locale: "en",
+    group: "confirm-gst-hst-number",
+    category: "Compliance & Maintenance",
+    title: "How to Confirm a GST/HST Number",
+    excerpt:
+      "Before you claim a tax credit on a supplier's invoice, it pays to confirm their GST/HST number is real and registered. Here is how, and why it matters.",
+    metaTitle: "How to Confirm a GST/HST Number (Canada) | Korporex",
+    metaDescription:
+      "How to confirm a GST/HST number using the CRA's free GST/HST Registry: what you need, what a valid result shows, and why checking protects your input tax credits.",
+    readTime: "4 min read",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "If a supplier charges you GST/HST, you generally get to claim that tax back as an input tax credit, but only if the supplier is actually registered. That is why it is worth knowing how to confirm a GST/HST number before you rely on it." },
+      { type: "paragraph", text: "The good news: the Canada Revenue Agency runs a free tool for exactly this, and the check takes under a minute." },
+      { type: "heading", id: "why-confirm", text: "Why confirming matters" },
+      { type: "paragraph", text: "When you claim an input tax credit, you are telling the CRA that the GST/HST you paid was charged by a registered business. If that supplier turns out not to be registered, the CRA can deny your credit, and the cost lands back on you. Confirming the number protects the credits you claim, especially on large invoices or with a new supplier you have not dealt with before." },
+      { type: "heading", id: "how-to-check", text: "How to confirm a GST/HST number" },
+      { type: "paragraph", text: "Use the CRA's GST/HST Registry, a free online tool. To run a check you need three things:" },
+      { type: "list", items: ["The GST/HST number shown on the supplier's invoice (the nine-digit business number followed by RT and four digits).", "The supplier's business name exactly as it appears on the invoice.", "The transaction date you want to confirm registration for."] },
+      { type: "paragraph", text: "The registry compares what you enter against the CRA's records and tells you whether the number was registered and valid on that date. It does not reveal the business's other tax details; it only confirms the registration itself." },
+      { type: "heading", id: "what-results-mean", text: "What the result tells you" },
+      { type: "paragraph", text: "A match means the number was registered and active on the date you entered, and your input tax credit for that invoice rests on solid ground. A non-match usually means one of three things: the number was typed incorrectly, the business name does not match the registration exactly, or the supplier is not actually registered for GST/HST." },
+      { type: "callout", text: "If the name or number is just slightly off, check the invoice again before assuming the worst. The registry needs the legal name, which is not always the brand name a business trades under." },
+      { type: "heading", id: "if-invalid", text: "If a number does not check out" },
+      { type: "paragraph", text: "If you cannot confirm a supplier's number, ask them for their correct GST/HST registration details before you pay tax on the invoice. A registered business will have no trouble providing it. If they are not registered, they should not be charging you GST/HST at all, and you should not be claiming a credit for it." },
+      { type: "paragraph", text: "Confirming numbers is part of keeping your own GST/HST filings clean. If you are setting up a corporation and want your business number and GST/HST account registered correctly from the start, Korporex sets both up as part of the online incorporation filing.", parts: ["Confirming numbers is part of keeping your own GST/HST filings clean. If you are setting up a corporation and want your ", { text: "business number and GST/HST account", href: "/guides/how-to-get-gst-hst-number-ontario" }, " registered correctly from the start, Korporex sets both up as part of the online incorporation filing."] },
+    ],
+  },
+  {
+    slug: "how-to-get-a-cra-business-number",
+    locale: "en",
+    group: "cra-business-number",
+    category: "Compliance & Maintenance",
+    title: "How to Get a CRA Business Number",
+    excerpt:
+      "The CRA business number is the single ID for your dealings with the federal tax system. Here is what it is, when you need one, and how to get it.",
+    metaTitle: "How to Get a CRA Business Number | Korporex",
+    metaDescription:
+      "How to get a CRA business number: what the nine-digit BN is, when you need one, and how to register online, by phone, or automatically when you incorporate.",
+    readTime: "5 min read",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "The CRA business number, or BN, is the nine-digit identifier the Canada Revenue Agency uses for your business across the federal tax system. If you are going to collect GST/HST, run payroll, or pay corporate tax, you will need one. Here is how to get a CRA business number without overthinking it." },
+      { type: "heading", id: "what-it-is", text: "What the business number is" },
+      { type: "paragraph", text: "The BN is a single nine-digit root that all your CRA program accounts hang off. The CRA adds a two-letter code and four digits for each account type: RT for GST/HST, RP for payroll, RC for corporate income tax, and RM for import/export. One business, one core number, several program accounts.", parts: ["The BN is a single nine-digit root that all your CRA program accounts hang off. The CRA adds a two-letter code and four digits for each account type: RT for GST/HST, RP for payroll, RC for corporate income tax, and RM for import/export. One business, one core number, several program accounts. It is not the same as your ", { text: "corporation number", href: "/guides/business-number-vs-corporation-number" }, ", which comes from the registry that incorporated you."] },
+      { type: "heading", id: "when-you-need-one", text: "When you need a business number" },
+      { type: "list", items: ["You register for GST/HST (required once you pass the $30,000 small-supplier threshold, optional before that).", "You hire employees and need a payroll account.", "You incorporate, federally or provincially, and need to file corporate income tax.", "You import or export commercial goods."] },
+      { type: "paragraph", text: "If none of these apply yet, a sole proprietor operating under their own name may not need a BN at all. You get one the moment you open your first program account." },
+      { type: "heading", id: "how-to-get", text: "How to get a business number" },
+      { type: "paragraph", text: "There are a few routes, and which one fits depends on how you are set up:" },
+      { type: "list", items: ["Online through the CRA's Business Registration Online. This is the standard route and can open your BN plus your first program account in one sitting.", "By phone through the CRA business enquiries line, if you would rather register with a person.", "By mail or fax using Form RC1, the slow option.", "Automatically when you incorporate. If you incorporate federally through Corporations Canada, a business number is usually generated and sent to the CRA for you."] },
+      { type: "paragraph", text: "When you register, the CRA asks for basic details: your legal name or corporation's name, the business activity, and which program accounts you want to open." },
+      { type: "heading", id: "after-you-have-it", text: "After you have it" },
+      { type: "paragraph", text: "Once you have your BN, put it on the documents that need it (GST/HST invoices, payroll remittances, corporate filings) and keep it somewhere easy to find. You will use it any time you deal with the CRA." },
+      { type: "paragraph", text: "When you incorporate with Korporex, your CRA business number and the tax accounts you need are set up alongside your articles and minute book, so everything is connected from day one.", parts: ["When you ", { text: "incorporate with Korporex", href: "/guides/federal-vs-provincial-incorporation" }, ", your CRA business number and the tax accounts you need are set up alongside your articles and minute book, so everything is connected from day one."] },
+    ],
+  },
+  {
+    slug: "what-are-articles-of-incorporation",
+    locale: "en",
+    group: "articles-of-incorporation",
+    category: "Incorporation Guides",
+    title: "What Are Articles of Incorporation?",
+    excerpt:
+      "Articles of incorporation are the founding document that creates your corporation. Here is what they contain, why the share structure matters, and how they are filed.",
+    metaTitle: "What Are Articles of Incorporation? | Korporex",
+    metaDescription:
+      "What articles of incorporation are: the founding document that creates your corporation, what they contain, the difference between federal and Ontario, and why share structure matters.",
+    readTime: "5 min read",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "Articles of incorporation are the founding document that brings a corporation into legal existence. When you incorporate, you file your articles with the government, and once they are accepted, your corporation exists as a separate legal entity. Everything the corporation can do flows from what the articles set out." },
+      { type: "heading", id: "what-they-contain", text: "What articles of incorporation contain" },
+      { type: "paragraph", text: "The exact form varies by jurisdiction, but articles of incorporation generally set out:" },
+      { type: "list", items: ["The corporate name (or a request for a numbered corporation).", "The province or territory where the registered office is located.", "The classes and any maximum number of shares the corporation is authorized to issue.", "Any restrictions on transferring shares (common in private corporations).", "The number, or minimum and maximum number, of directors.", "Any restrictions on the business the corporation may carry on.", "Any other provisions the incorporators choose to include."] },
+      { type: "heading", id: "share-structure", text: "Why the share structure is the important part" },
+      { type: "paragraph", text: "Most of the articles is administrative. The share structure is the part that actually shapes your business. It determines who owns what, how profits can be paid out as dividends, and how you can bring in a co-founder or investor later. A simple one-class structure works for a single owner, but it can box you in the moment you want to split ownership, income-split with family, or sell part of the company." },
+      { type: "callout", title: "Where do-it-yourself goes wrong", text: "Cheap online incorporations usually give everyone the same basic share setup. It works until it doesn't, and rebuilding a share structure after the fact costs far more than setting it up properly at the start." },
+      { type: "heading", id: "federal-vs-ontario", text: "Federal vs Ontario articles" },
+      { type: "paragraph", text: "Federal articles are filed under the Canada Business Corporations Act through Corporations Canada; Ontario articles are filed under the Ontario Business Corporations Act through the Ontario Business Registry. The documents are similar in substance, but name protection and ongoing filings differ.", parts: ["Federal articles are filed under the Canada Business Corporations Act through Corporations Canada; Ontario articles are filed under the Ontario Business Corporations Act through the Ontario Business Registry. The documents are similar in substance, but ", { text: "name protection and ongoing filings differ between federal and provincial", href: "/guides/federal-vs-provincial-incorporation" }, "." ] },
+      { type: "heading", id: "how-filed", text: "How articles are filed" },
+      { type: "paragraph", text: "You choose a name (with a NUANS report) or take a numbered corporation, set your share structure, name your directors and registered office, and file. Once accepted, you receive a certificate of incorporation and a stamped copy of your articles, which become the first documents in your minute book.", parts: ["You choose a name (with a ", { text: "NUANS report", href: "/nuans" }, ") or take a numbered corporation, set your share structure, name your directors and registered office, and file. Once accepted, you receive a certificate of incorporation and a stamped copy of your articles, which become the first documents in your minute book."] },
+      { type: "paragraph", text: "Korporex prepares and files your articles of incorporation online for federal and Ontario corporations, including the share structure, and delivers your documents within 24 hours." },
+    ],
+  },
+  {
+    slug: "how-to-register-a-sole-proprietorship-in-ontario",
+    locale: "en",
+    group: "register-sole-proprietorship-ontario",
+    category: "Incorporation Guides",
+    title: "How to Register a Sole Proprietorship in Ontario",
+    excerpt:
+      "Registering a sole proprietorship in Ontario is quick and inexpensive. Here is when you have to register, how to do it, and what comes after.",
+    metaTitle: "How to Register a Sole Proprietorship in Ontario | Korporex",
+    metaDescription:
+      "How to register a sole proprietorship in Ontario: when registration is required, how to register a business name through ServiceOntario, the cost, and what to do next.",
+    readTime: "5 min read",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "A sole proprietorship is the simplest way to run a business in Ontario: it is just you, operating as a business. Registering one is quick and inexpensive, and most people can do it themselves in an afternoon. Here is how to register a sole proprietorship in Ontario and what to handle afterward." },
+      { type: "heading", id: "do-you-register", text: "Do you have to register?" },
+      { type: "paragraph", text: "It depends on the name you use. If you operate strictly under your own legal name (for example, \"Jane Smith\"), you generally do not need to register a business name. The moment you add anything to it or use a separate brand name (\"Jane Smith Consulting\" or \"Maplewind Studio\"), you are required to register that business name with the province." },
+      { type: "heading", id: "how-to-register", text: "How to register the business name" },
+      { type: "paragraph", text: "You register through ServiceOntario, in what is called a Business Name Registration (formerly the Master Business Licence). You can do it online. You will need:" },
+      { type: "list", items: ["The business name you want to use.", "Your personal contact and address details.", "A short description of what the business does."] },
+      { type: "paragraph", text: "The registration is valid for five years, then you renew it. One step worth not skipping: search the name first. Ontario will let you register a name someone else is already using, which can set you up for a trademark dispute later. A quick search before you commit is cheap insurance.", parts: ["The registration is valid for five years, then you renew it. One step worth not skipping: search the name first. Ontario will let you register a name someone else is already using, which can set you up for a trademark dispute later. A quick search before you commit is cheap insurance. (This is also part of ", { text: "registering any business in Ontario", href: "/guides/how-to-register-a-business-in-ontario" }, ".)"] },
+      { type: "heading", id: "after-registering", text: "What comes after" },
+      { type: "list", items: ["Get a CRA business number if you will collect GST/HST or hire.", "Register for GST/HST once you expect to pass the $30,000 small-supplier threshold.", "Keep your business and personal finances separate, even though the law treats them as one, to make bookkeeping and taxes far easier."] },
+      { type: "heading", id: "when-to-incorporate", text: "When to consider incorporating instead" },
+      { type: "paragraph", text: "A sole proprietorship is not separate from you, so the business's debts and liabilities are yours personally, and you are taxed on everything it earns. Once there is real liability risk, or you are earning more than you need to live on, incorporating starts to make sense.", parts: ["A sole proprietorship is not separate from you, so the business's debts and liabilities are yours personally, and you are taxed on everything it earns. Once there is real liability risk, or you are earning more than you need to live on, ", { text: "incorporating starts to make sense", href: "/guides/sole-proprietorship-vs-corporation" }, "." ] },
+      { type: "paragraph", text: "If you reach that point, Korporex files your Ontario or federal incorporation online, including the name search, share structure, and minute book, and delivers your documents within 24 hours." },
+    ],
+  },
+  {
+    slug: "how-to-dissolve-a-corporation-in-ontario",
+    locale: "en",
+    group: "dissolve-corporation-ontario",
+    category: "Compliance & Maintenance",
+    title: "How to Dissolve a Corporation in Ontario",
+    excerpt:
+      "Closing an Ontario corporation properly means winding it up, settling taxes, and filing Articles of Dissolution. Here are the steps and the order to do them in.",
+    metaTitle: "How to Dissolve a Corporation in Ontario | Korporex",
+    metaDescription:
+      "How to dissolve a corporation in Ontario: the steps for a voluntary dissolution under the OBCA, settling debts and taxes with the CRA, and filing Articles of Dissolution.",
+    readTime: "5 min read",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "When an Ontario corporation has served its purpose, you do not just stop using it. Leaving it inactive keeps the annual-return and tax obligations running. Dissolving it properly closes the corporation as a legal entity. Here is how to dissolve a corporation in Ontario through a voluntary dissolution." },
+      { type: "heading", id: "what-dissolution-is", text: "What dissolution means" },
+      { type: "paragraph", text: "A voluntary dissolution under the Ontario Business Corporations Act ends the corporation's legal existence. Once dissolved, the corporation stops being a separate legal person: it can no longer carry on business, hold property, or owe obligations, and its annual filing requirements end." },
+      { type: "heading", id: "the-steps", text: "The steps, in order" },
+      { type: "list", items: ["Authorize the dissolution. The shareholders pass a special resolution approving the dissolution and authorizing the directors to wind up the corporation's affairs.", "Wind up the business. Stop operating, collect what is owed to the corporation, pay off its debts and liabilities, and distribute any remaining property to the shareholders.", "Settle with the CRA. File the final corporate tax return, close the GST/HST and payroll accounts, and file the final returns for each. The corporation should owe nothing before it is dissolved.", "File Articles of Dissolution. Submit the dissolution filing through the Ontario Business Registry. Once accepted, the corporation is dissolved."] },
+      { type: "callout", title: "Order matters", text: "Dissolve before settling the CRA accounts and you can create a mess, because the corporation no longer exists to file or be assessed. Clear the tax accounts first, then file the dissolution." },
+      { type: "heading", id: "after-dissolution", text: "After dissolution" },
+      { type: "paragraph", text: "Keep the corporation's records, including the minute book and tax filings, for the retention period required after dissolution. The CRA can still review the final years, and a clean record is your protection if anything is questioned later.", parts: ["Keep the corporation's records, including the ", { text: "minute book", href: "/guides/corporate-minute-book" }, " and tax filings, for the retention period required after dissolution. The CRA can still review the final years, and a clean record is your protection if anything is questioned later."] },
+      { type: "heading", id: "getting-it-done", text: "Getting it done" },
+      { type: "paragraph", text: "The mechanics are straightforward but the order and the CRA side are easy to get wrong. Korporex handles voluntary dissolution filings for Ontario and federal corporations online, so the Articles of Dissolution are prepared and filed correctly.", parts: ["The mechanics are straightforward but the order and the CRA side are easy to get wrong. Korporex handles ", { text: "voluntary dissolution filings", href: "/services/dissolve-business" }, " for Ontario and federal corporations online, so the Articles of Dissolution are prepared and filed correctly. For the final tax returns themselves, a qualified accountant should confirm everything is closed with the CRA."] },
+    ],
+  },
+  {
+    slug: "cost-to-incorporate-in-ontario",
+    locale: "en",
+    group: "cost-to-incorporate-ontario",
+    category: "Incorporation Guides",
+    title: "How Much Does It Cost to Incorporate in Ontario?",
+    excerpt:
+      "The cost to incorporate in Ontario is more than the government fee. Here is the full breakdown of required and optional costs, plus what you pay each year after.",
+    metaTitle: "Cost to Incorporate in Ontario: Full Breakdown | Korporex",
+    metaDescription:
+      "How much does it cost to incorporate in Ontario? The government filing fee, NUANS report, named vs numbered, optional costs like a minute book, and ongoing yearly costs.",
+    readTime: "5 min read",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "The cost to incorporate in Ontario is more than the single government fee people usually quote. The total depends on a few choices: whether you want a named or numbered corporation, whether you set up a minute book, and whether you do it yourself or use a service. Here is the full breakdown." },
+      { type: "heading", id: "government-fee", text: "The government filing fee" },
+      { type: "paragraph", text: "The core cost is the Ontario government filing fee to incorporate under the Ontario Business Corporations Act, filed through the Ontario Business Registry. This is the one unavoidable cost, and every Ontario incorporation pays it." },
+      { type: "heading", id: "named-vs-numbered", text: "Named vs numbered: the NUANS report" },
+      { type: "paragraph", text: "If you want a named corporation (\"Maplewind Consulting Inc.\"), you need a NUANS name search report to confirm the name is available and not confusingly similar to an existing one. That report has its own cost. A numbered corporation (\"1234567 Ontario Inc.\") skips the NUANS step entirely, which is cheaper and faster, the trade-off being you have a number instead of a brand name until you register an operating name.", parts: ["If you want a named corporation (\"Maplewind Consulting Inc.\"), you need a ", { text: "NUANS name search report", href: "/nuans" }, " to confirm the name is available and not confusingly similar to an existing one. That report has its own cost. A numbered corporation (\"1234567 Ontario Inc.\") skips the NUANS step entirely, which is cheaper and faster, the trade-off being you have a number instead of a brand name until you register an operating name."] },
+      { type: "heading", id: "optional-costs", text: "Optional costs worth knowing about" },
+      { type: "list", items: ["Minute book setup. Ontario corporations are legally required to keep one. You can assemble it yourself or have it prepared, which most owners find worth it.", "Registered office / address service. If you do not want your home address on the public record, an address service is an added cost.", "Professional help. A lawyer or incorporation service charges a fee on top of the government cost, in exchange for getting the share structure and documents right."] },
+      { type: "heading", id: "ongoing-costs", text: "What it costs each year after" },
+      { type: "paragraph", text: "Incorporating is not a one-time cost. Each year an Ontario corporation files an annual return and a separate corporate (T2) tax return, and keeps its minute book current. Budget for the corporate tax filing in particular, since it usually means an accountant.", parts: ["Incorporating is not a one-time cost. Each year an Ontario corporation files an ", { text: "annual return", href: "/guides/corporate-annual-returns-canada" }, " and a separate corporate (T2) tax return, and keeps its minute book current. Budget for the corporate tax filing in particular, since it usually means an accountant."] },
+      { type: "heading", id: "diy-vs-service", text: "Doing it yourself vs using a service" },
+      { type: "paragraph", text: "You can file directly with the Ontario Business Registry and pay only the government cost, but you are then responsible for the name search, share structure, and minute book yourself. A flat-fee service bundles those together. Korporex incorporates Ontario and federal corporations online for a fixed price that includes the filing, name search, share structure, and minute book, with documents delivered within 24 hours.", parts: ["You can file directly with the Ontario Business Registry and pay only the government cost, but you are then responsible for the name search, share structure, and minute book yourself. A flat-fee service bundles those together. Korporex incorporates Ontario and federal corporations online ", { text: "for a fixed price", href: "/order" }, " that includes the filing, name search, share structure, and minute book, with documents delivered within 24 hours."] },
+    ],
+  },
+
+  // ── French (batch 2) ──────────────────────────────────────────
+  {
+    slug: "comment-verifier-un-numero-tps-tvh",
+    locale: "fr",
+    group: "confirm-gst-hst-number",
+    category: "Compliance & Maintenance",
+    title: "Comment vérifier un numéro de TPS/TVH",
+    excerpt:
+      "Avant de réclamer un crédit de taxe sur la facture d'un fournisseur, il vaut la peine de vérifier que son numéro de TPS/TVH est réel et inscrit. Voici comment, et pourquoi.",
+    metaTitle: "Comment vérifier un numéro de TPS/TVH | Korporex",
+    metaDescription:
+      "Comment vérifier un numéro de TPS/TVH avec le registre gratuit de l'ARC : ce qu'il vous faut, ce qu'un résultat valide indique et pourquoi cela protège vos crédits de taxe.",
+    readTime: "4 min de lecture",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "Si un fournisseur vous facture la TPS/TVH, vous pouvez généralement récupérer cette taxe sous forme de crédit de taxe sur les intrants, mais seulement si le fournisseur est réellement inscrit. C'est pourquoi il vaut la peine de savoir comment vérifier un numéro de TPS/TVH avant de vous y fier." },
+      { type: "paragraph", text: "La bonne nouvelle : l'Agence du revenu du Canada offre un outil gratuit pour exactement cela, et la vérification prend moins d'une minute." },
+      { type: "heading", id: "pourquoi-verifier", text: "Pourquoi la vérification compte" },
+      { type: "paragraph", text: "Quand vous réclamez un crédit de taxe sur les intrants, vous indiquez à l'ARC que la TPS/TVH payée a été facturée par une entreprise inscrite. Si ce fournisseur n'est pas inscrit, l'ARC peut refuser votre crédit, et le coût retombe sur vous. Vérifier le numéro protège les crédits que vous réclamez, surtout sur les grosses factures ou avec un nouveau fournisseur." },
+      { type: "heading", id: "comment-verifier", text: "Comment vérifier un numéro de TPS/TVH" },
+      { type: "paragraph", text: "Utilisez le Registre de la TPS/TVH de l'ARC, un outil en ligne gratuit. Pour faire une vérification, il vous faut trois choses :" },
+      { type: "list", items: ["Le numéro de TPS/TVH figurant sur la facture du fournisseur (le numéro d'entreprise de neuf chiffres suivi de RT et de quatre chiffres).", "Le nom commercial du fournisseur exactement tel qu'il apparaît sur la facture.", "La date de la transaction pour laquelle vous voulez confirmer l'inscription."] },
+      { type: "paragraph", text: "Le registre compare ce que vous saisissez aux dossiers de l'ARC et vous indique si le numéro était inscrit et valide à cette date. Il ne révèle pas les autres renseignements fiscaux de l'entreprise; il confirme uniquement l'inscription." },
+      { type: "heading", id: "resultat", text: "Ce que le résultat vous apprend" },
+      { type: "paragraph", text: "Une correspondance signifie que le numéro était inscrit et actif à la date saisie, et votre crédit de taxe pour cette facture repose sur des bases solides. Une non-correspondance signifie habituellement l'une de trois choses : le numéro a été mal saisi, le nom de l'entreprise ne correspond pas exactement à l'inscription, ou le fournisseur n'est pas réellement inscrit à la TPS/TVH." },
+      { type: "callout", text: "Si le nom ou le numéro est seulement un peu différent, vérifiez la facture à nouveau avant de présumer le pire. Le registre a besoin du nom légal, qui n'est pas toujours le nom commercial sous lequel l'entreprise exerce." },
+      { type: "heading", id: "si-invalide", text: "Si un numéro ne se confirme pas" },
+      { type: "paragraph", text: "Si vous ne pouvez pas confirmer le numéro d'un fournisseur, demandez-lui ses bons renseignements d'inscription à la TPS/TVH avant de payer la taxe sur la facture. Une entreprise inscrite n'aura aucune difficulté à les fournir. Si elle n'est pas inscrite, elle ne devrait pas vous facturer la TPS/TVH, et vous ne devriez pas en réclamer le crédit." },
+      { type: "paragraph", text: "La vérification des numéros fait partie de la tenue de vos propres déclarations de TPS/TVH. Si vous mettez sur pied une société et voulez que votre numéro d'entreprise et votre compte de TPS/TVH soient inscrits correctement dès le départ, Korporex met les deux en place dans le cadre du dépôt de constitution en ligne.", parts: ["La vérification des numéros fait partie de la tenue de vos propres déclarations de TPS/TVH. Si vous mettez sur pied une société et voulez que votre ", { text: "numéro d'entreprise et votre compte de TPS/TVH", href: "/guides/comment-obtenir-numero-tps-tvh-ontario" }, " soient inscrits correctement dès le départ, Korporex met les deux en place dans le cadre du dépôt de constitution en ligne."] },
+    ],
+  },
+  {
+    slug: "comment-obtenir-un-numero-dentreprise-arc",
+    locale: "fr",
+    group: "cra-business-number",
+    category: "Compliance & Maintenance",
+    title: "Comment obtenir un numéro d'entreprise de l'ARC",
+    excerpt:
+      "Le numéro d'entreprise de l'ARC est l'identifiant unique de vos rapports avec le système fiscal fédéral. Voici ce que c'est, quand il vous en faut un et comment l'obtenir.",
+    metaTitle: "Comment obtenir un numéro d'entreprise de l'ARC | Korporex",
+    metaDescription:
+      "Comment obtenir un numéro d'entreprise de l'ARC : ce qu'est le NE de neuf chiffres, quand il vous en faut un, et comment vous inscrire en ligne, par téléphone ou à la constitution.",
+    readTime: "5 min de lecture",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "Le numéro d'entreprise de l'ARC, ou NE, est l'identifiant de neuf chiffres que l'Agence du revenu du Canada utilise pour votre entreprise dans l'ensemble du système fiscal fédéral. Si vous comptez percevoir la TPS/TVH, gérer la paie ou payer l'impôt des sociétés, il vous en faudra un. Voici comment obtenir un numéro d'entreprise de l'ARC sans vous compliquer la vie." },
+      { type: "heading", id: "ce-que-cest", text: "Ce qu'est le numéro d'entreprise" },
+      { type: "paragraph", text: "Le NE est une seule racine de neuf chiffres à laquelle se rattachent tous vos comptes de programme de l'ARC. L'ARC ajoute un code de deux lettres et quatre chiffres pour chaque type de compte : RT pour la TPS/TVH, RP pour la paie, RC pour l'impôt des sociétés et RM pour l'import-export.", parts: ["Le NE est une seule racine de neuf chiffres à laquelle se rattachent tous vos comptes de programme de l'ARC. L'ARC ajoute un code de deux lettres et quatre chiffres pour chaque type de compte : RT pour la TPS/TVH, RP pour la paie, RC pour l'impôt des sociétés et RM pour l'import-export. Ce n'est pas la même chose que votre ", { text: "numéro de société", href: "/guides/numero-entreprise-ou-numero-societe" }, ", qui provient du registre qui vous a constitué."] },
+      { type: "heading", id: "quand-il-faut", text: "Quand il vous faut un numéro d'entreprise" },
+      { type: "list", items: ["Vous vous inscrivez à la TPS/TVH (obligatoire une fois le seuil de petit fournisseur de 30 000 $ dépassé, facultatif avant).", "Vous embauchez des employés et avez besoin d'un compte de paie.", "Vous vous constituez en société et devez produire l'impôt des sociétés.", "Vous importez ou exportez des biens commerciaux."] },
+      { type: "paragraph", text: "Si rien de cela ne s'applique encore, un entrepreneur individuel exploitant sous son propre nom n'a peut-être pas besoin de NE. Vous en obtenez un dès l'ouverture de votre premier compte de programme." },
+      { type: "heading", id: "comment-obtenir", text: "Comment obtenir un numéro d'entreprise" },
+      { type: "list", items: ["En ligne, par l'Inscription des entreprises en direct de l'ARC. C'est la voie habituelle, qui peut ouvrir votre NE et votre premier compte de programme d'un coup.", "Par téléphone, à la ligne des demandes de renseignements des entreprises de l'ARC.", "Par la poste ou par télécopieur, à l'aide du formulaire RC1, l'option lente.", "Automatiquement à la constitution. Si vous vous constituez à l'échelle fédérale par Corporations Canada, un numéro d'entreprise est habituellement généré et transmis à l'ARC pour vous."] },
+      { type: "paragraph", text: "Lors de l'inscription, l'ARC demande des renseignements de base : votre nom légal ou celui de votre société, l'activité de l'entreprise et les comptes de programme que vous voulez ouvrir." },
+      { type: "heading", id: "apres", text: "Une fois que vous l'avez" },
+      { type: "paragraph", text: "Une fois votre NE obtenu, inscrivez-le sur les documents qui l'exigent (factures de TPS/TVH, versements de paie, déclarations des sociétés) et gardez-le à portée de main. Vous l'utiliserez chaque fois que vous traiterez avec l'ARC." },
+      { type: "paragraph", text: "Lorsque vous vous constituez en société avec Korporex, votre numéro d'entreprise de l'ARC et les comptes fiscaux dont vous avez besoin sont mis en place avec vos statuts et votre livre des procès-verbaux, pour que tout soit relié dès le premier jour.", parts: ["Lorsque vous vous ", { text: "constituez en société avec Korporex", href: "/guides/comment-se-constituer-societe-canada" }, ", votre numéro d'entreprise de l'ARC et les comptes fiscaux dont vous avez besoin sont mis en place avec vos statuts et votre livre des procès-verbaux, pour que tout soit relié dès le premier jour."] },
+    ],
+  },
+  {
+    slug: "que-sont-les-statuts-constitutifs",
+    locale: "fr",
+    group: "articles-of-incorporation",
+    category: "Incorporation Guides",
+    title: "Que sont les statuts constitutifs ?",
+    excerpt:
+      "Les statuts constitutifs sont le document fondateur qui crée votre société. Voici ce qu'ils contiennent, pourquoi la structure d'actions compte et comment on les dépose.",
+    metaTitle: "Que sont les statuts constitutifs ? | Korporex",
+    metaDescription:
+      "Ce que sont les statuts constitutifs : le document fondateur qui crée votre société, ce qu'ils contiennent, la différence entre fédéral et Ontario, et pourquoi la structure d'actions compte.",
+    readTime: "5 min de lecture",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "Les statuts constitutifs sont le document fondateur qui donne une existence juridique à une société. Quand vous vous constituez en société, vous déposez vos statuts auprès du gouvernement, et une fois acceptés, votre société existe comme entité juridique distincte. Tout ce que la société peut faire découle de ce que les statuts énoncent." },
+      { type: "heading", id: "ce-quils-contiennent", text: "Ce que contiennent les statuts constitutifs" },
+      { type: "paragraph", text: "La forme exacte varie selon la juridiction, mais les statuts constitutifs énoncent généralement :" },
+      { type: "list", items: ["Le nom de la société (ou une demande de société à matricule).", "La province ou le territoire où se trouve le siège social.", "Les catégories et le nombre maximal d'actions que la société est autorisée à émettre.", "Toute restriction au transfert des actions (fréquente dans les sociétés privées).", "Le nombre, ou le nombre minimal et maximal, d'administrateurs.", "Toute restriction aux activités que la société peut exercer.", "Toute autre disposition que les fondateurs choisissent d'inclure."] },
+      { type: "heading", id: "structure-actions", text: "Pourquoi la structure d'actions est la partie importante" },
+      { type: "paragraph", text: "L'essentiel des statuts est administratif. La structure d'actions est la partie qui façonne réellement votre entreprise. Elle détermine qui possède quoi, comment les profits peuvent être versés en dividendes, et comment vous pourrez accueillir un cofondateur ou un investisseur plus tard. Une structure simple à une seule catégorie convient à un propriétaire unique, mais elle peut vous coincer dès que vous voulez partager la propriété, fractionner le revenu avec la famille ou vendre une partie de l'entreprise." },
+      { type: "callout", title: "Là où le faire soi-même tourne mal", text: "Les constitutions en ligne bon marché donnent généralement à tout le monde la même configuration d'actions de base. Cela fonctionne jusqu'à ce que ce ne soit plus le cas, et reconstruire une structure d'actions après coup coûte bien plus cher que de l'avoir bien montée au départ." },
+      { type: "heading", id: "federal-ontario", text: "Statuts fédéraux ou ontariens" },
+      { type: "paragraph", text: "Les statuts fédéraux sont déposés en vertu de la Loi canadienne sur les sociétés par actions par Corporations Canada; les statuts ontariens, en vertu de la Loi sur les sociétés par actions de l'Ontario par le Registre des entreprises de l'Ontario. Les documents sont semblables sur le fond, mais la protection du nom et les dépôts courants diffèrent.", parts: ["Les statuts fédéraux sont déposés en vertu de la Loi canadienne sur les sociétés par actions par Corporations Canada; les statuts ontariens, en vertu de la Loi sur les sociétés par actions de l'Ontario par le Registre des entreprises de l'Ontario. Les documents sont semblables sur le fond, mais la ", { text: "protection du nom et les dépôts courants diffèrent entre le fédéral et le provincial", href: "/guides/comment-se-constituer-societe-canada" }, "."] },
+      { type: "heading", id: "comment-deposer", text: "Comment on dépose les statuts" },
+      { type: "paragraph", text: "Vous choisissez un nom (avec un rapport NUANS) ou prenez une société à matricule, établissez votre structure d'actions, nommez vos administrateurs et votre siège social, puis déposez. Une fois acceptés, vous recevez un certificat de constitution et une copie estampillée de vos statuts, qui deviennent les premiers documents de votre livre des procès-verbaux.", parts: ["Vous choisissez un nom (avec un ", { text: "rapport NUANS", href: "/nuans" }, ") ou prenez une société à matricule, établissez votre structure d'actions, nommez vos administrateurs et votre siège social, puis déposez. Une fois acceptés, vous recevez un certificat de constitution et une copie estampillée de vos statuts, qui deviennent les premiers documents de votre livre des procès-verbaux."] },
+      { type: "paragraph", text: "Korporex prépare et dépose vos statuts constitutifs en ligne pour les sociétés fédérales et ontariennes, y compris la structure d'actions, et livre vos documents en 24 heures." },
+    ],
+  },
+  {
+    slug: "comment-enregistrer-une-entreprise-individuelle-en-ontario",
+    locale: "fr",
+    group: "register-sole-proprietorship-ontario",
+    category: "Incorporation Guides",
+    title: "Comment enregistrer une entreprise individuelle en Ontario",
+    excerpt:
+      "Enregistrer une entreprise individuelle en Ontario est rapide et peu coûteux. Voici quand vous devez vous enregistrer, comment le faire et ce qui suit.",
+    metaTitle: "Enregistrer une entreprise individuelle en Ontario | Korporex",
+    metaDescription:
+      "Comment enregistrer une entreprise individuelle en Ontario : quand l'enregistrement est requis, comment enregistrer un nom commercial via ServiceOntario, le coût et les étapes suivantes.",
+    readTime: "5 min de lecture",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "Une entreprise individuelle est la façon la plus simple d'exploiter une entreprise en Ontario : c'est simplement vous, exerçant comme entreprise. En enregistrer une est rapide et peu coûteux, et la plupart des gens peuvent le faire eux-mêmes en un après-midi. Voici comment enregistrer une entreprise individuelle en Ontario et ce qu'il faut régler ensuite." },
+      { type: "heading", id: "devez-vous", text: "Devez-vous vous enregistrer ?" },
+      { type: "paragraph", text: "Cela dépend du nom que vous utilisez. Si vous exercez strictement sous votre propre nom légal (par exemple « Jeanne Tremblay »), vous n'avez généralement pas à enregistrer de nom commercial. Dès que vous y ajoutez quelque chose ou utilisez un nom distinct (« Jeanne Tremblay Conseil » ou « Studio Maplewind »), vous devez enregistrer ce nom commercial auprès de la province." },
+      { type: "heading", id: "comment-enregistrer", text: "Comment enregistrer le nom commercial" },
+      { type: "paragraph", text: "Vous enregistrez par l'entremise de ServiceOntario, ce qu'on appelle l'enregistrement d'un nom commercial (autrefois le Master Business Licence). Vous pouvez le faire en ligne. Il vous faudra :" },
+      { type: "list", items: ["Le nom commercial que vous voulez utiliser.", "Vos coordonnées et votre adresse.", "Une brève description de l'activité de l'entreprise."] },
+      { type: "paragraph", text: "L'enregistrement est valide cinq ans, puis vous le renouvelez. Une étape à ne pas sauter : vérifiez d'abord le nom. L'Ontario vous laissera enregistrer un nom déjà utilisé par quelqu'un d'autre, ce qui peut vous exposer à un litige de marque plus tard.", parts: ["L'enregistrement est valide cinq ans, puis vous le renouvelez. Une étape à ne pas sauter : vérifiez d'abord le nom. L'Ontario vous laissera enregistrer un nom déjà utilisé par quelqu'un d'autre, ce qui peut vous exposer à un litige de marque plus tard. (Cela fait aussi partie de ", { text: "l'enregistrement de toute entreprise en Ontario", href: "/guides/comment-enregistrer-entreprise-ontario" }, ".)"] },
+      { type: "heading", id: "ce-qui-suit", text: "Ce qui suit" },
+      { type: "list", items: ["Obtenez un numéro d'entreprise de l'ARC si vous comptez percevoir la TPS/TVH ou embaucher.", "Inscrivez-vous à la TPS/TVH dès que vous prévoyez dépasser le seuil de petit fournisseur de 30 000 $.", "Gardez vos finances d'entreprise et personnelles séparées, même si la loi les traite comme une seule, pour simplifier la comptabilité et les impôts."] },
+      { type: "heading", id: "quand-se-constituer", text: "Quand envisager la constitution en société" },
+      { type: "paragraph", text: "Une entreprise individuelle n'est pas distincte de vous : les dettes et responsabilités de l'entreprise sont les vôtres personnellement, et vous êtes imposé sur tout ce qu'elle gagne. Dès qu'il y a un vrai risque de responsabilité, ou que vous gagnez plus que ce dont vous avez besoin pour vivre, la constitution en société commence à avoir du sens.", parts: ["Une entreprise individuelle n'est pas distincte de vous : les dettes et responsabilités de l'entreprise sont les vôtres personnellement, et vous êtes imposé sur tout ce qu'elle gagne. Dès qu'il y a un vrai risque de responsabilité, ou que vous gagnez plus que ce dont vous avez besoin pour vivre, ", { text: "la constitution en société commence à avoir du sens", href: "/guides/entreprise-individuelle-ou-societe" }, "."] },
+      { type: "paragraph", text: "Si vous en arrivez là, Korporex dépose votre constitution ontarienne ou fédérale en ligne, y compris la recherche de nom, la structure d'actions et le livre des procès-verbaux, et livre vos documents en 24 heures." },
+    ],
+  },
+  {
+    slug: "comment-dissoudre-une-societe-en-ontario",
+    locale: "fr",
+    group: "dissolve-corporation-ontario",
+    category: "Compliance & Maintenance",
+    title: "Comment dissoudre une société en Ontario",
+    excerpt:
+      "Fermer correctement une société ontarienne suppose de la liquider, de régler les impôts et de déposer des statuts de dissolution. Voici les étapes et leur ordre.",
+    metaTitle: "Comment dissoudre une société en Ontario | Korporex",
+    metaDescription:
+      "Comment dissoudre une société en Ontario : les étapes d'une dissolution volontaire sous la LSAO, le règlement des dettes et des impôts avec l'ARC, et le dépôt des statuts de dissolution.",
+    readTime: "5 min de lecture",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "Quand une société ontarienne a fait son temps, vous ne cessez pas simplement de l'utiliser. La laisser inactive maintient les obligations de déclaration annuelle et d'impôt. La dissoudre correctement ferme la société en tant qu'entité juridique. Voici comment dissoudre une société en Ontario par une dissolution volontaire." },
+      { type: "heading", id: "ce-quest-la-dissolution", text: "Ce que signifie la dissolution" },
+      { type: "paragraph", text: "Une dissolution volontaire en vertu de la Loi sur les sociétés par actions de l'Ontario met fin à l'existence juridique de la société. Une fois dissoute, la société cesse d'être une personne morale distincte : elle ne peut plus exercer d'activités, détenir des biens ni porter d'obligations, et ses exigences de déclaration annuelle prennent fin." },
+      { type: "heading", id: "les-etapes", text: "Les étapes, dans l'ordre" },
+      { type: "list", items: ["Autoriser la dissolution. Les actionnaires adoptent une résolution spéciale approuvant la dissolution et autorisant les administrateurs à liquider les affaires de la société.", "Liquider l'entreprise. Cessez les activités, recouvrez ce qui est dû à la société, payez ses dettes et obligations, et distribuez tout bien restant aux actionnaires.", "Régler avec l'ARC. Produisez la déclaration de revenus finale de la société, fermez les comptes de TPS/TVH et de paie, et produisez les déclarations finales de chacun. La société ne devrait rien devoir avant d'être dissoute.", "Déposer les statuts de dissolution. Soumettez le dépôt de dissolution par le Registre des entreprises de l'Ontario. Une fois accepté, la société est dissoute."] },
+      { type: "callout", title: "L'ordre compte", text: "Dissoudre avant de régler les comptes de l'ARC peut créer des ennuis, car la société n'existe plus pour produire des déclarations ou être cotisée. Réglez d'abord les comptes fiscaux, puis déposez la dissolution." },
+      { type: "heading", id: "apres", text: "Après la dissolution" },
+      { type: "paragraph", text: "Conservez les registres de la société, y compris le livre des procès-verbaux et les déclarations fiscales, pendant la période de conservation requise après la dissolution. L'ARC peut encore examiner les dernières années, et un dossier propre vous protège si quelque chose est remis en question.", parts: ["Conservez les registres de la société, y compris le ", { text: "livre des procès-verbaux", href: "/guides/quest-ce-quun-livre-des-proces-verbaux" }, " et les déclarations fiscales, pendant la période de conservation requise après la dissolution. L'ARC peut encore examiner les dernières années, et un dossier propre vous protège si quelque chose est remis en question."] },
+      { type: "heading", id: "le-faire", text: "Le faire" },
+      { type: "paragraph", text: "La mécanique est simple, mais l'ordre et le volet de l'ARC sont faciles à rater. Korporex prend en charge les dépôts de dissolution volontaire pour les sociétés ontariennes et fédérales en ligne, pour que les statuts de dissolution soient préparés et déposés correctement.", parts: ["La mécanique est simple, mais l'ordre et le volet de l'ARC sont faciles à rater. Korporex prend en charge les ", { text: "dépôts de dissolution volontaire", href: "/services/dissolve-business" }, " pour les sociétés ontariennes et fédérales en ligne, pour que les statuts de dissolution soient préparés et déposés correctement. Pour les déclarations fiscales finales elles-mêmes, un comptable qualifié devrait confirmer que tout est fermé auprès de l'ARC."] },
+    ],
+  },
+  {
+    slug: "cout-pour-constituer-une-societe-en-ontario",
+    locale: "fr",
+    group: "cost-to-incorporate-ontario",
+    category: "Incorporation Guides",
+    title: "Combien coûte la constitution d'une société en Ontario ?",
+    excerpt:
+      "Le coût pour constituer une société en Ontario va au-delà des frais gouvernementaux. Voici la ventilation complète des coûts obligatoires et optionnels, et les frais annuels.",
+    metaTitle: "Coût pour constituer une société en Ontario | Korporex",
+    metaDescription:
+      "Combien coûte la constitution d'une société en Ontario ? Les frais de dépôt gouvernementaux, le rapport NUANS, nom ou matricule, les coûts optionnels et les frais annuels récurrents.",
+    readTime: "5 min de lecture",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "Le coût pour constituer une société en Ontario va au-delà des simples frais gouvernementaux qu'on cite habituellement. Le total dépend de quelques choix : société avec nom ou à matricule, mise en place d'un livre des procès-verbaux, et le faire soi-même ou recourir à un service. Voici la ventilation complète." },
+      { type: "heading", id: "frais-gouvernementaux", text: "Les frais de dépôt gouvernementaux" },
+      { type: "paragraph", text: "Le coût de base est le droit de dépôt du gouvernement de l'Ontario pour la constitution en vertu de la Loi sur les sociétés par actions de l'Ontario, déposée par le Registre des entreprises de l'Ontario. C'est le coût inévitable, payé par toute constitution ontarienne." },
+      { type: "heading", id: "nom-matricule", text: "Nom ou matricule : le rapport NUANS" },
+      { type: "paragraph", text: "Si vous voulez une société avec un nom (« Maplewind Conseil Inc. »), il vous faut un rapport de recherche de nom NUANS pour confirmer que le nom est disponible et pas trop semblable à un nom existant. Ce rapport a son propre coût. Une société à matricule (« 1234567 Ontario Inc. ») évite entièrement l'étape NUANS, ce qui est plus rapide et moins cher, le compromis étant que vous avez un numéro plutôt qu'un nom de marque.", parts: ["Si vous voulez une société avec un nom (« Maplewind Conseil Inc. »), il vous faut un ", { text: "rapport de recherche de nom NUANS", href: "/nuans" }, " pour confirmer que le nom est disponible et pas trop semblable à un nom existant. Ce rapport a son propre coût. Une société à matricule (« 1234567 Ontario Inc. ») évite entièrement l'étape NUANS, ce qui est plus rapide et moins cher, le compromis étant que vous avez un numéro plutôt qu'un nom de marque."] },
+      { type: "heading", id: "couts-optionnels", text: "Des coûts optionnels à connaître" },
+      { type: "list", items: ["Mise en place du livre des procès-verbaux. Les sociétés ontariennes doivent légalement en tenir un. Vous pouvez l'assembler vous-même ou le faire préparer, ce que la plupart des propriétaires trouvent utile.", "Service de siège social ou d'adresse. Si vous ne voulez pas que votre adresse personnelle figure au dossier public, un service d'adresse est un coût additionnel.", "Aide professionnelle. Un avocat ou un service de constitution facture des honoraires en plus du coût gouvernemental, en échange d'une structure d'actions et de documents bien faits."] },
+      { type: "heading", id: "couts-annuels", text: "Ce que cela coûte chaque année ensuite" },
+      { type: "paragraph", text: "La constitution n'est pas un coût unique. Chaque année, une société ontarienne produit une déclaration annuelle et une déclaration de revenus des sociétés (T2) distincte, et tient son livre des procès-verbaux à jour. Prévoyez surtout la déclaration de revenus des sociétés, qui implique généralement un comptable.", parts: ["La constitution n'est pas un coût unique. Chaque année, une société ontarienne produit une ", { text: "déclaration annuelle", href: "/guides/corporate-annual-returns-canada" }, " et une déclaration de revenus des sociétés (T2) distincte, et tient son livre des procès-verbaux à jour. Prévoyez surtout la déclaration de revenus des sociétés, qui implique généralement un comptable."] },
+      { type: "heading", id: "soi-meme-service", text: "Le faire soi-même ou recourir à un service" },
+      { type: "paragraph", text: "Vous pouvez déposer directement au Registre des entreprises de l'Ontario et ne payer que le coût gouvernemental, mais vous êtes alors responsable vous-même de la recherche de nom, de la structure d'actions et du livre des procès-verbaux. Un service à prix fixe regroupe le tout. Korporex constitue les sociétés ontariennes et fédérales en ligne à prix fixe, ce qui comprend le dépôt, la recherche de nom, la structure d'actions et le livre des procès-verbaux, avec livraison des documents en 24 heures.", parts: ["Vous pouvez déposer directement au Registre des entreprises de l'Ontario et ne payer que le coût gouvernemental, mais vous êtes alors responsable vous-même de la recherche de nom, de la structure d'actions et du livre des procès-verbaux. Un service à prix fixe regroupe le tout. Korporex constitue les sociétés ontariennes et fédérales en ligne ", { text: "à prix fixe", href: "/order" }, ", ce qui comprend le dépôt, la recherche de nom, la structure d'actions et le livre des procès-verbaux, avec livraison des documents en 24 heures."] },
+    ],
+  },
+
+  // ── Spanish (batch 2) ─────────────────────────────────────────
+  {
+    slug: "como-verificar-un-numero-gst-hst",
+    locale: "es",
+    group: "confirm-gst-hst-number",
+    category: "Compliance & Maintenance",
+    title: "Cómo verificar un número de GST/HST",
+    excerpt:
+      "Antes de reclamar un crédito fiscal en la factura de un proveedor, conviene verificar que su número de GST/HST es real y está registrado. Aquí está cómo, y por qué importa.",
+    metaTitle: "Cómo verificar un número de GST/HST | Korporex",
+    metaDescription:
+      "Cómo verificar un número de GST/HST con el registro gratuito de la CRA: qué necesita, qué muestra un resultado válido y por qué proteger sus créditos por impuesto soportado.",
+    readTime: "4 min de lectura",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "Si un proveedor le cobra GST/HST, por lo general puede recuperar ese impuesto como un crédito por impuesto soportado, pero solo si el proveedor está realmente registrado. Por eso conviene saber cómo verificar un número de GST/HST antes de confiar en él." },
+      { type: "paragraph", text: "La buena noticia: la Agencia de Ingresos de Canadá ofrece una herramienta gratuita justo para esto, y la verificación toma menos de un minuto." },
+      { type: "heading", id: "por-que-verificar", text: "Por qué importa verificar" },
+      { type: "paragraph", text: "Cuando reclama un crédito por impuesto soportado, le está diciendo a la CRA que el GST/HST que pagó lo cobró una empresa registrada. Si ese proveedor no está registrado, la CRA puede negar su crédito, y el costo recae sobre usted. Verificar el número protege los créditos que reclama, sobre todo en facturas grandes o con un proveedor nuevo." },
+      { type: "heading", id: "como-verificar", text: "Cómo verificar un número de GST/HST" },
+      { type: "paragraph", text: "Use el Registro de GST/HST de la CRA, una herramienta en línea gratuita. Para hacer una verificación necesita tres cosas:" },
+      { type: "list", items: ["El número de GST/HST que aparece en la factura del proveedor (el número de negocio de nueve dígitos seguido de RT y cuatro dígitos).", "El nombre comercial del proveedor exactamente como aparece en la factura.", "La fecha de la transacción para la que quiere confirmar el registro."] },
+      { type: "paragraph", text: "El registro compara lo que ingresa con los datos de la CRA y le indica si el número estaba registrado y vigente en esa fecha. No revela los demás datos fiscales de la empresa; solo confirma el registro." },
+      { type: "heading", id: "resultado", text: "Qué le dice el resultado" },
+      { type: "paragraph", text: "Una coincidencia significa que el número estaba registrado y activo en la fecha que ingresó, y su crédito fiscal para esa factura descansa sobre bases sólidas. Una no coincidencia suele significar una de tres cosas: el número se escribió mal, el nombre de la empresa no coincide exactamente con el registro, o el proveedor no está realmente registrado para el GST/HST." },
+      { type: "callout", text: "Si el nombre o el número difiere solo un poco, revise la factura de nuevo antes de suponer lo peor. El registro necesita el nombre legal, que no siempre es el nombre comercial bajo el que opera la empresa." },
+      { type: "heading", id: "si-invalido", text: "Si un número no se confirma" },
+      { type: "paragraph", text: "Si no puede confirmar el número de un proveedor, pídale sus datos correctos de registro de GST/HST antes de pagar el impuesto de la factura. Una empresa registrada no tendrá problema en proporcionarlos. Si no está registrada, no debería cobrarle GST/HST, y usted no debería reclamar un crédito por ello." },
+      { type: "paragraph", text: "Verificar números es parte de mantener limpias sus propias declaraciones de GST/HST. Si está montando una sociedad y quiere que su número de negocio y su cuenta de GST/HST se registren correctamente desde el inicio, Korporex configura ambos como parte del trámite de constitución en línea.", parts: ["Verificar números es parte de mantener limpias sus propias declaraciones de GST/HST. Si está montando una sociedad y quiere que su ", { text: "número de negocio y su cuenta de GST/HST", href: "/guides/como-obtener-numero-gst-hst-ontario" }, " se registren correctamente desde el inicio, Korporex configura ambos como parte del trámite de constitución en línea."] },
+    ],
+  },
+  {
+    slug: "como-obtener-un-numero-de-negocio-cra",
+    locale: "es",
+    group: "cra-business-number",
+    category: "Compliance & Maintenance",
+    title: "Cómo obtener un número de negocio de la CRA",
+    excerpt:
+      "El número de negocio de la CRA es el identificador único de sus tratos con el sistema fiscal federal. Aquí está qué es, cuándo lo necesita y cómo obtenerlo.",
+    metaTitle: "Cómo obtener un número de negocio de la CRA | Korporex",
+    metaDescription:
+      "Cómo obtener un número de negocio de la CRA: qué es el BN de nueve dígitos, cuándo lo necesita y cómo registrarse en línea, por teléfono o automáticamente al constituirse.",
+    readTime: "5 min de lectura",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "El número de negocio de la CRA, o BN, es el identificador de nueve dígitos que la Agencia de Ingresos de Canadá usa para su negocio en todo el sistema fiscal federal. Si va a cobrar GST/HST, manejar nómina o pagar el impuesto de sociedades, necesitará uno. Aquí está cómo obtener un número de negocio de la CRA sin complicarse." },
+      { type: "heading", id: "que-es", text: "Qué es el número de negocio" },
+      { type: "paragraph", text: "El BN es una sola raíz de nueve dígitos de la que cuelgan todas sus cuentas de programa de la CRA. La CRA añade un código de dos letras y cuatro dígitos por cada tipo de cuenta: RT para el GST/HST, RP para la nómina, RC para el impuesto de sociedades y RM para importación y exportación.", parts: ["El BN es una sola raíz de nueve dígitos de la que cuelgan todas sus cuentas de programa de la CRA. La CRA añade un código de dos letras y cuatro dígitos por cada tipo de cuenta: RT para el GST/HST, RP para la nómina, RC para el impuesto de sociedades y RM para importación y exportación. No es lo mismo que su ", { text: "número de sociedad", href: "/guides/numero-negocio-o-numero-sociedad" }, ", que proviene del registro que lo constituyó."] },
+      { type: "heading", id: "cuando-lo-necesita", text: "Cuándo necesita un número de negocio" },
+      { type: "list", items: ["Se registra para el GST/HST (obligatorio una vez superado el umbral de pequeño proveedor de 30 000 $, opcional antes).", "Contrata empleados y necesita una cuenta de nómina.", "Se constituye en sociedad y debe presentar el impuesto de sociedades.", "Importa o exporta bienes comerciales."] },
+      { type: "paragraph", text: "Si nada de esto aplica todavía, un empresario unipersonal que opera bajo su propio nombre quizá no necesite un BN. Obtiene uno en cuanto abre su primera cuenta de programa." },
+      { type: "heading", id: "como-obtener", text: "Cómo obtener un número de negocio" },
+      { type: "list", items: ["En línea, mediante el Registro de Empresas en Línea de la CRA. Es la vía habitual y puede abrir su BN y su primera cuenta de programa de una vez.", "Por teléfono, a través de la línea de consultas de empresas de la CRA.", "Por correo o fax, con el formulario RC1, la opción lenta.", "Automáticamente al constituirse. Si se constituye a nivel federal por Corporations Canada, normalmente se genera un número de negocio y se envía a la CRA por usted."] },
+      { type: "paragraph", text: "Al registrarse, la CRA pide datos básicos: su nombre legal o el de su sociedad, la actividad del negocio y qué cuentas de programa quiere abrir." },
+      { type: "heading", id: "despues", text: "Una vez que lo tiene" },
+      { type: "paragraph", text: "Una vez que tiene su BN, póngalo en los documentos que lo requieren (facturas de GST/HST, remesas de nómina, declaraciones de sociedades) y guárdelo a la mano. Lo usará cada vez que trate con la CRA." },
+      { type: "paragraph", text: "Cuando se constituye en sociedad con Korporex, su número de negocio de la CRA y las cuentas fiscales que necesita se configuran junto con sus estatutos y su libro de actas, de modo que todo queda conectado desde el primer día.", parts: ["Cuando se ", { text: "constituye en sociedad con Korporex", href: "/guides/como-constituirse-sociedad-canada" }, ", su número de negocio de la CRA y las cuentas fiscales que necesita se configuran junto con sus estatutos y su libro de actas, de modo que todo queda conectado desde el primer día."] },
+    ],
+  },
+  {
+    slug: "que-son-los-estatutos-de-constitucion",
+    locale: "es",
+    group: "articles-of-incorporation",
+    category: "Incorporation Guides",
+    title: "¿Qué son los estatutos de constitución?",
+    excerpt:
+      "Los estatutos de constitución son el documento fundacional que crea su sociedad. Aquí está qué contienen, por qué importa la estructura de acciones y cómo se presentan.",
+    metaTitle: "¿Qué son los estatutos de constitución? | Korporex",
+    metaDescription:
+      "Qué son los estatutos de constitución: el documento fundacional que crea su sociedad, qué contienen, la diferencia entre federal y Ontario, y por qué importa la estructura de acciones.",
+    readTime: "5 min de lectura",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "Los estatutos de constitución son el documento fundacional que da existencia legal a una sociedad. Cuando se constituye en sociedad, presenta sus estatutos ante el gobierno, y una vez aceptados, su sociedad existe como entidad legal independiente. Todo lo que la sociedad puede hacer se desprende de lo que establecen los estatutos." },
+      { type: "heading", id: "que-contienen", text: "Qué contienen los estatutos de constitución" },
+      { type: "paragraph", text: "La forma exacta varía según la jurisdicción, pero los estatutos de constitución suelen establecer:" },
+      { type: "list", items: ["El nombre de la sociedad (o una solicitud de sociedad numérica).", "La provincia o territorio donde está el domicilio social.", "Las clases y el número máximo de acciones que la sociedad está autorizada a emitir.", "Cualquier restricción a la transferencia de acciones (común en sociedades privadas).", "El número, o el mínimo y máximo, de directores.", "Cualquier restricción a la actividad que la sociedad puede ejercer.", "Cualquier otra disposición que los fundadores decidan incluir."] },
+      { type: "heading", id: "estructura-acciones", text: "Por qué la estructura de acciones es la parte importante" },
+      { type: "paragraph", text: "La mayor parte de los estatutos es administrativa. La estructura de acciones es la parte que realmente da forma a su negocio. Determina quién posee qué, cómo pueden pagarse las ganancias como dividendos y cómo podrá incorporar a un cofundador o inversionista más adelante. Una estructura simple de una sola clase sirve para un dueño único, pero puede encerrarlo en cuanto quiera repartir la propiedad, dividir el ingreso con la familia o vender parte de la empresa." },
+      { type: "callout", title: "Dónde sale mal hacerlo por su cuenta", text: "Las constituciones baratas en línea suelen dar a todos la misma configuración de acciones básica. Funciona hasta que deja de funcionar, y reconstruir una estructura de acciones después cuesta mucho más que haberla montado bien desde el inicio." },
+      { type: "heading", id: "federal-ontario", text: "Estatutos federales o de Ontario" },
+      { type: "paragraph", text: "Los estatutos federales se presentan bajo la Ley Canadiense de Sociedades por Acciones a través de Corporations Canada; los de Ontario, bajo la Ley de Sociedades por Acciones de Ontario a través del Registro de Empresas de Ontario. Los documentos son similares en su fondo, pero la protección del nombre y los trámites anuales difieren.", parts: ["Los estatutos federales se presentan bajo la Ley Canadiense de Sociedades por Acciones a través de Corporations Canada; los de Ontario, bajo la Ley de Sociedades por Acciones de Ontario a través del Registro de Empresas de Ontario. Los documentos son similares en su fondo, pero la ", { text: "protección del nombre y los trámites anuales difieren entre federal y provincial", href: "/guides/como-constituirse-sociedad-canada" }, "."] },
+      { type: "heading", id: "como-se-presentan", text: "Cómo se presentan los estatutos" },
+      { type: "paragraph", text: "Elige un nombre (con un informe NUANS) o toma una sociedad numérica, define su estructura de acciones, nombra a sus directores y domicilio social, y presenta. Una vez aceptados, recibe un certificado de constitución y una copia sellada de sus estatutos, que se convierten en los primeros documentos de su libro de actas.", parts: ["Elige un nombre (con un ", { text: "informe NUANS", href: "/nuans" }, ") o toma una sociedad numérica, define su estructura de acciones, nombra a sus directores y domicilio social, y presenta. Una vez aceptados, recibe un certificado de constitución y una copia sellada de sus estatutos, que se convierten en los primeros documentos de su libro de actas."] },
+      { type: "paragraph", text: "Korporex prepara y presenta sus estatutos de constitución en línea para sociedades federales y de Ontario, incluida la estructura de acciones, y entrega sus documentos en 24 horas." },
+    ],
+  },
+  {
+    slug: "como-registrar-una-empresa-unipersonal-en-ontario",
+    locale: "es",
+    group: "register-sole-proprietorship-ontario",
+    category: "Incorporation Guides",
+    title: "Cómo registrar una empresa unipersonal en Ontario",
+    excerpt:
+      "Registrar una empresa unipersonal en Ontario es rápido y económico. Aquí está cuándo debe registrarse, cómo hacerlo y qué viene después.",
+    metaTitle: "Cómo registrar una empresa unipersonal en Ontario | Korporex",
+    metaDescription:
+      "Cómo registrar una empresa unipersonal en Ontario: cuándo se requiere el registro, cómo registrar un nombre comercial por ServiceOntario, el costo y los pasos siguientes.",
+    readTime: "5 min de lectura",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "Una empresa unipersonal es la forma más sencilla de operar un negocio en Ontario: es solo usted, operando como negocio. Registrar una es rápido y económico, y la mayoría puede hacerlo por sí misma en una tarde. Aquí está cómo registrar una empresa unipersonal en Ontario y qué atender después." },
+      { type: "heading", id: "debe-registrarse", text: "¿Tiene que registrarse?" },
+      { type: "paragraph", text: "Depende del nombre que use. Si opera estrictamente bajo su propio nombre legal (por ejemplo, «Juana Pérez»), por lo general no necesita registrar un nombre comercial. En cuanto le añade algo o usa un nombre distinto («Juana Pérez Consultoría» o «Estudio Maplewind»), debe registrar ese nombre comercial ante la provincia." },
+      { type: "heading", id: "como-registrar", text: "Cómo registrar el nombre comercial" },
+      { type: "paragraph", text: "Se registra a través de ServiceOntario, en lo que se llama Registro de Nombre Comercial (antes Master Business Licence). Puede hacerlo en línea. Necesitará:" },
+      { type: "list", items: ["El nombre comercial que quiere usar.", "Sus datos de contacto y dirección.", "Una breve descripción de lo que hace el negocio."] },
+      { type: "paragraph", text: "El registro es válido por cinco años y luego se renueva. Un paso que no conviene saltar: busque primero el nombre. Ontario le permitirá registrar un nombre que otra persona ya usa, lo que puede meterlo en un conflicto de marca más adelante.", parts: ["El registro es válido por cinco años y luego se renueva. Un paso que no conviene saltar: busque primero el nombre. Ontario le permitirá registrar un nombre que otra persona ya usa, lo que puede meterlo en un conflicto de marca más adelante. (Esto también es parte de ", { text: "registrar cualquier negocio en Ontario", href: "/guides/como-registrar-negocio-ontario" }, ".)"] },
+      { type: "heading", id: "que-viene", text: "Qué viene después" },
+      { type: "list", items: ["Obtenga un número de negocio de la CRA si va a cobrar GST/HST o contratar.", "Regístrese para el GST/HST cuando espere superar el umbral de pequeño proveedor de 30 000 $.", "Mantenga separadas las finanzas del negocio y las personales, aunque la ley las trate como una sola, para facilitar mucho la contabilidad y los impuestos."] },
+      { type: "heading", id: "cuando-constituirse", text: "Cuándo considerar constituirse en sociedad" },
+      { type: "paragraph", text: "Una empresa unipersonal no está separada de usted: las deudas y responsabilidades del negocio son suyas en lo personal, y se le grava sobre todo lo que gana. En cuanto hay un riesgo real de responsabilidad, o gana más de lo que necesita para vivir, constituirse en sociedad empieza a tener sentido.", parts: ["Una empresa unipersonal no está separada de usted: las deudas y responsabilidades del negocio son suyas en lo personal, y se le grava sobre todo lo que gana. En cuanto hay un riesgo real de responsabilidad, o gana más de lo que necesita para vivir, ", { text: "constituirse en sociedad empieza a tener sentido", href: "/guides/empresa-unipersonal-o-sociedad" }, "."] },
+      { type: "paragraph", text: "Si llega a ese punto, Korporex presenta su constitución de Ontario o federal en línea, incluida la búsqueda de nombre, la estructura de acciones y el libro de actas, y entrega sus documentos en 24 horas." },
+    ],
+  },
+  {
+    slug: "como-disolver-una-sociedad-en-ontario",
+    locale: "es",
+    group: "dissolve-corporation-ontario",
+    category: "Compliance & Maintenance",
+    title: "Cómo disolver una sociedad en Ontario",
+    excerpt:
+      "Cerrar bien una sociedad de Ontario implica liquidarla, saldar impuestos y presentar los Estatutos de Disolución. Aquí están los pasos y el orden en que hacerlos.",
+    metaTitle: "Cómo disolver una sociedad en Ontario | Korporex",
+    metaDescription:
+      "Cómo disolver una sociedad en Ontario: los pasos de una disolución voluntaria bajo la OBCA, saldar deudas e impuestos con la CRA, y presentar los Estatutos de Disolución.",
+    readTime: "5 min de lectura",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "Cuando una sociedad de Ontario ya cumplió su propósito, no basta con dejar de usarla. Dejarla inactiva mantiene vivas las obligaciones de declaración anual e impuestos. Disolverla correctamente cierra la sociedad como entidad legal. Aquí está cómo disolver una sociedad en Ontario mediante una disolución voluntaria." },
+      { type: "heading", id: "que-es-disolucion", text: "Qué significa la disolución" },
+      { type: "paragraph", text: "Una disolución voluntaria bajo la Ley de Sociedades por Acciones de Ontario pone fin a la existencia legal de la sociedad. Una vez disuelta, la sociedad deja de ser una persona jurídica independiente: ya no puede operar, poseer bienes ni asumir obligaciones, y terminan sus exigencias de declaración anual." },
+      { type: "heading", id: "los-pasos", text: "Los pasos, en orden" },
+      { type: "list", items: ["Autorizar la disolución. Los accionistas aprueban una resolución especial que autoriza la disolución y faculta a los directores a liquidar los asuntos de la sociedad.", "Liquidar el negocio. Cese las operaciones, cobre lo que se le debe a la sociedad, pague sus deudas y obligaciones, y distribuya cualquier bien restante a los accionistas.", "Saldar con la CRA. Presente la declaración final del impuesto de sociedades, cierre las cuentas de GST/HST y nómina, y presente las declaraciones finales de cada una. La sociedad no debería deber nada antes de ser disuelta.", "Presentar los Estatutos de Disolución. Envíe el trámite de disolución por el Registro de Empresas de Ontario. Una vez aceptado, la sociedad queda disuelta."] },
+      { type: "callout", title: "El orden importa", text: "Disolver antes de saldar las cuentas de la CRA puede generar problemas, porque la sociedad ya no existe para presentar declaraciones o ser evaluada. Liquide primero las cuentas fiscales, luego presente la disolución." },
+      { type: "heading", id: "despues", text: "Después de la disolución" },
+      { type: "paragraph", text: "Conserve los registros de la sociedad, incluidos el libro de actas y las declaraciones fiscales, durante el período de conservación requerido tras la disolución. La CRA aún puede revisar los últimos años, y un registro limpio es su protección si algo se cuestiona.", parts: ["Conserve los registros de la sociedad, incluidos el ", { text: "libro de actas", href: "/guides/que-es-un-libro-de-actas" }, " y las declaraciones fiscales, durante el período de conservación requerido tras la disolución. La CRA aún puede revisar los últimos años, y un registro limpio es su protección si algo se cuestiona."] },
+      { type: "heading", id: "hacerlo", text: "Hacerlo" },
+      { type: "paragraph", text: "La mecánica es sencilla, pero el orden y el lado de la CRA son fáciles de equivocar. Korporex maneja los trámites de disolución voluntaria para sociedades de Ontario y federales en línea, para que los Estatutos de Disolución se preparen y presenten correctamente.", parts: ["La mecánica es sencilla, pero el orden y el lado de la CRA son fáciles de equivocar. Korporex maneja los ", { text: "trámites de disolución voluntaria", href: "/services/dissolve-business" }, " para sociedades de Ontario y federales en línea, para que los Estatutos de Disolución se preparen y presenten correctamente. Para las declaraciones fiscales finales en sí, un contador calificado debería confirmar que todo quedó cerrado con la CRA."] },
+    ],
+  },
+  {
+    slug: "costo-para-constituirse-en-sociedad-en-ontario",
+    locale: "es",
+    group: "cost-to-incorporate-ontario",
+    category: "Incorporation Guides",
+    title: "¿Cuánto cuesta constituirse en sociedad en Ontario?",
+    excerpt:
+      "El costo para constituirse en sociedad en Ontario es más que la tarifa del gobierno. Aquí está el desglose completo de los costos obligatorios y opcionales, y los anuales.",
+    metaTitle: "Costo para constituirse en sociedad en Ontario | Korporex",
+    metaDescription:
+      "¿Cuánto cuesta constituirse en sociedad en Ontario? La tarifa de presentación del gobierno, el informe NUANS, con nombre o numérica, los costos opcionales y los costos anuales recurrentes.",
+    readTime: "5 min de lectura",
+    updated: "2026-06-04",
+    publishedAt: "2026-06-04T11:00:00-04:00",
+    content: [
+      { type: "paragraph", text: "El costo para constituirse en sociedad en Ontario es más que la única tarifa del gobierno que se suele citar. El total depende de unas pocas decisiones: si quiere una sociedad con nombre o numérica, si monta un libro de actas, y si lo hace usted mismo o usa un servicio. Aquí está el desglose completo." },
+      { type: "heading", id: "tarifa-gobierno", text: "La tarifa de presentación del gobierno" },
+      { type: "paragraph", text: "El costo central es la tarifa de presentación del gobierno de Ontario para constituirse bajo la Ley de Sociedades por Acciones de Ontario, presentada por el Registro de Empresas de Ontario. Este es el costo inevitable, que paga toda constitución de Ontario." },
+      { type: "heading", id: "nombre-numerica", text: "Con nombre o numérica: el informe NUANS" },
+      { type: "paragraph", text: "Si quiere una sociedad con nombre («Maplewind Consultoría Inc.»), necesita un informe de búsqueda de nombre NUANS para confirmar que el nombre está disponible y no se confunde con uno existente. Ese informe tiene su propio costo. Una sociedad numérica («1234567 Ontario Inc.») evita por completo el paso NUANS, lo que es más rápido y barato, con la contrapartida de que tiene un número en lugar de un nombre de marca.", parts: ["Si quiere una sociedad con nombre («Maplewind Consultoría Inc.»), necesita un ", { text: "informe de búsqueda de nombre NUANS", href: "/nuans" }, " para confirmar que el nombre está disponible y no se confunde con uno existente. Ese informe tiene su propio costo. Una sociedad numérica («1234567 Ontario Inc.») evita por completo el paso NUANS, lo que es más rápido y barato, con la contrapartida de que tiene un número en lugar de un nombre de marca."] },
+      { type: "heading", id: "costos-opcionales", text: "Costos opcionales que conviene conocer" },
+      { type: "list", items: ["Montaje del libro de actas. Las sociedades de Ontario están legalmente obligadas a llevar uno. Puede armarlo usted mismo o hacerlo preparar, lo que la mayoría de los dueños considera que vale la pena.", "Servicio de domicilio social o dirección. Si no quiere que su dirección personal figure en el registro público, un servicio de dirección es un costo adicional.", "Ayuda profesional. Un abogado o servicio de constitución cobra honorarios además del costo del gobierno, a cambio de dejar bien la estructura de acciones y los documentos."] },
+      { type: "heading", id: "costos-anuales", text: "Qué cuesta cada año después" },
+      { type: "paragraph", text: "Constituirse no es un costo único. Cada año, una sociedad de Ontario presenta una declaración anual y una declaración del impuesto de sociedades (T2) aparte, y mantiene su libro de actas al día. Presupueste sobre todo la declaración del impuesto de sociedades, que suele implicar un contador.", parts: ["Constituirse no es un costo único. Cada año, una sociedad de Ontario presenta una ", { text: "declaración anual", href: "/guides/corporate-annual-returns-canada" }, " y una declaración del impuesto de sociedades (T2) aparte, y mantiene su libro de actas al día. Presupueste sobre todo la declaración del impuesto de sociedades, que suele implicar un contador."] },
+      { type: "heading", id: "propio-servicio", text: "Hacerlo por su cuenta o usar un servicio" },
+      { type: "paragraph", text: "Puede presentar directamente ante el Registro de Empresas de Ontario y pagar solo el costo del gobierno, pero entonces usted es responsable de la búsqueda de nombre, la estructura de acciones y el libro de actas. Un servicio de tarifa fija agrupa todo eso. Korporex constituye sociedades de Ontario y federales en línea por un precio fijo que incluye la presentación, la búsqueda de nombre, la estructura de acciones y el libro de actas, con documentos entregados en 24 horas.", parts: ["Puede presentar directamente ante el Registro de Empresas de Ontario y pagar solo el costo del gobierno, pero entonces usted es responsable de la búsqueda de nombre, la estructura de acciones y el libro de actas. Un servicio de tarifa fija agrupa todo eso. Korporex constituye sociedades de Ontario y federales en línea ", { text: "por un precio fijo", href: "/order" }, " que incluye la presentación, la búsqueda de nombre, la estructura de acciones y el libro de actas, con documentos entregados en 24 horas."] },
+    ],
+  },
 ];
+
+// True once an article's scheduled publish time has arrived (or if it has no
+// scheduled time, in which case it is always live).
+export function isPublished(article: Article): boolean {
+  return !article.publishedAt || new Date(article.publishedAt).getTime() <= Date.now();
+}
 
 const ARTICLES_BY_LOCALE: Record<Locale, Article[]> = {
   en: articles.filter((a) => a.locale === "en"),
@@ -1114,12 +1655,20 @@ const ARTICLES_BY_LOCALE: Record<Locale, Article[]> = {
   es: articles.filter((a) => a.locale === "es"),
 };
 
-export function getArticlesByLocale(locale: Locale): Article[] {
+// All articles for a locale, including any scheduled for a future date.
+export function getAllArticlesByLocale(locale: Locale): Article[] {
   return ARTICLES_BY_LOCALE[locale] ?? [];
 }
 
+// Only the articles whose publish time has arrived — what visitors should see.
+export function getArticlesByLocale(locale: Locale): Article[] {
+  return getAllArticlesByLocale(locale).filter(isPublished);
+}
+
+// Look up by slug regardless of publish state, so the page can decide whether
+// to render it or 404 (used together with isPublished()).
 export function getArticle(locale: Locale, slug: string): Article | undefined {
-  return getArticlesByLocale(locale).find((a) => a.slug === slug);
+  return getAllArticlesByLocale(locale).find((a) => a.slug === slug);
 }
 
 export function getRelatedArticles(

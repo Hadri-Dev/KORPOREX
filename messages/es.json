@@ -349,6 +349,9 @@
         "label": "Comparaciones de jurisdicciones",
         "description": "Federal o provincial, y cómo iniciar un negocio en Ontario: entienda las diferencias antes de elegir."
       }
-    }
+    },
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "paginationLabel": "Paginación de guías"
   }
 }

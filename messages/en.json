@@ -349,6 +349,9 @@
         "label": "Jurisdiction Comparisons",
         "description": "Federal vs. provincial, and starting a business in Ontario: understand the differences before you choose."
       }
-    }
+    },
+    "previous": "Previous",
+    "next": "Next",
+    "paginationLabel": "Guides pagination"
   }
 }
