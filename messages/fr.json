@@ -353,5 +353,33 @@
     "previous": "Précédent",
     "next": "Suivant",
     "paginationLabel": "Pagination des guides"
+  },
+  "contact": {
+    "metaTitle": "Contacter Korporex | Soutien à la constitution en ligne",
+    "metaDescription": "Des questions sur la constitution de votre entreprise au Canada ? Contactez l'équipe de soutien de Korporex — nous répondons en un jour ouvrable. 100 % en ligne.",
+    "eyebrow": "Nous joindre",
+    "heroTitle": "Nous sommes là pour vous aider",
+    "heroSubtitle": "Une question sur la constitution de votre entreprise ? Notre équipe de soutien répond en un jour ouvrable.",
+    "formTitle": "Envoyez-nous un message",
+    "name": "Nom complet",
+    "namePlaceholder": "Jeanne Tremblay",
+    "email": "Adresse courriel",
+    "emailPlaceholder": "jeanne@entreprise.com",
+    "company": "Nom de l'entreprise",
+    "companyPlaceholder": "Acme Ltée",
+    "message": "Comment pouvons-nous vous aider ?",
+    "messagePlaceholder": "Parlez-nous de votre entreprise et de ce dont vous avez besoin...",
+    "send": "Envoyer le message",
+    "sending": "Envoi…",
+    "errorGeneric": "Une erreur s'est produite. Veuillez réessayer ou nous écrire à contact@korporex.ca.",
+    "thankYouTitle": "Merci",
+    "thankYouBody": "Nous avons bien reçu votre message et vous répondrons en un jour ouvrable.",
+    "infoTitle": "Coordonnées",
+    "emailLabel": "Courriel",
+    "emailNote": "Toutes les demandes : questions générales, commandes de constitution et soutien.",
+    "faqTitle": "Vous cherchez des réponses rapides ?",
+    "faqBody": "La plupart des questions courantes trouvent réponse dans notre FAQ : choisir entre le fédéral et le provincial, ce qui est inclus et combien de temps prend la constitution.",
+    "faqCta": "Consulter la FAQ",
+    "quote": "Nous répondons à chaque message en un jour ouvrable. Korporex est 100 % en ligne. Nous servons les entrepreneurs canadiens et les clients internationaux, où qu'ils soient."
   }
 }

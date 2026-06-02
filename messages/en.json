@@ -353,5 +353,33 @@
     "previous": "Previous",
     "next": "Next",
     "paginationLabel": "Guides pagination"
+  },
+  "contact": {
+    "metaTitle": "Contact Korporex | Online Incorporation Support",
+    "metaDescription": "Questions about incorporating your business in Canada? Contact the Korporex support team — we respond within one business day. 100% online.",
+    "eyebrow": "Contact Us",
+    "heroTitle": "We're Here to Help",
+    "heroSubtitle": "Have a question about incorporating your business? Our support team responds within one business day.",
+    "formTitle": "Send Us a Message",
+    "name": "Full Name",
+    "namePlaceholder": "Jane Smith",
+    "email": "Email Address",
+    "emailPlaceholder": "jane@company.com",
+    "company": "Company / Business Name",
+    "companyPlaceholder": "Acme Ltd",
+    "message": "How Can We Help?",
+    "messagePlaceholder": "Tell us about your business and what you need help with...",
+    "send": "Send Message",
+    "sending": "Sending…",
+    "errorGeneric": "Something went wrong. Please try again or email us at contact@korporex.ca.",
+    "thankYouTitle": "Thank You",
+    "thankYouBody": "We've received your message and will respond within one business day.",
+    "infoTitle": "Contact Information",
+    "emailLabel": "Email",
+    "emailNote": "All enquiries: general questions, incorporation orders, and support.",
+    "faqTitle": "Looking for Quick Answers?",
+    "faqBody": "Most common questions are answered in our FAQ, including whether to choose federal or provincial, what's included, and how long incorporation takes.",
+    "faqCta": "Browse the FAQ",
+    "quote": "We respond to every message within one business day. Korporex is 100% online. We serve Canadian entrepreneurs and international clients from anywhere."
   }
 }

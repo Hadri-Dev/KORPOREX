@@ -353,5 +353,33 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "paginationLabel": "Paginación de guías"
+  },
+  "contact": {
+    "metaTitle": "Contactar a Korporex | Soporte de constitución en línea",
+    "metaDescription": "¿Preguntas sobre constituir su empresa en Canadá? Contacte al equipo de soporte de Korporex — respondemos en un día hábil. 100 % en línea.",
+    "eyebrow": "Contáctenos",
+    "heroTitle": "Estamos aquí para ayudar",
+    "heroSubtitle": "¿Tiene una pregunta sobre constituir su empresa? Nuestro equipo de soporte responde en un día hábil.",
+    "formTitle": "Envíenos un mensaje",
+    "name": "Nombre completo",
+    "namePlaceholder": "Juana Pérez",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "juana@empresa.com",
+    "company": "Nombre de la empresa",
+    "companyPlaceholder": "Acme Ltd",
+    "message": "¿Cómo podemos ayudarle?",
+    "messagePlaceholder": "Cuéntenos sobre su empresa y en qué necesita ayuda...",
+    "send": "Enviar mensaje",
+    "sending": "Enviando…",
+    "errorGeneric": "Algo salió mal. Inténtelo de nuevo o escríbanos a contact@korporex.ca.",
+    "thankYouTitle": "Gracias",
+    "thankYouBody": "Hemos recibido su mensaje y le responderemos en un día hábil.",
+    "infoTitle": "Información de contacto",
+    "emailLabel": "Correo",
+    "emailNote": "Todas las consultas: preguntas generales, pedidos de constitución y soporte.",
+    "faqTitle": "¿Busca respuestas rápidas?",
+    "faqBody": "La mayoría de las preguntas comunes se responden en nuestras preguntas frecuentes: elegir entre federal y provincial, qué está incluido y cuánto tarda la constitución.",
+    "faqCta": "Ver las preguntas frecuentes",
+    "quote": "Respondemos a cada mensaje en un día hábil. Korporex es 100 % en línea. Atendemos a emprendedores canadienses y clientes internacionales desde cualquier lugar."
   }
 }
