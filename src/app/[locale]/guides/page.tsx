@@ -14,7 +14,7 @@ type Params = {
   searchParams: { page?: string };
 };
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 6;
 
 // Re-render periodically so scheduled articles appear (and the pagination
 // control shows once there are more than PAGE_SIZE published) without a redeploy.
