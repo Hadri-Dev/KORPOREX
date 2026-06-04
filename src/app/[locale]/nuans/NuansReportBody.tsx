@@ -177,7 +177,7 @@ export default function NuansReportBody() {
               </h2>
               <p className="text-sm text-gray-600 mb-6 leading-relaxed">
                 Add one name per row. The first proposed name is $40 + HST. Each
-                additional name in the same order is $45 + HST. Every name you
+                additional name in the same order is $40 + HST. Every name you
                 enter is searched and the results are bundled into a single
                 emailed PDF.
               </p>

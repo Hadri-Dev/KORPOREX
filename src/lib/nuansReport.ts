@@ -104,7 +104,7 @@ export const NUANS_REPORT = {
   /** Surcharge for every proposed name beyond the first. Each name in the
    *  table is a separate NUANS search; the extras cover the additional
    *  pass-through cost from the search house. */
-  additionalPrice: 45,
+  additionalPrice: 40,
   tagline:
     "Pre-screen one or more proposed Canadian corporation names against the NUANS database before you file.",
 };

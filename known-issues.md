@@ -3,8 +3,8 @@
 ## Open
 
 ### [Severity: low] First-name NUANS price ($40) is below Ontario pass-through cost
-- **Where**: [src/lib/nuansReport.ts](src/lib/nuansReport.ts) `basePrice: 40` (first name), `additionalPrice: 45` (each extra name). Pass-through reference in [src/lib/pricing.ts](src/lib/pricing.ts) `NUANS_FEES` (federal $20, Ontario $60).
-- **Symptom**: A single-name Ontario-jurisdiction NUANS order pays $40 + tax while the search-house pass-through cost is approximately $60. Korporex loses ~$20 on a 1-name Ontario order. Federal 1-name orders net ~$20 margin. Multi-name orders are healthy at $45 per addition.
+- **Where**: [src/lib/nuansReport.ts](src/lib/nuansReport.ts) `basePrice: 40` (first name), `additionalPrice: 40` (each extra name). Pass-through reference in [src/lib/pricing.ts](src/lib/pricing.ts) `NUANS_FEES` (federal $20, Ontario $60).
+- **Symptom**: A single-name Ontario-jurisdiction NUANS order pays $40 + tax while the search-house pass-through cost is approximately $60. Korporex loses ~$20 on a 1-name Ontario order. Federal 1-name orders net ~$20 margin. Additional names are now also $40 each (was $45), so multi-name Ontario orders carry the same per-name loss-leader margin.
 - **Impact**: Per-order margin negative on 1-name Ontario orders only. Volume expected to be low (most NUANS orders are bundled with incorporation packages). Acceptable as a marketing loss-leader.
 - **Why not fixed yet**: Per user direction during 2026-05-26 builds — keep base price at $40 to match published marketing. Per-jurisdiction first-name pricing ($40 federal / $80 Ontario) is a one-line change in `NUANS_REPORT.basePrice` plus passing the first row's jurisdiction to `computePricing` in `/api/nuans-report/route.ts`.
 - **Logged**: 2026-05-26 (updated same day for the $45 / additional-row tier)
