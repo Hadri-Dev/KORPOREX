@@ -34,7 +34,9 @@ export default function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 h-[72px]">
       <nav className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5 shrink-0">
+        {/* locale="en" forces the logo to the unprefixed English home even from
+            a /fr or /es page — the brand mark always returns to English. */}
+        <Link href="/" locale="en" className="flex items-center gap-2.5 shrink-0">
           <KLogo />
           <span className="font-serif text-[1.2rem] font-bold text-navy-900 tracking-[0.12em] hidden sm:block">
             KORPOREX

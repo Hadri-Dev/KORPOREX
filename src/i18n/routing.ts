@@ -12,6 +12,12 @@ export const routing = defineRouting({
   // French and Spanish use a locale prefix (/fr/about, /es/pricing). Visiting
   // /en/* redirects to the unprefixed equivalent.
   localePrefix: "as-needed",
+  // Always default to English. Without this, next-intl negotiates the locale
+  // from the visitor's `Accept-Language` header, so a French/Spanish browser
+  // hitting `/` would be redirected to `/fr` or `/es`. Disabling detection
+  // pins the unprefixed root to the default locale (en); visitors opt into
+  // FR/ES explicitly via the language switcher.
+  localeDetection: false,
 });
 
 export type Locale = (typeof routing.locales)[number];
