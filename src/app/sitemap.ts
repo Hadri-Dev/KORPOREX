@@ -7,6 +7,7 @@ import {
   SITE_URL,
   type Locale,
 } from "./[locale]/guides/articles";
+import { isBodyTranslated } from "@/lib/seoMeta";
 
 // Regenerate hourly so guide articles scheduled with a future `publishedAt`
 // enter the sitemap shortly after they go live, without a redeploy.
@@ -67,17 +68,36 @@ function languagesOf(urls: Partial<Record<Locale, string>>): Record<string, stri
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
 
-  // Static pages — one entry per locale URL, each carrying the full hreflang
-  // set so every language version references its alternates (and itself).
+  // Static pages. Pages whose body is translated emit one entry per locale URL,
+  // each carrying the full hreflang set so every language version references its
+  // alternates (and itself). Pages still rendering English under /fr and /es are
+  // duplicates of the English URL — they emit only the English entry with no
+  // hreflang, matching the page-level canonical (which consolidates fr/es → en).
+  // This keeps the sitemap from re-advertising the duplicate locale URLs that
+  // Google flags as "Duplicate without user-selected canonical". When a page is
+  // translated (added to BODY_TRANSLATED_PATHS in seoMeta), it regains its
+  // per-locale entries here automatically.
   for (const path of STATIC_PATHS) {
+    const changeFrequency = path === "" || path === "/guides" ? "weekly" : "monthly";
+    const priority = path === "" ? 1 : path.startsWith("/services/") ? 0.6 : 0.8;
+
+    if (!isBodyTranslated(path)) {
+      entries.push({
+        url: localeUrl("en", path),
+        changeFrequency,
+        priority,
+      });
+      continue;
+    }
+
     const urls: Partial<Record<Locale, string>> = {};
     for (const locale of routing.locales) urls[locale] = localeUrl(locale, path);
     const languages = languagesOf(urls);
     for (const locale of routing.locales) {
       entries.push({
         url: urls[locale]!,
-        changeFrequency: path === "" || path === "/guides" ? "weekly" : "monthly",
-        priority: path === "" ? 1 : path.startsWith("/services/") ? 0.6 : 0.8,
+        changeFrequency,
+        priority,
         alternates: { languages },
       });
     }
