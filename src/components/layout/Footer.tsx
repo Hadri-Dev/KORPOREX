@@ -141,6 +141,13 @@ export default function Footer() {
                   {tCommon("contactEmail")}
                 </a>
               </li>
+              <li>
+                <address className="not-italic leading-relaxed text-gray-400">
+                  {t("addressLine1")}
+                  <br />
+                  {t("addressLine2")}
+                </address>
+              </li>
               <li className="leading-relaxed text-xs text-gray-500">{t("responseLine")}</li>
             </ul>
             <div className="mt-6">

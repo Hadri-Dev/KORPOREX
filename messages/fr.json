@@ -50,6 +50,8 @@
     "servicesTitle": "Services",
     "contactTitle": "Contact",
     "responseLine": "Nous répondons à toutes les demandes en un jour ouvrable.",
+    "addressLine1": "901 Guelph Line",
+    "addressLine2": "Burlington, ON  L7R 3N8",
     "companyLinks": {
       "services": "Services",
       "pricing": "Commander",
