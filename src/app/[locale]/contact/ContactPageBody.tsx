@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Mail, MessageSquare } from "lucide-react";
+import { Mail, MapPin, MessageSquare } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 
 export default function ContactPageBody() {
@@ -126,6 +126,17 @@ export default function ContactPageBody() {
                       contact@korporex.ca
                     </a>
                     <p className="text-xs text-gray-500 mt-1 leading-relaxed">{t("emailNote")}</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <MapPin size={18} className="text-gold-500 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase mb-1">{t("addressLabel")}</p>
+                    <address className="not-italic text-sm text-gray-700 leading-relaxed">
+                      {t("addressLine1")}
+                      <br />
+                      {t("addressLine2")}
+                    </address>
                   </div>
                 </li>
               </ul>
