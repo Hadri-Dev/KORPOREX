@@ -1,6 +1,8 @@
 # Progress
 
 ## Current Focus
+**2026-06-22 (later 3) — Tightened gap between footer COMPANY sub-columns.** The two sub-columns sat far apart. Root cause: `grid grid-cols-2` forced each sub-column to 50% of the COMPANY cell, leaving empty slack that `gap-x` couldn't remove (reducing `gap-x-6`→`gap-x-3` had no visible effect). Switched the wrapper from grid to `flex gap-x-8` ([Footer.tsx](src/components/layout/Footer.tsx)) so each `<ul>` sizes to its content and the gap directly controls the visible spacing (~32px). Verified via screenshot, user-approved. `npx tsc --noEmit` clean.
+
 **2026-06-22 (later 2) — Footer COMPANY links → two sub-columns.** The COMPANY column was a single tall list of 6 links leaving empty space to its right. Split into two side-by-side sub-columns ([Footer.tsx](src/components/layout/Footer.tsx)): left = Services/Order/About Us, right = FAQ/Guides/Contact (user-chosen "Variant B"). Implemented as `COMPANY_LINKS_COL1` (faq/guides/contact) + `COMPANY_LINKS_COL2` (services/order/about) rendered through a `grid grid-cols-2 gap-x-6 gap-y-3` wrapper; render order `[COL2, COL1]` puts Services group on the left. Shown to user as two rendered variants before pushing. `npx tsc --noEmit` clean.
 
 **2026-06-22 (later) — Shortened footer response line to one line.** "We respond to all enquiries within one business day." wrapped to two lines; shortened to "We reply within one business day." (EN) with concise FR ("Réponse sous un jour ouvrable.") / ES ("Respondemos en un día hábil.") rewrites, same meaning. All three `footer.responseLine` keys updated in lockstep. Verified single-line via screenshot. Pushed (commit 9ce6d29).

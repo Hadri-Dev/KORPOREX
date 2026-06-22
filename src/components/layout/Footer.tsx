@@ -108,7 +108,7 @@ export default function Footer() {
             <p className="text-xs font-semibold tracking-[0.12em] uppercase text-gray-500 mb-5">
               {t("companyTitle")}
             </p>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+            <div className="flex gap-x-8">
               {[COMPANY_LINKS_COL2, COMPANY_LINKS_COL1].map((col, i) => (
                 <ul key={i} className="space-y-3">
                   {col.map(({ href, labelKey }) => (
