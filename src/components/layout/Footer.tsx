@@ -73,8 +73,8 @@ export default function Footer() {
 
   return (
     <footer className="bg-navy-950 text-white">
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
+      <div className="max-w-7xl mx-auto px-6 pt-8 pb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-8">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
               <div className="w-8 h-8 bg-navy-900 flex items-center justify-center shrink-0">
@@ -161,7 +161,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-600">{t("copyrightDisclaimer", { year })}</p>
           <div className="flex gap-6 text-xs text-gray-600">
             <Link href="/privacy-policy" className="hover:text-gray-400 transition-colors">

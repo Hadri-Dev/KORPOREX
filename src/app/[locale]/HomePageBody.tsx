@@ -313,7 +313,7 @@ export default function HomePageBody() {
       </section>
 
       {/* CTA */}
-      <section className="bg-navy-900 py-14 px-6 text-center text-white">
+      <section className="bg-navy-900 pt-12 pb-8 px-6 text-center text-white">
         <div className="max-w-2xl mx-auto">
           <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">
             {t("ctaBottom.title")}
