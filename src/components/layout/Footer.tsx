@@ -49,13 +49,16 @@ const SOCIALS: { label: string; href: string; icon: React.ReactNode }[] = [
   },
 ];
 
-const COMPANY_LINKS = [
-  { href: "/services", labelKey: "services" },
-  { href: "/order", labelKey: "pricing" },
-  { href: "/about", labelKey: "about" },
+const COMPANY_LINKS_COL1 = [
   { href: "/faq", labelKey: "faq" },
   { href: "/guides", labelKey: "resources" },
   { href: "/contact", labelKey: "contact" },
+] as const;
+
+const COMPANY_LINKS_COL2 = [
+  { href: "/services", labelKey: "services" },
+  { href: "/order", labelKey: "pricing" },
+  { href: "/about", labelKey: "about" },
 ] as const;
 
 const SERVICE_LINKS = [
@@ -105,15 +108,19 @@ export default function Footer() {
             <p className="text-xs font-semibold tracking-[0.12em] uppercase text-gray-500 mb-5">
               {t("companyTitle")}
             </p>
-            <ul className="space-y-3">
-              {COMPANY_LINKS.map(({ href, labelKey }) => (
-                <li key={href}>
-                  <Link href={href} className="text-sm text-gray-400 hover:text-white transition-colors">
-                    {t(`companyLinks.${labelKey}`)}
-                  </Link>
-                </li>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+              {[COMPANY_LINKS_COL2, COMPANY_LINKS_COL1].map((col, i) => (
+                <ul key={i} className="space-y-3">
+                  {col.map(({ href, labelKey }) => (
+                    <li key={href}>
+                      <Link href={href} className="text-sm text-gray-400 hover:text-white transition-colors">
+                        {t(`companyLinks.${labelKey}`)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               ))}
-            </ul>
+            </div>
           </div>
 
           <div>
