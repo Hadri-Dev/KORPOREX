@@ -2,8 +2,49 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { routing, type Locale } from "@/i18n/routing";
 import { SITE_URL } from "@/app/[locale]/guides/articles";
+import { OG_IMAGE_PATH, ORG_SHORT } from "@/lib/structuredData";
 
 const DEFAULT_LOCALE = routing.defaultLocale;
+
+// og:locale uses an underscore region tag. Spanish has no single country here,
+// so es maps to the generic es_ES form most platforms accept.
+const OG_LOCALE: Record<Locale, string> = {
+  en: "en_CA",
+  fr: "fr_CA",
+  es: "es_ES",
+};
+
+// Builds Open Graph + Twitter card metadata for a page. Each page passes its own
+// resolved title/description/url so the social preview matches the page (not a
+// site-wide default). The image is the shared 1200x630 branded card; the
+// metadataBase set in the root layout resolves the relative path to an absolute
+// URL. `type` is "website" for normal pages, "article" for guide posts.
+export function socialMeta(opts: {
+  title: string;
+  description: string;
+  url: string;
+  locale: Locale;
+  type?: "website" | "article";
+}): Pick<Metadata, "openGraph" | "twitter"> {
+  const image = { url: OG_IMAGE_PATH, width: 1200, height: 630, alt: opts.title };
+  return {
+    openGraph: {
+      title: opts.title,
+      description: opts.description,
+      url: opts.url,
+      siteName: ORG_SHORT,
+      locale: OG_LOCALE[opts.locale],
+      type: opts.type ?? "website",
+      images: [image],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: opts.title,
+      description: opts.description,
+      images: [OG_IMAGE_PATH],
+    },
+  };
+}
 
 // Absolute URL for a locale-less path, honoring next-intl's `as-needed`
 // prefixing (English unprefixed; fr/es prefixed). `/` resolves to the origin.
@@ -83,9 +124,12 @@ export async function buildSeoMetadata(
   path: string,
 ): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: "seo" });
+  const title = t(`${key}.title`);
+  const description = t(`${key}.description`);
   return {
-    title: t(`${key}.title`),
-    description: t(`${key}.description`),
+    title,
+    description,
     alternates: buildAlternates(locale, path, isBodyTranslated(path)),
+    ...socialMeta({ title, description, url: localizedUrl(locale, path), locale }),
   };
 }

@@ -8,6 +8,7 @@ import {
   SITE_URL,
   type Locale,
 } from "./articles";
+import { socialMeta } from "@/lib/seoMeta";
 
 type Params = {
   params: { locale: Locale };
@@ -35,9 +36,11 @@ function indexUrl(locale: Locale): string {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { locale } = params;
   const t = await getTranslations({ locale, namespace: "guides" });
+  const title = t("metaTitle");
+  const description = t("metaDescription");
   return {
-    title: t("metaTitle"),
-    description: t("metaDescription"),
+    title,
+    description,
     alternates: {
       canonical: indexUrl(locale),
       languages: {
@@ -47,6 +50,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         "x-default": indexUrl("en"),
       },
     },
+    ...socialMeta({ title, description, url: indexUrl(locale), locale }),
   };
 }
 

@@ -12,9 +12,13 @@ import {
   guideUrl,
   isPublished,
   resolveLocalizedSlug,
+  SITE_URL,
   type ArticleSection,
   type Locale,
 } from "../articles";
+import { socialMeta } from "@/lib/seoMeta";
+import { articleSchema, breadcrumbSchema, ORG_SHORT } from "@/lib/structuredData";
+import JsonLd from "@/components/JsonLd";
 
 type Params = { params: { locale: Locale; slug: string } };
 
@@ -56,6 +60,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       canonical: guideUrl(locale, slug),
       languages,
     },
+    ...socialMeta({
+      title: article.metaTitle,
+      description: article.metaDescription,
+      url: guideUrl(locale, slug),
+      locale,
+      type: "article",
+    }),
   };
 }
 
@@ -186,14 +197,34 @@ export default async function ArticlePage({ params }: Params) {
   }
 
   const t = await getTranslations("guides");
+  const tNav = await getTranslations("nav");
 
   const headings = article.content.filter(
     (s): s is Extract<ArticleSection, { type: "heading" }> => s.type === "heading",
   );
   const related = getRelatedArticles(locale, slug);
 
+  // Structured data: Article (with published/modified dates) + a Home › Guides ›
+  // Article breadcrumb trail. Built server-side so it ships in the static HTML.
+  const prefix = locale === "en" ? "" : `/${locale}`;
+  const articleUrl = guideUrl(locale, slug);
+  const article_ld = articleSchema({
+    headline: article.title,
+    description: article.metaDescription,
+    url: articleUrl,
+    datePublished: article.publishedAt ?? article.updated,
+    dateModified: article.updated,
+    inLanguage: DATE_LOCALE[locale],
+  });
+  const breadcrumb_ld = breadcrumbSchema([
+    { name: ORG_SHORT, url: `${SITE_URL}${prefix}` },
+    { name: tNav("resources"), url: `${SITE_URL}${prefix}/guides` },
+    { name: article.title, url: articleUrl },
+  ]);
+
   return (
     <>
+      <JsonLd data={[article_ld, breadcrumb_ld]} />
       {/* Hero */}
       <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
         <div className="max-w-4xl mx-auto">

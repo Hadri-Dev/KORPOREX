@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowRight, Zap, Eye, ShieldCheck, Globe } from "lucide-react";
 import { SITE_URL, type Locale } from "../guides/articles";
+import { socialMeta } from "@/lib/seoMeta";
 
 // Value cards: icon is structural (stays in code), title/description are localized.
 const VALUES: { key: string; icon: React.ElementType }[] = [
@@ -24,9 +25,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "about" });
+  const title = t("metaTitle");
+  const description = t("metaDescription");
   return {
-    title: t("metaTitle"),
-    description: t("metaDescription"),
+    title,
+    description,
     alternates: {
       canonical: aboutUrl(locale),
       languages: {
@@ -36,6 +39,7 @@ export async function generateMetadata({
         "x-default": aboutUrl("en"),
       },
     },
+    ...socialMeta({ title, description, url: aboutUrl(locale), locale }),
   };
 }
 

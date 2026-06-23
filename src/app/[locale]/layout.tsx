@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import "../globals.css";
 import SiteChrome from "@/components/layout/SiteChrome";
 import { routing, type Locale } from "@/i18n/routing";
+import { SITE_URL } from "@/app/[locale]/guides/articles";
+import { localizedUrl, socialMeta } from "@/lib/seoMeta";
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
@@ -30,9 +32,18 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
+  const title = t("title");
+  const description = t("description");
   return {
-    title: t("title"),
-    description: t("description"),
+    // metadataBase resolves the relative og:image path to an absolute URL and
+    // is the base for any relative canonical/alternate links.
+    metadataBase: new URL(SITE_URL),
+    title,
+    description,
+    // Site-wide default social cards. Pages that export their own
+    // generateMetadata (via buildSeoMetadata / socialMeta) override these with
+    // page-specific title, description, and URL.
+    ...socialMeta({ title, description, url: localizedUrl(locale, "/"), locale }),
   };
 }
 
