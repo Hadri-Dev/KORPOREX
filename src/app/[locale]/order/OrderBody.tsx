@@ -124,7 +124,7 @@ export default function PricingPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy-900 text-white py-16 px-6 text-center">
+      <section className="bg-navy-900 text-white py-12 px-6 text-center">
         <div className="max-w-3xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             Pricing
@@ -140,7 +140,7 @@ export default function PricingPage() {
       </section>
 
       {/* Jurisdiction Tabs */}
-      <section className="bg-white py-16 px-6">
+      <section className="bg-white py-12 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-wrap justify-center gap-2 mb-12">
             {jurisdictions.map(({ id, label, subtitle }) => (
@@ -204,7 +204,7 @@ export default function PricingPage() {
       </section>
 
       {/* What's included in every package */}
-      <section className="bg-cream-50 py-16 px-6">
+      <section className="bg-cream-50 py-12 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             Included in Every Package
@@ -224,7 +224,7 @@ export default function PricingPage() {
       </section>
 
       {/* Registered Office add-on */}
-      <section className="bg-white py-16 px-6 border-t border-gray-100">
+      <section className="bg-white py-12 px-6 border-t border-gray-100">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">

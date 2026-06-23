@@ -73,7 +73,7 @@ export default async function GuidesPage({ params, searchParams }: Params) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy-900 text-white py-16 px-6">
+      <section className="bg-navy-900 text-white py-12 px-6">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             {t("eyebrow")}
@@ -88,7 +88,7 @@ export default async function GuidesPage({ params, searchParams }: Params) {
       </section>
 
       {/* Category overview */}
-      <section className="bg-white py-14 px-6 border-b border-gray-100">
+      <section className="bg-white py-10 px-6 border-b border-gray-100">
         <div className="max-w-6xl mx-auto grid sm:grid-cols-3 gap-6">
           {CATEGORY_CARDS.map(({ key, icon: Icon }) => (
             <div key={key} className="flex gap-4 items-start p-6 bg-cream-50 border border-gray-100 rounded-lg">
@@ -109,7 +109,7 @@ export default async function GuidesPage({ params, searchParams }: Params) {
       </section>
 
       {/* Articles */}
-      <section className="bg-white py-16 px-6">
+      <section className="bg-white py-12 px-6">
         <div className="max-w-6xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-2">
             {t("allArticles")}

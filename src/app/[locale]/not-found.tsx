@@ -9,7 +9,7 @@ import NotFoundBeacon from "./NotFoundBeacon";
 // translations are tracked as a separate known-issue and don't block this).
 export default function NotFound() {
   return (
-    <main className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center px-6 py-16 text-center">
+    <main className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center px-6 py-12 text-center">
       <p className="font-mono text-sm uppercase tracking-wider text-gray-500">404</p>
       <h1 className="mt-3 font-serif text-4xl font-semibold text-navy-900 sm:text-5xl">
         Page not found

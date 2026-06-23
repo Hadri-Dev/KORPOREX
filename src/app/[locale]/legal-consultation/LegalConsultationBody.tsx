@@ -218,7 +218,7 @@ export default function LegalConsultationPage() {
       <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="afterInteractive" />
 
       {/* Hero */}
-      <section className="bg-cream-50 py-16 px-6 border-b border-gray-100">
+      <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
         <div className="max-w-3xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             Talk to a Trusted Corporate Lawyer

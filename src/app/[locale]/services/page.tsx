@@ -124,7 +124,7 @@ export default function ServicesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy-900 text-white py-16 px-6">
+      <section className="bg-navy-900 text-white py-12 px-6">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             All Services
@@ -143,7 +143,7 @@ export default function ServicesPage() {
 
       {/* Service Categories — each in an elevated cream card with gold stripe,
           matching the /nuans 'Your proposed names' card treatment. */}
-      <section className="bg-white py-16 px-6">
+      <section className="bg-white py-12 px-6">
         <div className="max-w-6xl mx-auto space-y-8">
           {/* Incorporation — custom block: two jurisdiction cards + 3-package summary */}
           <div className="relative bg-cream-50 border border-gray-200 border-l-4 border-l-gold-500 border-r-4 border-r-gold-500 rounded-lg shadow-sm p-6 md:p-8">
@@ -274,7 +274,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Lawyer-referral callout */}
-      <section className="bg-cream-50 py-16 px-6 border-t border-gray-100">
+      <section className="bg-cream-50 py-12 px-6 border-t border-gray-100">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white border border-gray-200 rounded-lg p-8 md:p-10 flex flex-col md:flex-row gap-8 items-start">
             <div className="w-12 h-12 bg-navy-900 flex items-center justify-center shrink-0">

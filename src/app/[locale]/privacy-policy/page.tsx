@@ -41,7 +41,7 @@ export default function PrivacyPage() {
       </section>
 
       {/* Body */}
-      <section className="bg-white py-16 px-6">
+      <section className="bg-white py-12 px-6">
         <div className="max-w-3xl mx-auto text-gray-700 leading-relaxed">
           <p className="mb-8">
             <strong>Korporex Business Solutions Inc.</strong> (&ldquo;<strong>Korporex</strong>&rdquo;,

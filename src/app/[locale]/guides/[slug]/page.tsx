@@ -195,7 +195,7 @@ export default async function ArticlePage({ params }: Params) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-cream-50 py-16 px-6 border-b border-gray-100">
+      <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
         <div className="max-w-4xl mx-auto">
           <Link
             href="/guides"
@@ -224,7 +224,7 @@ export default async function ArticlePage({ params }: Params) {
       </section>
 
       {/* Body */}
-      <section className="bg-white py-14 px-6">
+      <section className="bg-white py-10 px-6">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-[1fr_240px] gap-12">
           <article className="min-w-0">
             {article.content.map((section, i) => renderSection(section, i))}
@@ -260,7 +260,7 @@ export default async function ArticlePage({ params }: Params) {
 
       {/* Related */}
       {related.length > 0 ? (
-        <section className="bg-cream-50 py-16 px-6 border-t border-gray-100">
+        <section className="bg-cream-50 py-12 px-6 border-t border-gray-100">
           <div className="max-w-6xl mx-auto">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-2">
               {t("keepReading")}

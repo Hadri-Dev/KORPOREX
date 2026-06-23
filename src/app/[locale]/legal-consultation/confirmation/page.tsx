@@ -108,7 +108,7 @@ export default async function LegalConsultConfirmationPage({ searchParams }: Pag
         </div>
       </section>
 
-      <section className="bg-white py-16 px-6">
+      <section className="bg-white py-12 px-6">
         <div className="max-w-3xl mx-auto">
           <div className="w-8 h-0.5 bg-gold-500 mb-8" />
           <h2 className="font-serif text-2xl font-bold text-navy-900 mb-10">What Happens Next</h2>

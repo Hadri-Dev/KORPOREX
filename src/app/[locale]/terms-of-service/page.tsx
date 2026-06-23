@@ -39,7 +39,7 @@ export default function TermsPage() {
       </section>
 
       {/* Body */}
-      <section className="bg-white py-16 px-6">
+      <section className="bg-white py-12 px-6">
         <div className="max-w-3xl mx-auto prose prose-sm text-gray-700 leading-relaxed">
           <p className="text-gray-700 leading-relaxed mb-8">
             These Terms of Service (the &ldquo;<strong>Terms</strong>&rdquo;) govern your access to

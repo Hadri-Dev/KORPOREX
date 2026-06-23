@@ -40,7 +40,7 @@ export default function FAQPageBody() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy-900 text-white py-16 px-6">
+      <section className="bg-navy-900 text-white py-12 px-6">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
             {t("eyebrow")}
@@ -58,7 +58,7 @@ export default function FAQPageBody() {
       </section>
 
       {/* FAQ Content */}
-      <section className="bg-white py-16 px-6">
+      <section className="bg-white py-12 px-6">
         <div className="max-w-5xl mx-auto grid md:grid-cols-4 gap-12">
           {/* Category nav */}
           <div className="md:col-span-1">
