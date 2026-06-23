@@ -91,9 +91,9 @@ export default function HomePageBody() {
       </section>
 
       {/* Featured Services */}
-      <section className="bg-white py-14 px-6">
+      <section className="bg-white py-10 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center mb-10">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
               {t("jurisdictions.eyebrow")}
             </p>
@@ -148,9 +148,9 @@ export default function HomePageBody() {
       </section>
 
       {/* Other Services */}
-      <section className="bg-cream-50 py-14 px-6 border-t border-gray-100">
+      <section className="bg-cream-50 py-10 px-6 border-t border-gray-100">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center mb-10">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
               {t("otherServices.eyebrow")}
             </p>
@@ -209,9 +209,9 @@ export default function HomePageBody() {
       </section>
 
       {/* How It Works */}
-      <section className="bg-cream-50 py-14 px-6">
+      <section className="bg-cream-50 py-10 px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
               {t("howItWorks.eyebrow")}
             </p>
@@ -252,9 +252,9 @@ export default function HomePageBody() {
       </section>
 
       {/* Why Korporex */}
-      <section className="bg-white py-14 px-6">
+      <section className="bg-white py-10 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
               {t("whyUs.eyebrow")}
             </p>
@@ -281,9 +281,9 @@ export default function HomePageBody() {
       </section>
 
       {/* Testimonials */}
-      <section className="bg-cream-50 py-14 px-6">
+      <section className="bg-cream-50 py-10 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center mb-10">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
               {t("testimonials.eyebrow")}
             </p>
@@ -313,7 +313,7 @@ export default function HomePageBody() {
       </section>
 
       {/* CTA */}
-      <section className="bg-navy-900 pt-12 pb-8 px-6 text-center text-white">
+      <section className="bg-navy-900 pt-10 pb-8 px-6 text-center text-white">
         <div className="max-w-2xl mx-auto">
           <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">
             {t("ctaBottom.title")}
