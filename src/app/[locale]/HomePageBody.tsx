@@ -59,7 +59,7 @@ export default function HomePageBody() {
                 {tCommon("fastOnlineAffordable")}
               </span>
             </div>
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] mb-6">
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] mb-6">
               <RotatingWords phrases={rotatingPhrases} />
               <br />
               <span className="text-gold-400 whitespace-pre-line">{t("hero.tagline")}</span>
