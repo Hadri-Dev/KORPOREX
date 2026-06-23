@@ -587,11 +587,11 @@
   "seo": {
     "home": {
       "title": "Constitution d'entreprise en ligne au Canada | Korporex",
-      "description": "Constituez votre entreprise au Canada en ligne avec une tarification forfaitaire tout inclus—frais gouvernementaux compris. Documents fédéraux (LCSA) et ontariens (LSAO) prêts sous 24 heures."
+      "description": "Constituez votre entreprise au Canada en ligne, tarif forfaitaire tout inclus—frais gouvernementaux compris. Documents fédéraux et ontariens sous 24 heures."
     },
     "services": {
       "title": "Services de constitution et de dépôt corporatif | Korporex",
-      "description": "Parcourez tous les services Korporex : constitution fédérale et ontarienne, enregistrements d'entreprise, modifications, rapports annuels et dépôts de restructuration."
+      "description": "Tous les services Korporex : constitution fédérale et ontarienne, enregistrements, modifications, rapports annuels et dépôts de restructuration."
     },
     "incorporate": {
       "title": "Constituer une entreprise en ligne au Canada | Korporex",
@@ -599,19 +599,19 @@
     },
     "order": {
       "title": "Forfaits et tarifs de constitution | Korporex",
-      "description": "Comparez les forfaits de constitution Korporex pour les sociétés fédérales et ontariennes. Tarifs forfaitaires transparents en CAD, frais de dépôt gouvernementaux indiqués à part."
+      "description": "Comparez les forfaits de constitution Korporex, fédéraux et ontariens. Tarifs forfaitaires en CAD, frais de dépôt gouvernementaux indiqués à part."
     },
     "legalConsultation": {
       "title": "Consultation juridique avec un avocat | Korporex",
-      "description": "Réservez une consultation payante avec un avocat canadien indépendant via Korporex pour des conseils sur votre entreprise. Korporex n'est pas un cabinet d'avocats."
+      "description": "Réservez une consultation payante avec un avocat canadien indépendant via Korporex. Korporex n'est pas un cabinet d'avocats."
     },
     "terms": {
       "title": "Conditions d'utilisation | Korporex",
-      "description": "Consultez les conditions d'utilisation de Korporex régissant l'usage de notre plateforme de constitution et de dépôt corporatif en ligne : frais, remboursements et vos responsabilités."
+      "description": "Conditions d'utilisation de Korporex pour notre plateforme de constitution et de dépôt corporatif en ligne : frais, remboursements et vos responsabilités."
     },
     "privacy": {
       "title": "Politique de confidentialité | Korporex",
-      "description": "Comment Korporex recueille, utilise et protège vos renseignements personnels lorsque vous utilisez nos services de constitution et de dépôt corporatif en ligne au Canada."
+      "description": "Comment Korporex recueille, utilise et protège vos renseignements personnels lors de l'utilisation de nos services de constitution en ligne au Canada."
     },
     "soleProprietorship": {
       "title": "Enregistrer une entreprise individuelle en Ontario | Korporex",
@@ -627,15 +627,15 @@
     },
     "extraProvincial": {
       "title": "Enregistrement extraprovincial au Canada | Korporex",
-      "description": "Étendez votre société dans une nouvelle province. Korporex prépare et dépose votre enregistrement extraprovincial pour exercer hors de votre territoire d'origine."
+      "description": "Étendez votre société dans une nouvelle province. Korporex prépare et dépose votre enregistrement extraprovincial pour exercer hors de votre territoire."
     },
     "changeDirector": {
       "title": "Changement d'administrateur ou de dirigeant | Korporex",
-      "description": "Mettez à jour les administrateurs ou dirigeants de votre société. Korporex prépare et dépose le changement requis auprès de Corporations Canada ou du registre ontarien."
+      "description": "Mettez à jour les administrateurs ou dirigeants de votre société. Korporex prépare et dépose le changement auprès du registre fédéral ou ontarien."
     },
     "changeShareholder": {
       "title": "Dépôt de changement d'actionnaire | Korporex",
-      "description": "Inscrivez un changement d'actionnaire dans les registres de votre société. Korporex prépare les documents de transfert d'actions et met à jour votre livre de procès-verbaux."
+      "description": "Inscrivez un changement d'actionnaire. Korporex prépare les documents de transfert d'actions et met à jour votre livre de procès-verbaux."
     },
     "changeAddress": {
       "title": "Changement d'adresse de société | Korporex",
@@ -643,11 +643,11 @@
     },
     "articlesAmendment": {
       "title": "Déposer des statuts de modification au Canada | Korporex",
-      "description": "Modifiez les statuts de votre société pour changer son nom, sa structure d'actions ou d'autres dispositions. Korporex prépare et dépose vos statuts de modification."
+      "description": "Modifiez les statuts de votre société : nom, structure d'actions ou autres dispositions. Korporex prépare et dépose vos statuts de modification."
     },
     "initialReturnOn": {
       "title": "Déposer un rapport initial de l'Ontario | Korporex",
-      "description": "Déposez le rapport initial de l'Ontario dû dans les 60 jours suivant la constitution. Korporex le prépare et le soumet au Registre des entreprises de l'Ontario pour vous."
+      "description": "Déposez le rapport initial de l'Ontario, dû dans les 60 jours suivant la constitution. Korporex le prépare et le soumet au Registre des entreprises."
     },
     "annualReturnOn": {
       "title": "Déposer un rapport annuel de l'Ontario | Korporex",
@@ -675,7 +675,7 @@
     },
     "continuance": {
       "title": "Proroger une société entre territoires | Korporex",
-      "description": "Transférez votre société vers un nouveau territoire. Korporex prépare et dépose vos statuts de prorogation pour importer ou exporter entre le fédéral et l'Ontario."
+      "description": "Transférez votre société vers un nouveau territoire. Korporex prépare et dépose vos statuts de prorogation entre le fédéral et l'Ontario."
     }
   }
 }

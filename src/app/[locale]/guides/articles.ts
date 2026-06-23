@@ -70,7 +70,7 @@ export const articles: Article[] = [
       "The first real decision when you incorporate in Canada is federal or provincial. We break down the differences, costs, and steps so you can incorporate with confidence.",
     metaTitle: "How to Incorporate in Canada: Federal vs Provincial | Korporex",
     metaDescription:
-      "How to incorporate in Canada, step by step. Compare federal vs provincial incorporation, name protection, costs, and filings so you choose the right route for your business.",
+      "How to incorporate in Canada, step by step. Compare federal vs provincial incorporation, name protection, costs, and filings to choose the right route.",
     readTime: "7 min read",
     updated: "2026-06-01",
     content: [
@@ -190,7 +190,7 @@ export const articles: Article[] = [
       "If you're incorporating federally or in certain provinces, a NUANS search is mandatory. Learn what it is, how it works, and what happens if your first-choice name is unavailable.",
     metaTitle: "What Is a NUANS Name Search, and Do You Need One? | Korporex",
     metaDescription:
-      "A NUANS name search checks your proposed corporate name against names across Canada. Learn when it is required, how it works, and what to do if your first choice is taken.",
+      "A NUANS name search checks your proposed corporate name against names across Canada. Learn when it's required, how it works, and what if your choice is taken.",
     readTime: "4 min read",
     updated: "2026-04-21",
     content: [
@@ -361,7 +361,7 @@ export const articles: Article[] = [
       "Canadian corporations are legally required to maintain a corporate minute book. We explain what goes in it, who is responsible for keeping it, and what happens if you don't have one.",
     metaTitle: "What Is a Minute Book and Why You Need One | Korporex",
     metaDescription:
-      "A corporate minute book is the legal record of your corporation's existence and decisions. Learn what goes in a minute book, why it's required, and the cost of neglecting it.",
+      "A corporate minute book is the legal record of your corporation's existence and decisions. Learn what goes in it, why it's required, and the cost of neglect.",
     readTime: "4 min read",
     updated: "2026-06-01",
     content: [
@@ -437,7 +437,7 @@ export const articles: Article[] = [
       "Ontario is home to the majority of Canadian small businesses. This guide walks through the Ontario Business Corporations Act, costs, timelines, and what you'll receive after filing.",
     metaTitle: "Incorporating in Ontario: Everything You Need to Know | Korporex",
     metaDescription:
-      "A complete guide to incorporating in Ontario under the OBCA: what's required, costs, timelines, and what you receive after filing with the Ontario Business Registry.",
+      "A complete guide to incorporating in Ontario under the OBCA: requirements, costs, timelines, and what you receive after filing with the Ontario registry.",
     readTime: "7 min read",
     updated: "2026-04-21",
     content: [
@@ -589,7 +589,7 @@ export const articles: Article[] = [
       "Registering a business in Ontario is mostly paperwork. The harder part is choosing your structure first. Here is the whole path, start to finish.",
     metaTitle: "How to Register a Business in Ontario | Korporex",
     metaDescription:
-      "How to register a business in Ontario: choose your structure, register a sole proprietorship or partnership through ServiceOntario, or incorporate. The full path, start to finish.",
+      "How to register a business in Ontario: choose your structure, register a sole proprietorship or partnership through ServiceOntario, or incorporate.",
     readTime: "6 min read",
     updated: "2026-06-01",
     content: [
@@ -627,7 +627,7 @@ export const articles: Article[] = [
       "The decision almost every new business owner faces. Here is how to think through sole proprietorship vs corporation based on where your business is going.",
     metaTitle: "Sole Proprietorship vs Corporation in Canada | Korporex",
     metaDescription:
-      "Sole proprietorship vs corporation in Canada: how they differ on liability, tax, and cost, plus a simple way to decide which structure fits your business right now.",
+      "Sole proprietorship vs corporation in Canada: how they differ on liability, tax, and cost, plus a simple way to decide which structure fits you.",
     readTime: "6 min read",
     updated: "2026-06-01",
     content: [
@@ -662,7 +662,7 @@ export const articles: Article[] = [
       "These two numbers get mixed up constantly, partly because a corporation has both. Here is the difference between a business number and a corporation number, in plain terms.",
     metaTitle: "Business Number vs Corporation Number | Korporex",
     metaDescription:
-      "Business number vs corporation number: what each one is, why a corporation has both, where they come from, and how to find each. A plain-language Canadian guide.",
+      "Business number vs corporation number: what each is, why a corporation has both, where they come from, and how to find each. A plain-language Canadian guide.",
     readTime: "5 min read",
     updated: "2026-06-01",
     content: [
@@ -701,7 +701,7 @@ export const articles: Article[] = [
       "Qui a réellement besoin d'un numéro de TPS/TVH, quand l'inscription devient obligatoire, et comment s'inscrire auprès de l'ARC sans se compliquer la vie.",
     metaTitle: "Comment obtenir un numéro de TPS/TVH en Ontario | Korporex",
     metaDescription:
-      "Comment obtenir un numéro de TPS/TVH en Ontario : qui en a besoin, le seuil de petit fournisseur de 30 000 $, et comment s'inscrire auprès de l'ARC en ligne, par téléphone ou par la poste.",
+      "Comment obtenir un numéro de TPS/TVH en Ontario : qui en a besoin, le seuil de petit fournisseur de 30 000 $, et comment s'inscrire auprès de l'ARC.",
     readTime: "5 min de lecture",
     updated: "2026-06-01",
     content: [
@@ -737,7 +737,7 @@ export const articles: Article[] = [
       "Enregistrer une entreprise en Ontario, c'est surtout de la paperasse. Le plus difficile, c'est de choisir votre structure d'abord. Voici tout le parcours, du début à la fin.",
     metaTitle: "Comment enregistrer une entreprise en Ontario | Korporex",
     metaDescription:
-      "Comment enregistrer une entreprise en Ontario : choisir votre structure, enregistrer une entreprise individuelle ou une société de personnes via ServiceOntario, ou vous constituer en société.",
+      "Comment enregistrer une entreprise en Ontario : choisir votre structure, enregistrer une entreprise individuelle via ServiceOntario, ou vous constituer.",
     readTime: "6 min de lecture",
     updated: "2026-06-01",
     content: [
@@ -775,7 +775,7 @@ export const articles: Article[] = [
       "La décision que presque tout nouvel entrepreneur doit prendre. Voici comment réfléchir à l'entreprise individuelle ou la société selon l'évolution de votre entreprise.",
     metaTitle: "Entreprise individuelle ou société par actions au Canada | Korporex",
     metaDescription:
-      "Entreprise individuelle ou société par actions au Canada : leurs différences sur la responsabilité, l'impôt et le coût, plus une façon simple de décider laquelle vous convient.",
+      "Entreprise individuelle ou société par actions au Canada : différences de responsabilité, d'impôt et de coût, et une façon simple de décider.",
     readTime: "6 min de lecture",
     updated: "2026-06-01",
     content: [
@@ -810,7 +810,7 @@ export const articles: Article[] = [
       "Ces deux numéros sont sans cesse confondus, en partie parce qu'une société possède les deux. Voici la différence entre un numéro d'entreprise et un numéro de société, en termes simples.",
     metaTitle: "Numéro d'entreprise ou numéro de société | Korporex",
     metaDescription:
-      "Numéro d'entreprise ou numéro de société : ce qu'est chacun, pourquoi une société possède les deux, d'où ils viennent et comment les trouver. Un guide canadien en langage clair.",
+      "Numéro d'entreprise ou numéro de société : ce qu'est chacun, pourquoi une société a les deux, d'où ils viennent et comment les trouver. Guide canadien clair.",
     readTime: "5 min de lecture",
     updated: "2026-06-01",
     content: [
@@ -845,7 +845,7 @@ export const articles: Article[] = [
       "La première vraie bifurcation quand vous vous constituez en société au Canada, c'est fédéral ou provincial. Voici les différences, les coûts et les étapes.",
     metaTitle: "Se constituer en société au Canada : fédéral ou provincial | Korporex",
     metaDescription:
-      "Comment se constituer en société au Canada, étape par étape. Comparez la constitution fédérale et provinciale, la protection du nom, les coûts et les dépôts pour choisir la bonne voie.",
+      "Comment se constituer en société au Canada, étape par étape : constitution fédérale ou provinciale, protection du nom, coûts et dépôts pour choisir.",
     readTime: "7 min de lecture",
     updated: "2026-06-01",
     content: [
@@ -877,7 +877,7 @@ export const articles: Article[] = [
       "Si vous vous êtes constitué en société, vous devez tenir un livre des procès-verbaux. Voici ce que c'est réellement, pourquoi ce n'est pas facultatif et ce qui arrive si vous l'ignorez.",
     metaTitle: "Qu'est-ce qu'un livre des procès-verbaux ? | Korporex",
     metaDescription:
-      "Un livre des procès-verbaux est le registre légal de l'existence et des décisions de votre société. Voyez ce qu'il contient, pourquoi il est obligatoire et le coût de le négliger.",
+      "Le livre des procès-verbaux est le registre légal de l'existence et des décisions de votre société. Ce qu'il contient, pourquoi il est obligatoire, le coût.",
     readTime: "4 min de lecture",
     updated: "2026-06-01",
     content: [
@@ -913,7 +913,7 @@ export const articles: Article[] = [
       "Quién necesita realmente un número de GST/HST, cuándo el registro es obligatorio y cómo registrarse ante la CRA sin complicarse la vida.",
     metaTitle: "Cómo obtener un número de GST/HST en Ontario | Korporex",
     metaDescription:
-      "Cómo obtener un número de GST/HST en Ontario: quién lo necesita, el umbral de pequeño proveedor de 30 000 $, y cómo registrarse ante la CRA en línea, por teléfono o por correo.",
+      "Cómo obtener un número de GST/HST en Ontario: quién lo necesita, el umbral de pequeño proveedor de 30 000 $, y cómo registrarse ante la CRA en línea.",
     readTime: "5 min de lectura",
     updated: "2026-06-01",
     content: [
@@ -949,7 +949,7 @@ export const articles: Article[] = [
       "Registrar un negocio en Ontario es sobre todo papeleo. Lo difícil es elegir primero su estructura. Aquí está todo el recorrido, de principio a fin.",
     metaTitle: "Cómo registrar un negocio en Ontario | Korporex",
     metaDescription:
-      "Cómo registrar un negocio en Ontario: elija su estructura, registre una empresa unipersonal o sociedad de personas por ServiceOntario, o constitúyase en sociedad. El recorrido completo.",
+      "Cómo registrar un negocio en Ontario: elija su estructura, registre una empresa unipersonal o sociedad por ServiceOntario, o constitúyase en sociedad.",
     readTime: "6 min de lectura",
     updated: "2026-06-01",
     content: [
@@ -987,7 +987,7 @@ export const articles: Article[] = [
       "La decisión que casi todo nuevo emprendedor enfrenta. Así puede pensar a fondo entre empresa unipersonal o sociedad según hacia dónde va su negocio.",
     metaTitle: "Empresa unipersonal o sociedad por acciones en Canadá | Korporex",
     metaDescription:
-      "Empresa unipersonal o sociedad por acciones en Canadá: sus diferencias en responsabilidad, impuestos y costo, más una forma sencilla de decidir cuál le conviene ahora.",
+      "Empresa unipersonal o sociedad por acciones en Canadá: diferencias en responsabilidad, impuestos y costo, y una forma sencilla de decidir cuál le conviene.",
     readTime: "6 min de lectura",
     updated: "2026-06-01",
     content: [
@@ -1022,7 +1022,7 @@ export const articles: Article[] = [
       "Estos dos números se confunden constantemente, en parte porque una sociedad tiene ambos. Aquí está la diferencia entre un número de negocio y un número de sociedad, en términos sencillos.",
     metaTitle: "Número de negocio o número de sociedad | Korporex",
     metaDescription:
-      "Número de negocio o número de sociedad: qué es cada uno, por qué una sociedad tiene ambos, de dónde vienen y cómo encontrar cada uno. Una guía canadiense en lenguaje claro.",
+      "Número de negocio o número de sociedad: qué es cada uno, por qué una sociedad tiene ambos, de dónde vienen y cómo encontrarlos. Guía canadiense clara.",
     readTime: "5 min de lectura",
     updated: "2026-06-01",
     content: [
@@ -1057,7 +1057,7 @@ export const articles: Article[] = [
       "La primera bifurcación real cuando se constituye en sociedad en Canadá es federal o provincial. Aquí están las diferencias, los costos y los pasos.",
     metaTitle: "Constituirse en sociedad en Canadá: federal o provincial | Korporex",
     metaDescription:
-      "Cómo constituirse en sociedad en Canadá, paso a paso. Compare la constitución federal y provincial, la protección del nombre, los costos y los trámites para elegir la vía correcta.",
+      "Cómo constituirse en sociedad en Canadá, paso a paso: constitución federal o provincial, protección del nombre, costos y trámites para elegir la vía.",
     readTime: "7 min de lectura",
     updated: "2026-06-01",
     content: [
@@ -1127,7 +1127,7 @@ export const articles: Article[] = [
       "Before you claim a tax credit on a supplier's invoice, it pays to confirm their GST/HST number is real and registered. Here is how, and why it matters.",
     metaTitle: "How to Confirm a GST/HST Number (Canada) | Korporex",
     metaDescription:
-      "How to confirm a GST/HST number using the CRA's free GST/HST Registry: what you need, what a valid result shows, and why checking protects your input tax credits.",
+      "How to confirm a GST/HST number with the CRA's free GST/HST Registry: what you need, what a valid result shows, and why checking protects your tax credits.",
     readTime: "4 min read",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1188,7 +1188,7 @@ export const articles: Article[] = [
       "Articles of incorporation are the founding document that creates your corporation. Here is what they contain, why the share structure matters, and how they are filed.",
     metaTitle: "What Are Articles of Incorporation? | Korporex",
     metaDescription:
-      "What articles of incorporation are: the founding document that creates your corporation, what they contain, the difference between federal and Ontario, and why share structure matters.",
+      "What articles of incorporation are: the founding document that creates your corporation, what they contain, federal vs Ontario, and why share structure matters.",
     readTime: "5 min read",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1217,7 +1217,7 @@ export const articles: Article[] = [
       "Registering a sole proprietorship in Ontario is quick and inexpensive. Here is when you have to register, how to do it, and what comes after.",
     metaTitle: "How to Register a Sole Proprietorship in Ontario | Korporex",
     metaDescription:
-      "How to register a sole proprietorship in Ontario: when registration is required, how to register a business name through ServiceOntario, the cost, and what to do next.",
+      "How to register a sole proprietorship in Ontario: when it's required, how to register a business name through ServiceOntario, the cost, and what's next.",
     readTime: "5 min read",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1246,7 +1246,7 @@ export const articles: Article[] = [
       "Closing an Ontario corporation properly means winding it up, settling taxes, and filing Articles of Dissolution. Here are the steps and the order to do them in.",
     metaTitle: "How to Dissolve a Corporation in Ontario | Korporex",
     metaDescription:
-      "How to dissolve a corporation in Ontario: the steps for a voluntary dissolution under the OBCA, settling debts and taxes with the CRA, and filing Articles of Dissolution.",
+      "How to dissolve a corporation in Ontario: voluntary dissolution under the OBCA, settling debts and taxes with the CRA, and filing Articles of Dissolution.",
     readTime: "5 min read",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1273,7 +1273,7 @@ export const articles: Article[] = [
       "The cost to incorporate in Ontario is more than the government fee. Here is the full breakdown of required and optional costs, plus what you pay each year after.",
     metaTitle: "Cost to Incorporate in Ontario: Full Breakdown | Korporex",
     metaDescription:
-      "How much does it cost to incorporate in Ontario? The government filing fee, NUANS report, named vs numbered, optional costs like a minute book, and ongoing yearly costs.",
+      "How much does it cost to incorporate in Ontario? Government filing fee, NUANS report, named vs numbered, optional costs like a minute book, and yearly costs.",
     readTime: "5 min read",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1303,7 +1303,7 @@ export const articles: Article[] = [
       "Avant de réclamer un crédit de taxe sur la facture d'un fournisseur, il vaut la peine de vérifier que son numéro de TPS/TVH est réel et inscrit. Voici comment, et pourquoi.",
     metaTitle: "Comment vérifier un numéro de TPS/TVH | Korporex",
     metaDescription:
-      "Comment vérifier un numéro de TPS/TVH avec le registre gratuit de l'ARC : ce qu'il vous faut, ce qu'un résultat valide indique et pourquoi cela protège vos crédits de taxe.",
+      "Comment vérifier un numéro de TPS/TVH avec le registre gratuit de l'ARC : ce qu'il vous faut, ce qu'un résultat valide indique et pourquoi c'est utile.",
     readTime: "4 min de lecture",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1334,7 +1334,7 @@ export const articles: Article[] = [
       "Le numéro d'entreprise de l'ARC est l'identifiant unique de vos rapports avec le système fiscal fédéral. Voici ce que c'est, quand il vous en faut un et comment l'obtenir.",
     metaTitle: "Comment obtenir un numéro d'entreprise de l'ARC | Korporex",
     metaDescription:
-      "Comment obtenir un numéro d'entreprise de l'ARC : ce qu'est le NE de neuf chiffres, quand il vous en faut un, et comment vous inscrire en ligne, par téléphone ou à la constitution.",
+      "Comment obtenir un numéro d'entreprise de l'ARC : le NE de neuf chiffres, quand il vous en faut un, et comment vous inscrire en ligne ou à la constitution.",
     readTime: "5 min de lecture",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1363,7 +1363,7 @@ export const articles: Article[] = [
       "Les statuts constitutifs sont le document fondateur qui crée votre société. Voici ce qu'ils contiennent, pourquoi la structure d'actions compte et comment on les dépose.",
     metaTitle: "Que sont les statuts constitutifs ? | Korporex",
     metaDescription:
-      "Ce que sont les statuts constitutifs : le document fondateur qui crée votre société, ce qu'ils contiennent, la différence entre fédéral et Ontario, et pourquoi la structure d'actions compte.",
+      "Les statuts constitutifs : le document fondateur qui crée votre société, ce qu'ils contiennent, fédéral ou Ontario, et pourquoi la structure d'actions compte.",
     readTime: "5 min de lecture",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1392,7 +1392,7 @@ export const articles: Article[] = [
       "Enregistrer une entreprise individuelle en Ontario est rapide et peu coûteux. Voici quand vous devez vous enregistrer, comment le faire et ce qui suit.",
     metaTitle: "Enregistrer une entreprise individuelle en Ontario | Korporex",
     metaDescription:
-      "Comment enregistrer une entreprise individuelle en Ontario : quand l'enregistrement est requis, comment enregistrer un nom commercial via ServiceOntario, le coût et les étapes suivantes.",
+      "Comment enregistrer une entreprise individuelle en Ontario : quand c'est requis, enregistrer un nom commercial via ServiceOntario, le coût et les étapes.",
     readTime: "5 min de lecture",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1421,7 +1421,7 @@ export const articles: Article[] = [
       "Fermer correctement une société ontarienne suppose de la liquider, de régler les impôts et de déposer des statuts de dissolution. Voici les étapes et leur ordre.",
     metaTitle: "Comment dissoudre une société en Ontario | Korporex",
     metaDescription:
-      "Comment dissoudre une société en Ontario : les étapes d'une dissolution volontaire sous la LSAO, le règlement des dettes et des impôts avec l'ARC, et le dépôt des statuts de dissolution.",
+      "Comment dissoudre une société en Ontario : la dissolution volontaire sous la LSAO, le règlement des dettes et impôts avec l'ARC, et le dépôt des statuts.",
     readTime: "5 min de lecture",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1448,7 +1448,7 @@ export const articles: Article[] = [
       "Le coût pour constituer une société en Ontario va au-delà des frais gouvernementaux. Voici la ventilation complète des coûts obligatoires et optionnels, et les frais annuels.",
     metaTitle: "Coût pour constituer une société en Ontario | Korporex",
     metaDescription:
-      "Combien coûte la constitution d'une société en Ontario ? Les frais de dépôt gouvernementaux, le rapport NUANS, nom ou matricule, les coûts optionnels et les frais annuels récurrents.",
+      "Combien coûte la constitution d'une société en Ontario ? Frais de dépôt gouvernementaux, rapport NUANS, nom ou matricule, coûts optionnels et frais annuels.",
     readTime: "5 min de lecture",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1478,7 +1478,7 @@ export const articles: Article[] = [
       "Antes de reclamar un crédito fiscal en la factura de un proveedor, conviene verificar que su número de GST/HST es real y está registrado. Aquí está cómo, y por qué importa.",
     metaTitle: "Cómo verificar un número de GST/HST | Korporex",
     metaDescription:
-      "Cómo verificar un número de GST/HST con el registro gratuito de la CRA: qué necesita, qué muestra un resultado válido y por qué proteger sus créditos por impuesto soportado.",
+      "Cómo verificar un número de GST/HST con el registro gratuito de la CRA: qué necesita, qué muestra un resultado válido y por qué protege sus créditos fiscales.",
     readTime: "4 min de lectura",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1509,7 +1509,7 @@ export const articles: Article[] = [
       "El número de negocio de la CRA es el identificador único de sus tratos con el sistema fiscal federal. Aquí está qué es, cuándo lo necesita y cómo obtenerlo.",
     metaTitle: "Cómo obtener un número de negocio de la CRA | Korporex",
     metaDescription:
-      "Cómo obtener un número de negocio de la CRA: qué es el BN de nueve dígitos, cuándo lo necesita y cómo registrarse en línea, por teléfono o automáticamente al constituirse.",
+      "Cómo obtener un número de negocio de la CRA: qué es el BN de nueve dígitos, cuándo lo necesita y cómo registrarse en línea o al constituirse.",
     readTime: "5 min de lectura",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1538,7 +1538,7 @@ export const articles: Article[] = [
       "Los estatutos de constitución son el documento fundacional que crea su sociedad. Aquí está qué contienen, por qué importa la estructura de acciones y cómo se presentan.",
     metaTitle: "¿Qué son los estatutos de constitución? | Korporex",
     metaDescription:
-      "Qué son los estatutos de constitución: el documento fundacional que crea su sociedad, qué contienen, la diferencia entre federal y Ontario, y por qué importa la estructura de acciones.",
+      "Qué son los estatutos de constitución: el documento que crea su sociedad, qué contienen, federal frente a Ontario, y por qué importa la estructura de acciones.",
     readTime: "5 min de lectura",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1567,7 +1567,7 @@ export const articles: Article[] = [
       "Registrar una empresa unipersonal en Ontario es rápido y económico. Aquí está cuándo debe registrarse, cómo hacerlo y qué viene después.",
     metaTitle: "Cómo registrar una empresa unipersonal en Ontario | Korporex",
     metaDescription:
-      "Cómo registrar una empresa unipersonal en Ontario: cuándo se requiere el registro, cómo registrar un nombre comercial por ServiceOntario, el costo y los pasos siguientes.",
+      "Cómo registrar una empresa unipersonal en Ontario: cuándo se requiere, cómo registrar un nombre comercial por ServiceOntario, el costo y los pasos.",
     readTime: "5 min de lectura",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1596,7 +1596,7 @@ export const articles: Article[] = [
       "Cerrar bien una sociedad de Ontario implica liquidarla, saldar impuestos y presentar los Estatutos de Disolución. Aquí están los pasos y el orden en que hacerlos.",
     metaTitle: "Cómo disolver una sociedad en Ontario | Korporex",
     metaDescription:
-      "Cómo disolver una sociedad en Ontario: los pasos de una disolución voluntaria bajo la OBCA, saldar deudas e impuestos con la CRA, y presentar los Estatutos de Disolución.",
+      "Cómo disolver una sociedad en Ontario: la disolución voluntaria bajo la OBCA, saldar deudas e impuestos con la CRA, y presentar los Estatutos de Disolución.",
     readTime: "5 min de lectura",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1623,7 +1623,7 @@ export const articles: Article[] = [
       "El costo para constituirse en sociedad en Ontario es más que la tarifa del gobierno. Aquí está el desglose completo de los costos obligatorios y opcionales, y los anuales.",
     metaTitle: "Costo para constituirse en sociedad en Ontario | Korporex",
     metaDescription:
-      "¿Cuánto cuesta constituirse en sociedad en Ontario? La tarifa de presentación del gobierno, el informe NUANS, con nombre o numérica, los costos opcionales y los costos anuales recurrentes.",
+      "¿Cuánto cuesta constituirse en sociedad en Ontario? La tarifa del gobierno, el informe NUANS, con nombre o numérica, costos opcionales y costos anuales.",
     readTime: "5 min de lectura",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1658,7 +1658,7 @@ export const articles: Article[] = [
       "Si vous vous constituez en société au fédéral ou dans certaines provinces, une recherche NUANS est obligatoire. Voici ce que c'est, comment ça fonctionne, et que faire si votre premier choix de nom n'est pas disponible.",
     metaTitle: "Qu'est-ce qu'une recherche de nom NUANS ? | Korporex",
     metaDescription:
-      "Une recherche de nom NUANS compare le nom proposé de votre société aux noms enregistrés partout au Canada. Voyez quand elle est requise, comment elle fonctionne et que faire si votre premier choix est pris.",
+      "Une recherche de nom NUANS compare le nom proposé de votre société aux noms enregistrés au Canada. Quand elle est requise, comment elle fonctionne, que faire.",
     readTime: "4 min de lecture",
     updated: "2026-04-21",
     content: [
@@ -1697,7 +1697,7 @@ export const articles: Article[] = [
       "Toute société canadienne doit produire une déclaration annuelle. Les échéances, les frais et les conséquences d'un défaut varient selon la province. Voici tout ce qu'il faut savoir.",
     metaTitle: "Déclarations annuelles des sociétés au Canada | Korporex",
     metaDescription:
-      "Toute société canadienne doit produire une déclaration annuelle chaque année. Découvrez les échéances et frais fédéraux et ontariens, et ce qui arrive en cas de défaut de production.",
+      "Toute société canadienne doit produire une déclaration annuelle. Découvrez les échéances et frais fédéraux et ontariens, et le risque en cas de défaut.",
     readTime: "5 min de lecture",
     updated: "2026-04-21",
     content: [
@@ -1736,7 +1736,7 @@ export const articles: Article[] = [
       "L'Ontario abrite la majorité des petites entreprises canadiennes. Ce guide passe en revue la Loi sur les sociétés par actions de l'Ontario, les coûts, les délais et ce que vous recevez après le dépôt.",
     metaTitle: "Se constituer en société en Ontario : le guide | Korporex",
     metaDescription:
-      "Guide complet de la constitution en société en Ontario en vertu de la LSAO : ce qui est requis, les coûts, les délais et ce que vous recevez après le dépôt auprès du Registre des entreprises de l'Ontario.",
+      "Guide complet de la constitution en société en Ontario sous la LSAO : exigences, coûts, délais et ce que vous recevez après le dépôt au registre ontarien.",
     readTime: "7 min de lecture",
     updated: "2026-04-21",
     content: [
@@ -1798,7 +1798,7 @@ export const articles: Article[] = [
       "Si se constituye en sociedad a nivel federal o en ciertas provincias, una búsqueda NUANS es obligatoria. Vea qué es, cómo funciona y qué hacer si su primera opción de nombre no está disponible.",
     metaTitle: "¿Qué es una búsqueda de nombre NUANS? | Korporex",
     metaDescription:
-      "Una búsqueda de nombre NUANS coteja el nombre propuesto de su sociedad con los nombres registrados en todo Canadá. Vea cuándo es obligatoria, cómo funciona y qué hacer si su primera opción está tomada.",
+      "Una búsqueda de nombre NUANS coteja el nombre propuesto de su sociedad con los registrados en Canadá. Cuándo es obligatoria, cómo funciona y qué hacer si falla.",
     readTime: "4 min de lectura",
     updated: "2026-04-21",
     content: [
@@ -1837,7 +1837,7 @@ export const articles: Article[] = [
       "Toda sociedad canadiense debe presentar una declaración anual. Los plazos, las tarifas y las consecuencias de no presentarla varían según la jurisdicción. Esto es todo lo que necesita saber.",
     metaTitle: "Declaraciones anuales de sociedades en Canadá | Korporex",
     metaDescription:
-      "Toda sociedad canadiense debe presentar una declaración anual cada año. Conozca los plazos y tarifas federales y de Ontario, y qué pasa si omite una presentación.",
+      "Toda sociedad canadiense debe presentar una declaración anual. Conozca los plazos y tarifas federales y de Ontario, y qué pasa si omite una presentación.",
     readTime: "5 min de lectura",
     updated: "2026-04-21",
     content: [
@@ -1876,7 +1876,7 @@ export const articles: Article[] = [
       "Ontario alberga a la mayoría de las pequeñas empresas canadienses. Esta guía recorre la Ley de Sociedades por Acciones de Ontario, los costos, los plazos y lo que recibe después de presentar.",
     metaTitle: "Constituirse en sociedad en Ontario: la guía | Korporex",
     metaDescription:
-      "Guía completa para constituirse en sociedad en Ontario bajo la OBCA: qué se requiere, costos, plazos y qué recibe después de presentar ante el Registro de Empresas de Ontario.",
+      "Guía completa para constituirse en sociedad en Ontario bajo la OBCA: requisitos, costos, plazos y qué recibe tras presentar ante el Registro de Empresas.",
     readTime: "7 min de lectura",
     updated: "2026-04-21",
     content: [

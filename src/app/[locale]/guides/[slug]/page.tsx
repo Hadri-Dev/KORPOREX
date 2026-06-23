@@ -24,7 +24,11 @@ type Params = { params: { locale: Locale; slug: string } };
 
 // Re-render periodically so a scheduled article (publishedAt in the future)
 // flips from 404 to live shortly after its publish time, without a redeploy.
-export const revalidate = 300;
+// Hourly matches the sitemap's cadence and keeps the prerendered HTML served
+// from the edge cache far longer than a 5-minute window did — fewer on-demand
+// regenerations means crawlers consistently get the fast cached page (the old
+// 300s window let an occasional crawl hit a cold regeneration, ~3s TTFB).
+export const revalidate = 3600;
 
 // One static page per (locale, slug). The [locale] parent provides the locale,
 // so each language only prerenders its own slugs (fr/es get their own URLs).
