@@ -50,7 +50,7 @@ export default function HomePageBody() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy-900 text-white py-12 md:py-16 px-6">
+      <section className="bg-navy-900 text-white py-6 md:py-8 px-6">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 mb-6">
