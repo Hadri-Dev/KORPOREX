@@ -73,7 +73,7 @@
   },
   "soon": {
     "metaTitle": "Korporex | Lancement bientôt",
-    "metaDescription": "Korporex, services de constitution d'entreprise et services aux sociétés au Canada, sera lancé bientôt. Entre-temps, contactez-nous et nous répondrons dans les 24 heures.",
+    "metaDescription": "Korporex, services de constitution et de gestion de sociétés au Canada, sera lancé bientôt. Contactez-nous : réponse dans les 24 heures.",
     "launchingSoon": "Lancement bientôt",
     "headline": {
       "before": "Quelque chose",
@@ -333,7 +333,7 @@
     "heroTitle": "Guides et articles pour les entrepreneurs canadiens",
     "heroSubtitle": "Des guides en langage clair sur la constitution en société, la conformité et l'entretien corporatif pour vous aider à prendre des décisions éclairées pour votre entreprise.",
     "metaTitle": "Guides et articles pour les entrepreneurs canadiens | Korporex",
-    "metaDescription": "Des guides en langage clair sur la constitution en société au Canada, la TPS/TVH, la structure d'entreprise et la conformité pour vous aider à démarrer et gérer votre entreprise.",
+    "metaDescription": "Des guides en langage clair sur la constitution en société au Canada, la TPS/TVH, la structure d'entreprise et la conformité pour les entrepreneurs.",
     "allArticles": "Tous les articles",
     "latestResources": "Derniers articles",
     "moreComingTitle": "D'autres articles à venir",
@@ -370,7 +370,7 @@
   },
   "contact": {
     "metaTitle": "Contacter Korporex | Soutien à la constitution en ligne",
-    "metaDescription": "Des questions sur la constitution de votre entreprise au Canada ? Contactez l'équipe de soutien de Korporex — nous répondons en un jour ouvrable. 100 % en ligne.",
+    "metaDescription": "Des questions sur la constitution de votre entreprise au Canada ? Contactez le soutien de Korporex — réponse en un jour ouvrable. 100 % en ligne.",
     "eyebrow": "Nous joindre",
     "heroTitle": "Nous sommes là pour vous aider",
     "heroSubtitle": "Une question sur la constitution de votre entreprise ? Notre équipe de soutien répond en un jour ouvrable.",
@@ -401,7 +401,7 @@
   },
   "about": {
     "metaTitle": "À propos de Korporex | Constitution en société en ligne au Canada",
-    "metaDescription": "Korporex est une entreprise technologique canadienne qui rend la constitution et la gestion d'une société par actions simples, rapides et entièrement en ligne, pour les fondateurs canadiens et internationaux.",
+    "metaDescription": "Korporex, entreprise technologique canadienne, rend la constitution et la gestion d'une société par actions simples, rapides et entièrement en ligne.",
     "eyebrow": "À propos de Korporex",
     "heroTitle": "Simplifier la constitution en société canadienne pour tout le monde",
     "heroSubtitle": "Korporex est une entreprise technologique canadienne qui permet aux entrepreneurs de constituer et de gérer leur société par actions entièrement en ligne : rapide, transparent et accessible aux fondateurs canadiens et internationaux.",
@@ -455,7 +455,7 @@
   },
   "faq": {
     "metaTitle": "Foire aux questions | Korporex",
-    "metaDescription": "Réponses sur la constitution en société d'une entreprise au Canada avec Korporex : fédérale ou provinciale, NUANS, délais, tarification, remboursements et ce que vous recevez après le dépôt.",
+    "metaDescription": "Réponses sur la constitution en société au Canada avec Korporex : fédérale ou provinciale, NUANS, délais, tarifs, remboursements et après le dépôt.",
     "eyebrow": "FAQ",
     "heroTitle": "Foire aux questions",
     "heroSubtitlePrefix": "Tout ce que vous devez savoir sur la constitution en société de votre entreprise au Canada avec Korporex. Vous ne trouvez pas votre réponse? ",

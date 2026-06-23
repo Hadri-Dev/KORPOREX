@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (isFr) {
     const title = "Rapport NUANS Canada | Recherche préliminaire de nom commercial | Korporex";
     const description =
-      "Commandez un rapport NUANS officiel pour pré-vérifier un nom de société canadienne avant la constitution. À partir de 40 $ + TVH (40 $ par nom supplémentaire). Livré en quelques heures.";
+      "Commandez un rapport NUANS officiel pour pré-vérifier un nom de société canadienne avant la constitution. Dès 40 $ + TVH par nom. Livré en quelques heures.";
     return {
       title,
       description,
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (isEs) {
     const title = "Informe NUANS Canadá | Búsqueda preliminar de nombre corporativo | Korporex";
     const description =
-      "Solicite un informe NUANS oficial para verificar un nombre de corporación canadiense antes de incorporar. Desde $40 + HST ($40 por nombre adicional). Entrega en pocas horas.";
+      "Solicite un informe NUANS oficial para verificar un nombre de sociedad canadiense antes de constituir. Desde $40 + HST por nombre. Entrega en pocas horas.";
     return {
       title,
       description,
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
   const title = "NUANS Report Canada | Pre-Screen a Corporate Name | Korporex";
   const description =
-    "Order an official NUANS preliminary name-search report before you incorporate in Canada. Federal and provincial filings supported. From $40 + HST for the first name, $40 + HST for each additional name. Delivered within a few hours.";
+    "Order an official NUANS preliminary name-search report before you incorporate in Canada. From $40 + HST per name, federal and provincial. Delivered in hours.";
   return {
     title,
     description,
