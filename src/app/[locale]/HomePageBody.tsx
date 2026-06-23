@@ -2,7 +2,7 @@
 
 import { ArrowRight, Clock, Laptop, ShieldCheck, BadgeDollarSign, Star, CheckCircle, FileText, Edit3, ClipboardCheck, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
-import HeroContactForm from "@/components/HeroContactForm";
+import HeroStartPanel from "@/components/HeroStartPanel";
 import RotatingWords from "@/components/RotatingWords";
 import { Link } from "@/i18n/navigation";
 
@@ -85,7 +85,7 @@ export default function HomePageBody() {
           </div>
 
           <div className="w-full">
-            <HeroContactForm />
+            <HeroStartPanel />
           </div>
         </div>
       </section>

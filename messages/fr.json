@@ -159,6 +159,18 @@
       "other": "Autre"
     }
   },
+  "heroStart": {
+    "title": "Commencez votre constitution",
+    "subtitle": "Choisissez votre territoire et vos documents sont prêts en 24 heures.",
+    "chooseLabel": "Choisissez votre territoire",
+    "from": "à partir de",
+    "trust": {
+      "fees": "Frais gouvernementaux inclus",
+      "online": "Dépôts 100 % en ligne"
+    },
+    "otherPrompt": "Besoin d'un enregistrement, d'une modification ou d'un dépôt de conformité?",
+    "otherLink": "Voir tous les services"
+  },
   "home": {
     "hero": {
       "rotating": [

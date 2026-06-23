@@ -159,6 +159,18 @@
       "other": "Other"
     }
   },
+  "heroStart": {
+    "title": "Start Your Incorporation",
+    "subtitle": "Pick your jurisdiction and your documents are ready in 24 hours.",
+    "chooseLabel": "Choose your jurisdiction",
+    "from": "from",
+    "trust": {
+      "fees": "Government fees included",
+      "online": "100% online filings"
+    },
+    "otherPrompt": "Need a registration, amendment, or compliance filing?",
+    "otherLink": "View all services"
+  },
   "home": {
     "hero": {
       "rotating": [

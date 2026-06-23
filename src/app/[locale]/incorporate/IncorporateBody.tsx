@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useForm, useFieldArray, FormProvider, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -1612,9 +1613,26 @@ const init: WizardData = {
   billingAddress: { street: "", city: "", region: "", postalCode: "", country: "CA" },
 };
 
-export default function IncorporatePage() {
-  const [step, setStep] = useState(1);
-  const [data, setData] = useState<WizardData>(init);
+// Whitelist the `?jurisdiction=` deep-link value. Anything outside the
+// supported Jurisdiction union (or a missing param) returns null so the wizard
+// falls back to its normal Step-1 start.
+function parseJurisdictionParam(raw: string | null): Jurisdiction | null {
+  return raw === "federal" || raw === "ontario" ? raw : null;
+}
+
+function IncorporateWizard() {
+  // Hero panel and homepage jurisdiction cards deep-link with
+  // `?jurisdiction=federal|ontario`. When present and valid, pre-select it and
+  // skip the redundant Step 1 (jurisdiction) — landing the customer straight on
+  // Step 2 (Package). Read once on mount; later in-wizard Back navigation is
+  // free to return to Step 1 normally.
+  const searchParams = useSearchParams();
+  const presetJurisdiction = parseJurisdictionParam(searchParams.get("jurisdiction"));
+
+  const [step, setStep] = useState(presetJurisdiction ? 2 : 1);
+  const [data, setData] = useState<WizardData>(
+    presetJurisdiction ? { ...init, jurisdiction: presetJurisdiction } : init
+  );
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -1714,5 +1732,15 @@ export default function IncorporatePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function IncorporatePage() {
+  // useSearchParams() must sit under a Suspense boundary or Next.js opts the
+  // whole route into client-side bailout at build time.
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <IncorporateWizard />
+    </Suspense>
   );
 }
