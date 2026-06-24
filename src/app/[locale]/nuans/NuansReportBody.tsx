@@ -182,10 +182,10 @@ export default function NuansReportBody() {
                 Your proposed names
               </h2>
               <p className="text-sm text-gray-600 mb-6 leading-relaxed">
-                Add one name per row. The first proposed name is $39.99 + HST. Each
-                additional name in the same order is $39.99 + HST. Every name you
-                enter is searched and the results are bundled into a single
-                emailed PDF.
+                List one proposed corporate name per row, priced at $39.99 + HST
+                each — your first name and every additional name in the order cost
+                the same. We run a NUANS name search on each one and deliver all the
+                results together in a single PDF sent straight to your inbox.
               </p>
 
               {/* Single responsive layout: stacked card on mobile, table-style
