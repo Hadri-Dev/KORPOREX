@@ -92,14 +92,14 @@ export default function NuansReportBody() {
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-3">
             Name Search
           </p>
-          <h1 className="font-serif text-4xl md:text-5xl font-bold leading-tight mb-5">
+          <h1 className="font-serif text-3xl md:text-4xl font-bold leading-tight mb-5">
             Order a NUANS Preliminary Name-Search Report
           </h1>
           <p className="text-lg text-gray-300 leading-relaxed max-w-3xl">
             A NUANS report cross-references your proposed Canadian corporate name against millions of registered business names, corporate names, and trademarks across the country. It is the standard pre-incorporation name check required by Corporations Canada for federal filings and by most provincial registries for named corporations.
           </p>
           <div className="mt-8 flex items-baseline gap-3">
-            <span className="font-serif text-4xl md:text-5xl font-bold text-gold-500">
+            <span className="font-serif text-3xl md:text-4xl font-bold text-gold-500">
               ${NUANS_REPORT.basePrice.toFixed(2)}
             </span>
             <span className="text-sm text-gray-300">+ HST per proposed name</span>
