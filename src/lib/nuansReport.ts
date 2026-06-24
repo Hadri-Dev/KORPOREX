@@ -100,11 +100,11 @@ export const NUANS_REPORT = {
   longLabel: "NUANS Preliminary Name-Search Report",
   path: "/nuans",
   /** Base fee covering the first proposed name in the order. */
-  basePrice: 40,
+  basePrice: 39.99,
   /** Surcharge for every proposed name beyond the first. Each name in the
    *  table is a separate NUANS search; the extras cover the additional
    *  pass-through cost from the search house. */
-  additionalPrice: 40,
+  additionalPrice: 39.99,
   tagline:
     "Pre-screen one or more proposed Canadian corporation names against the NUANS database before you file.",
 };

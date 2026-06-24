@@ -98,7 +98,13 @@ export default function NuansReportBody() {
           <p className="text-lg text-gray-300 leading-relaxed max-w-3xl">
             A NUANS report cross-references your proposed Canadian corporate name against millions of registered business names, corporate names, and trademarks across the country. It is the standard pre-incorporation name check required by Corporations Canada for federal filings and by most provincial registries for named corporations.
           </p>
-          <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm text-gray-300">
+          <div className="mt-8 flex items-baseline gap-3">
+            <span className="font-serif text-4xl md:text-5xl font-bold text-gold-500">
+              ${NUANS_REPORT.basePrice.toFixed(2)}
+            </span>
+            <span className="text-sm text-gray-300">+ HST per proposed name</span>
+          </div>
+          <div className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-sm text-gray-300">
             <span className="flex items-center gap-2">
               <ShieldCheck size={16} className="text-gold-500" />
               Official NUANS source
@@ -176,8 +182,8 @@ export default function NuansReportBody() {
                 Your proposed names
               </h2>
               <p className="text-sm text-gray-600 mb-6 leading-relaxed">
-                Add one name per row. The first proposed name is $40 + HST. Each
-                additional name in the same order is $40 + HST. Every name you
+                Add one name per row. The first proposed name is $39.99 + HST. Each
+                additional name in the same order is $39.99 + HST. Every name you
                 enter is searched and the results are bundled into a single
                 emailed PDF.
               </p>
