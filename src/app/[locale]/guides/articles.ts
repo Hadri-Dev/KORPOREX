@@ -1991,12 +1991,17 @@ export function resolveLocalizedSlug(
   return target?.slug;
 }
 
-// Map of locale -> slug for every language version of an article group. Used to
-// build hreflang alternates so Google treats the versions as translations.
+// Map of locale -> slug for every PUBLISHED language version of an article
+// group. Used to build hreflang alternates so Google treats the versions as
+// translations. Unpublished (future-scheduled) versions are excluded: their
+// URLs 404 until their publish time, and a hreflang pointing at a 404 is the
+// "hreflang to redirect or broken page" error in Ahrefs. This mirrors the
+// sitemap, which already filters with isPublished — keeping the two in sync so
+// a staggered per-locale publish never advertises a not-yet-live alternate.
 export function getAlternateSlugs(group: string): Partial<Record<Locale, string>> {
   const out: Partial<Record<Locale, string>> = {};
   for (const a of articles) {
-    if (a.group === group) out[a.locale] = a.slug;
+    if (a.group === group && isPublished(a)) out[a.locale] = a.slug;
   }
   return out;
 }
