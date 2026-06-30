@@ -74,10 +74,10 @@ export default function HomePageBody() {
           </div>
 
           <div className="w-full">
-            <div className="text-center mb-5">
-              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
-                <span className="text-xs text-gray-300 tracking-widest uppercase font-medium">
+            <div className="mb-5">
+              <div className="flex w-full items-center justify-center gap-2.5 bg-white/10 border border-white/20 rounded-lg px-4 py-3.5">
+                <span className="w-2 h-2 rounded-full bg-gold-500"></span>
+                <span className="text-sm text-gray-300 tracking-widest uppercase font-semibold">
                   {tCommon("fastOnlineAffordable")}
                 </span>
               </div>

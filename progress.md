@@ -1,6 +1,9 @@
 # Progress
 
 ## Current Focus
+**2026-06-30 (later 6) — Widened the hero eyebrow badge to align with the form panel.** User (annotated screenshot) wanted the `FAST · ONLINE · AFFORDABLE` badge made bigger so it lines up with the `Start Your Incorporation` form (HeroStartPanel) below it. In [HomePageBody.tsx](src/app/[locale]/HomePageBody.tsx) the badge went from `inline-flex` (content-width, centered via `text-center`) to a full-width `flex w-full justify-center` block matching the panel edges: text `text-xs`→`text-sm`, `font-medium`→`font-semibold`, padding `px-3 py-1.5`→`px-4 py-3.5`, dot `w-1.5 h-1.5`→`w-2 h-2`, added `rounded-lg` to mirror the form's corners. Class-only change so FR/ES inherit it. Typecheck clean.
+- Next: none — visual alignment only.
+
 **2026-06-30 (later 5) — Removed duplicated trust strip inside the hero panel.** User spotted (annotated screenshot) that the small in-panel strip `✓ Government fees included · ✓ 100% online filings` repeated two of the four bold trust badges sitting right below the panel (~40px apart). Considered replacing it with a price-anchored line, but the left-column guarantee already says "All-inclusive pricing with no surprises," so any reassurance there was redundant. Removed the strip entirely from [HeroStartPanel.tsx](src/components/HeroStartPanel.tsx) (and the now-unused `CheckCircle` import) plus the orphaned `heroStart.trust.{fees,online}` keys from en/fr/es. Bold 4-badge row below the panel now solely owns the trust messaging. JSON validated + typecheck clean. Previewed 3-up (current vs remove vs replace) before the user picked remove.
 - Next: none — de-dupe/visual cleanup only.
 
