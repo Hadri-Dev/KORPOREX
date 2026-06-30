@@ -78,12 +78,12 @@ export default function NaicsCombobox({ value, onChange, placeholder, error }: P
     ? "border-red-400"
     : open
     ? "border-navy-900"
-    : "border-gray-200";
+    : "border-gold-500";
 
   return (
     <div ref={wrapRef} className="relative">
       <div
-        className={`w-full border ${borderCls} bg-white flex items-center gap-2 transition-colors`}
+        className={`w-full border-2 ${borderCls} bg-white flex items-center gap-2 transition-colors`}
         onClick={() => {
           setOpen(true);
           inputRef.current?.focus();
