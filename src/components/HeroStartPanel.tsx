@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
@@ -58,15 +58,6 @@ export default function HeroStartPanel() {
           </Link>
         ))}
       </div>
-
-      <ul className="flex flex-wrap gap-x-5 gap-y-2 mt-6 text-xs text-gray-600 list-none">
-        <li className="flex items-center gap-1.5">
-          <CheckCircle size={13} className="text-gold-500 shrink-0" /> {t("trust.fees")}
-        </li>
-        <li className="flex items-center gap-1.5">
-          <CheckCircle size={13} className="text-gold-500 shrink-0" /> {t("trust.online")}
-        </li>
-      </ul>
 
       <div className="mt-6 pt-5 border-t border-gray-100">
         <p className="text-xs text-gray-500">

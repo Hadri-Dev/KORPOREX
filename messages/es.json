@@ -164,10 +164,6 @@
     "subtitle": "Elija su jurisdicción y sus documentos estarán listos en 24 horas.",
     "chooseLabel": "Elija su jurisdicción",
     "from": "desde",
-    "trust": {
-      "fees": "Tasas gubernamentales incluidas",
-      "online": "Trámites 100 % en línea"
-    },
     "otherPrompt": "¿Necesita un registro, una modificación o un trámite de cumplimiento?",
     "otherLink": "Ver todos los servicios"
   },

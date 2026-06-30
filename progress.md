@@ -1,6 +1,9 @@
 # Progress
 
 ## Current Focus
+**2026-06-30 (later 5) — Removed duplicated trust strip inside the hero panel.** User spotted (annotated screenshot) that the small in-panel strip `✓ Government fees included · ✓ 100% online filings` repeated two of the four bold trust badges sitting right below the panel (~40px apart). Considered replacing it with a price-anchored line, but the left-column guarantee already says "All-inclusive pricing with no surprises," so any reassurance there was redundant. Removed the strip entirely from [HeroStartPanel.tsx](src/components/HeroStartPanel.tsx) (and the now-unused `CheckCircle` import) plus the orphaned `heroStart.trust.{fees,online}` keys from en/fr/es. Bold 4-badge row below the panel now solely owns the trust messaging. JSON validated + typecheck clean. Previewed 3-up (current vs remove vs replace) before the user picked remove.
+- Next: none — de-dupe/visual cleanup only.
+
 **2026-06-30 (later 4) — Made the hero trust badges stand out.** User wanted the four trust checkmarks (`Government fees included`, `Documents in 24 hours`, `100% online filings`, `No subscription required`) to read as prominent selling points rather than muted footnotes. In [HomePageBody.tsx](src/app/[locale]/HomePageBody.tsx) the trust `ul` went `text-sm text-gray-400` → `text-base font-semibold text-white` (high contrast on the `bg-navy-900` hero), checkmarks 14→18px, row spacing `gap-y-2.5`→`gap-y-3`. Class-only change, so FR/ES/CA inherit it automatically. Previewed a faithful before/after (real brand colors + Inter) to the user before pushing. Gold checkmark accent retained.
 - Next: none — visual emphasis only.
 
