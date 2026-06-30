@@ -14,7 +14,7 @@ import {
   getNuansFee,
   JURISDICTION_LABELS,
   PKG_LABELS,
-  REG_OFFICE_ADDON,
+  REG_OFFICE_OPTIONS,
   regOfficeAddonAvailable,
   computePricing,
   type Jurisdiction,
@@ -320,7 +320,7 @@ const s5 = z.object({
 const s6 = z.object({ officers: z.array(officerSchema).min(1) });
 const s7 = z.object({
   regOffice: addressSchema,
-  regOfficeAddon: z.enum(["none", "korporex"]),
+  regOfficeAddon: z.enum(["none", "korporex", "burlington"]),
 });
 const s8 = z.object({
   billingName: z.string().min(1, "Required"),
@@ -1287,12 +1287,11 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
   const { handleSubmit, watch, setValue } = form;
   const selectedAddon = watch("regOfficeAddon");
 
-  // When the Korporex add-on is selected, mirror the sentinel address
-  // (city = "Greater Toronto Area", street = "Assigned by Korporex at filing")
-  // into the regOffice fields so the schema validates and the operator sees
-  // a clear "to be filled in before filing" marker on the intake email. When
-  // the user switches back to "none", blank the fields so they can enter
-  // their own address.
+  // When a Korporex add-on is selected, mirror that location's address into the
+  // regOffice fields so the schema validates. For the GTA ("korporex") option
+  // these are sentinel values the operator replaces before filing; for the
+  // Burlington option they are the real, disclosed address. When the user
+  // switches back to "none", blank the fields so they can enter their own.
   const applyAddonAddress = (addon: RegOfficeAddon) => {
     if (addon === "none") {
       setValue("regOffice.street", "");
@@ -1302,7 +1301,7 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
       setValue("regOffice.country", "CA");
       return;
     }
-    const a = REG_OFFICE_ADDON.address;
+    const a = REG_OFFICE_OPTIONS[addon].address;
     setValue("regOffice.street", a.street, { shouldValidate: true });
     setValue("regOffice.city", a.city, { shouldValidate: true });
     setValue("regOffice.region", a.region, { shouldValidate: true });
@@ -1335,10 +1334,19 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
                 value="korporex"
                 selected={selectedAddon === "korporex"}
                 onSelect={() => { setValue("regOfficeAddon", "korporex"); applyAddonAddress("korporex"); }}
-                title="Use a Korporex registered office address"
+                title="Korporex office — Toronto"
                 subtitle="Greater Toronto Area address chosen by Korporex. Monthly mail scans emailed to you."
-                price={`$${REG_OFFICE_ADDON.monthly.toFixed(2)}/mo`}
-                priceSub={`billed annually in advance at $${REG_OFFICE_ADDON.annual.toFixed(2)} + HST`}
+                price={`$${REG_OFFICE_OPTIONS.korporex.monthly.toFixed(2)}/mo`}
+                priceSub={`billed annually in advance at $${REG_OFFICE_OPTIONS.korporex.annual.toFixed(2)} + HST`}
+              />
+              <AddonOption
+                value="burlington"
+                selected={selectedAddon === "burlington"}
+                onSelect={() => { setValue("regOfficeAddon", "burlington"); applyAddonAddress("burlington"); }}
+                title="Korporex office — Burlington"
+                subtitle="Burlington, Ontario address chosen by Korporex. Monthly mail scans emailed to you."
+                price={`$${REG_OFFICE_OPTIONS.burlington.monthly.toFixed(2)}/mo`}
+                priceSub={`billed annually in advance at $${REG_OFFICE_OPTIONS.burlington.annual.toFixed(2)} + HST`}
               />
             </div>
           )}
@@ -1352,19 +1360,21 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
               locationBias={ADDRESS_BIAS[jurisdiction]}
             />
           )}
-          {selectedAddon === "korporex" && (
+          {selectedAddon !== "none" && (
             <div className="bg-navy-50 border border-navy-900 rounded-lg p-4 text-sm text-navy-900 leading-relaxed">
-              <p className="font-semibold mb-1">{REG_OFFICE_ADDON.label} - {REG_OFFICE_ADDON.locationLabel}</p>
+              <p className="font-semibold mb-1">
+                {REG_OFFICE_OPTIONS[selectedAddon].label} - {REG_OFFICE_OPTIONS[selectedAddon].locationLabel}
+              </p>
               <p className="text-gray-700">
-                Korporex selects and assigns the registered office address, somewhere in the Greater Toronto Area,
-                at our discretion before your Articles of Incorporation are filed. The street address is not
-                disclosed in advance.
+                {REG_OFFICE_OPTIONS[selectedAddon].addressAssignedAtFiling
+                  ? "Korporex selects and assigns the registered office address, somewhere in the Greater Toronto Area, at our discretion before your Articles of Incorporation are filed. The street address is not disclosed in advance."
+                  : `Korporex provides a registered office address in ${REG_OFFICE_OPTIONS[selectedAddon].locationLabel}, Ontario, chosen by Korporex. The specific street address is not disclosed in advance.`}
               </p>
               <ul className="text-xs text-gray-700 mt-3 space-y-1.5 list-disc pl-5">
                 <li>Monthly scanned copy of mail received at the address, emailed to you.</li>
-                <li>The assigned address appears on your Articles of Incorporation and the public corporate registry.</li>
+                <li>The Korporex registered office address appears on your Articles of Incorporation and the public corporate registry.</li>
                 <li>
-                  ${REG_OFFICE_ADDON.annual.toFixed(2)} CAD billed annually in advance, plus HST. <strong>Non-refundable</strong>,
+                  ${REG_OFFICE_OPTIONS[selectedAddon].annual.toFixed(2)} CAD billed annually in advance, plus HST. <strong>Non-refundable</strong>,
                   including if you obtain your own registered office address before the term ends.
                 </li>
               </ul>
@@ -1456,10 +1466,11 @@ function Step8({ data, onBack, onPay }: {
     regOfficeAddon: data.regOfficeAddon,
   });
   const nameSearchApplies = nuansFee > 0;
-  const addonApplies = regOfficeFee > 0 && data.regOfficeAddon === "korporex";
-  const addonLabel = addonApplies
-    ? `Registered office - ${REG_OFFICE_ADDON.label} (12 mo)`
-    : "";
+  const addonApplies = regOfficeFee > 0 && data.regOfficeAddon !== "none";
+  const addonLabel =
+    regOfficeFee > 0 && data.regOfficeAddon !== "none"
+      ? `Registered office - ${REG_OFFICE_OPTIONS[data.regOfficeAddon].locationLabel} (12 mo)`
+      : "";
 
   const jurisLabel = JURISDICTION_LABELS[data.jurisdiction];
   const pkgLabel = PKG_LABELS[data.pkg];
@@ -1506,8 +1517,8 @@ function Step8({ data, onBack, onPay }: {
               ["Officers", String(data.officers.length)],
               [
                 "Registered Office",
-                data.regOfficeAddon === "korporex"
-                  ? `${REG_OFFICE_ADDON.label} - ${REG_OFFICE_ADDON.locationLabel}`
+                data.regOfficeAddon !== "none"
+                  ? `${REG_OFFICE_OPTIONS[data.regOfficeAddon].label} - ${REG_OFFICE_OPTIONS[data.regOfficeAddon].locationLabel}`
                   : data.regOffice.city ? `${data.regOffice.city}, ${data.regOffice.region}` : "-",
               ],
             ].map(([k, v]) => (

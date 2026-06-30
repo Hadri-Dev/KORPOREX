@@ -6,6 +6,7 @@ import {
   formatDate,
   getOrderDetail,
 } from "@/lib/dashboardData";
+import { REG_OFFICE_OPTIONS, type RegOfficeLocation } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -190,8 +191,11 @@ export default async function OrderDetailPage({
             {md.legalEnding ? (
               <Field label="Legal ending" value={md.legalEnding} />
             ) : null}
-            {md.regOfficeAddon === "true" || md.regOfficeAddon === "yes" ? (
-              <Field label="Registered office" value="Add-on selected" />
+            {md.regOfficeAddon && md.regOfficeAddon !== "none" && md.regOfficeAddon in REG_OFFICE_OPTIONS ? (
+              <Field
+                label="Registered office"
+                value={`${REG_OFFICE_OPTIONS[md.regOfficeAddon as RegOfficeLocation].locationLabel} (12 mo, non-refundable)`}
+              />
             ) : null}
           </Section>
         </div>

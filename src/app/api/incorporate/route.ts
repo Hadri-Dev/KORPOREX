@@ -3,7 +3,7 @@ import { z } from "zod";
 import {
   JURISDICTION_LABELS,
   PKG_LABELS,
-  REG_OFFICE_ADDON,
+  REG_OFFICE_OPTIONS,
   computePricing,
   type Jurisdiction,
   type Pkg,
@@ -87,7 +87,7 @@ const schema = z.object({
   shareClasses: z.array(z.string()).max(10).default([]),
   officers: z.array(officerSchema).min(1).max(50),
   regOffice: addressSchema,
-  regOfficeAddon: z.enum(["none", "korporex"]).default("none"),
+  regOfficeAddon: z.enum(["none", "korporex", "burlington"]).default("none"),
   billingName: z.string().trim().min(1).max(200),
   billingAddress: addressSchema,
 });
@@ -184,13 +184,16 @@ export async function POST(req: Request) {
     });
   }
 
-  if (pricing.regOfficeFee > 0 && payload.regOfficeAddon === "korporex") {
+  if (pricing.regOfficeFee > 0 && payload.regOfficeAddon !== "none") {
+    const opt = REG_OFFICE_OPTIONS[payload.regOfficeAddon];
+    // Customer-facing (shown on the Stripe Checkout page) — city/region only,
+    // never the street address.
     lineItems.push({
       price_data: {
         currency: "cad",
         product_data: {
-          name: `${REG_OFFICE_ADDON.label} (12 months)`,
-          description: `${REG_OFFICE_ADDON.locationLabel}. Korporex assigns the address before filing. Monthly mail scans emailed to customer. $${REG_OFFICE_ADDON.monthly.toFixed(2)}/mo × 12. Non-refundable.`,
+          name: `${opt.label} — ${opt.locationLabel} (12 months)`,
+          description: `Registered office address in ${opt.locationLabel}, chosen by Korporex. Monthly mail scans emailed to customer. $${opt.monthly.toFixed(2)}/mo × 12. Non-refundable.`,
         },
         unit_amount: Math.round(pricing.regOfficeFee * 100),
       },
@@ -361,8 +364,8 @@ function buildHtmlBody(
   ].join("");
 
   const addonLabel =
-    d.regOfficeAddon === "korporex"
-      ? `Registered office — ${REG_OFFICE_ADDON.label} (12 mo)`
+    d.regOfficeAddon !== "none"
+      ? `Registered office — ${REG_OFFICE_OPTIONS[d.regOfficeAddon].locationLabel} (12 mo)`
       : "";
 
   const pricingRows = [
@@ -465,16 +468,23 @@ function buildHtmlBody(
     }))
   );
 
-  const regOfficeHeader =
-    d.regOfficeAddon === "korporex"
-      ? `<p style="margin:0 0 6px;color:#C5A35A;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">${escapeHtml(
-          REG_OFFICE_ADDON.label
-        )} — ${escapeHtml(REG_OFFICE_ADDON.locationLabel)}</p>`
-      : "";
+  const regOfficeOpt = d.regOfficeAddon !== "none" ? REG_OFFICE_OPTIONS[d.regOfficeAddon] : null;
+  const regOfficeHeader = regOfficeOpt
+    ? `<p style="margin:0 0 6px;color:#C5A35A;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">${escapeHtml(
+        regOfficeOpt.label
+      )} — ${escapeHtml(regOfficeOpt.locationLabel)}</p>`
+    : "";
+  // The GTA option ships a sentinel address the operator must replace before
+  // filing; the Burlington option carries a fixed real address (above) — no
+  // action, just a record of the paid term.
   const regOfficeNote =
-    d.regOfficeAddon === "korporex"
+    regOfficeOpt && regOfficeOpt.addressAssignedAtFiling
       ? `<p style="margin:6px 0 0;color:#92400e;font-size:12px;line-height:1.6;"><strong>ACTION REQUIRED:</strong> assign actual GTA address before filing. Customer paid 12-month non-refundable term.</p>`
-      : "";
+      : regOfficeOpt
+        ? `<p style="margin:6px 0 0;color:#92400e;font-size:12px;line-height:1.6;">Customer paid 12-month non-refundable term for the ${escapeHtml(
+            regOfficeOpt.locationLabel
+          )} address.</p>`
+        : "";
   const regOffice = `${regOfficeHeader}<p style="margin:0;color:#111827;font-size:14px;line-height:1.6;">${escapeHtml(
     formatAddress(d.regOffice)
   )}</p>${regOfficeNote}`;

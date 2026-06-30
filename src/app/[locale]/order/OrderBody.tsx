@@ -3,7 +3,7 @@
 import { Link } from "@/i18n/navigation";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import { useState } from "react";
-import { REG_OFFICE_ADDON } from "@/lib/pricing";
+import { REG_OFFICE_OPTIONS } from "@/lib/pricing";
 
 type Jurisdiction = "federal" | "ontario";
 
@@ -124,11 +124,8 @@ export default function PricingPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy-900 text-white py-12 px-6 text-center">
+      <section className="bg-navy-900 text-white py-8 px-6 text-center">
         <div className="max-w-3xl mx-auto">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
-            Pricing
-          </p>
           <h1 className="font-serif text-5xl md:text-6xl font-bold mb-6">
             Simple, Transparent Pricing
           </h1>
@@ -234,43 +231,71 @@ export default function PricingPage() {
               Registered Office Address Service
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Don&rsquo;t have a physical address for your corporation? Use ours. Available at
+              Don&rsquo;t have a physical address for your corporation? Use ours. Choose a location at
               checkout for federal and Ontario incorporations.
             </p>
           </div>
-          <div className="border border-navy-900 rounded-lg p-8 bg-cream-50">
-            <p className="text-xs font-semibold tracking-[0.15em] uppercase text-gold-500 mb-3">
-              {REG_OFFICE_ADDON.label}
-            </p>
-            <p className="font-serif text-4xl font-bold text-navy-900 mb-1">
-              ${REG_OFFICE_ADDON.monthly.toFixed(2)}
-              <span className="text-lg text-gray-500 font-sans font-normal">/mo</span>
-            </p>
-            <p className="text-xs text-gray-500 mb-6">
-              billed annually in advance at ${REG_OFFICE_ADDON.annual.toFixed(2)} + HST
-            </p>
-            <ul className="space-y-3 text-sm text-gray-700">
-              <li className="flex items-start gap-3">
-                <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
-                <span>Registered office address in the Greater Toronto Area, chosen by Korporex</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
-                <span>Monthly scanned copy of your mail emailed to you</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
-                <span>Address listed on your Articles of Incorporation and the public corporate registry</span>
-              </li>
-            </ul>
-            <p className="text-xs text-gray-600 mt-6 pt-4 border-t border-gray-200 leading-relaxed">
-              <strong className="text-navy-900">Non-refundable.</strong> The annual fee is billed in
-              advance and is not refundable, in whole or in part, including if you obtain your own
-              registered office address before the end of the term.
-            </p>
+          <div className="grid gap-6 sm:grid-cols-2">
+            {/* Toronto (GTA) — address assigned by Korporex at filing */}
+            <div className="border border-navy-900 rounded-lg p-8 bg-cream-50">
+              <p className="text-xs font-semibold tracking-[0.15em] uppercase text-gold-500 mb-3">
+                {REG_OFFICE_OPTIONS.korporex.locationLabel}
+              </p>
+              <p className="font-serif text-4xl font-bold text-navy-900 mb-1">
+                ${REG_OFFICE_OPTIONS.korporex.monthly.toFixed(2)}
+                <span className="text-lg text-gray-500 font-sans font-normal">/mo</span>
+              </p>
+              <p className="text-xs text-gray-500 mb-6">
+                billed annually in advance at ${REG_OFFICE_OPTIONS.korporex.annual.toFixed(2)} + HST
+              </p>
+              <ul className="space-y-3 text-sm text-gray-700">
+                <li className="flex items-start gap-3">
+                  <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
+                  <span>Registered office address in the Greater Toronto Area, chosen by Korporex</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
+                  <span>Monthly scanned copy of your mail emailed to you</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
+                  <span>Address listed on your Articles of Incorporation and the public corporate registry</span>
+                </li>
+              </ul>
+            </div>
+            {/* Burlington — fixed, disclosed address */}
+            <div className="border border-navy-900 rounded-lg p-8 bg-cream-50">
+              <p className="text-xs font-semibold tracking-[0.15em] uppercase text-gold-500 mb-3">
+                {REG_OFFICE_OPTIONS.burlington.locationLabel}
+              </p>
+              <p className="font-serif text-4xl font-bold text-navy-900 mb-1">
+                ${REG_OFFICE_OPTIONS.burlington.monthly.toFixed(2)}
+                <span className="text-lg text-gray-500 font-sans font-normal">/mo</span>
+              </p>
+              <p className="text-xs text-gray-500 mb-6">
+                billed annually in advance at ${REG_OFFICE_OPTIONS.burlington.annual.toFixed(2)} + HST
+              </p>
+              <ul className="space-y-3 text-sm text-gray-700">
+                <li className="flex items-start gap-3">
+                  <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
+                  <span>Registered office address in Burlington, Ontario, chosen by Korporex</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
+                  <span>Monthly scanned copy of your mail emailed to you</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
+                  <span>Address listed on your Articles of Incorporation and the public corporate registry</span>
+                </li>
+              </ul>
+            </div>
           </div>
-          <p className="text-xs text-gray-500 text-center mt-6">
-            Available for federal and Ontario incorporations.
+          <p className="text-xs text-gray-600 mt-6 leading-relaxed text-center max-w-2xl mx-auto">
+            <strong className="text-navy-900">Non-refundable.</strong> The annual fee is billed in
+            advance and is not refundable, in whole or in part, including if you obtain your own
+            registered office address before the end of the term. Available for federal and Ontario
+            incorporations.
           </p>
         </div>
       </section>

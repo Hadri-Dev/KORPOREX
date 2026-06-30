@@ -11,37 +11,88 @@
 // union and follow the README in that folder.
 export type Jurisdiction = "federal" | "ontario";
 export type Pkg = "basic" | "standard" | "premium";
-export type RegOfficeAddon = "none" | "korporex";
+// Registered office add-on selection. "korporex" = Greater Toronto Area address
+// (assigned by Korporex at filing); "burlington" = a fixed real Burlington
+// address. Neither street is advertised to the customer — both surfaces show
+// city/region only. The value "korporex" is kept (rather than renamed to
+// "toronto") for backward compatibility with Stripe session metadata on orders
+// placed before the Burlington tier was added.
+export type RegOfficeAddon = "none" | "korporex" | "burlington";
+export type RegOfficeLocation = Exclude<RegOfficeAddon, "none">;
 
-// Registered office address add-on. Single tier: Korporex provides a
-// registered office address in the Greater Toronto Area, billed annually in
-// advance. Annual fee is non-refundable, even if the customer obtains their
-// own registered office address before the term ends.
+// Registered office address add-on. Korporex provides a registered office
+// address, billed annually in advance. The annual fee is non-refundable, even
+// if the customer obtains their own registered office address before the term
+// ends. Available for all currently supported jurisdictions (Federal + Ontario).
 //
-// Available for all currently supported jurisdictions (Federal + Ontario).
-//
-// The actual street/city of the GTA address is selected by Korporex at the
-// time of filing and is intentionally NOT advertised on the marketing or
-// wizard surfaces — customers commit to "Greater Toronto Area, assigned by
-// Korporex". The placeholder address values below are sentinel strings that
-// flow into the wizard's `regOffice` fields when this add-on is selected, so
-// the operator (cross-referencing the [PENDING]/[PAID] emails) knows the real
-// address is to be filled in before the Articles of Incorporation are filed.
-export const REG_OFFICE_ADDON = {
-  annual: 1199.88, // 99.99 × 12
-  monthly: 99.99,
-  label: "Korporex Registered Office",
-  locationLabel: "Greater Toronto Area",
-  // Sentinel values — replaced with the real, Korporex-controlled address
-  // before each customer's Articles of Incorporation are filed.
+// The specific street address is NEVER advertised to the customer for either
+// location — the wizard, /order page, and Stripe line item all describe the
+// service by city/region only ("Greater Toronto Area" / "Burlington"). The two
+// tiers differ only operationally, captured by `addressAssignedAtFiling`:
+//  - korporex (GTA): the street is selected by Korporex at filing time. The
+//    stored `address` is a sentinel that flows into the wizard's `regOffice`
+//    fields so the operator (cross-referencing the [PENDING]/[PAID] emails)
+//    knows to fill in a real address before the Articles are filed.
+//  - burlington: a fixed, real address (901 Guelph Line) — already on file, so
+//    it flows straight onto the Articles with no operator action. It is simply
+//    not shown to the customer (city only), same as the GTA tier.
+export type RegOfficeOption = {
+  monthly: number;
+  annual: number;
+  label: string;
+  locationLabel: string;
+  // True when the stored `address` is a placeholder the operator must replace
+  // before filing (GTA tier); false when it is a fixed real address (Burlington).
+  // Customer-facing surfaces show city only regardless of this flag.
+  addressAssignedAtFiling: boolean;
   address: {
-    street: "Assigned by Korporex at filing",
-    city: "Greater Toronto Area",
-    region: "ON",
-    postalCode: "TBD",
-    country: "CA",
+    street: string;
+    city: string;
+    region: string;
+    postalCode: string;
+    country: string;
+  };
+};
+
+export const REG_OFFICE_OPTIONS: Record<RegOfficeLocation, RegOfficeOption> = {
+  korporex: {
+    annual: 1199.88, // 99.99 × 12
+    monthly: 99.99,
+    label: "Korporex Registered Office",
+    locationLabel: "Greater Toronto Area",
+    addressAssignedAtFiling: true,
+    // Sentinel values — replaced with the real, Korporex-controlled address
+    // before each customer's Articles of Incorporation are filed.
+    address: {
+      street: "Assigned by Korporex at filing",
+      city: "Greater Toronto Area",
+      region: "ON",
+      postalCode: "TBD",
+      country: "CA",
+    },
   },
-} as const;
+  burlington: {
+    annual: 599.88, // 49.99 × 12
+    monthly: 49.99,
+    label: "Korporex Registered Office",
+    locationLabel: "Burlington",
+    addressAssignedAtFiling: false,
+    // Real, fixed address (flows onto the Articles). Not advertised to the
+    // customer — the wizard shows "Burlington" only.
+    address: {
+      street: "901 Guelph Line",
+      city: "Burlington",
+      region: "ON",
+      postalCode: "L7R 3N8",
+      country: "CA",
+    },
+  },
+};
+
+// Back-compat alias: the original single-tier export pointed at the GTA option.
+// Surfaces that still reference only the Toronto tier (e.g. the legacy default)
+// keep working through this alias.
+export const REG_OFFICE_ADDON = REG_OFFICE_OPTIONS.korporex;
 
 export function regOfficeAddonAvailable(jurisdiction: Jurisdiction): boolean {
   return jurisdiction === "federal" || jurisdiction === "ontario";
@@ -157,8 +208,8 @@ export function computePricing(args: {
     : 0;
   const addon = args.regOfficeAddon ?? "none";
   const regOfficeFee =
-    addon === "korporex" && regOfficeAddonAvailable(args.jurisdiction)
-      ? REG_OFFICE_ADDON.annual
+    addon !== "none" && regOfficeAddonAvailable(args.jurisdiction)
+      ? REG_OFFICE_OPTIONS[addon].annual
       : 0;
   const subtotal = Math.round((price + nuansFee + regOfficeFee) * 100) / 100;
   const taxRate = getTaxRate(args.billingCountry, args.billingRegion);

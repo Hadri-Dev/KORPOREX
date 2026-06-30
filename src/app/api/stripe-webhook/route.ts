@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
-import { JURISDICTION_LABELS, PKG_LABELS, REG_OFFICE_ADDON, type Jurisdiction, type Pkg, type RegOfficeAddon } from "@/lib/pricing";
+import { JURISDICTION_LABELS, PKG_LABELS, REG_OFFICE_OPTIONS, type Jurisdiction, type Pkg, type RegOfficeAddon } from "@/lib/pricing";
 import { LEGAL_CONSULT_RECIPIENTS } from "@/lib/legalConsult";
 import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
 
@@ -249,13 +249,14 @@ function buildPaidBody(d: {
   sessionId: string;
   paymentIntent: string;
 }) {
-  const regOfficeRow: [string, string] | null =
-    d.regOfficeAddon === "korporex"
-      ? [
-          "Registered office add-on",
-          `${REG_OFFICE_ADDON.label} — ${REG_OFFICE_ADDON.locationLabel} (12 months, non-refundable)`,
-        ]
-      : null;
+  const regOfficeOpt =
+    d.regOfficeAddon !== "none" ? REG_OFFICE_OPTIONS[d.regOfficeAddon] : undefined;
+  const regOfficeRow: [string, string] | null = regOfficeOpt
+    ? [
+        "Registered office add-on",
+        `${regOfficeOpt.label} — ${regOfficeOpt.locationLabel} (12 months, non-refundable)`,
+      ]
+    : null;
   const legalEndingRow: [string, string] | null = d.legalEnding
     ? ["Legal ending", d.legalEnding]
     : null;
