@@ -78,7 +78,7 @@ export default function HomePageBody() {
               <div className="flex w-full items-center justify-center gap-2.5 bg-white/10 border border-white/20 rounded-lg px-4 py-3.5">
                 <span className="w-2 h-2 rounded-full bg-gold-500"></span>
                 <span className="text-sm text-gray-300 tracking-widest uppercase font-semibold">
-                  {tCommon("fastOnlineAffordable")}
+                  {tCommon("federalProvincialIncorporation")}
                 </span>
               </div>
             </div>
