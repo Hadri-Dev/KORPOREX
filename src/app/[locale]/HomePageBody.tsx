@@ -83,11 +83,11 @@ export default function HomePageBody() {
               </div>
             </div>
             <HeroStartPanel />
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5 mt-6 w-fit mx-auto text-sm text-gray-400 list-none">
-              <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.fees")}</li>
-              <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.speed")}</li>
-              <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.online")}</li>
-              <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.noSubscription")}</li>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 mt-6 w-fit mx-auto text-base font-semibold text-white list-none">
+              <li className="flex items-center gap-2"><CheckCircle size={18} className="text-gold-500 shrink-0" /> {t("hero.trust.fees")}</li>
+              <li className="flex items-center gap-2"><CheckCircle size={18} className="text-gold-500 shrink-0" /> {t("hero.trust.speed")}</li>
+              <li className="flex items-center gap-2"><CheckCircle size={18} className="text-gold-500 shrink-0" /> {t("hero.trust.online")}</li>
+              <li className="flex items-center gap-2"><CheckCircle size={18} className="text-gold-500 shrink-0" /> {t("hero.trust.noSubscription")}</li>
             </ul>
           </div>
         </div>

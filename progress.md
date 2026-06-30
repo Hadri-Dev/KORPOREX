@@ -1,6 +1,9 @@
 # Progress
 
 ## Current Focus
+**2026-06-30 (later 4) — Made the hero trust badges stand out.** User wanted the four trust checkmarks (`Government fees included`, `Documents in 24 hours`, `100% online filings`, `No subscription required`) to read as prominent selling points rather than muted footnotes. In [HomePageBody.tsx](src/app/[locale]/HomePageBody.tsx) the trust `ul` went `text-sm text-gray-400` → `text-base font-semibold text-white` (high contrast on the `bg-navy-900` hero), checkmarks 14→18px, row spacing `gap-y-2.5`→`gap-y-3`. Class-only change, so FR/ES/CA inherit it automatically. Previewed a faithful before/after (real brand colors + Inter) to the user before pushing. Gold checkmark accent retained.
+- Next: none — visual emphasis only.
+
 **2026-06-30 (later 3) — Centered hero badge, CTA button, and trust strip.** User wanted the `FAST · ONLINE · AFFORDABLE` badge centered over the conversion panel, the `Incorporate Now` button centered under the left-column text, and (for symmetry) the trust strip centered under the panel — at ALL breakpoints, not just stacked. In [HomePageBody.tsx](src/app/[locale]/HomePageBody.tsx): button wrapper `text-center`, badge wrapper `text-center mb-5`, trust `ul` `w-fit mx-auto` (dropped the earlier `lg:text-left` / `lg:w-full lg:mx-0` desktop-left overrides). Headline/lead/guarantee stay left-aligned. Verified desktop + stacked via screenshots. Pushed. (Also killed 4 stale `next dev` processes squatting ports 3000–3003 from the iteration churn.)
 - Next: none — visual polish only.
 
