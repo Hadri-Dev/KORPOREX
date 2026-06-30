@@ -62,24 +62,28 @@ export default function HomePageBody() {
             <p className="text-sm md:text-base text-gold-400 leading-relaxed mb-8 border-l-2 border-gold-500 pl-4 max-w-xl">
               {t("hero.guarantee")}
             </p>
-            <Link
-              href="/incorporate"
-              className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors"
-            >
-              {tCommon("incorporateNow")}
-              <ArrowRight size={16} />
-            </Link>
+            <div className="text-center">
+              <Link
+                href="/incorporate"
+                className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors"
+              >
+                {tCommon("incorporateNow")}
+                <ArrowRight size={16} />
+              </Link>
+            </div>
           </div>
 
           <div className="w-full">
-            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
-              <span className="text-xs text-gray-300 tracking-widest uppercase font-medium">
-                {tCommon("fastOnlineAffordable")}
-              </span>
+            <div className="text-center mb-5">
+              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
+                <span className="text-xs text-gray-300 tracking-widest uppercase font-medium">
+                  {tCommon("fastOnlineAffordable")}
+                </span>
+              </div>
             </div>
             <HeroStartPanel />
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5 mt-6 text-sm text-gray-400 list-none">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5 mt-6 w-fit mx-auto text-sm text-gray-400 list-none">
               <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.fees")}</li>
               <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.speed")}</li>
               <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.online")}</li>

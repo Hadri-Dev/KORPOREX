@@ -1,6 +1,9 @@
 # Progress
 
 ## Current Focus
+**2026-06-30 (later 3) — Centered hero badge, CTA button, and trust strip.** User wanted the `FAST · ONLINE · AFFORDABLE` badge centered over the conversion panel, the `Incorporate Now` button centered under the left-column text, and (for symmetry) the trust strip centered under the panel — at ALL breakpoints, not just stacked. In [HomePageBody.tsx](src/app/[locale]/HomePageBody.tsx): button wrapper `text-center`, badge wrapper `text-center mb-5`, trust `ul` `w-fit mx-auto` (dropped the earlier `lg:text-left` / `lg:w-full lg:mx-0` desktop-left overrides). Headline/lead/guarantee stay left-aligned. Verified desktop + stacked via screenshots. Pushed. (Also killed 4 stale `next dev` processes squatting ports 3000–3003 from the iteration churn.)
+- Next: none — visual polish only.
+
 **2026-06-30 (later 2) — Rebalanced homepage hero: moved badge + trust strip into the right column.** User flagged (annotated screenshot) empty space around the conversion panel and wanted the eyebrow badge and trust checkmarks moved into it. In [HomePageBody.tsx](src/app/[locale]/HomePageBody.tsx) the left column is now headline → lead → guarantee → CTA only; the right column is the `FAST · ONLINE · AFFORDABLE` badge (above the panel) → `HeroStartPanel` → the 4 trust checkmarks (2×2 grid, `grid-cols-1 sm:grid-cols-2`, below the panel). Equalizes the two column heights and fills the previously-empty top-right/bottom-right bands. Known tradeoff (told user): on mobile the badge stacks above the panel rather than as the headline eyebrow. Verified on dev + screenshot. Pushed.
 - Next: none — visual polish only.
 
