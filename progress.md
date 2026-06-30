@@ -1,6 +1,9 @@
 # Progress
 
 ## Current Focus
+**2026-06-30 (later) — De-crowded the homepage hero layout.** User felt the hero looked crowded. Restructured the left column in [HomePageBody.tsx](src/app/[locale]/HomePageBody.tsx): the four trust checkmarks were a single tall vertical column running well past the CTA button (the main crowding driver) — moved them into a 2×2 grid (`grid-cols-1 sm:grid-cols-2`) below the button, put the "Incorporate Now" button on its own line, tightened the heading/lead rhythm (mb-5) and capped the lead + guarantee at `max-w-xl`. First bumped section padding to `py-12 md:py-16 lg:py-20` but that left too much empty space top/bottom (user flagged via annotated screenshot); settled on `py-8 md:py-10`. Verified across iterations on the dev server + screenshots. Pushed.
+- Next: none — visual polish only.
+
 **2026-06-30 — Added "No subscription required" to the homepage hero.** New trust key `home.hero.trust.noSubscription` added to all three locales (en: "No subscription required", fr: "Aucun abonnement requis", es: "Sin suscripción requerida") and rendered as a fourth checkmark `<li>` in the hero trust list in [HomePageBody.tsx](src/app/[locale]/HomePageBody.tsx), below "100% online filings". Chose the trust-list pattern over a standalone badge for design consistency. Verified rendering on the dev server (all four items present in en HTML) and via screenshot. Pushed.
 - Next: none — standalone copy addition.
 

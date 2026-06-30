@@ -50,7 +50,7 @@ export default function HomePageBody() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy-900 text-white py-6 md:py-8 px-6">
+      <section className="bg-navy-900 text-white py-8 md:py-10 px-6">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 mb-6">
@@ -59,30 +59,28 @@ export default function HomePageBody() {
                 {tCommon("fastOnlineAffordable")}
               </span>
             </div>
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] mb-6">
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] mb-5">
               <RotatingWords phrases={rotatingPhrases} />
               <br />
               <span className="text-gold-400 whitespace-pre-line">{t("hero.tagline")}</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-6">{t("hero.lead")}</p>
-            <p className="text-sm md:text-base text-gold-400 leading-relaxed mb-8 border-l-2 border-gold-500 pl-4">
+            <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-5 max-w-xl">{t("hero.lead")}</p>
+            <p className="text-sm md:text-base text-gold-400 leading-relaxed mb-8 border-l-2 border-gold-500 pl-4 max-w-xl">
               {t("hero.guarantee")}
             </p>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
-              <Link
-                href="/incorporate"
-                className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors shrink-0"
-              >
-                {tCommon("incorporateNow")}
-                <ArrowRight size={16} />
-              </Link>
-              <ul className="flex flex-col gap-1.5 text-sm text-gray-400 list-none">
-                <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.fees")}</li>
-                <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.speed")}</li>
-                <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.online")}</li>
-                <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.noSubscription")}</li>
-              </ul>
-            </div>
+            <Link
+              href="/incorporate"
+              className="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-8 py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors"
+            >
+              {tCommon("incorporateNow")}
+              <ArrowRight size={16} />
+            </Link>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5 mt-8 text-sm text-gray-400 list-none">
+              <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.fees")}</li>
+              <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.speed")}</li>
+              <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.online")}</li>
+              <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.noSubscription")}</li>
+            </ul>
           </div>
 
           <div className="w-full">
