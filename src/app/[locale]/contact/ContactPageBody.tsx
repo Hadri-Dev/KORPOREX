@@ -39,11 +39,8 @@ export default function ContactPageBody() {
 
   return (
     <>
-      <section className="bg-navy-900 text-white py-12 px-6">
+      <section className="bg-navy-900 text-white py-8 px-6">
         <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
-            {t("eyebrow")}
-          </p>
           <h1 className="font-serif text-5xl md:text-6xl font-bold leading-tight mb-6">
             {t("heroTitle")}
           </h1>

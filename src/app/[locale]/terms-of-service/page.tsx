@@ -24,11 +24,8 @@ export default function TermsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
+      <section className="bg-cream-50 py-8 px-6 border-b border-gray-100">
         <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
-            Legal
-          </p>
           <h1 className="font-serif text-5xl md:text-6xl font-bold text-navy-900 leading-tight mb-6">
             Terms of Service
           </h1>

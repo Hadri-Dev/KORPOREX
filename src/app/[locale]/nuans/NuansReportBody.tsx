@@ -87,11 +87,8 @@ export default function NuansReportBody() {
   return (
     <FormProvider {...form}>
       {/* Hero */}
-      <section className="bg-navy-900 text-white py-12 px-6">
+      <section className="bg-navy-900 text-white py-8 px-6">
         <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-3">
-            Name Search
-          </p>
           <h1 className="font-serif text-3xl md:text-4xl font-bold leading-tight mb-5">
             Order a NUANS Preliminary Name-Search Report
           </h1>

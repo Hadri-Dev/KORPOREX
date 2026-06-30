@@ -93,9 +93,8 @@ export default function ExtraProvincialRegistrationPage() {
 
   return (
     <FormProvider {...form}>
-      <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
+      <section className="bg-cream-50 py-8 px-6 border-b border-gray-100">
         <div className="max-w-2xl mx-auto">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-3">Registration</p>
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-navy-900 leading-tight mb-4">{SERVICE.label}</h1>
           <p className="text-lg text-gray-600 leading-relaxed">{SERVICE.description}</p>
           <p className="mt-4 text-sm text-gray-500">
