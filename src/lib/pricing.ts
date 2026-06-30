@@ -11,10 +11,10 @@
 // union and follow the README in that folder.
 export type Jurisdiction = "federal" | "ontario";
 export type Pkg = "basic" | "standard" | "premium";
-// Registered office add-on selection. "korporex" = Greater Toronto Area address
+// Registered office add-on selection. "korporex" = a Downtown Toronto address
 // (assigned by Korporex at filing); "burlington" = a fixed real Burlington
 // address. Neither street is advertised to the customer — both surfaces show
-// city/region only. The value "korporex" is kept (rather than renamed to
+// city/area only. The value "korporex" is kept (rather than renamed to
 // "toronto") for backward compatibility with Stripe session metadata on orders
 // placed before the Burlington tier was added.
 export type RegOfficeAddon = "none" | "korporex" | "burlington";
@@ -27,7 +27,7 @@ export type RegOfficeLocation = Exclude<RegOfficeAddon, "none">;
 //
 // The specific street address is NEVER advertised to the customer for either
 // location — the wizard, /order page, and Stripe line item all describe the
-// service by city/region only ("Greater Toronto Area" / "Burlington"). The two
+// service by city/area only ("Downtown Toronto" / "Burlington"). The two
 // tiers differ only operationally, captured by `addressAssignedAtFiling`:
 //  - korporex (GTA): the street is selected by Korporex at filing time. The
 //    stored `address` is a sentinel that flows into the wizard's `regOffice`
@@ -59,13 +59,13 @@ export const REG_OFFICE_OPTIONS: Record<RegOfficeLocation, RegOfficeOption> = {
     annual: 1199.88, // 99.99 × 12
     monthly: 99.99,
     label: "Korporex Registered Office",
-    locationLabel: "Greater Toronto Area",
+    locationLabel: "Downtown Toronto",
     addressAssignedAtFiling: true,
     // Sentinel values — replaced with the real, Korporex-controlled address
     // before each customer's Articles of Incorporation are filed.
     address: {
       street: "Assigned by Korporex at filing",
-      city: "Greater Toronto Area",
+      city: "Downtown Toronto",
       region: "ON",
       postalCode: "TBD",
       country: "CA",

@@ -474,12 +474,12 @@ function buildHtmlBody(
         regOfficeOpt.label
       )} — ${escapeHtml(regOfficeOpt.locationLabel)}</p>`
     : "";
-  // The GTA option ships a sentinel address the operator must replace before
-  // filing; the Burlington option carries a fixed real address (above) — no
-  // action, just a record of the paid term.
+  // The Toronto option ships a sentinel address the operator must replace
+  // before filing; the Burlington option carries a fixed real address (above) —
+  // no action, just a record of the paid term.
   const regOfficeNote =
     regOfficeOpt && regOfficeOpt.addressAssignedAtFiling
-      ? `<p style="margin:6px 0 0;color:#92400e;font-size:12px;line-height:1.6;"><strong>ACTION REQUIRED:</strong> assign actual GTA address before filing. Customer paid 12-month non-refundable term.</p>`
+      ? `<p style="margin:6px 0 0;color:#92400e;font-size:12px;line-height:1.6;"><strong>ACTION REQUIRED:</strong> assign actual downtown Toronto address before filing. Customer paid 12-month non-refundable term.</p>`
       : regOfficeOpt
         ? `<p style="margin:6px 0 0;color:#92400e;font-size:12px;line-height:1.6;">Customer paid 12-month non-refundable term for the ${escapeHtml(
             regOfficeOpt.locationLabel

@@ -236,7 +236,7 @@ export default function PricingPage() {
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2">
-            {/* Toronto (GTA) — address assigned by Korporex at filing */}
+            {/* Toronto — Downtown Toronto address assigned by Korporex at filing */}
             <div className="border border-navy-900 rounded-lg p-8 bg-cream-50">
               <p className="text-xs font-semibold tracking-[0.15em] uppercase text-gold-500 mb-3">
                 {REG_OFFICE_OPTIONS.korporex.locationLabel}
@@ -251,7 +251,7 @@ export default function PricingPage() {
               <ul className="space-y-3 text-sm text-gray-700">
                 <li className="flex items-start gap-3">
                   <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />
-                  <span>Registered office address in the Greater Toronto Area, chosen by Korporex</span>
+                  <span>Registered office address in downtown Toronto, chosen by Korporex</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle size={15} className="text-gold-500 shrink-0 mt-0.5" />

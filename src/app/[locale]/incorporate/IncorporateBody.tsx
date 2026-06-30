@@ -1335,7 +1335,7 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
                 selected={selectedAddon === "korporex"}
                 onSelect={() => { setValue("regOfficeAddon", "korporex"); applyAddonAddress("korporex"); }}
                 title="Korporex office — Toronto"
-                subtitle="Greater Toronto Area address chosen by Korporex. Monthly mail scans emailed to you."
+                subtitle="Downtown Toronto address chosen by Korporex. Monthly mail scans emailed to you."
                 price={`$${REG_OFFICE_OPTIONS.korporex.monthly.toFixed(2)}/mo`}
                 priceSub={`billed annually in advance at $${REG_OFFICE_OPTIONS.korporex.annual.toFixed(2)} + HST`}
               />
@@ -1367,7 +1367,7 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
               </p>
               <p className="text-gray-700">
                 {REG_OFFICE_OPTIONS[selectedAddon].addressAssignedAtFiling
-                  ? "Korporex selects and assigns the registered office address, somewhere in the Greater Toronto Area, at our discretion before your Articles of Incorporation are filed. The street address is not disclosed in advance."
+                  ? "Korporex selects and assigns the registered office address in downtown Toronto, at our discretion before your Articles of Incorporation are filed. The street address is not disclosed in advance."
                   : `Korporex provides a registered office address in ${REG_OFFICE_OPTIONS[selectedAddon].locationLabel}, Ontario, chosen by Korporex. The specific street address is not disclosed in advance.`}
               </p>
               <ul className="text-xs text-gray-700 mt-3 space-y-1.5 list-disc pl-5">
