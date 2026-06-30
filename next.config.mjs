@@ -4,6 +4,12 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Canonical URLs never carry a trailing slash (home is `https://korporex.ca`,
+  // not `.../`). Setting this explicitly — rather than relying on the Next.js
+  // default — locks the policy in and makes Next 308-redirect any `/path/`
+  // request to the slash-less `/path`, so the whole site stays consistent with
+  // the canonical/sitemap URLs built in seoMeta.ts and sitemap.ts.
+  trailingSlash: false,
   async rewrites() {
     // beforeFiles: these run before filesystem AND dynamic-route resolution.
     // Required for `/llms.txt` — as a single URL segment it would otherwise be
