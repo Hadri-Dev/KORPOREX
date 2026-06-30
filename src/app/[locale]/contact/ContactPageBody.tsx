@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Mail, MapPin, MessageSquare } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { Field, iCls } from "@/components/wizard/WizardUI";
 
 export default function ContactPageBody() {
   const t = useTranslations("contact");
@@ -65,39 +66,23 @@ export default function ContactPageBody() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid sm:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="name" className="block text-xs font-semibold tracking-[0.1em] uppercase text-gray-500 mb-2">
-                      {t("name")} *
-                    </label>
+                  <Field label={`${t("name")} *`}>
                     <input id="name" name="name" type="text" required value={form.name} onChange={handleChange}
-                      placeholder={t("namePlaceholder")}
-                      className="w-full border border-gray-200 px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors" />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-xs font-semibold tracking-[0.1em] uppercase text-gray-500 mb-2">
-                      {t("email")} *
-                    </label>
+                      placeholder={t("namePlaceholder")} className={iCls} />
+                  </Field>
+                  <Field label={`${t("email")} *`}>
                     <input id="email" name="email" type="email" required value={form.email} onChange={handleChange}
-                      placeholder={t("emailPlaceholder")}
-                      className="w-full border border-gray-200 px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors" />
-                  </div>
+                      placeholder={t("emailPlaceholder")} className={iCls} />
+                  </Field>
                 </div>
-                <div>
-                  <label htmlFor="company" className="block text-xs font-semibold tracking-[0.1em] uppercase text-gray-500 mb-2">
-                    {t("company")}
-                  </label>
+                <Field label={t("company")}>
                   <input id="company" name="company" type="text" value={form.company} onChange={handleChange}
-                    placeholder={t("companyPlaceholder")}
-                    className="w-full border border-gray-200 px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors" />
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-xs font-semibold tracking-[0.1em] uppercase text-gray-500 mb-2">
-                    {t("message")} *
-                  </label>
+                    placeholder={t("companyPlaceholder")} className={iCls} />
+                </Field>
+                <Field label={`${t("message")} *`}>
                   <textarea id="message" name="message" required rows={5} value={form.message} onChange={handleChange}
-                    placeholder={t("messagePlaceholder")}
-                    className="w-full border border-gray-200 px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors resize-none" />
-                </div>
+                    placeholder={t("messagePlaceholder")} className={`${iCls} resize-none`} />
+                </Field>
                 {error && (
                   <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-4 py-3" role="alert">
                     {error}
