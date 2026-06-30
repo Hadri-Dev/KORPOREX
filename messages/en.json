@@ -183,7 +183,8 @@
       "trust": {
         "fees": "Government fees included",
         "speed": "Documents in 24 hours",
-        "online": "100% online filings"
+        "online": "100% online filings",
+        "noSubscription": "No subscription required"
       }
     },
     "jurisdictions": {

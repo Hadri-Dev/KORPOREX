@@ -183,7 +183,8 @@
       "trust": {
         "fees": "Tasas gubernamentales incluidas",
         "speed": "Documentos en 24 horas",
-        "online": "Trámites 100 % en línea"
+        "online": "Trámites 100 % en línea",
+        "noSubscription": "Sin suscripción requerida"
       }
     },
     "jurisdictions": {

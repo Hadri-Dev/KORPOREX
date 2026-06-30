@@ -80,6 +80,7 @@ export default function HomePageBody() {
                 <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.fees")}</li>
                 <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.speed")}</li>
                 <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.online")}</li>
+                <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.noSubscription")}</li>
               </ul>
             </div>
           </div>

@@ -183,7 +183,8 @@
       "trust": {
         "fees": "Frais gouvernementaux inclus",
         "speed": "Documents en 24 heures",
-        "online": "Dépôts 100 % en ligne"
+        "online": "Dépôts 100 % en ligne",
+        "noSubscription": "Aucun abonnement requis"
       }
     },
     "jurisdictions": {
