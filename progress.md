@@ -1,6 +1,9 @@
 # Progress
 
 ## Current Focus
+**2026-06-30 (later 7) — Recolored the incorporation wizard step band from white → deep forest green.** User (annotated screenshot) wanted the sticky progress-stepper band at the top of the wizard to be a non-white, on-brand color. Previewed 3 on-brand options in a standalone HTML mock (warm cream, soft green tint, deep forest green); user picked deep forest green. In the `ProgressBar` component in [IncorporateBody.tsx](src/app/[locale]/incorporate/IncorporateBody.tsx): band `bg-white border-gray-100` → `bg-navy-900 border-white/10`. Adapted all inner states for the dark bg — done circle `bg-navy-900 text-white` → `bg-gold-500 text-navy-900`; active circle keeps white bg + gold ring but ring-offset `white`→`navy-900`; upcoming circle `bg-white text-gray-400 border-gray-200` → `bg-white/10 text-white/60 border-white/25`; labels now white / white-85 / white-60; connectors done `bg-navy-900`→`bg-gold-500`, upcoming `bg-gray-200`→`bg-white/20`; mobile "Step X of Y" + label + track recolored for the dark band (gold fill retained). Class-only change, so FR/ES inherit it. Typecheck clean.
+- Next: none — visual recolor only.
+
 **2026-06-30 (later 6) — Widened the hero eyebrow badge to align with the form panel.** User (annotated screenshot) wanted the `FAST · ONLINE · AFFORDABLE` badge made bigger so it lines up with the `Start Your Incorporation` form (HeroStartPanel) below it. In [HomePageBody.tsx](src/app/[locale]/HomePageBody.tsx) the badge went from `inline-flex` (content-width, centered via `text-center`) to a full-width `flex w-full justify-center` block matching the panel edges: text `text-xs`→`text-sm`, `font-medium`→`font-semibold`, padding `px-3 py-1.5`→`px-4 py-3.5`, dot `w-1.5 h-1.5`→`w-2 h-2`, added `rounded-lg` to mirror the form's corners. Class-only change so FR/ES inherit it. Typecheck clean.
 - Next: none — visual alignment only.
 

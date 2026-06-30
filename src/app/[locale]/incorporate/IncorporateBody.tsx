@@ -521,14 +521,14 @@ function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPref
 function ProgressBar({ current }: { current: number }) {
   const total = STEP_LABELS.length;
   return (
-    <div className="bg-white border-b border-gray-100 px-6 py-6 sticky top-[72px] z-40">
+    <div className="bg-navy-900 border-b border-white/10 px-6 py-6 sticky top-[72px] z-40">
       <div className="max-w-5xl mx-auto">
         {/* mobile */}
         <div className="flex md:hidden items-center justify-between mb-2">
-          <span className="text-sm font-medium text-navy-900">Step {current} of {total}</span>
-          <span className="text-sm text-gray-500 font-medium">{STEP_LABELS[current - 1]}</span>
+          <span className="text-sm font-medium text-white">Step {current} of {total}</span>
+          <span className="text-sm text-white/70 font-medium">{STEP_LABELS[current - 1]}</span>
         </div>
-        <div className="md:hidden w-full bg-gray-100 h-1.5 rounded-full">
+        <div className="md:hidden w-full bg-white/15 h-1.5 rounded-full">
           <div className="bg-gold-500 h-1.5 rounded-full transition-all" style={{ width: `${(current / total) * 100}%` }} />
         </div>
         {/* desktop */}
@@ -542,20 +542,20 @@ function ProgressBar({ current }: { current: number }) {
                 <div className="flex flex-col items-center shrink-0 w-24">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all
                     ${done
-                      ? "bg-navy-900 text-white shadow-sm"
+                      ? "bg-gold-500 text-navy-900 shadow-sm"
                       : active
-                        ? "bg-white text-navy-900 ring-2 ring-gold-500 ring-offset-2 ring-offset-white shadow-md"
-                        : "bg-white text-gray-400 border border-gray-200"}`}>
+                        ? "bg-white text-navy-900 ring-2 ring-gold-500 ring-offset-2 ring-offset-navy-900 shadow-md"
+                        : "bg-white/10 text-white/60 border border-white/25"}`}>
                     {done ? <Check size={16} strokeWidth={2.5} /> : num}
                   </div>
                   <span className={`text-xs mt-2 whitespace-nowrap text-center tracking-wide
-                    ${active ? "text-navy-900 font-semibold" : done ? "text-gray-700 font-medium" : "text-gray-400 font-medium"}`}>
+                    ${active ? "text-white font-semibold" : done ? "text-white/85 font-medium" : "text-white/60 font-medium"}`}>
                     {label}
                   </span>
                 </div>
                 {idx < STEP_LABELS.length - 1 && (
                   <div className={`flex-1 h-0.5 mx-1 mt-5 rounded-full transition-colors
-                    ${done ? "bg-navy-900" : "bg-gray-200"}`} />
+                    ${done ? "bg-gold-500" : "bg-white/20"}`} />
                 )}
               </div>
             );
