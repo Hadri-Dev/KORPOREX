@@ -53,12 +53,6 @@ export default function HomePageBody() {
       <section className="bg-navy-900 text-white py-8 md:py-10 px-6">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
-              <span className="text-xs text-gray-300 tracking-widest uppercase font-medium">
-                {tCommon("fastOnlineAffordable")}
-              </span>
-            </div>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] mb-5">
               <RotatingWords phrases={rotatingPhrases} />
               <br />
@@ -75,16 +69,22 @@ export default function HomePageBody() {
               {tCommon("incorporateNow")}
               <ArrowRight size={16} />
             </Link>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5 mt-8 text-sm text-gray-400 list-none">
+          </div>
+
+          <div className="w-full">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
+              <span className="text-xs text-gray-300 tracking-widest uppercase font-medium">
+                {tCommon("fastOnlineAffordable")}
+              </span>
+            </div>
+            <HeroStartPanel />
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5 mt-6 text-sm text-gray-400 list-none">
               <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.fees")}</li>
               <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.speed")}</li>
               <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.online")}</li>
               <li className="flex items-center gap-2"><CheckCircle size={14} className="text-gold-500 shrink-0" /> {t("hero.trust.noSubscription")}</li>
             </ul>
-          </div>
-
-          <div className="w-full">
-            <HeroStartPanel />
           </div>
         </div>
       </section>

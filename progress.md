@@ -1,6 +1,9 @@
 # Progress
 
 ## Current Focus
+**2026-06-30 (later 2) — Rebalanced homepage hero: moved badge + trust strip into the right column.** User flagged (annotated screenshot) empty space around the conversion panel and wanted the eyebrow badge and trust checkmarks moved into it. In [HomePageBody.tsx](src/app/[locale]/HomePageBody.tsx) the left column is now headline → lead → guarantee → CTA only; the right column is the `FAST · ONLINE · AFFORDABLE` badge (above the panel) → `HeroStartPanel` → the 4 trust checkmarks (2×2 grid, `grid-cols-1 sm:grid-cols-2`, below the panel). Equalizes the two column heights and fills the previously-empty top-right/bottom-right bands. Known tradeoff (told user): on mobile the badge stacks above the panel rather than as the headline eyebrow. Verified on dev + screenshot. Pushed.
+- Next: none — visual polish only.
+
 **2026-06-30 (later) — De-crowded the homepage hero layout.** User felt the hero looked crowded. Restructured the left column in [HomePageBody.tsx](src/app/[locale]/HomePageBody.tsx): the four trust checkmarks were a single tall vertical column running well past the CTA button (the main crowding driver) — moved them into a 2×2 grid (`grid-cols-1 sm:grid-cols-2`) below the button, put the "Incorporate Now" button on its own line, tightened the heading/lead rhythm (mb-5) and capped the lead + guarantee at `max-w-xl`. First bumped section padding to `py-12 md:py-16 lg:py-20` but that left too much empty space top/bottom (user flagged via annotated screenshot); settled on `py-8 md:py-10`. Verified across iterations on the dev server + screenshots. Pushed.
 - Next: none — visual polish only.
 
