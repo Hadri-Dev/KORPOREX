@@ -111,7 +111,7 @@ export default function CorporationNameSection({
                   className={`text-left border-2 rounded-lg p-5 transition-colors ${
                     selected
                       ? "border-navy-900 bg-navy-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      : "border-gold-500 hover:border-navy-900"
                   }`}
                 >
                   <div className="font-semibold text-navy-900 mb-1">
@@ -203,7 +203,7 @@ export default function CorporationNameSection({
             onChange={(e) => setBusinessName(e.target.value)}
             placeholder='e.g. "Maple Ridge Consulting"'
             autoComplete="off"
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors bg-white mb-4"
+            className="w-full px-4 py-3 border-2 border-gold-500 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors bg-white mb-4"
           />
 
           <label className="block text-xs font-semibold tracking-[0.15em] uppercase text-gray-900 mb-2">
@@ -221,7 +221,7 @@ export default function CorporationNameSection({
                 ? "border-red-300 focus:border-red-500"
                 : confirmMatches
                   ? "border-emerald-400 focus:border-emerald-500"
-                  : "border-gray-200 focus:border-navy-900"
+                  : "border-gold-500 focus:border-navy-900"
             }`}
           />
           {confirmMismatch && (
@@ -274,7 +274,7 @@ export default function CorporationNameSection({
                 className={`bg-white border-2 rounded-lg px-2 py-3 text-center transition-colors ${
                   selected
                     ? "border-navy-900 bg-navy-50"
-                    : "border-gray-200 hover:border-gray-300"
+                    : "border-gold-500 hover:border-navy-900"
                 }`}
               >
                 <div className="font-bold text-navy-900 text-sm">{ending}</div>

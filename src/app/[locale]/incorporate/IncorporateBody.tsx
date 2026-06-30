@@ -579,7 +579,7 @@ function Step1({ value, onChange, onNext }: { value: Jurisdiction; onChange: (v:
       <div className="space-y-3 mb-6">
         {JURISDICTION_INFO.map(({ id, label, sub, desc }) => (
           <button key={id} onClick={() => onChange(id)}
-            className={`w-full text-left border px-5 py-4 transition-colors ${value === id ? "border-navy-900 bg-navy-50" : "border-gray-200 hover:border-gray-300"}`}>
+            className={`w-full text-left border-2 px-5 py-4 transition-colors ${value === id ? "border-navy-900 bg-navy-50" : "border-gold-500 hover:border-navy-900"}`}>
             <div className="flex items-start gap-3">
               <div className={`w-4 h-4 rounded-full border-2 mt-0.5 shrink-0 flex items-center justify-center ${value === id ? "border-navy-900" : "border-gray-300"}`}>
                 {value === id && <div className="w-2 h-2 rounded-full bg-navy-900" />}
@@ -621,7 +621,7 @@ function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
           const price = PRICES[jurisdiction][id];
           return (
             <button key={id} onClick={() => onChange(id)}
-              className={`w-full text-left border px-5 py-5 transition-colors ${value === id ? "border-navy-900 bg-navy-50" : "border-gray-200 hover:border-gray-300"}`}>
+              className={`w-full text-left border-2 px-5 py-5 transition-colors ${value === id ? "border-navy-900 bg-navy-50" : "border-gold-500 hover:border-navy-900"}`}>
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="flex items-start gap-3">
                   <div className={`w-4 h-4 rounded-full border-2 mt-0.5 shrink-0 flex items-center justify-center ${value === id ? "border-navy-900" : "border-gray-300"}`}>
@@ -915,7 +915,7 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S4>; j
                     {CITIZENSHIP_OPTIONS.map((opt) => (
                       <label
                         key={opt.value}
-                        className="flex items-center gap-2 border border-gray-200 px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium"
+                        className="flex items-center gap-2 border-2 border-gold-500 px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium"
                       >
                         <input
                           type="radio"
@@ -940,11 +940,11 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S4>; j
                     error={de[i]?.isCanadianResident?.message}
                   >
                     <div className="grid grid-cols-2 gap-3">
-                      <label className="flex items-center gap-2 border border-gray-200 px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium">
+                      <label className="flex items-center gap-2 border-2 border-gold-500 px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium">
                         <input type="radio" value="yes" {...register(`directors.${i}.isCanadianResident`)} className="accent-navy-900" />
                         I am a resident Canadian
                       </label>
-                      <label className="flex items-center gap-2 border border-gray-200 px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium">
+                      <label className="flex items-center gap-2 border-2 border-gold-500 px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium">
                         <input type="radio" value="no" {...register(`directors.${i}.isCanadianResident`)} className="accent-navy-900" />
                         I am not a resident Canadian
                       </label>
@@ -1071,7 +1071,7 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S5>; j
                       className={`block border-2 rounded-lg p-4 cursor-pointer transition-colors ${
                         checked
                           ? "border-navy-900 bg-white"
-                          : "border-gray-200 bg-white hover:border-gray-300"
+                          : "border-gold-500 bg-white hover:border-navy-900"
                       }`}
                     >
                       <div className="flex items-start gap-3">
@@ -1397,10 +1397,10 @@ function AddonOption({ selected, onSelect, title, subtitle, price, priceSub }: {
     <button
       type="button"
       onClick={onSelect}
-      className={`w-full text-left border p-4 transition-colors ${
+      className={`w-full text-left border-2 p-4 transition-colors ${
         selected
           ? "border-navy-900 bg-navy-50"
-          : "border-gray-200 bg-white hover:border-navy-900"
+          : "border-gold-500 bg-white hover:border-navy-900"
       }`}
     >
       <div className="flex items-start justify-between gap-4">
