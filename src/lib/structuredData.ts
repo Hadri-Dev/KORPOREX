@@ -1,4 +1,11 @@
 import { SITE_URL } from "@/app/[locale]/guides/articles";
+import {
+  PRICES,
+  PKG_LABELS,
+  JURISDICTION_LABELS,
+  type Jurisdiction,
+  type Pkg,
+} from "@/lib/pricing";
 
 // ─── Shared organization identity ─────────────────────────────────────────────
 // Korporex is a document-preparation / filing platform, NOT a law firm — the
@@ -112,5 +119,49 @@ export function breadcrumbSchema(crumbs: { name: string; url: string }[]) {
       name: c.name,
       item: c.url,
     })),
+  };
+}
+
+// Service node with an AggregateOffer for the incorporation packages — powers
+// the /order pricing page so search engines and AI assistants can read the
+// offering and its CAD prices. Deliberately a generic Service (never
+// LegalService): Korporex is a document-preparation and filing platform, not a
+// law firm. Prices are pulled from `@/lib/pricing` so the schema always matches
+// what the /order page renders (both read the same source of truth). Every
+// price includes government filing fees, matching the on-page disclosure.
+export function incorporationServiceSchema() {
+  const CURRENCY = "CAD";
+  const jurisdictions = Object.keys(PRICES) as Jurisdiction[];
+  const offers = jurisdictions.flatMap((jur) =>
+    (Object.keys(PRICES[jur]) as Pkg[]).map((pkg) => ({
+      "@type": "Offer",
+      name: `${JURISDICTION_LABELS[jur]} incorporation — ${PKG_LABELS[pkg]}`,
+      price: PRICES[jur][pkg].toFixed(2),
+      priceCurrency: CURRENCY,
+      url: `${SITE_URL}/incorporate?jurisdiction=${jur}&package=${pkg}`,
+      availability: "https://schema.org/InStock",
+    })),
+  );
+  const all = jurisdictions.flatMap((jur) =>
+    (Object.keys(PRICES[jur]) as Pkg[]).map((pkg) => PRICES[jur][pkg]),
+  );
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${SITE_URL}/#incorporation-service`,
+    name: "Business Incorporation & Corporate Filing",
+    serviceType: "Business incorporation and corporate filing",
+    description:
+      "Online business incorporation and corporate filing for Canadian entrepreneurs. Korporex prepares and files federal (CBCA) and Ontario (OBCA) incorporations for a flat fee, with government filing fees included.",
+    provider: { "@id": `${SITE_URL}/#organization` },
+    areaServed: "CA",
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: CURRENCY,
+      lowPrice: Math.min(...all).toFixed(2),
+      highPrice: Math.max(...all).toFixed(2),
+      offerCount: offers.length,
+      offers,
+    },
   };
 }
