@@ -24,6 +24,8 @@ const config: Config = {
           950: "#0c2218",
         },
         gold: {
+          // 200 is the soft "pale sand" border tone used for form field / option-box edges
+          200: "#EEE2C6",
           300: "#e8d099",
           400: "#dfc07a",
           500: "#C5A35A",

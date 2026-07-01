@@ -4,10 +4,10 @@ import { ChevronLeft } from "lucide-react";
 import type { ReactNode } from "react";
 
 export const iCls =
-  "w-full border-2 border-gold-500 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors";
+  "w-full border-2 border-gold-200 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors";
 
 export const sCls =
-  "w-full border-2 border-gold-500 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-navy-900 bg-white transition-colors appearance-none";
+  "w-full border-2 border-gold-200 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-navy-900 bg-white transition-colors appearance-none";
 
 export function Field({
   label,

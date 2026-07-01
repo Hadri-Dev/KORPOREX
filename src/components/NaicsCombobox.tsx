@@ -78,7 +78,7 @@ export default function NaicsCombobox({ value, onChange, placeholder, error }: P
     ? "border-red-400"
     : open
     ? "border-navy-900"
-    : "border-gold-500";
+    : "border-gold-200";
 
   return (
     <div ref={wrapRef} className="relative">
