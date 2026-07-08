@@ -1,0 +1,62 @@
+name: Supabase keep-alive
+
+# Why this exists:
+#   The Korporex Supabase project is on the FREE tier, which auto-pauses after
+#   ~7 days of no database activity. This job performs a real DB WRITE on a
+#   schedule so the inactivity timer never reaches 7 days.
+#
+# How it works:
+#   Calls the record_not_found() RPC, which INSERT/UPDATEs a single dedicated
+#   row (path = /__keepalive_ping__; on-conflict increments hit_count, so the
+#   table never grows). HTTP 204 means a row was actually committed — the ping
+#   cannot "succeed" without touching Postgres.
+#
+# Cadence:
+#   Runs DAILY (not every 2 days) on purpose: GitHub occasionally delays or
+#   skips scheduled runs under load, so a daily cadence keeps us far under the
+#   7-day pause window even if several runs are skipped. A curl costs seconds
+#   of the free Actions budget.
+#
+# Alerting:
+#   A non-2xx response fails the job (exit 1). GitHub shows it red in the
+#   Actions tab AND emails the repo owner on workflow failure — that is the
+#   built-in alert, so a broken keep-alive can never rot silently for weeks.
+#
+# Key:
+#   Uses the PUBLISHABLE (anon) key, which is safe to commit — it already ships
+#   to browsers via NEXT_PUBLIC_SUPABASE_ANON_KEY and cannot bypass RLS. The
+#   record_not_found RPC is a SECURITY DEFINER function callable with this key.
+
+on:
+  schedule:
+    - cron: "17 9 * * *" # 09:17 UTC daily (off the top-of-hour peak)
+  workflow_dispatch: {} # allow manual "Run workflow" from the Actions tab
+
+# If two runs ever overlap, the newest wins — no piling up.
+concurrency:
+  group: supabase-keepalive
+  cancel-in-progress: true
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Write keep-alive row (record_not_found RPC)
+        run: |
+          set -euo pipefail
+          BASE="https://klnxilozjfratddqriue.supabase.co"
+          KEY="sb_publishable_km7DeTNFAjoadnSDUwi_YA_qiSx_ipY"
+          code=$(curl -s -o /tmp/resp.txt -w '%{http_code}' --max-time 30 \
+            -X POST "$BASE/rest/v1/rpc/record_not_found" \
+            -H "apikey: $KEY" \
+            -H "Authorization: Bearer $KEY" \
+            -H "Content-Type: application/json" \
+            -d '{"p_path":"/__keepalive_ping__","p_referer":null,"p_user_agent":"github-actions-keepalive","p_ip":null}')
+          echo "HTTP $code"
+          echo "Body: $(cat /tmp/resp.txt 2>/dev/null || true)"
+          if [ "$code" != "204" ] && [ "$code" != "200" ]; then
+            echo "::error::Supabase keep-alive FAILED (HTTP $code). Korporex may be paused/unreachable, or the publishable key was rotated. Check https://supabase.com/dashboard/project/klnxilozjfratddqriue"
+            exit 1
+          fi
+          echo "Keep-alive OK — real DB write committed (HTTP $code)."
