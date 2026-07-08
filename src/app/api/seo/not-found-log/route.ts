@@ -52,6 +52,12 @@ export async function GET(req: NextRequest): Promise<Response> {
     .from("not_found_log")
     .select("*", { count: "exact" });
 
+  // Hide the keep-alive marker row from the owner-facing 404 log. The Supabase
+  // keep-alive routine writes to `/__keepalive_ping__` every 2 days (via the
+  // record_not_found RPC) purely to stop the free-tier project auto-pausing —
+  // it's infrastructure, not a real visitor 404, so it must never surface here.
+  query = query.neq("path", "/__keepalive_ping__");
+
   if (parsed.status === "active") query = query.eq("archived", false);
   else if (parsed.status === "archived") query = query.eq("archived", true);
 
