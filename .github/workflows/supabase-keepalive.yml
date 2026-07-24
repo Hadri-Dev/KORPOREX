@@ -3,29 +3,38 @@ name: Supabase keep-alive
 # Why this exists:
 #   The Korporex Supabase project is on the FREE tier, which auto-pauses after
 #   ~7 days of no database activity. This job performs a real DB WRITE on a
-#   schedule so the inactivity timer never reaches 7 days.
+#   schedule so the inactivity timer never reaches 7 days. (Korporex genuinely
+#   paused once, 2026-07-07 — this must never happen again.)
 #
-# How it works:
-#   Calls the record_not_found() RPC, which INSERT/UPDATEs a single dedicated
-#   row (path = /__keepalive_ping__; on-conflict increments hit_count, so the
-#   table never grows). HTTP 204 means a row was actually committed — the ping
-#   cannot "succeed" without touching Postgres.
+# Two independent paths (belt-and-suspenders — mirrors the Acta project):
+#   1. REST path  — calls the record_not_found() RPC through the PostgREST
+#      gateway with the PUBLISHABLE key. INSERT/UPDATEs a single dedicated row
+#      (path = /__keepalive_ping__; on-conflict increments hit_count, so the
+#      table never grows). HTTP 204 means a row was actually committed.
+#   2. Direct-DB path — the SAME committed write over a DIRECT Postgres pooler
+#      connection (psql). This is the unambiguous "activity" signal and removes
+#      any doubt about whether gateway/REST traffic counts. It only runs once the
+#      SUPABASE_DB_URL secret is set; until then it is a safe no-op and the REST
+#      path alone keeps the project alive.
 #
 # Cadence:
 #   Runs DAILY (not every 2 days) on purpose: GitHub occasionally delays or
 #   skips scheduled runs under load, so a daily cadence keeps us far under the
-#   7-day pause window even if several runs are skipped. A curl costs seconds
-#   of the free Actions budget.
+#   7-day pause window even if several runs are skipped.
 #
 # Alerting:
-#   A non-2xx response fails the job (exit 1). GitHub shows it red in the
+#   Any non-2xx / failed step fails the job (exit 1). GitHub shows it red in the
 #   Actions tab AND emails the repo owner on workflow failure — that is the
 #   built-in alert, so a broken keep-alive can never rot silently for weeks.
 #
 # Key:
-#   Uses the PUBLISHABLE (anon) key, which is safe to commit — it already ships
-#   to browsers via NEXT_PUBLIC_SUPABASE_ANON_KEY and cannot bypass RLS. The
-#   record_not_found RPC is a SECURITY DEFINER function callable with this key.
+#   The REST step uses the PUBLISHABLE (anon) key, which is safe to commit — it
+#   already ships to browsers via NEXT_PUBLIC_SUPABASE_ANON_KEY and cannot bypass
+#   RLS. record_not_found is a SECURITY DEFINER function callable with this key.
+#
+# NOTE: GitHub disables scheduled workflows after 60 days with no commits to the
+# repo. While Korporex is actively maintained this never triggers; if it goes
+# fully dormant for 2+ months, re-enable this workflow in the Actions tab.
 
 on:
   schedule:
@@ -42,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Write keep-alive row (record_not_found RPC)
+      - name: REST keep-alive (record_not_found RPC)
         run: |
           set -euo pipefail
           BASE="https://klnxilozjfratddqriue.supabase.co"
@@ -53,10 +62,30 @@ jobs:
             -H "Authorization: Bearer $KEY" \
             -H "Content-Type: application/json" \
             -d '{"p_path":"/__keepalive_ping__","p_referer":null,"p_user_agent":"github-actions-keepalive","p_ip":null}')
-          echo "HTTP $code"
+          echo "REST: HTTP $code"
           echo "Body: $(cat /tmp/resp.txt 2>/dev/null || true)"
           if [ "$code" != "204" ] && [ "$code" != "200" ]; then
-            echo "::error::Supabase keep-alive FAILED (HTTP $code). Korporex may be paused/unreachable, or the publishable key was rotated. Check https://supabase.com/dashboard/project/klnxilozjfratddqriue"
+            echo "::error::Supabase REST keep-alive FAILED (HTTP $code). Korporex may be paused/unreachable, or the publishable key was rotated. Check https://supabase.com/dashboard/project/klnxilozjfratddqriue"
             exit 1
           fi
-          echo "Keep-alive OK — real DB write committed (HTTP $code)."
+          echo "REST keep-alive OK — real DB write committed (HTTP $code)."
+
+      # Runs even if the REST step failed (if: always), so the two paths are truly
+      # independent. No-ops cleanly until SUPABASE_DB_URL is configured.
+      - name: Direct Postgres keep-alive (pooler connection)
+        if: ${{ always() }}
+        env:
+          # Supabase "Transaction pooler" connection string (Connect -> Direct ->
+          # Transaction pooler). Stored as a repo secret; never logged.
+          DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          if [ -z "$DB_URL" ]; then
+            echo "SUPABASE_DB_URL secret not set — skipping direct-DB ping. (REST ping above still keeps the project alive.)"
+            exit 0
+          fi
+          if ! command -v psql >/dev/null 2>&1; then
+            sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
+          fi
+          psql "$DB_URL" -v ON_ERROR_STOP=1 \
+            -c "select record_not_found(p_path => '/__keepalive_ping__', p_referer => null, p_user_agent => 'github-actions-keepalive-directdb', p_ip => null);"
+          echo "Direct-DB: record_not_found() committed via direct Postgres pooler connection."
