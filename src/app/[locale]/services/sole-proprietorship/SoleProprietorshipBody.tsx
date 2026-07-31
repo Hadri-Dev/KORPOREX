@@ -7,12 +7,17 @@ import { useRouter } from "@/i18n/navigation";
 import { soleProprietorshipSchema, type SoleProprietorshipSubmission } from "@/lib/registrationSchemas";
 import { REGISTRATION_SERVICES } from "@/lib/registrationServices";
 import { getTaxRate } from "@/lib/pricing";
-import { Field, BackBtn, NextBtn, StepProgress, iCls } from "@/components/wizard/WizardUI";
+import { Field, BackBtn, NextBtn, WizardStepper, firstErrorStep, iCls } from "@/components/wizard/WizardUI";
 import AddressFields from "@/components/wizard/AddressFields";
 import NaicsCombobox from "@/components/NaicsCombobox";
 
 const SERVICE = REGISTRATION_SERVICES["sole-prop-on"];
-const TOTAL_STEPS = 3;
+const STEP_LABELS = ["Business", "Owner", "Billing"];
+const STEP_FIELDS: string[][] = [
+  ["businessName", "businessActivity", "naicsCode", "businessAddress", "effectiveDate"],
+  ["ownerFirstName", "ownerLastName", "ownerEmail", "ownerPhone", "ownerDob", "ownerAddress"],
+  ["billingName", "billingAddress"],
+];
 
 export default function SolePropPage() {
   const [step, setStep] = useState(1);
@@ -99,7 +104,7 @@ export default function SolePropPage() {
 
       <section className="bg-white py-12 px-6">
         <div className="max-w-xl mx-auto">
-          <StepProgress step={step} total={TOTAL_STEPS} />
+          <WizardStepper steps={STEP_LABELS} current={step} onGo={setStep} />
 
           {step === 1 && (
             <div>
@@ -213,7 +218,7 @@ export default function SolePropPage() {
               <p className="text-gray-500 text-sm mb-8">
                 Final step. We&apos;ll redirect you to Stripe to complete payment.
               </p>
-              <form onSubmit={handleSubmit(onFinalSubmit)} className="space-y-5">
+              <form onSubmit={handleSubmit(onFinalSubmit, (errs) => { const s = firstErrorStep(errs, STEP_FIELDS); if (s) setStep(s); })} className="space-y-5">
                 <Field label="Billing name *" error={errors.billingName?.message} hint="Name on the credit/debit card.">
                   <input type="text" {...register("billingName")} className={iCls} />
                 </Field>

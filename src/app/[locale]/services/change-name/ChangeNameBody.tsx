@@ -15,58 +15,11 @@ import {
 } from "@/lib/changeNameSchema";
 import { JURISDICTION_LABELS, type Jurisdiction } from "@/lib/pricing";
 import { LEGAL_ENDINGS } from "@/lib/legalEndings";
-import { Field, BackBtn, NextBtn, iCls, sCls } from "@/components/wizard/WizardUI";
+import { Field, BackBtn, NextBtn, WizardStepper, iCls, sCls } from "@/components/wizard/WizardUI";
 import AddressFields from "@/components/wizard/AddressFields";
 import CorporationIdSection from "@/components/wizard/CorporationIdSection";
 
 const STEP_LABELS = ["Jurisdiction", "Corporation", "New name", "Contact", "Billing"];
-
-// Fully clickable stepper — every step navigates directly. On final submit,
-// onInvalid (below) jumps the user to the first step that has an error, so
-// free navigation never lets a required field be silently skipped.
-function WizardStepper({ step, onGo }: { step: number; onGo: (n: number) => void }) {
-  return (
-    <ol className="flex items-center mb-8">
-      {STEP_LABELS.map((label, i) => {
-        const n = i + 1;
-        const done = n < step;
-        const current = n === step;
-        return (
-          <li key={label} className={n < STEP_LABELS.length ? "flex items-center flex-1" : "flex items-center"}>
-            <button
-              type="button"
-              onClick={() => onGo(n)}
-              aria-current={current ? "step" : undefined}
-              className="flex items-center gap-2 cursor-pointer"
-            >
-              <span
-                className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-semibold shrink-0 border-2 transition-colors ${
-                  done
-                    ? "bg-navy-900 border-navy-900 text-white"
-                    : current
-                      ? "bg-navy-900 border-gold-500 text-white ring-2 ring-gold-500/30"
-                      : "bg-white border-gray-300 text-gray-400 hover:border-navy-900 hover:text-navy-900"
-                }`}
-              >
-                {done ? <Check size={14} /> : n}
-              </span>
-              <span
-                className={`hidden sm:inline text-xs font-semibold whitespace-nowrap transition-colors ${
-                  current ? "text-navy-900" : done ? "text-gray-600" : "text-gray-400"
-                }`}
-              >
-                {label}
-              </span>
-            </button>
-            {n < STEP_LABELS.length && (
-              <span className={`mx-2 sm:mx-3 h-0.5 flex-1 rounded transition-colors ${done ? "bg-navy-900" : "bg-gray-200"}`} />
-            )}
-          </li>
-        );
-      })}
-    </ol>
-  );
-}
 
 const JURISDICTIONS: Array<{
   value: Jurisdiction;
@@ -237,7 +190,7 @@ export default function ChangeNameBody() {
 
       <section className="bg-white py-12 px-6">
         <div className="max-w-xl mx-auto">
-          <WizardStepper step={step} onGo={goTo} />
+          <WizardStepper steps={STEP_LABELS} current={step} onGo={goTo} />
 
           {/* STEP 1 — Jurisdiction */}
           {step === 1 && (

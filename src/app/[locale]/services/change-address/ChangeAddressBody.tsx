@@ -10,12 +10,26 @@ import {
 } from "@/lib/amendmentSchemas";
 import { AMENDMENT_SERVICES } from "@/lib/amendmentServices";
 import { getTaxRate } from "@/lib/pricing";
-import { Field, BackBtn, NextBtn, StepProgress, iCls } from "@/components/wizard/WizardUI";
+import { Field, BackBtn, NextBtn, WizardStepper, firstErrorStep, iCls } from "@/components/wizard/WizardUI";
 import AddressFields from "@/components/wizard/AddressFields";
 import CorporationIdSection from "@/components/wizard/CorporationIdSection";
 
 const SERVICE = AMENDMENT_SERVICES["change-address"];
-const TOTAL_STEPS = 4;
+
+const STEP_LABELS = ["Corporation", "Address", "Contact", "Billing"];
+
+const STEP_FIELDS: string[][] = [
+  ["corporation"],
+  [
+    "changeRegisteredOffice",
+    "changeMailingAddress",
+    "newRegisteredOffice",
+    "newMailingAddress",
+    "effectiveDate",
+  ],
+  ["contact"],
+  ["billingName", "billingAddress"],
+];
 
 const emptyAddress = { street: "", city: "", region: "", postalCode: "", country: "CA" };
 
@@ -122,7 +136,7 @@ export default function ChangeAddressPage() {
 
       <section className="bg-white py-12 px-6">
         <div className="max-w-xl mx-auto">
-          <StepProgress step={step} total={TOTAL_STEPS} />
+          <WizardStepper steps={STEP_LABELS} current={step} onGo={setStep} />
 
           {step === 1 && (
             <div>
@@ -259,7 +273,7 @@ export default function ChangeAddressPage() {
               <BackBtn onClick={() => setStep(3)} />
               <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Billing &amp; Review</h2>
               <p className="text-gray-500 text-sm mb-8">Final step. We&apos;ll redirect you to Stripe to complete payment.</p>
-              <form onSubmit={handleSubmit(onFinalSubmit)} className="space-y-5">
+              <form onSubmit={handleSubmit(onFinalSubmit, (errs) => { const s = firstErrorStep(errs, STEP_FIELDS); if (s) setStep(s); })} className="space-y-5">
                 <Field label="Billing name *" error={errors.billingName?.message} hint="Name on the credit/debit card.">
                   <input type="text" {...register("billingName")} className={iCls} />
                 </Field>
