@@ -96,28 +96,29 @@ export default function HomePageBody() {
       {/* Featured Services */}
       <section className="bg-white py-10 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-4">
+          <div className="relative bg-navy-900 rounded-2xl overflow-hidden px-6 py-10 md:py-12 text-center max-w-3xl mx-auto mb-10">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-3">
               {t("jurisdictions.eyebrow")}
             </p>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-navy-900">
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-white">
               {t("jurisdictions.title")}
             </h2>
-            <p className="text-gray-600 mt-4 max-w-xl mx-auto">
+            <p className="text-gray-300 mt-4 max-w-xl mx-auto">
               {t.rich("jurisdictions.lead", {
                 faqLink: () => (
-                  <Link href="/faq" className="text-navy-900 underline underline-offset-2">
+                  <Link href="/faq" className="text-gold-400 underline underline-offset-2">
                     {t("jurisdictions.faqLink")}
                   </Link>
                 ),
               })}
             </p>
+            <span className="absolute left-1/2 -translate-x-1/2 bottom-0 w-16 h-[3px] bg-gold-500 rounded-full" />
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             {JURISDICTIONS.map(({ key, href }) => (
               <div
                 key={key}
-                className="group flex flex-col p-8 border border-gray-200 rounded-lg transition-colors hover:bg-navy-900 hover:border-navy-900"
+                className="group flex flex-col p-8 border border-gray-200 rounded-2xl transition-colors hover:bg-navy-900 hover:border-navy-900"
               >
                 <p className="font-serif text-2xl font-bold text-navy-900 mb-1 transition-colors group-hover:text-white">
                   {t(`jurisdictions.items.${key}.title`)}
@@ -166,35 +167,39 @@ export default function HomePageBody() {
             {OTHER_SERVICES.map(({ key, icon: Icon }) => (
               <div
                 key={key}
-                className="group flex flex-col bg-white border border-gray-200 rounded-lg p-7 transition-colors hover:bg-navy-900 hover:border-navy-900"
+                className="group flex flex-col bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm transition-shadow hover:shadow-md"
               >
-                <div className="w-11 h-11 bg-navy-50 flex items-center justify-center mb-5 transition-colors group-hover:bg-white/10">
-                  <Icon size={20} className="text-navy-900 transition-colors group-hover:text-gold-400" />
+                {/* Green header band with inset gold underline */}
+                <div className="relative flex items-center gap-3 bg-navy-900 px-5 py-4">
+                  <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                    <Icon size={18} className="text-white" />
+                  </div>
+                  <h3 className="font-serif text-lg font-bold text-white leading-tight">
+                    {t(`otherServices.items.${key}.title`)}
+                  </h3>
+                  <span className="absolute left-5 right-5 bottom-0 h-0.5 bg-gold-500" />
                 </div>
-                <h3 className="font-serif text-xl font-bold text-navy-900 mb-2 transition-colors group-hover:text-white">
-                  {t(`otherServices.items.${key}.title`)}
-                </h3>
-                <p className="text-sm text-gray-600 leading-relaxed mb-5 transition-colors group-hover:text-gray-300">
-                  {t(`otherServices.items.${key}.description`)}
-                </p>
-                <ul className="space-y-2 mb-6 flex-1">
-                  {otherServiceItems[key].map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-2 text-xs text-gray-700 transition-colors group-hover:text-gray-300"
-                    >
-                      <CheckCircle size={12} className="text-gold-500 shrink-0 mt-0.5" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="flex items-center justify-between pt-5 border-t border-gray-100 transition-colors group-hover:border-white/20">
-                  <p className="text-xs text-gray-500 transition-colors group-hover:text-gray-400">
-                    {t(`otherServices.items.${key}.from`)}
+                {/* Body */}
+                <div className="flex flex-col flex-1 p-5">
+                  <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                    {t(`otherServices.items.${key}.description`)}
                   </p>
-                  <span className="text-xs font-medium text-navy-900 transition-colors group-hover:text-gold-400">
-                    {t("learnMoreArrow")}
-                  </span>
+                  <ul className="space-y-2 mb-5 flex-1">
+                    {otherServiceItems[key].map((item) => (
+                      <li key={item} className="flex items-start gap-2 text-xs text-gray-700">
+                        <CheckCircle size={12} className="text-gold-600 shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <p className="text-xs font-semibold text-gray-500">
+                      {t(`otherServices.items.${key}.from`)}
+                    </p>
+                    <span className="text-xs font-bold text-navy-900">
+                      {t("learnMoreArrow")}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -222,14 +227,14 @@ export default function HomePageBody() {
               {t("howItWorks.title")}
             </h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {STEPS.map((stepKey, idx) => (
-              <div key={stepKey} className="relative">
-                {idx < STEPS.length - 1 && (
-                  <div className="hidden md:block absolute top-6 left-[calc(50%+2rem)] right-[-calc(50%-2rem)] h-px bg-gray-200" />
-                )}
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-12 h-12 bg-navy-900 text-white flex items-center justify-center font-serif font-bold text-lg mb-5 shrink-0">
+          <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-8 md:p-10">
+            <div className="grid md:grid-cols-3 gap-8 md:gap-6">
+              {STEPS.map((stepKey, idx) => (
+                <div key={stepKey} className="relative flex flex-col items-center text-center px-2">
+                  {idx < STEPS.length - 1 && (
+                    <span className="hidden md:block absolute top-[18px] -right-3 w-2.5 h-2.5 border-t-2 border-r-2 border-gold-500 rotate-45" />
+                  )}
+                  <div className="w-11 h-11 rounded-lg bg-navy-900 text-white flex items-center justify-center font-serif font-bold text-lg mb-5 shrink-0">
                     {t(`howItWorks.steps.${stepKey}.number`)}
                   </div>
                   <h3 className="font-serif text-xl font-bold text-navy-900 mb-3">
@@ -239,8 +244,8 @@ export default function HomePageBody() {
                     {t(`howItWorks.steps.${stepKey}.description`)}
                   </p>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
           <div className="text-center mt-12">
             <Link
@@ -265,10 +270,10 @@ export default function HomePageBody() {
               {t("whyUs.title")}
             </h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {WHY_US.map(({ key, icon: Icon }) => (
-              <div key={key} className="text-center">
-                <div className="w-12 h-12 bg-navy-50 flex items-center justify-center mx-auto mb-5">
+              <div key={key} className="text-center bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+                <div className="w-12 h-12 rounded-xl bg-gold-200 flex items-center justify-center mx-auto mb-5">
                   <Icon size={22} className="text-navy-900" />
                 </div>
                 <h3 className="font-serif text-lg font-bold text-navy-900 mb-2">
