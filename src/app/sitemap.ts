@@ -39,6 +39,7 @@ const STATIC_PATHS = [
   "/services/business-number",
   "/services/change-address",
   "/services/change-director",
+  "/services/change-name",
   "/services/change-shareholder",
   "/services/continuance",
   "/services/dissolve-business",
