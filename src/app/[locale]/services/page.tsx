@@ -254,15 +254,15 @@ export default function ServicesPage() {
                   <Link
                     key={name}
                     href={href}
-                    className="flex items-center justify-between bg-white border border-gray-200 rounded-md px-5 py-4 hover:border-navy-900 hover:shadow-sm group transition-all"
+                    className="flex items-center justify-between bg-white border border-gray-200 rounded-md px-5 py-4 hover:bg-navy-900 hover:border-navy-900 hover:shadow-md group transition-all"
                   >
                     <div>
-                      <p className="text-sm font-medium text-gray-800 group-hover:text-navy-900 transition-colors">
+                      <p className="text-sm font-medium text-gray-800 group-hover:text-white transition-colors">
                         {name}
                       </p>
-                      <p className="text-xs text-gray-500 mt-0.5">From {from}</p>
+                      <p className="text-xs text-gray-500 group-hover:text-gray-300 mt-0.5 transition-colors">From {from}</p>
                     </div>
-                    <ArrowRight size={14} className="text-gray-400 group-hover:text-navy-900 shrink-0 ml-3 transition-colors" />
+                    <ArrowRight size={14} className="text-gray-400 group-hover:text-gold-500 shrink-0 ml-3 transition-colors" />
                   </Link>
                 ))}
               </div>
