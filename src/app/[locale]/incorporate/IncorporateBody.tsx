@@ -1631,6 +1631,13 @@ function parseJurisdictionParam(raw: string | null): Jurisdiction | null {
   return raw === "federal" || raw === "ontario" ? raw : null;
 }
 
+// Whitelist the `?package=` deep-link value (services page package cards link
+// with `?package=basic|standard|premium`). Invalid/missing → null (wizard keeps
+// its default package).
+function parsePackageParam(raw: string | null): Pkg | null {
+  return raw === "basic" || raw === "standard" || raw === "premium" ? raw : null;
+}
+
 function IncorporateWizard() {
   // Hero panel and homepage jurisdiction cards deep-link with
   // `?jurisdiction=federal|ontario`. When present and valid, pre-select it and
@@ -1639,11 +1646,17 @@ function IncorporateWizard() {
   // free to return to Step 1 normally.
   const searchParams = useSearchParams();
   const presetJurisdiction = parseJurisdictionParam(searchParams.get("jurisdiction"));
+  const presetPkg = parsePackageParam(searchParams.get("package"));
 
+  // Jurisdiction deep-link skips to Step 2 (Package). A package deep-link
+  // pre-selects the package but still lands on Step 1 so the customer picks a
+  // jurisdiction first (unless jurisdiction is also provided).
   const [step, setStep] = useState(presetJurisdiction ? 2 : 1);
-  const [data, setData] = useState<WizardData>(
-    presetJurisdiction ? { ...init, jurisdiction: presetJurisdiction } : init
-  );
+  const [data, setData] = useState<WizardData>({
+    ...init,
+    ...(presetJurisdiction ? { jurisdiction: presetJurisdiction } : {}),
+    ...(presetPkg ? { pkg: presetPkg } : {}),
+  });
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });

@@ -39,6 +39,7 @@ const jurisdictionOptions = [
 const packageSummary = [
   {
     name: "Basic",
+    pkg: "basic",
     price: "$599",
     audience: "For solo founders",
     blurb: "Consultants, freelancers, and single-owner holding companies.",
@@ -50,6 +51,7 @@ const packageSummary = [
   },
   {
     name: "Standard",
+    pkg: "standard",
     price: "$899",
     audience: "For founding teams",
     blurb: "Co-founders, spouses incorporating together, and small partnerships ready to operate under a business name.",
@@ -62,6 +64,7 @@ const packageSummary = [
   },
   {
     name: "Premium",
+    pkg: "premium",
     price: "$1,199",
     audience: "For multi-stakeholder businesses",
     blurb: "Multiple founders, advisors, or family members with a layered share structure.",
@@ -198,10 +201,11 @@ export default function ServicesPage() {
                   </Link>
                 </div>
                 <div className="grid md:grid-cols-3 gap-4">
-                  {packageSummary.map(({ name, price, audience, blurb, highlights, popular }) => (
-                    <div
+                  {packageSummary.map(({ name, pkg, price, audience, blurb, highlights, popular }) => (
+                    <Link
                       key={name}
-                      className={`relative bg-white rounded-lg p-6 border transition-colors ${
+                      href={`/incorporate?package=${pkg}`}
+                      className={`group relative flex flex-col bg-white rounded-lg p-6 border transition-all hover:border-navy-900 hover:shadow-md ${
                         popular ? "border-navy-900 shadow-sm" : "border-gray-200"
                       }`}
                     >
@@ -227,7 +231,11 @@ export default function ServicesPage() {
                           </li>
                         ))}
                       </ul>
-                    </div>
+                      <span className="mt-5 pt-4 border-t border-gray-100 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-navy-900 transition-all group-hover:gap-2.5">
+                        Start with {name}
+                        <ArrowRight size={13} className="text-gold-600" />
+                      </span>
+                    </Link>
                   ))}
                 </div>
                 <p className="text-xs text-gray-500 mt-4 leading-relaxed">
