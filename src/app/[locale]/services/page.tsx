@@ -235,39 +235,53 @@ export default function ServicesPage() {
             </div>
           </div>
 
-          {categories.map(({ icon: Icon, title, description, services }) => (
-            <div
-              key={title}
-              className="relative bg-cream-50 border border-gray-200 border-l-4 border-l-gold-500 border-r-4 border-r-gold-500 rounded-lg shadow-sm p-6 md:p-8"
-            >
-              <div className="flex items-start gap-4 mb-8">
-                <div className="w-11 h-11 bg-white border border-gray-200 flex items-center justify-center shrink-0 mt-0.5 rounded-sm">
-                  <Icon size={20} className="text-navy-900" />
+          {/* Service categories — green header band + service list (Version 2) */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {categories.map(({ icon: Icon, title, description, services }) => (
+              <div
+                key={title}
+                className="flex flex-col bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm"
+              >
+                {/* Green header band with inset gold underline */}
+                <div className="relative flex items-start gap-4 bg-navy-900 text-white px-6 py-5">
+                  <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                    <Icon size={20} className="text-white" />
+                  </div>
+                  <div>
+                    <h2 className="font-serif text-xl md:text-2xl font-bold leading-tight">{title}</h2>
+                    <p className="text-xs text-gray-300 leading-snug mt-1">{description}</p>
+                  </div>
+                  <span className="absolute left-6 right-6 bottom-0 h-0.5 bg-gold-500" />
                 </div>
-                <div>
-                  <h2 className="font-serif text-2xl md:text-3xl font-bold text-navy-900 mb-1">{title}</h2>
-                  <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
-                </div>
-              </div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {services.map(({ name, from, href }) => (
-                  <Link
-                    key={name}
-                    href={href}
-                    className="flex items-center justify-between bg-white border border-gray-200 rounded-md px-5 py-4 hover:bg-navy-900 hover:border-navy-900 hover:shadow-md group transition-all"
-                  >
-                    <div>
-                      <p className="text-sm font-medium text-gray-800 group-hover:text-white transition-colors">
+
+                {/* Service list — each row fills solid green on hover */}
+                <div className="p-3 sm:p-4">
+                  {services.map(({ name, from, href }, i) => (
+                    <Link
+                      key={name}
+                      href={href}
+                      className={`group flex items-center justify-between gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-navy-900 hover:border-transparent ${
+                        i > 0 ? "border-t border-gray-100" : ""
+                      }`}
+                    >
+                      <span className="text-sm font-medium text-gray-800 group-hover:text-white transition-colors">
                         {name}
-                      </p>
-                      <p className="text-xs text-gray-500 group-hover:text-gray-300 mt-0.5 transition-colors">From {from}</p>
-                    </div>
-                    <ArrowRight size={14} className="text-gray-400 group-hover:text-gold-500 shrink-0 ml-3 transition-colors" />
-                  </Link>
-                ))}
+                      </span>
+                      <span className="flex items-center gap-2.5 shrink-0">
+                        <span className="text-xs font-semibold text-gray-500 group-hover:text-gold-500 whitespace-nowrap transition-colors">
+                          From {from}
+                        </span>
+                        <ArrowRight
+                          size={15}
+                          className="text-gray-300 opacity-0 transition-all group-hover:opacity-100 group-hover:text-gold-500"
+                        />
+                      </span>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
