@@ -144,7 +144,7 @@ export default function ServicesPage() {
 
       {/* Service Categories — each in an elevated cream card with gold stripe,
           matching the /nuans 'Your proposed names' card treatment. */}
-      <section className="bg-white py-12 px-6">
+      <section className="bg-white pt-12 pb-6 px-6">
         <div className="max-w-6xl mx-auto space-y-8">
           {/* Incorporation — custom block, styled to match the category cards below */}
           <div className="flex flex-col bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
@@ -298,7 +298,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Lawyer-referral callout */}
-      <section className="bg-cream-50 py-12 px-6 border-t border-gray-100">
+      <section className="bg-cream-50 py-8 px-6 border-t border-gray-100">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white border border-gray-200 rounded-lg p-8 md:p-10 flex flex-col md:flex-row gap-8 items-start">
             <div className="w-12 h-12 bg-navy-900 flex items-center justify-center shrink-0">
