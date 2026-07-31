@@ -68,6 +68,9 @@ export const changeNameSchema = z
   .object({
     // Corporation identity + jurisdiction (jurisdiction drives the price).
     corporation: corporationIdSchema,
+    // Confidential key that authorizes online filing — the Corporations Canada
+    // Corporate Key (federal) or the Ontario Company Key. Required to file.
+    companyKey: z.string().trim().min(4, "Required").max(40),
     // The new name to be filed on the Articles of Amendment.
     newCorpName: z.string().trim().min(1, "New corporate name required").max(200),
     newLegalEnding: legalEndingSchema,

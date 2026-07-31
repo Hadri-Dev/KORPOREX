@@ -63,6 +63,7 @@ export default function ChangeNameBody() {
     mode: "onTouched",
     defaultValues: {
       corporation: { jurisdiction: "ontario", corpName: "", corpNumber: "", businessNumber: "" },
+      companyKey: "",
       newCorpName: "",
       newLegalEnding: undefined,
       effectiveDate: "",
@@ -97,7 +98,7 @@ export default function ChangeNameBody() {
   async function gotoStep(next: number) {
     const fieldsByStep: Record<number, Array<keyof ChangeNameSubmission | string>> = {
       1: ["corporation.jurisdiction"],
-      2: ["corporation"],
+      2: ["corporation", "companyKey"],
       3: [
         "newCorpName",
         "newLegalEnding",
@@ -259,6 +260,17 @@ export default function ChangeNameBody() {
               </p>
               <form onSubmit={(e) => { e.preventDefault(); gotoStep(3); }} className="space-y-5">
                 <CorporationIdSection errors={errors.corporation} lockedJurisdiction={jurisdiction} />
+                <Field
+                  label="Company Key *"
+                  error={errors.companyKey?.message}
+                  hint={
+                    jurisdiction === "federal"
+                      ? "The confidential Corporate Key from Corporations Canada that authorizes online filings for your corporation."
+                      : "The confidential Company Key issued by the Ontario Business Registry that authorizes online filings for your corporation."
+                  }
+                >
+                  <input type="text" {...register("companyKey")} className={iCls} placeholder="e.g. 1a2b3c4d5e" />
+                </Field>
                 <NextBtn />
               </form>
             </div>

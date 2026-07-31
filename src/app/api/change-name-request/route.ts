@@ -228,6 +228,7 @@ function buildHtmlBody(args: {
   const corporationRows = [
     row("Current legal name", payload.corporation.corpName),
     row("Corporation number", payload.corporation.corpNumber),
+    row("Company key", payload.companyKey),
     ...(payload.corporation.businessNumber
       ? [row("Business number (CRA)", payload.corporation.businessNumber)]
       : []),
