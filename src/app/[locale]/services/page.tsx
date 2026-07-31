@@ -143,95 +143,99 @@ export default function ServicesPage() {
           matching the /nuans 'Your proposed names' card treatment. */}
       <section className="bg-white py-12 px-6">
         <div className="max-w-6xl mx-auto space-y-8">
-          {/* Incorporation — custom block: two jurisdiction cards + 3-package summary */}
-          <div className="relative bg-cream-50 border border-gray-200 border-l-4 border-l-gold-500 border-r-4 border-r-gold-500 rounded-lg shadow-sm p-6 md:p-8">
-            <div className="flex items-start gap-4 mb-8">
-              <div className="w-11 h-11 bg-white border border-gray-200 flex items-center justify-center shrink-0 mt-0.5 rounded-sm">
-                <Building2 size={20} className="text-navy-900" />
+          {/* Incorporation — custom block, styled to match the category cards below */}
+          <div className="flex flex-col bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+            {/* Green header band with inset gold underline */}
+            <div className="relative flex items-start gap-4 bg-navy-900 text-white px-6 py-5">
+              <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center shrink-0 mt-0.5">
+                <Building2 size={20} className="text-white" />
               </div>
               <div>
-                <h2 className="font-serif text-2xl md:text-3xl font-bold text-navy-900 mb-1">Incorporation</h2>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <h2 className="font-serif text-xl md:text-2xl font-bold leading-tight">Incorporation</h2>
+                <p className="text-xs text-gray-300 leading-snug mt-1 max-w-2xl">
                   Incorporate federally or in Ontario, fully online, in 24 hours. Pick your
                   jurisdiction below, then choose the package that fits your business.
                 </p>
               </div>
+              <span className="absolute left-6 right-6 bottom-0 h-0.5 bg-gold-500" />
             </div>
 
-            {/* Jurisdiction picker — primary action */}
-            <div className="grid md:grid-cols-2 gap-4 mb-12">
-              {jurisdictionOptions.map(({ id, name, statute, pitch, from, href }) => (
-                <Link
-                  key={id}
-                  href={href}
-                  className="group block bg-white border border-gray-200 rounded-lg p-6 hover:border-navy-900 hover:shadow-sm transition-all"
-                >
-                  <div className="flex items-start justify-between gap-3 mb-2">
-                    <h3 className="font-serif text-xl font-semibold text-navy-900">{name}</h3>
-                    <ArrowRight
-                      size={18}
-                      className="text-gray-400 group-hover:text-navy-900 shrink-0 mt-1 transition-colors"
-                    />
-                  </div>
-                  <p className="text-xs font-medium text-gold-600 tracking-wide mb-3">{statute}</p>
-                  <p className="text-sm text-gray-600 leading-relaxed mb-4">{pitch}</p>
-                  <p className="text-sm font-semibold text-navy-900">From {from}</p>
-                </Link>
-              ))}
-            </div>
-
-            {/* Package summary — secondary, informational */}
-            <div>
-              <div className="flex items-baseline justify-between flex-wrap gap-3 mb-5">
-                <h3 className="font-serif text-lg font-semibold text-navy-900">
-                  Three packages, one transparent price
-                </h3>
-                <Link
-                  href="/order"
-                  className="text-xs font-semibold uppercase tracking-[0.15em] text-navy-900 hover:text-navy-700 inline-flex items-center gap-1"
-                >
-                  Compare full features
-                  <ArrowRight size={12} />
-                </Link>
-              </div>
-              <div className="grid md:grid-cols-3 gap-4">
-                {packageSummary.map(({ name, price, audience, blurb, highlights, popular }) => (
-                  <div
-                    key={name}
-                    className={`relative bg-white rounded-lg p-6 border transition-colors ${
-                      popular ? "border-navy-900 shadow-sm" : "border-gray-200"
-                    }`}
+            <div className="p-6 md:p-8">
+              {/* Jurisdiction picker — fills green on hover, matching the service rows */}
+              <div className="grid md:grid-cols-2 gap-4 mb-10">
+                {jurisdictionOptions.map(({ id, name, statute, pitch, from, href }) => (
+                  <Link
+                    key={id}
+                    href={href}
+                    className="group block bg-white border border-gray-200 rounded-xl p-6 transition-all hover:bg-navy-900 hover:border-navy-900 hover:shadow-md"
                   >
-                    {popular && (
-                      <div className="absolute -top-3 left-6 bg-navy-900 text-white text-[0.65rem] font-bold tracking-[0.15em] uppercase px-2.5 py-1 rounded-sm inline-flex items-center gap-1">
-                        <Star size={10} className="fill-gold-500 text-gold-500" />
-                        Most Popular
-                      </div>
-                    )}
-                    <div className="flex items-baseline gap-2 mb-1">
-                      <h4 className="font-serif text-xl font-bold text-navy-900">{name}</h4>
-                      <span className="text-sm font-semibold text-gray-500">{price}</span>
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <h3 className="font-serif text-xl font-semibold text-navy-900 transition-colors group-hover:text-white">{name}</h3>
+                      <ArrowRight
+                        size={18}
+                        className="text-gray-400 group-hover:text-gold-500 shrink-0 mt-1 transition-colors"
+                      />
                     </div>
-                    <p className="text-xs font-semibold text-gold-600 uppercase tracking-wide mb-3">
-                      {audience}
-                    </p>
-                    <p className="text-sm text-gray-600 leading-relaxed mb-4">{blurb}</p>
-                    <ul className="space-y-2">
-                      {highlights.map((h) => (
-                        <li key={h} className="flex items-start gap-2 text-sm text-gray-700">
-                          <Check size={14} className="text-navy-900 shrink-0 mt-0.5" />
-                          <span>{h}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                    <p className="text-xs font-medium text-gold-600 tracking-wide mb-3 transition-colors group-hover:text-gold-500">{statute}</p>
+                    <p className="text-sm text-gray-600 leading-relaxed mb-4 transition-colors group-hover:text-gray-200">{pitch}</p>
+                    <p className="text-sm font-semibold text-navy-900 transition-colors group-hover:text-white">From {from}</p>
+                  </Link>
                 ))}
               </div>
-              <p className="text-xs text-gray-500 mt-4 leading-relaxed">
-                All packages include the Articles of Incorporation filing, Certificate of
-                Incorporation, Company key, Standard Digital Minute Book, all mandatory
-                post-incorporation filings, and 24-hour turnaround.
-              </p>
+
+              {/* Package summary — secondary, informational */}
+              <div>
+                <div className="flex items-baseline justify-between flex-wrap gap-3 mb-5">
+                  <h3 className="font-serif text-lg font-semibold text-navy-900">
+                    Three packages, one transparent price
+                  </h3>
+                  <Link
+                    href="/order"
+                    className="text-xs font-semibold uppercase tracking-[0.15em] text-navy-900 hover:text-navy-700 inline-flex items-center gap-1"
+                  >
+                    Compare full features
+                    <ArrowRight size={12} />
+                  </Link>
+                </div>
+                <div className="grid md:grid-cols-3 gap-4">
+                  {packageSummary.map(({ name, price, audience, blurb, highlights, popular }) => (
+                    <div
+                      key={name}
+                      className={`relative bg-white rounded-lg p-6 border transition-colors ${
+                        popular ? "border-navy-900 shadow-sm" : "border-gray-200"
+                      }`}
+                    >
+                      {popular && (
+                        <div className="absolute -top-3 left-6 bg-navy-900 text-white text-[0.65rem] font-bold tracking-[0.15em] uppercase px-2.5 py-1 rounded-sm inline-flex items-center gap-1">
+                          <Star size={10} className="fill-gold-500 text-gold-500" />
+                          Most Popular
+                        </div>
+                      )}
+                      <div className="flex items-baseline gap-2 mb-1">
+                        <h4 className="font-serif text-xl font-bold text-navy-900">{name}</h4>
+                        <span className="text-sm font-semibold text-gray-500">{price}</span>
+                      </div>
+                      <p className="text-xs font-semibold text-gold-600 uppercase tracking-wide mb-3">
+                        {audience}
+                      </p>
+                      <p className="text-sm text-gray-600 leading-relaxed mb-4">{blurb}</p>
+                      <ul className="space-y-2">
+                        {highlights.map((h) => (
+                          <li key={h} className="flex items-start gap-2 text-sm text-gray-700">
+                            <Check size={14} className="text-navy-900 shrink-0 mt-0.5" />
+                            <span>{h}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-4 leading-relaxed">
+                  All packages include the Articles of Incorporation filing, Certificate of
+                  Incorporation, Company key, Standard Digital Minute Book, all mandatory
+                  post-incorporation filings, and 24-hour turnaround.
+                </p>
+              </div>
             </div>
           </div>
 
