@@ -15,11 +15,58 @@ import {
 } from "@/lib/changeNameSchema";
 import { JURISDICTION_LABELS, type Jurisdiction } from "@/lib/pricing";
 import { LEGAL_ENDINGS } from "@/lib/legalEndings";
-import { Field, BackBtn, NextBtn, StepProgress, iCls, sCls } from "@/components/wizard/WizardUI";
+import { Field, BackBtn, NextBtn, iCls, sCls } from "@/components/wizard/WizardUI";
 import AddressFields from "@/components/wizard/AddressFields";
 import CorporationIdSection from "@/components/wizard/CorporationIdSection";
 
-const TOTAL_STEPS = 5;
+const STEP_LABELS = ["Jurisdiction", "Corporation", "New name", "Contact", "Billing"];
+
+// Fully clickable stepper — every step navigates directly. On final submit,
+// onInvalid (below) jumps the user to the first step that has an error, so
+// free navigation never lets a required field be silently skipped.
+function WizardStepper({ step, onGo }: { step: number; onGo: (n: number) => void }) {
+  return (
+    <ol className="flex items-center mb-8">
+      {STEP_LABELS.map((label, i) => {
+        const n = i + 1;
+        const done = n < step;
+        const current = n === step;
+        return (
+          <li key={label} className={n < STEP_LABELS.length ? "flex items-center flex-1" : "flex items-center"}>
+            <button
+              type="button"
+              onClick={() => onGo(n)}
+              aria-current={current ? "step" : undefined}
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <span
+                className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-semibold shrink-0 border-2 transition-colors ${
+                  done
+                    ? "bg-navy-900 border-navy-900 text-white"
+                    : current
+                      ? "bg-navy-900 border-gold-500 text-white ring-2 ring-gold-500/30"
+                      : "bg-white border-gray-300 text-gray-400 hover:border-navy-900 hover:text-navy-900"
+                }`}
+              >
+                {done ? <Check size={14} /> : n}
+              </span>
+              <span
+                className={`hidden sm:inline text-xs font-semibold whitespace-nowrap transition-colors ${
+                  current ? "text-navy-900" : done ? "text-gray-600" : "text-gray-400"
+                }`}
+              >
+                {label}
+              </span>
+            </button>
+            {n < STEP_LABELS.length && (
+              <span className={`mx-2 sm:mx-3 h-0.5 flex-1 rounded transition-colors ${done ? "bg-navy-900" : "bg-gray-200"}`} />
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
 
 const JURISDICTIONS: Array<{
   value: Jurisdiction;
@@ -136,6 +183,28 @@ export default function ChangeNameBody() {
     }
   }
 
+  function goTo(n: number) {
+    setStep(n);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // If the final submit fails validation, jump to the earliest step whose
+  // fields have an error (fields on other steps aren't visible otherwise).
+  function onInvalid(errs: typeof errors) {
+    if (errs.corporation?.jurisdiction) return goTo(1);
+    if (errs.corporation || errs.companyKey) return goTo(2);
+    if (
+      errs.newCorpName ||
+      errs.newLegalEnding ||
+      errs.effectiveDate ||
+      errs.specialResolutionPassed ||
+      errs.specialResolutionDate
+    )
+      return goTo(3);
+    if (errs.contact) return goTo(4);
+    if (errs.billingName || errs.billingAddress) return goTo(5);
+  }
+
   const taxPctLabel = pricing.taxRate === 0.14975 ? "14.975" : (pricing.taxRate * 100).toFixed(0);
 
   return (
@@ -168,7 +237,7 @@ export default function ChangeNameBody() {
 
       <section className="bg-white py-12 px-6">
         <div className="max-w-xl mx-auto">
-          <StepProgress step={step} total={TOTAL_STEPS} />
+          <WizardStepper step={step} onGo={goTo} />
 
           {/* STEP 1 — Jurisdiction */}
           {step === 1 && (
@@ -401,7 +470,7 @@ export default function ChangeNameBody() {
               <BackBtn onClick={() => setStep(4)} />
               <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Billing &amp; Review</h2>
               <p className="text-gray-500 text-sm mb-8">Final step. We&apos;ll redirect you to Stripe to complete payment.</p>
-              <form onSubmit={handleSubmit(onFinalSubmit)} className="space-y-5">
+              <form onSubmit={handleSubmit(onFinalSubmit, onInvalid)} className="space-y-5">
                 <Field label="Billing name *" error={errors.billingName?.message} hint="Name on the credit/debit card.">
                   <input type="text" {...register("billingName")} className={iCls} />
                 </Field>
