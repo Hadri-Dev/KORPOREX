@@ -205,35 +205,35 @@ export default function ServicesPage() {
                     <Link
                       key={name}
                       href={`/incorporate?package=${pkg}`}
-                      className={`group relative flex flex-col bg-white rounded-lg p-6 border transition-all hover:border-navy-900 hover:shadow-md ${
+                      className={`group relative flex flex-col bg-white rounded-lg p-6 border transition-all hover:bg-navy-900 hover:border-navy-900 hover:shadow-md ${
                         popular ? "border-navy-900 shadow-sm" : "border-gray-200"
                       }`}
                     >
                       {popular && (
-                        <div className="absolute -top-3 left-6 bg-navy-900 text-white text-[0.65rem] font-bold tracking-[0.15em] uppercase px-2.5 py-1 rounded-sm inline-flex items-center gap-1">
-                          <Star size={10} className="fill-gold-500 text-gold-500" />
+                        <div className="absolute -top-3 left-6 bg-navy-900 text-white text-[0.65rem] font-bold tracking-[0.15em] uppercase px-2.5 py-1 rounded-sm inline-flex items-center gap-1 transition-colors group-hover:bg-gold-500 group-hover:text-navy-900">
+                          <Star size={10} className="fill-gold-500 text-gold-500 transition-colors group-hover:fill-navy-900 group-hover:text-navy-900" />
                           Most Popular
                         </div>
                       )}
                       <div className="flex items-baseline gap-2 mb-1">
-                        <h4 className="font-serif text-xl font-bold text-navy-900">{name}</h4>
-                        <span className="text-sm font-semibold text-gray-500">{price}</span>
+                        <h4 className="font-serif text-xl font-bold text-navy-900 transition-colors group-hover:text-white">{name}</h4>
+                        <span className="text-sm font-semibold text-gray-500 transition-colors group-hover:text-gray-300">{price}</span>
                       </div>
-                      <p className="text-xs font-semibold text-gold-600 uppercase tracking-wide mb-3">
+                      <p className="text-xs font-semibold text-gold-600 uppercase tracking-wide mb-3 transition-colors group-hover:text-gold-500">
                         {audience}
                       </p>
-                      <p className="text-sm text-gray-600 leading-relaxed mb-4">{blurb}</p>
+                      <p className="text-sm text-gray-600 leading-relaxed mb-4 transition-colors group-hover:text-gray-200">{blurb}</p>
                       <ul className="space-y-2">
                         {highlights.map((h) => (
-                          <li key={h} className="flex items-start gap-2 text-sm text-gray-700">
-                            <Check size={14} className="text-navy-900 shrink-0 mt-0.5" />
+                          <li key={h} className="flex items-start gap-2 text-sm text-gray-700 transition-colors group-hover:text-gray-200">
+                            <Check size={14} className="text-navy-900 shrink-0 mt-0.5 transition-colors group-hover:text-gold-500" />
                             <span>{h}</span>
                           </li>
                         ))}
                       </ul>
-                      <span className="mt-5 pt-4 border-t border-gray-100 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-navy-900 transition-all group-hover:gap-2.5">
+                      <span className="mt-5 pt-4 border-t border-gray-100 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.12em] text-navy-900 transition-all group-hover:gap-2.5 group-hover:border-white/20 group-hover:text-white">
                         Start with {name}
-                        <ArrowRight size={13} className="text-gold-600" />
+                        <ArrowRight size={13} className="text-gold-600 transition-colors group-hover:text-gold-500" />
                       </span>
                     </Link>
                   ))}
