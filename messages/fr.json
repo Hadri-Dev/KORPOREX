@@ -329,7 +329,7 @@
     "eyebrow": "Ressources",
     "heroTitle": "Guides et articles pour les entrepreneurs canadiens",
     "heroSubtitle": "Des guides en langage clair sur la constitution en société, la conformité et l'entretien corporatif pour vous aider à prendre des décisions éclairées pour votre entreprise.",
-    "metaTitle": "Guides et articles pour les entrepreneurs canadiens | Korporex",
+    "metaTitle": "Guides pour les entrepreneurs canadiens | Korporex",
     "metaDescription": "Des guides en langage clair sur la constitution en société au Canada, la TPS/TVH, la structure d'entreprise et la conformité pour les entrepreneurs.",
     "allArticles": "Tous les articles",
     "latestResources": "Derniers articles",
@@ -397,7 +397,7 @@
     "quote": "Nous répondons à chaque message en un jour ouvrable. Korporex est 100 % en ligne. Nous servons les entrepreneurs canadiens et les clients internationaux, où qu'ils soient."
   },
   "about": {
-    "metaTitle": "À propos de Korporex | Constitution en société en ligne au Canada",
+    "metaTitle": "À propos de Korporex | Constitution en société en ligne",
     "metaDescription": "Korporex, entreprise technologique canadienne, rend la constitution et la gestion d'une société par actions simples, rapides et entièrement en ligne.",
     "eyebrow": "À propos de Korporex",
     "heroTitle": "Simplifier la constitution en société canadienne pour tout le monde",
@@ -611,7 +611,7 @@
       "description": "Comment Korporex recueille, utilise et protège vos renseignements personnels lors de l'utilisation de nos services de constitution en ligne au Canada."
     },
     "soleProprietorship": {
-      "title": "Enregistrer une entreprise individuelle en Ontario | Korporex",
+      "title": "Entreprise individuelle en Ontario | Korporex",
       "description": "Enregistrez votre entreprise individuelle ontarienne en ligne. Korporex prépare et dépose l'enregistrement de votre nom commercial pour exercer sous celui-ci."
     },
     "businessName": {
@@ -643,8 +643,8 @@
       "description": "Modifiez les statuts de votre société : nom, structure d'actions ou autres dispositions. Korporex prépare et dépose vos statuts de modification."
     },
     "changeName": {
-      "title": "Changement de nom d'entreprise (Ontario et fédéral) | Korporex",
-      "description": "Changez légalement le nom de votre société ontarienne ou fédérale. Prix fixe à partir de 399,99 $ + TVH, frais gouvernementaux et une recherche NUANS inclus. Déposé en 1 à 2 jours ouvrables."
+      "title": "Changement de nom d'entreprise | Korporex",
+      "description": "Changez le nom de votre société ontarienne ou fédérale. Prix fixe dès 399,99 $ + TVH, frais gouvernementaux et recherche NUANS inclus. Déposé en 1-2 jours."
     },
     "initialReturnOn": {
       "title": "Déposer un rapport initial de l'Ontario | Korporex",

@@ -68,7 +68,7 @@ export const articles: Article[] = [
     title: "How to Incorporate in Canada: Federal vs. Provincial",
     excerpt:
       "The first real decision when you incorporate in Canada is federal or provincial. We break down the differences, costs, and steps so you can incorporate with confidence.",
-    metaTitle: "How to Incorporate in Canada: Federal vs Provincial | Korporex",
+    metaTitle: "Incorporate in Canada: Federal vs Provincial | Korporex",
     metaDescription:
       "How to incorporate in Canada, step by step. Compare federal vs provincial incorporation, name protection, costs, and filings to choose the right route.",
     readTime: "7 min read",
@@ -275,7 +275,7 @@ export const articles: Article[] = [
     title: "Corporate Annual Returns in Canada: A Complete Guide",
     excerpt:
       "Every Canadian corporation must file an annual return. Deadlines, fees, and consequences of missing a filing differ by jurisdiction. Here's everything you need to know.",
-    metaTitle: "Corporate Annual Returns in Canada: A Complete Guide | Korporex",
+    metaTitle: "Corporate Annual Returns in Canada: Full Guide | Korporex",
     metaDescription:
       "Every Canadian corporation must file an annual return each year. Learn the federal and Ontario deadlines, fees, and what happens if you miss a filing.",
     readTime: "5 min read",
@@ -435,7 +435,7 @@ export const articles: Article[] = [
     title: "Incorporating in Ontario: Everything You Need to Know",
     excerpt:
       "Ontario is home to the majority of Canadian small businesses. This guide walks through the Ontario Business Corporations Act, costs, timelines, and what you'll receive after filing.",
-    metaTitle: "Incorporating in Ontario: Everything You Need to Know | Korporex",
+    metaTitle: "Incorporating in Ontario: What You Need to Know | Korporex",
     metaDescription:
       "A complete guide to incorporating in Ontario under the OBCA: requirements, costs, timelines, and what you receive after filing with the Ontario registry.",
     readTime: "7 min read",
@@ -773,7 +773,7 @@ export const articles: Article[] = [
     title: "Entreprise individuelle ou société par actions au Canada : laquelle vous convient ?",
     excerpt:
       "La décision que presque tout nouvel entrepreneur doit prendre. Voici comment réfléchir à l'entreprise individuelle ou la société selon l'évolution de votre entreprise.",
-    metaTitle: "Entreprise individuelle ou société par actions au Canada | Korporex",
+    metaTitle: "Entreprise individuelle ou société au Canada | Korporex",
     metaDescription:
       "Entreprise individuelle ou société par actions au Canada : différences de responsabilité, d'impôt et de coût, et une façon simple de décider.",
     readTime: "6 min de lecture",
@@ -843,7 +843,7 @@ export const articles: Article[] = [
     title: "Comment se constituer en société au Canada : fédéral ou provincial",
     excerpt:
       "La première vraie bifurcation quand vous vous constituez en société au Canada, c'est fédéral ou provincial. Voici les différences, les coûts et les étapes.",
-    metaTitle: "Se constituer en société au Canada : fédéral ou provincial | Korporex",
+    metaTitle: "Se constituer au Canada : fédéral ou provincial | Korporex",
     metaDescription:
       "Comment se constituer en société au Canada, étape par étape : constitution fédérale ou provinciale, protection du nom, coûts et dépôts pour choisir.",
     readTime: "7 min de lecture",
@@ -985,7 +985,7 @@ export const articles: Article[] = [
     title: "Empresa unipersonal o sociedad por acciones en Canadá: ¿cuál le conviene?",
     excerpt:
       "La decisión que casi todo nuevo emprendedor enfrenta. Así puede pensar a fondo entre empresa unipersonal o sociedad según hacia dónde va su negocio.",
-    metaTitle: "Empresa unipersonal o sociedad por acciones en Canadá | Korporex",
+    metaTitle: "Empresa unipersonal o sociedad en Canadá | Korporex",
     metaDescription:
       "Empresa unipersonal o sociedad por acciones en Canadá: diferencias en responsabilidad, impuestos y costo, y una forma sencilla de decidir cuál le conviene.",
     readTime: "6 min de lectura",
@@ -1055,7 +1055,7 @@ export const articles: Article[] = [
     title: "Cómo constituirse en sociedad en Canadá: federal o provincial",
     excerpt:
       "La primera bifurcación real cuando se constituye en sociedad en Canadá es federal o provincial. Aquí están las diferencias, los costos y los pasos.",
-    metaTitle: "Constituirse en sociedad en Canadá: federal o provincial | Korporex",
+    metaTitle: "Constituirse en Canadá: federal o provincial | Korporex",
     metaDescription:
       "Cómo constituirse en sociedad en Canadá, paso a paso: constitución federal o provincial, protección del nombre, costos y trámites para elegir la vía.",
     readTime: "7 min de lectura",
@@ -1390,7 +1390,7 @@ export const articles: Article[] = [
     title: "Comment enregistrer une entreprise individuelle en Ontario",
     excerpt:
       "Enregistrer une entreprise individuelle en Ontario est rapide et peu coûteux. Voici quand vous devez vous enregistrer, comment le faire et ce qui suit.",
-    metaTitle: "Enregistrer une entreprise individuelle en Ontario | Korporex",
+    metaTitle: "Entreprise individuelle en Ontario | Korporex",
     metaDescription:
       "Comment enregistrer une entreprise individuelle en Ontario : quand c'est requis, enregistrer un nom commercial via ServiceOntario, le coût et les étapes.",
     readTime: "5 min de lecture",
@@ -1936,7 +1936,7 @@ export const articles: Article[] = [
       "A plain-language walkthrough of incorporating a business federally in Canada under the CBCA: what you need, the steps, the fees, and what to do afterward.",
     metaTitle: "How to Incorporate a Business in Canada | Korporex",
     metaDescription:
-      "How to incorporate a business in Canada federally: choosing a name, articles of incorporation, director rules, the Corporations Canada filing, fees, and next steps.",
+      "How to incorporate a business in Canada federally: choosing a name, articles of incorporation, director rules, the Corporations Canada filing, and fees.",
     readTime: "7 min read",
     updated: "2026-07-01",
     publishedAt: "2026-07-08T10:15:00-04:00",
@@ -2061,7 +2061,7 @@ export const articles: Article[] = [
       "Once you incorporate, your corporation needs its own bank account. Here is why it matters, what documents you need, and how to choose an account.",
     metaTitle: "How to Open a Business Bank Account in Canada | Korporex",
     metaDescription:
-      "How to open a business bank account in Canada: why a corporation needs its own account, the documents banks ask for, and how to choose between banks and digital options.",
+      "How to open a business bank account in Canada: why a corporation needs its own account, the documents banks ask for, and how to choose a provider.",
     readTime: "5 min read",
     updated: "2026-07-01",
     publishedAt: "2026-07-29T11:05:00-04:00",
@@ -2101,7 +2101,7 @@ export const articles: Article[] = [
       "A holding company owns assets and shares of other companies rather than operating itself. Here is what that means in Canada, why people use one, and when it is worth it.",
     metaTitle: "Holding Company in Canada: How It Works | Korporex",
     metaDescription:
-      "What a holding company is in Canada, how the holdco and opco structure works, why owners use one for asset protection and tax deferral, and when it is worth the overhead.",
+      "What a holding company is in Canada, how the holdco and opco structure works, why owners use one for asset protection and tax deferral, and when it pays off.",
     readTime: "6 min read",
     updated: "2026-07-01",
     publishedAt: "2026-08-04T15:30:00-04:00",
@@ -2172,7 +2172,7 @@ export const articles: Article[] = [
       "Incorporating yourself can offer liability protection and tax deferral, but there is one CRA rule that can undo the benefits. Here is what to know first.",
     metaTitle: "How to Incorporate Yourself in Canada | Korporex",
     metaDescription:
-      "How to incorporate yourself as a freelancer or contractor in Canada: the benefits, the personal services business rule that can wipe them out, and when it makes sense.",
+      "How to incorporate as a freelancer or contractor in Canada: the benefits, the personal services business rule that can wipe them out, and when it makes sense.",
     readTime: "6 min read",
     updated: "2026-07-01",
     publishedAt: "2026-08-19T10:50:00-04:00",
@@ -2207,7 +2207,7 @@ export const articles: Article[] = [
       "If a corporation has more than one owner, a shareholder agreement is the document that prevents the disputes nobody plans for. Here is what it covers and why it matters.",
     metaTitle: "Shareholder Agreements in Canada | Korporex",
     metaDescription:
-      "What a shareholder agreement is in Canada, what it covers, why corporations with more than one owner need one, and how it differs from your articles of incorporation.",
+      "What a shareholder agreement is in Canada, what it covers, why corporations with more than one owner need one, and how it differs from your articles.",
     readTime: "5 min read",
     updated: "2026-07-01",
     publishedAt: "2026-08-25T14:05:00-04:00",
@@ -2244,7 +2244,7 @@ export const articles: Article[] = [
       "Regulated professionals can incorporate, but a professional corporation comes with extra rules and one big misconception. Here is how they work in Canada.",
     metaTitle: "Professional Corporations in Canada | Korporex",
     metaDescription:
-      "How professional corporations work in Canada: who can form one, the extra rules from professional regulators, and why they do not protect against professional negligence.",
+      "How professional corporations work in Canada: who can form one, the extra rules from professional regulators, and why they do not cover negligence.",
     readTime: "6 min read",
     updated: "2026-07-01",
     publishedAt: "2026-09-03T09:15:00-04:00",
@@ -2281,7 +2281,7 @@ export const articles: Article[] = [
       "The low small business tax rate is one of the main reasons people incorporate. Here is how corporate tax rates work in Canada and what the small business deduction really does.",
     metaTitle: "Corporate Tax Rates in Canada | Korporex",
     metaDescription:
-      "How corporate tax rates work in Canada: the general rate, the small business deduction on the first $500,000 of active income, combined federal and Ontario rates, and the catch.",
+      "How corporate tax rates work in Canada: the general rate, the small business deduction on the first $500,000 of active income, and combined Ontario rates.",
     readTime: "6 min read",
     updated: "2026-07-01",
     publishedAt: "2026-09-09T12:40:00-04:00",
@@ -2315,7 +2315,7 @@ export const articles: Article[] = [
       "Un guide en langage clair pour constituer une entreprise en société à l'échelle fédérale au Canada, en vertu de la LCSA : ce qu'il faut, les étapes, les frais et la suite.",
     metaTitle: "Constituer une entreprise au Canada (fédéral) | Korporex",
     metaDescription:
-      "Comment constituer une entreprise en société au Canada à l'échelle fédérale : le nom, les statuts constitutifs, les règles sur les administrateurs, le dépôt et les frais.",
+      "Constituer une entreprise en société au Canada à l'échelle fédérale : le nom, les statuts constitutifs, les règles sur les administrateurs et les frais.",
     readTime: "7 min de lecture",
     updated: "2026-07-01",
     publishedAt: "2026-07-08T10:15:00-04:00",
@@ -2367,7 +2367,7 @@ export const articles: Article[] = [
       "Il n'existe pas de LLC au Canada. Voici ce qu'est réellement cette structure américaine, pourquoi le Canada ne l'a pas, et les options canadiennes qui font le même travail.",
     metaTitle: "La LLC au Canada : pourquoi elle n'existe pas | Korporex",
     metaDescription:
-      "Il n'y a pas de LLC au Canada. Découvrez pourquoi cette société américaine n'existe pas ici, ce qui arrive si un Canadien en crée une aux États-Unis, et quoi utiliser.",
+      "Il n'y a pas de LLC au Canada. Découvrez pourquoi cette société américaine n'existe pas ici, ce qui arrive si un Canadien en crée une, et quoi utiliser.",
     readTime: "5 min de lecture",
     updated: "2026-07-01",
     publishedAt: "2026-07-14T09:40:00-04:00",
@@ -2403,7 +2403,7 @@ export const articles: Article[] = [
       "Une société avec un nom et une société à matricule sont juridiquement identiques. La différence tient à l'image de marque, à la vitesse et au coût. Voici comment décider.",
     metaTitle: "Société avec nom ou à matricule | Korporex",
     metaDescription:
-      "Société avec nom ou société à matricule au Canada : ce qu'est chacune, pourquoi elles sont juridiquement identiques, les compromis de coût et de vitesse, et comment choisir.",
+      "Société avec nom ou société à matricule au Canada : ce qu'est chacune, pourquoi elles sont juridiquement identiques, les compromis de coût, et comment choisir.",
     readTime: "5 min de lecture",
     updated: "2026-07-01",
     publishedAt: "2026-07-23T13:20:00-04:00",
@@ -2440,7 +2440,7 @@ export const articles: Article[] = [
       "Une fois constituée, votre société a besoin de son propre compte bancaire. Voici pourquoi c'est important, les documents qu'il vous faut, et comment choisir un compte.",
     metaTitle: "Ouvrir un compte bancaire d'entreprise au Canada | Korporex",
     metaDescription:
-      "Comment ouvrir un compte bancaire d'entreprise au Canada : pourquoi une société a besoin de son propre compte, les documents que les banques exigent, et comment choisir.",
+      "Ouvrir un compte bancaire d'entreprise au Canada : pourquoi une société a besoin de son propre compte, les documents exigés, et comment choisir.",
     readTime: "5 min de lecture",
     updated: "2026-07-01",
     publishedAt: "2026-07-29T11:05:00-04:00",
@@ -2480,7 +2480,7 @@ export const articles: Article[] = [
       "Une société de portefeuille détient des actifs et des actions d'autres sociétés plutôt que d'exploiter une entreprise. Voici ce que cela veut dire au Canada et quand ça vaut la peine.",
     metaTitle: "Société de portefeuille au Canada | Korporex",
     metaDescription:
-      "Ce qu'est une société de portefeuille au Canada, comment fonctionne la structure société de portefeuille et société exploitante, et quand elle vaut les frais généraux.",
+      "Ce qu'est une société de portefeuille au Canada, comment fonctionne la structure avec société exploitante, et quand elle vaut les frais généraux.",
     readTime: "6 min de lecture",
     updated: "2026-07-01",
     publishedAt: "2026-08-04T15:30:00-04:00",
@@ -2515,7 +2515,7 @@ export const articles: Article[] = [
       "Une fois constitué, vous décidez comment sortir de l'argent : salaire, dividendes ou un mélange. Voici comment chacun fonctionne au Canada et les compromis à soupeser.",
     metaTitle: "Salaire ou dividendes au Canada | Korporex",
     metaDescription:
-      "Salaire ou dividendes au Canada : comment chaque façon de vous verser une rémunération de votre société fonctionne, l'effet sur le RPC, le REER et la paie, et comment décider.",
+      "Salaire ou dividendes au Canada : comment chaque façon de vous payer depuis votre société fonctionne, l'effet sur le RPC et le REER, et comment décider.",
     readTime: "6 min de lecture",
     updated: "2026-07-01",
     publishedAt: "2026-08-13T08:45:00-04:00",
@@ -2551,7 +2551,7 @@ export const articles: Article[] = [
       "Vous constituer en société peut offrir une responsabilité limitée et un report d'impôt, mais une règle de l'ARC peut en annuler les avantages. Voici ce qu'il faut savoir d'abord.",
     metaTitle: "Comment vous constituer en société au Canada | Korporex",
     metaDescription:
-      "Comment vous constituer en société comme pigiste ou travailleur autonome au Canada : les avantages, la règle de l'entreprise de prestation de services personnels, et quand ça a du sens.",
+      "Se constituer en société comme pigiste ou travailleur autonome au Canada : les avantages, la règle sur les entreprises de prestation de services personnels.",
     readTime: "6 min de lecture",
     updated: "2026-07-01",
     publishedAt: "2026-08-19T10:50:00-04:00",
@@ -2586,7 +2586,7 @@ export const articles: Article[] = [
       "Si une société a plus d'un propriétaire, la convention d'actionnaires est le document qui prévient les différends que personne ne planifie. Voici ce qu'elle couvre et pourquoi elle compte.",
     metaTitle: "La convention d'actionnaires au Canada | Korporex",
     metaDescription:
-      "Ce qu'est une convention d'actionnaires au Canada, ce qu'elle couvre, pourquoi les sociétés à plus d'un propriétaire en ont besoin, et sa différence avec les statuts constitutifs.",
+      "Ce qu'est une convention d'actionnaires, ce qu'elle couvre, pourquoi les sociétés à plusieurs propriétaires en ont besoin, et sa différence avec les statuts.",
     readTime: "5 min de lecture",
     updated: "2026-07-01",
     publishedAt: "2026-08-25T14:05:00-04:00",
@@ -2623,7 +2623,7 @@ export const articles: Article[] = [
       "Les professionnels réglementés peuvent se constituer en société, mais une société professionnelle comporte des règles supplémentaires et une grande idée fausse. Voici comment ça fonctionne.",
     metaTitle: "La société professionnelle au Canada | Korporex",
     metaDescription:
-      "Comment fonctionnent les sociétés professionnelles au Canada : qui peut en constituer une, les règles supplémentaires des ordres, et pourquoi elles ne protègent pas contre la négligence professionnelle.",
+      "Les sociétés professionnelles au Canada : qui peut en constituer une, les règles des ordres, et pourquoi elles ne couvrent pas la négligence professionnelle.",
     readTime: "6 min de lecture",
     updated: "2026-07-01",
     publishedAt: "2026-09-03T09:15:00-04:00",
@@ -2660,7 +2660,7 @@ export const articles: Article[] = [
       "Le faible taux des petites entreprises est l'une des grandes raisons de se constituer. Voici comment fonctionnent les taux d'imposition des sociétés au Canada et ce que fait vraiment la déduction.",
     metaTitle: "Taux d'imposition des sociétés au Canada | Korporex",
     metaDescription:
-      "Comment fonctionnent les taux d'imposition des sociétés au Canada : le taux général, la déduction pour petites entreprises sur les premiers 500 000 $, les taux combinés, et le hic.",
+      "Les taux d'imposition des sociétés au Canada : le taux général, la déduction pour petites entreprises sur les premiers 500 000 $, et les taux combinés.",
     readTime: "6 min de lecture",
     updated: "2026-07-01",
     publishedAt: "2026-09-09T12:40:00-04:00",
@@ -2694,7 +2694,7 @@ export const articles: Article[] = [
       "Una guía en lenguaje claro para constituir una empresa en sociedad a nivel federal en Canadá, bajo la LSAC: qué necesita, los pasos, las tarifas y qué sigue después.",
     metaTitle: "Constituir una empresa en Canadá (federal) | Korporex",
     metaDescription:
-      "Cómo constituir una empresa en sociedad en Canadá a nivel federal: el nombre, los estatutos de constitución, las reglas sobre directores, la presentación y las tarifas.",
+      "Cómo constituir una empresa en sociedad en Canadá a nivel federal: el nombre, los estatutos de constitución, las reglas sobre directores y las tarifas.",
     readTime: "7 min de lectura",
     updated: "2026-07-01",
     publishedAt: "2026-07-08T10:15:00-04:00",
@@ -2746,7 +2746,7 @@ export const articles: Article[] = [
       "No existe la LLC en Canadá. Aquí está lo que es realmente esa estructura estadounidense, por qué Canadá no la tiene, y las opciones canadienses que hacen el mismo trabajo.",
     metaTitle: "La LLC en Canadá: por qué no existe | Korporex",
     metaDescription:
-      "No hay LLC en Canadá. Conozca por qué la compañía de responsabilidad limitada estadounidense no existe aquí, qué pasa si un canadiense forma una en EE. UU., y qué usar.",
+      "No hay LLC en Canadá. Conozca por qué esta figura estadounidense no existe aquí, qué pasa si un canadiense forma una en EE. UU., y qué usar.",
     readTime: "5 min de lectura",
     updated: "2026-07-01",
     publishedAt: "2026-07-14T09:40:00-04:00",
@@ -2859,7 +2859,7 @@ export const articles: Article[] = [
       "Una sociedad de cartera posee activos y acciones de otras empresas en lugar de operar ella misma. Aquí está qué significa eso en Canadá y cuándo vale la pena.",
     metaTitle: "La sociedad de cartera en Canadá | Korporex",
     metaDescription:
-      "Qué es una sociedad de cartera en Canadá, cómo funciona la estructura de sociedad de cartera y sociedad operativa, y cuándo vale la pena la carga administrativa.",
+      "Qué es una sociedad de cartera en Canadá, cómo funciona la estructura con sociedad operativa, y cuándo vale la pena la carga administrativa.",
     readTime: "6 min de lectura",
     updated: "2026-07-01",
     publishedAt: "2026-08-04T15:30:00-04:00",
@@ -2894,7 +2894,7 @@ export const articles: Article[] = [
       "Una vez constituido, decide cómo sacar dinero: salario, dividendos o una mezcla. Aquí está cómo funciona cada uno en Canadá y qué concesiones sopesar.",
     metaTitle: "Salario o dividendos en Canadá | Korporex",
     metaDescription:
-      "Salario o dividendos en Canadá: cómo funciona cada forma de pagarse desde su sociedad, el efecto en el CPP, el espacio de RRSP y la nómina, y cómo deciden los propietarios.",
+      "Salario o dividendos en Canadá: cómo funciona cada forma de pagarse desde su sociedad, el efecto en el CPP y el RRSP, y cómo deciden los propietarios.",
     readTime: "6 min de lectura",
     updated: "2026-07-01",
     publishedAt: "2026-08-13T08:45:00-04:00",
@@ -2930,7 +2930,7 @@ export const articles: Article[] = [
       "Constituirse en sociedad puede ofrecer responsabilidad limitada y diferimiento de impuestos, pero una regla de la CRA puede anular los beneficios. Aquí está lo que hay que saber primero.",
     metaTitle: "Cómo constituirse en sociedad en Canadá | Korporex",
     metaDescription:
-      "Cómo constituirse en sociedad como trabajador autónomo o contratista en Canadá: los beneficios, la regla de la empresa de servicios personales, y cuándo tiene sentido.",
+      "Constituirse en sociedad como trabajador autónomo o contratista en Canadá: los beneficios, la regla de la empresa de servicios personales, y cuándo conviene.",
     readTime: "6 min de lectura",
     updated: "2026-07-01",
     publishedAt: "2026-08-19T10:50:00-04:00",
@@ -2965,7 +2965,7 @@ export const articles: Article[] = [
       "Si una sociedad tiene más de un propietario, el convenio de accionistas es el documento que evita los conflictos que nadie planea. Aquí está qué cubre y por qué importa.",
     metaTitle: "El convenio de accionistas en Canadá | Korporex",
     metaDescription:
-      "Qué es un convenio de accionistas en Canadá, qué cubre, por qué las sociedades con más de un propietario lo necesitan, y en qué se diferencia de los estatutos de constitución.",
+      "Qué es un convenio de accionistas en Canadá, qué cubre, por qué las sociedades con más de un propietario lo necesitan, y en qué se diferencia de los estatutos.",
     readTime: "5 min de lectura",
     updated: "2026-07-01",
     publishedAt: "2026-08-25T14:05:00-04:00",
@@ -3002,7 +3002,7 @@ export const articles: Article[] = [
       "Los profesionales regulados pueden constituirse, pero una sociedad profesional trae reglas adicionales y una gran idea equivocada. Aquí está cómo funcionan en Canadá.",
     metaTitle: "La sociedad profesional en Canadá | Korporex",
     metaDescription:
-      "Cómo funcionan las sociedades profesionales en Canadá: quién puede constituir una, las reglas adicionales de los reguladores, y por qué no protegen contra la negligencia profesional.",
+      "Las sociedades profesionales en Canadá: quién puede constituir una, las reglas de los reguladores, y por qué no cubren la negligencia profesional.",
     readTime: "6 min de lectura",
     updated: "2026-07-01",
     publishedAt: "2026-09-03T09:15:00-04:00",
@@ -3039,7 +3039,7 @@ export const articles: Article[] = [
       "La baja tasa para pequeñas empresas es una de las grandes razones para constituirse. Aquí está cómo funcionan las tasas del impuesto de sociedades en Canadá y qué hace de verdad la deducción.",
     metaTitle: "Tasas del impuesto de sociedades en Canadá | Korporex",
     metaDescription:
-      "Cómo funcionan las tasas del impuesto de sociedades en Canadá: la tasa general, la deducción para pequeñas empresas sobre los primeros 500 000 $, las tasas combinadas, y el truco.",
+      "Las tasas del impuesto de sociedades en Canadá: la tasa general, la deducción para pequeñas empresas sobre los primeros 500 000 $, y las tasas combinadas.",
     readTime: "6 min de lectura",
     updated: "2026-07-01",
     publishedAt: "2026-09-09T12:40:00-04:00",

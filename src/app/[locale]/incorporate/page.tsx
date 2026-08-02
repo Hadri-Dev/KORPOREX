@@ -12,5 +12,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 export default async function Page({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <IncorporateBody />;
+  return (
+    <>
+      {/* The wizard reads search params, so it renders client-side only and its
+          per-step <h2>s are absent from the served HTML — the page shipped with
+          no heading at all. A visually-hidden H1 here (server component) puts
+          exactly one in the markup without touching the wizard's design.
+          English-only, like the rest of this page: /incorporate is not in
+          BODY_TRANSLATED_PATHS, so /fr and /es render the same English body. */}
+      <h1 className="sr-only">Incorporate a Business in Canada</h1>
+      <IncorporateBody />
+    </>
+  );
 }
