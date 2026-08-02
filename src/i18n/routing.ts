@@ -18,6 +18,18 @@ export const routing = defineRouting({
   // pins the unprefixed root to the default locale (en); visitors opt into
   // FR/ES explicitly via the language switcher.
   localeDetection: false,
+  // next-intl otherwise sets a `Link: rel="alternate"` response header on every
+  // page, mapping the *current pathname* into each locale (/x, /fr/x, /es/x).
+  // That is a second hreflang cluster that contradicts the correct one we emit
+  // in the HTML, and it is wrong twice over:
+  //   • English-only pages emit no hreflang on purpose (see seoMeta.ts), but the
+  //     header pointed at /fr/x and /es/x, which canonicalize to /x
+  //     → "Hreflang to non-canonical".
+  //   • Guides have localized slugs per locale, so the header's same-slug guess
+  //     (/fr/<en-slug>) both duplicates the language and 308-redirects
+  //     → "More than one page for same language" + "Hreflang to redirect".
+  // Hreflang is owned entirely by the metadata layer + sitemap; keep it there.
+  alternateLinks: false,
 });
 
 export type Locale = (typeof routing.locales)[number];
