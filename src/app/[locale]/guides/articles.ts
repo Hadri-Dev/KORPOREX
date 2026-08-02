@@ -3101,12 +3101,24 @@ export function getRelatedArticles(
   const source = getArticle(locale, slug);
   if (!source) return [];
   const pool = getArticlesByLocale(locale);
-  const sameCategory = pool.filter(
+
+  // Rotate each candidate list by this article's position before slicing.
+  // Taking the first `limit` of an unrotated list made every page recommend
+  // the same handful of articles, so anything further down the list ended up
+  // with no incoming internal links at all and was reachable only from a
+  // paginated index page (Ahrefs: "only one dofollow incoming internal link").
+  // Rotating spreads the in-links evenly and stays deterministic, so the
+  // statically prerendered pages don't churn between builds.
+  const at = Math.max(pool.findIndex((a) => a.slug === slug), 0);
+  const rotate = (xs: Article[]): Article[] =>
+    xs.length ? [...xs.slice(at % xs.length), ...xs.slice(0, at % xs.length)] : xs;
+
+  const sameCategory = rotate(pool.filter(
     (a) => a.slug !== slug && a.category === source.category,
-  );
-  const others = pool.filter(
+  ));
+  const others = rotate(pool.filter(
     (a) => a.slug !== slug && a.category !== source.category,
-  );
+  ));
   return [...sameCategory, ...others].slice(0, limit);
 }
 
