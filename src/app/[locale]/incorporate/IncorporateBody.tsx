@@ -23,6 +23,7 @@ import {
   type Pkg,
   type RegOfficeAddon,
 } from "@/lib/pricing";
+import { PACKAGE_COPY, PACKAGE_ORDER } from "@/lib/packages";
 import { legalEndingSchema, type LegalEnding } from "@/lib/legalEndings";
 import CorporationNameSection from "@/components/incorporate/CorporationNameSection";
 import {
@@ -113,27 +114,9 @@ interface WizardData {
 // can recalculate totals from the same source. PRICES and getNuansFee() are
 // imported above; kept inline references below read from those.
 
-// Basic differs by jurisdiction: the Ontario initial return is a required
-// post-incorporation filing with no federal counterpart at this stage.
-const BASIC_FEATURES: Record<Jurisdiction, string[]> = {
-  federal: ["Articles of Incorporation", "Certificate of Incorporation", "Standard Corporate By-laws", "Standard Digital Minute Book"],
-  ontario: ["Articles of Incorporation", "Certificate of Incorporation", "Initial Return Filing", "Standard Corporate By-laws", "Standard Digital Minute Book"],
-};
-
-const PKG_FEATURES: Record<Exclude<Pkg, "basic">, string[]> = {
-  standard: ["Everything in Basic", "Corporate minute book", "Share certificates", "Banking resolution"],
-  premium:  ["Everything in Standard", "First annual return filing", "Priority 12-hour turnaround", "Dedicated account support"],
-};
-
-function packageFeatures(jurisdiction: Jurisdiction, pkg: Pkg): string[] {
-  return pkg === "basic" ? BASIC_FEATURES[jurisdiction] : PKG_FEATURES[pkg];
-}
-
-// Structural limits, shown under the deliverables so the scope a tier is built
-// for is explicit before the client commits to it. Mirrors the /services cards.
-const PKG_SCOPE: Partial<Record<Pkg, string[]>> = {
-  basic: ["Numbered corporation", "1 director, 1 shareholder, 1 officer", "1 class of shares"],
-};
+// Package names, descriptions and feature lists come from `@/lib/packages`, the
+// same source the /order pricing page renders — a customer who picked a package
+// on /order must see that identical package here.
 
 const CA_PROVINCES = [
   { code: "AB", name: "Alberta" },
@@ -247,12 +230,6 @@ const JURISDICTION_INFO = [
     sub: "Ontario Business Corporations Act",
     desc: "Provincial corporation created under Ontario law. Automatic authorization to carry on business in Ontario.",
   },
-];
-
-const PKG_INFO: { id: Pkg; label: string; desc: string }[] = [
-  { id: "basic",    label: "Basic",    desc: "Essential incorporation documents." },
-  { id: "standard", label: "Standard", desc: "Full package with minute book, share certificates, and more." },
-  { id: "premium",  label: "Premium",  desc: "Complete package with first annual return filing and priority turnaround." },
 ];
 
 // Google Places location-bias rectangles per jurisdiction. Tuple format is
@@ -635,7 +612,8 @@ function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
       <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Choose Your Package</h2>
       <p className="text-gray-500 text-sm mb-8">All prices include government filing fees. Prices in CAD.</p>
       <div className="space-y-3 mb-6">
-        {PKG_INFO.map(({ id, label, desc }) => {
+        {PACKAGE_ORDER.map((id) => {
+          const { name, description, features } = PACKAGE_COPY[id];
           const price = PRICES[jurisdiction][id];
           return (
             <button key={id} onClick={() => onChange(id)}
@@ -646,33 +624,21 @@ function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
                     {value === id && <div className="w-2 h-2 rounded-full bg-navy-900" />}
                   </div>
                   <div>
-                    <p className="font-semibold text-navy-900 text-sm">{label}</p>
-                    <p className="text-xs text-gray-500">{desc}</p>
+                    <p className="font-semibold text-navy-900 text-sm">{name}</p>
+                    <p className="text-xs text-gray-500 whitespace-pre-line first-line:font-semibold first-line:text-navy-900">
+                      {description}
+                    </p>
                   </div>
                 </div>
                 <span className="font-serif text-2xl font-bold text-navy-900 shrink-0">${price}</span>
               </div>
-              <ul className="ml-7 space-y-1">
-                {packageFeatures(jurisdiction, id).map((f) => (
-                  <li key={f} className="text-xs text-gray-600 flex items-center gap-1.5">
-                    <Check size={10} className="text-navy-700 shrink-0" /> {f}
+              <ul className="ml-7 space-y-1.5">
+                {features.map((f) => (
+                  <li key={f} className="text-xs text-gray-600 flex items-start gap-1.5">
+                    <Check size={10} className="text-navy-700 shrink-0 mt-[3px]" /> {f}
                   </li>
                 ))}
               </ul>
-              {PKG_SCOPE[id] && (
-                <div className="ml-7 mt-3 pt-3 border-t border-gold-200">
-                  <p className="text-[0.65rem] font-semibold text-gold-600 uppercase tracking-wide mb-1.5">
-                    Built for this structure
-                  </p>
-                  <ul className="space-y-1">
-                    {PKG_SCOPE[id]?.map((s) => (
-                      <li key={s} className="text-xs text-gray-600 flex items-center gap-1.5">
-                        <Check size={10} className="text-navy-700 shrink-0" /> {s}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </button>
           );
         })}
