@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
-import { ArrowRight, Building2, FileText, Edit3, ClipboardCheck, RefreshCw, ScaleIcon, Check, Star } from "lucide-react";
+import { ArrowRight, Building2, FileText, Edit3, ClipboardCheck, RefreshCw, ScaleIcon, Check, Star, ShieldCheck } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
 import { buildSeoMetadata } from "@/lib/seoMeta";
 import { EXTRA_NAME_SEARCH_FEE } from "@/lib/pricing";
@@ -35,6 +35,15 @@ const jurisdictionOptions = [
     from: "$599",
     href: "/incorporate?jurisdiction=ontario",
   },
+];
+
+const packageInclusions = [
+  "Articles of Incorporation filing",
+  "Certificate of Incorporation",
+  "Company key",
+  "Standard Digital Minute Book",
+  "All mandatory post-incorporation filings",
+  "24-hour turnaround",
 ];
 
 const packageSummary = [
@@ -241,16 +250,39 @@ export default function ServicesPage() {
                     </Link>
                   ))}
                 </div>
-                <p className="text-xs text-gray-500 mt-4 leading-relaxed">
-                  All packages include the Articles of Incorporation filing, Certificate of
-                  Incorporation, Company key, Standard Digital Minute Book, all mandatory
-                  post-incorporation filings, and 24-hour turnaround. Standard and Premium
-                  include one NUANS name search for the name you file; each additional search
-                  is ${EXTRA_NAME_SEARCH_FEE.toFixed(2)} + HST and is ordered separately as a{" "}
-                  <Link href="/nuans" className="text-navy-900 underline underline-offset-2 hover:text-navy-700">
-                    NUANS report
-                  </Link>.
-                </p>
+                {/* What every package includes, pulled out of the fine print */}
+                <div className="mt-6 rounded-xl border border-gold-200 bg-cream-50 shadow-sm overflow-hidden">
+                  <div className="border-l-4 border-gold-500 px-5 py-5 md:px-6">
+                    <p className="flex items-center gap-2 text-[0.7rem] font-bold uppercase tracking-[0.15em] text-navy-900 mb-4">
+                      <ShieldCheck size={15} className="text-gold-600" />
+                      Included in every package
+                    </p>
+                    <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-2.5">
+                      {packageInclusions.map((item) => (
+                        <li key={item} className="flex items-start gap-2 text-sm font-medium text-navy-900">
+                          <Check size={15} className="text-gold-600 shrink-0 mt-0.5" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="text-xs text-gray-600 leading-relaxed mt-4 pt-4 border-t border-gold-200">
+                      Standard and Premium include{" "}
+                      <span className="font-semibold text-navy-900">one NUANS name search</span> for
+                      the name you file. Each additional search is{" "}
+                      <span className="font-semibold text-navy-900">
+                        ${EXTRA_NAME_SEARCH_FEE.toFixed(2)} + HST
+                      </span>{" "}
+                      and is ordered separately as a{" "}
+                      <Link
+                        href="/nuans"
+                        className="font-semibold text-navy-900 underline underline-offset-2 hover:text-gold-600"
+                      >
+                        NUANS report
+                      </Link>
+                      .
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
