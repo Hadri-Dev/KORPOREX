@@ -169,7 +169,7 @@ export const PKG_LABELS: Record<Pkg, string> = {
   premium: "Premium",
 };
 
-// Standard and Premium bundle exactly ONE name-search report — the search for
+// Standard and Premium bundle exactly ONE name-search report: the search for
 // the single name being filed. If that name comes back unavailable and the
 // customer wants to test another, the further search is a separate order
 // through /nuans at EXTRA_NAME_SEARCH_FEE. Never describe the bundled search

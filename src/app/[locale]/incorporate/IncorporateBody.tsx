@@ -756,7 +756,7 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack }: {
               ) : (
                 <>
                   <strong className="text-gray-800">One {nameSearchLabel} included.</strong> Your {pkg === "standard" ? "Standard" : "Premium"} package
-                  covers one {nameSearchLabel.toLowerCase()} report for the name above — no separate fee at checkout.
+                  covers one {nameSearchLabel} report for the name above, with no separate fee at checkout.
                   If that name isn&apos;t available and you want to try another, each additional search is{" "}
                   <strong className="text-gray-800">${EXTRA_NAME_SEARCH_FEE.toFixed(2)} + HST</strong>, ordered at{" "}
                   <a href={EXTRA_NAME_SEARCH_PATH} className="text-navy-900 underline underline-offset-2 hover:text-navy-700">
