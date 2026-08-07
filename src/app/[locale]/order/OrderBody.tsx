@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { REG_OFFICE_OPTIONS, EXTRA_NAME_SEARCH_FEE } from "@/lib/pricing";
+import { packageTiers } from "@/lib/packages";
 
 type Jurisdiction = "federal" | "ontario";
 
@@ -12,112 +13,19 @@ const jurisdictions = [
   { id: "ontario" as Jurisdiction, label: "Ontario", subtitle: "Ontario Business Corporations Act" },
 ];
 
-const pricingData: Record<Jurisdiction, {
-  name: string;
-  price: string;
-  description: string;
-  features: string[];
-}[]> = {
-  federal: [
-    {
-      name: "Basic",
-      price: "$749",
-      description: "For solo founders.\nThe simplest way to incorporate. Ideal for consultants, Freelancers, and single-owner holding companies.",
-      features: [
-        "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
-        "Numbered Corporation",
-        "1 Class of Shares",
-        "1 Shareholder, 1 Director, and 1 Officer",
-        "Standard Digital Minute Book",
-        "All Mandatory post-incorporation filings",
-        "24-hour turnaround",
-      ],
-    },
-    {
-      name: "Standard",
-      price: "$1,049",
-      description: "For founding teams.\nBuilt for co-founders, spouses incorporating together, and small partnerships ready to operate under a business name.",
-      features: [
-        "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
-        "Numbered or named corporation (one NUANS name search included)",
-        "Up to 3 Classes of Shares",
-        "Up to 3 Shareholders, 3 Directors, 3 Officers",
-        "Standard Digital Minute Book",
-        "All Mandatory post-incorporation filings",
-        "24-hour turnaround",
-      ],
-    },
-    {
-      name: "Premium",
-      price: "$1,349",
-      description: "For multi-stakeholder Businesses.\nDesigned for businesses with multiple founders, advisors, or family members, and the share structure to match.",
-      features: [
-        "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
-        "Numbered or named corporation (one NUANS name search included)",
-        "Up to 5 Classes of Shares",
-        "Up to 5 Shareholders, 5 Directors, 5 Officers",
-        "Standard Digital Minute Book",
-        "All Mandatory post-incorporation filings",
-        "24-hour turnaround",
-      ],
-    },
-  ],
-  ontario: [
-    {
-      name: "Basic",
-      price: "$599",
-      description: "For solo founders.\nThe simplest way to incorporate. Ideal for consultants, Freelancers, and single-owner holding companies.",
-      features: [
-        "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
-        "Numbered Corporation",
-        "1 Class of Shares",
-        "1 Shareholder, 1 Director, and 1 Officer",
-        "Standard Digital Minute Book",
-        "All Mandatory post-incorporation filings",
-        "24-hour turnaround",
-      ],
-    },
-    {
-      name: "Standard",
-      price: "$899",
-      description: "For founding teams.\nBuilt for co-founders, spouses incorporating together, and small partnerships ready to operate under a business name.",
-      features: [
-        "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
-        "Numbered or named corporation (one NUANS name search included)",
-        "Up to 3 Classes of Shares",
-        "Up to 3 Shareholders, 3 Directors, 3 Officers",
-        "Standard Digital Minute Book",
-        "All Mandatory post-incorporation filings",
-        "24-hour turnaround",
-      ],
-    },
-    {
-      name: "Premium",
-      price: "$1,199",
-      description: "For multi-stakeholder Businesses.\nDesigned for businesses with multiple founders, advisors, or family members, and the share structure to match.",
-      features: [
-        "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
-        "Numbered or named corporation (one NUANS name search included)",
-        "Up to 5 Classes of Shares",
-        "Up to 5 Shareholders, 5 Directors, 5 Officers",
-        "Standard Digital Minute Book",
-        "All Mandatory post-incorporation filings",
-        "24-hour turnaround",
-      ],
-    },
-  ],
-};
+// Package copy and prices live in `@/lib/packages` and `@/lib/pricing` so the
+// /incorporate wizard renders the exact packages advertised here.
 
 const everythingIncluded = [
   "All government filing fees (no hidden costs)",
-  "Digital document delivery within 24 hours",
+  "Incorporation within 24 hours",
   "Standard Digital Minute Book",
   "Available to Canadian and international founders",
 ];
 
 export default function PricingPage() {
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction>("federal");
-  const tiers = pricingData[jurisdiction];
+  const tiers = packageTiers(jurisdiction);
 
   return (
     <>
