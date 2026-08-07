@@ -26,8 +26,8 @@ const pricingData: Record<Jurisdiction, {
       features: [
         "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
         "Numbered Corporation",
-        "One Class of Shares",
-        "One Shareholder, One Director, and One Officer",
+        "1 Class of Shares",
+        "1 Shareholder, 1 Director, and 1 Officer",
         "Standard Digital Minute Book",
         "All Mandatory post-incorporation filings",
         "24-hour turnaround",
@@ -70,8 +70,8 @@ const pricingData: Record<Jurisdiction, {
       features: [
         "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
         "Numbered Corporation",
-        "One Class of Shares",
-        "One Shareholder, One Director, and One Officer",
+        "1 Class of Shares",
+        "1 Shareholder, 1 Director, and 1 Officer",
         "Standard Digital Minute Book",
         "All Mandatory post-incorporation filings",
         "24-hour turnaround",
