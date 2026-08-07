@@ -129,6 +129,12 @@ function packageFeatures(jurisdiction: Jurisdiction, pkg: Pkg): string[] {
   return pkg === "basic" ? BASIC_FEATURES[jurisdiction] : PKG_FEATURES[pkg];
 }
 
+// Structural limits, shown under the deliverables so the scope a tier is built
+// for is explicit before the client commits to it. Mirrors the /services cards.
+const PKG_SCOPE: Partial<Record<Pkg, string[]>> = {
+  basic: ["Numbered corporation", "1 director, 1 shareholder, 1 officer", "1 class of shares"],
+};
+
 const CA_PROVINCES = [
   { code: "AB", name: "Alberta" },
   { code: "BC", name: "British Columbia" },
@@ -653,6 +659,20 @@ function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
                   </li>
                 ))}
               </ul>
+              {PKG_SCOPE[id] && (
+                <div className="ml-7 mt-3 pt-3 border-t border-gold-200">
+                  <p className="text-[0.65rem] font-semibold text-gold-600 uppercase tracking-wide mb-1.5">
+                    Built for this structure
+                  </p>
+                  <ul className="space-y-1">
+                    {PKG_SCOPE[id]?.map((s) => (
+                      <li key={s} className="text-xs text-gray-600 flex items-center gap-1.5">
+                        <Check size={10} className="text-navy-700 shrink-0" /> {s}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </button>
           );
         })}
