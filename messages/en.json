@@ -658,6 +658,14 @@
       "title": "File a Federal Annual Return | Korporex",
       "description": "File your federal (CBCA) corporation's annual return with Corporations Canada. Korporex prepares and submits it to keep your corporation in good standing."
     },
+    "annualResolutionOn": {
+      "title": "Ontario Annual Resolutions for Your Minute Book | Korporex",
+      "description": "Annual director and shareholder resolutions for your Ontario corporation. Korporex prepares the OBCA resolutions approving your financial statements, directors, officers, and auditor."
+    },
+    "annualResolutionFederal": {
+      "title": "Federal Annual Resolutions for Your Minute Book | Korporex",
+      "description": "Annual director and shareholder resolutions for your federal (CBCA) corporation. Korporex prepares the resolutions approving your financial statements, directors, officers, and auditor."
+    },
     "noticeOfChange": {
       "title": "File a Notice of Change | Korporex",
       "description": "Report changes to your corporation's directors or registered office. Korporex prepares and files the required Notice of Change with the registry."

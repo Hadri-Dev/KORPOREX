@@ -658,6 +658,14 @@
       "title": "Presentar la Declaración Anual Federal | Korporex",
       "description": "Presenta la declaración anual de tu sociedad federal (CBCA) ante Corporations Canada. Korporex la prepara y la envía para mantener tu sociedad en regla."
     },
+    "annualResolutionOn": {
+      "title": "Resoluciones Anuales de Ontario para tu Libro de Actas | Korporex",
+      "description": "Resoluciones anuales de directores y accionistas para tu sociedad de Ontario. Korporex prepara las resoluciones (OBCA) que aprueban tus estados financieros, directores, funcionarios y auditor."
+    },
+    "annualResolutionFederal": {
+      "title": "Resoluciones Anuales Federales para tu Libro de Actas | Korporex",
+      "description": "Resoluciones anuales de directores y accionistas para tu sociedad federal (CBCA). Korporex prepara las resoluciones que aprueban tus estados financieros, directores, funcionarios y auditor."
+    },
     "noticeOfChange": {
       "title": "Presentar un Aviso de Cambio | Korporex",
       "description": "Reporta cambios en los directores o el domicilio social de tu sociedad. Korporex prepara y presenta el Aviso de Cambio requerido ante el registro."

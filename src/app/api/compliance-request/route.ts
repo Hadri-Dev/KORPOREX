@@ -5,6 +5,7 @@ import {
   type InitialReturnOntarioSubmission,
   type AnnualReturnOntarioSubmission,
   type AnnualReturnFederalSubmission,
+  type AnnualResolutionSubmission,
   type NoticeOfChangeSubmission,
   type AmendmentJurisdiction,
 } from "@/lib/complianceSchemas";
@@ -22,6 +23,7 @@ type CompliancePayload =
   | InitialReturnOntarioSubmission
   | AnnualReturnOntarioSubmission
   | AnnualReturnFederalSubmission
+  | AnnualResolutionSubmission
   | NoticeOfChangeSubmission;
 
 function computeCompliancePricing(
@@ -218,6 +220,12 @@ const ROLE_LABEL: Record<string, string> = {
   director_and_officer: "Director and Officer",
 };
 
+const AUDITOR_TREATMENT_LABEL: Record<string, string> = {
+  dispense: "Dispensed with by unanimous shareholder consent",
+  appoint_auditor: "Auditor appointed",
+  appoint_accountant: "Accountant appointed (review / compilation)",
+};
+
 const NOTICE_CHANGE_LABEL: Record<string, string> = {
   registered_office: "Registered office address",
   mailing_address: "Mailing address",
@@ -380,6 +388,49 @@ function serviceDetailHtml(service: ComplianceServiceSlug, payload: CompliancePa
         ].join("")}</table>`;
       }
       return parts;
+    }
+    case "annual-resolution-on":
+    case "annual-resolution-federal": {
+      const p = payload as AnnualResolutionSubmission;
+      const summaryRows = [
+        row("Financial year-end", p.financialYearEnd),
+        row("Resolutions dated", p.resolutionDate),
+        ...(p.lastAnnualMeetingDate ? [row("Last annual meeting", p.lastAnnualMeetingDate)] : []),
+        row(
+          "Financial statements",
+          p.financialStatementsAvailable
+            ? "Prepared — to be approved by the resolutions"
+            : "Not yet prepared — operator to follow up"
+        ),
+        row("Audit", AUDITOR_TREATMENT_LABEL[p.auditorTreatment] ?? p.auditorTreatment),
+        ...(p.auditorName ? [row("Auditor / accountant", p.auditorName)] : []),
+        ...(p.additionalMatters ? [row("Additional matters", p.additionalMatters)] : []),
+      ].join("");
+      const namedList = (title: string, items: string[]) =>
+        `<p style="margin:18px 0 8px;color:#6b7280;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">${escapeHtml(
+          title
+        )} (${items.length})</p><div style="padding:10px 12px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:13px;line-height:1.7;color:#111827;">${items
+          .map(escapeHtml)
+          .join("<br>")}</div>`;
+      return (
+        `<table style="width:100%;border-collapse:collapse;">${summaryRows}</table>` +
+        namedList(
+          "Directors elected",
+          p.directors.map((d) => `${d.firstName} ${d.lastName}`.trim())
+        ) +
+        namedList(
+          "Officers appointed",
+          p.officers.map((o) => `${o.firstName} ${o.lastName}`.trim() + ` — ${o.position}`)
+        ) +
+        namedList(
+          "Shareholders signing",
+          p.shareholders.map(
+            (s) =>
+              `${s.name} (${s.partyType === "corporation" ? "Corporation" : "Individual"})` +
+              (s.shareClass ? ` — ${s.shareClass}` : "")
+          )
+        )
+      );
     }
     case "notice-of-change": {
       const p = payload as NoticeOfChangeSubmission;

@@ -1,7 +1,8 @@
-// Zod schemas for the four recurring compliance filings. Each captures the
-// data the relevant government form requires; jurisdiction is fixed for the
-// per-jurisdiction services (Initial Return Ontario, Annual Return Ontario,
-// Annual Return Federal) and bi-jurisdictional for the Notice of Change.
+// Zod schemas for the recurring compliance services. Each captures the data the
+// relevant government form (or, for the annual resolutions, the minute-book
+// document) requires; jurisdiction is fixed for the per-jurisdiction services
+// (Initial Return Ontario, both Annual Returns, both Annual Resolutions) and
+// bi-jurisdictional for the Notice of Change.
 //
 // Statutory references (for the operator reviewing the [PENDING] intake):
 //
@@ -11,6 +12,10 @@
 //                            Registry; annual on the incorporation anniversary
 //   annual-return-federal  → CBCA s.263 (Form 22), within 60 days of the
 //                            anniversary of incorporation
+//   annual-resolution-on   → OBCA s.94 (annual meeting), s.104 (written
+//                            resolutions in lieu), s.148 (auditor exemption)
+//   annual-resolution-federal → CBCA s.133 (annual meeting), s.142 (written
+//                            resolutions in lieu), s.163 (auditor dispensation)
 //   notice-of-change       → Federal: Form 3 (Reg. office), Form 6 (Directors).
 //                            Ontario: CIA Notice of Change. Single bundled
 //                            filing covering multiple change types.
@@ -230,7 +235,140 @@ export const annualReturnFederalSchema = z
 
 export type AnnualReturnFederalSubmission = z.infer<typeof annualReturnFederalSchema>;
 
-// ── 4. Notice of Change (bi-jurisdictional, bundled) ────────────────────────
+// ── 4. Annual Resolutions (Ontario / Federal) ───────────────────────────────
+//
+// NOT a registry filing — these are minute-book documents. An annual meeting of
+// shareholders is required within 15 months of the last one (OBCA s.94(1);
+// CBCA s.133(1), which adds a 6-month-after-year-end outer limit), and written
+// resolutions signed by all shareholders may be passed in place of the meeting
+// (OBCA s.104(1); CBCA s.142(1)). The resolutions approve the financial
+// statements (OBCA s.154 / CBCA s.155), elect directors, appoint officers, and
+// either appoint an auditor or dispense with the audit by unanimous consent
+// (OBCA s.148(1) / CBCA s.163(1)).
+//
+// Only people's names are captured here — the resolutions identify directors,
+// officers, and shareholders by name; addresses are not recited, so we don't
+// make the customer re-enter them.
+
+/** A director elected / re-elected by the annual shareholder resolution. */
+export const resolutionDirectorSchema = z.object({
+  firstName: z.string().trim().min(1, "Required").max(100),
+  lastName: z.string().trim().min(1, "Required").max(100),
+});
+
+export type ResolutionDirector = z.infer<typeof resolutionDirectorSchema>;
+
+/** An officer appointed / re-appointed by the annual director resolution. */
+export const resolutionOfficerSchema = z.object({
+  firstName: z.string().trim().min(1, "Required").max(100),
+  lastName: z.string().trim().min(1, "Required").max(100),
+  position: z.enum(OFFICER_POSITIONS as unknown as [OfficerPosition, ...OfficerPosition[]], {
+    message: "Select a position",
+  }),
+});
+
+export type ResolutionOfficer = z.infer<typeof resolutionOfficerSchema>;
+
+/**
+ * A shareholder who signs the written resolution. Held as a single `name`
+ * because a shareholder may be a corporation as well as an individual.
+ */
+export const resolutionShareholderSchema = z.object({
+  name: z.string().trim().min(1, "Required").max(200),
+  partyType: z.enum(["individual", "corporation"], { message: "Select a type" }),
+  shareClass: z.string().trim().max(100).optional().or(z.literal("")),
+});
+
+export type ResolutionShareholder = z.infer<typeof resolutionShareholderSchema>;
+
+/** How the resolutions deal with the audit requirement for the year. */
+export const auditorTreatmentSchema = z.enum(
+  ["dispense", "appoint_auditor", "appoint_accountant"],
+  { message: "Select how the audit requirement is handled" }
+);
+
+export type AuditorTreatment = z.infer<typeof auditorTreatmentSchema>;
+
+const annualResolutionBaseSchema = z
+  .object({
+    corporation: corporationIdSchema,
+    /** Financial year the resolutions cover. */
+    financialYearEnd: z.string().trim().min(8, "Required").max(20),
+    /** Date the resolutions will be dated / signed. */
+    resolutionDate: z.string().trim().min(8, "Required").max(20),
+    /** Date of the last annual meeting or written resolutions, if any. */
+    lastAnnualMeetingDate: z.string().trim().max(20).optional().or(z.literal("")),
+    /** Are financial statements prepared and available to be approved? */
+    financialStatementsAvailable: z.boolean(),
+    auditorTreatment: auditorTreatmentSchema,
+    /** Firm / person appointed — required unless the audit is dispensed with. */
+    auditorName: z.string().trim().max(200).optional().or(z.literal("")),
+    directors: z
+      .array(resolutionDirectorSchema)
+      .min(1, "At least one director is required")
+      .max(20),
+    officers: z
+      .array(resolutionOfficerSchema)
+      .min(1, "At least one officer is required")
+      .max(20),
+    shareholders: z
+      .array(resolutionShareholderSchema)
+      .min(1, "At least one shareholder is required")
+      .max(20),
+    /**
+     * Written resolutions in lieu of a meeting must be signed by ALL
+     * shareholders entitled to vote — confirmed here before we prepare them.
+     */
+    allShareholdersWillSign: z.literal(true, {
+      message: "Written resolutions must be signed by all voting shareholders",
+    }),
+    additionalMatters: z.string().trim().max(2000).optional().or(z.literal("")),
+    contact: contactSchema,
+  })
+  .merge(billingSchema);
+
+function refineAnnualResolution(
+  data: z.infer<typeof annualResolutionBaseSchema>,
+  ctx: z.RefinementCtx
+) {
+  if (data.auditorTreatment !== "dispense" && !data.auditorName) {
+    ctx.addIssue({
+      path: ["auditorName"],
+      code: z.ZodIssueCode.custom,
+      message: "Name of the auditor or accountant is required",
+    });
+  }
+}
+
+export const annualResolutionOntarioSchema = annualResolutionBaseSchema.superRefine(
+  (data, ctx) => {
+    if (data.corporation.jurisdiction !== "ontario") {
+      ctx.addIssue({
+        path: ["corporation", "jurisdiction"],
+        code: z.ZodIssueCode.custom,
+        message: "Annual Resolutions (Ontario) is an OBCA service",
+      });
+    }
+    refineAnnualResolution(data, ctx);
+  }
+);
+
+export const annualResolutionFederalSchema = annualResolutionBaseSchema.superRefine(
+  (data, ctx) => {
+    if (data.corporation.jurisdiction !== "federal") {
+      ctx.addIssue({
+        path: ["corporation", "jurisdiction"],
+        code: z.ZodIssueCode.custom,
+        message: "Annual Resolutions (Federal) is a CBCA service",
+      });
+    }
+    refineAnnualResolution(data, ctx);
+  }
+);
+
+export type AnnualResolutionSubmission = z.infer<typeof annualResolutionBaseSchema>;
+
+// ── 5. Notice of Change (bi-jurisdictional, bundled) ────────────────────────
 //
 // A single filing that bundles multiple change types. Cheaper than filing each
 // change as a separate amendment. Customer picks what's changing; the wizard
@@ -301,6 +439,8 @@ export const complianceRequestSchema = z.discriminatedUnion("service", [
   z.object({ service: z.literal("initial-return-on"), payload: initialReturnOntarioSchema }),
   z.object({ service: z.literal("annual-return-on"), payload: annualReturnOntarioSchema }),
   z.object({ service: z.literal("annual-return-federal"), payload: annualReturnFederalSchema }),
+  z.object({ service: z.literal("annual-resolution-on"), payload: annualResolutionOntarioSchema }),
+  z.object({ service: z.literal("annual-resolution-federal"), payload: annualResolutionFederalSchema }),
   z.object({ service: z.literal("notice-of-change"), payload: noticeOfChangeSchema }),
 ]);
 

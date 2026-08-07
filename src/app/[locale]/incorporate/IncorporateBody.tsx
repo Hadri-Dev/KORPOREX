@@ -113,10 +113,11 @@ interface WizardData {
 // can recalculate totals from the same source. PRICES and getNuansFee() are
 // imported above; kept inline references below read from those.
 
+// Kept in sync with the package-card highlights on /services.
 const PKG_FEATURES: Record<Pkg, string[]> = {
-  basic:    ["Articles of Incorporation", "Corporate bylaws", "Certificate of Incorporation", "Digital document delivery", "Digital document storage"],
-  standard: ["Everything in Basic", "Corporate minute book", "Share certificates", "Banking resolution"],
-  premium:  ["Everything in Standard", "First annual return filing", "Priority 12-hour turnaround", "Dedicated account support"],
+  basic:    ["Numbered corporation", "1 director, 1 shareholder, 1 officer", "1 class of shares"],
+  standard: ["Named or numbered (NUANS included)", "Up to 3 directors, 3 shareholders, 3 officers", "Up to 3 classes of shares"],
+  premium:  ["Named or numbered (NUANS included)", "Up to 5 directors, 5 shareholders, 5 officers", "Up to 5 classes of shares"],
 };
 
 const CA_PROVINCES = [

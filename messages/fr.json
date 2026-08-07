@@ -658,6 +658,14 @@
       "title": "Déposer un rapport annuel fédéral | Korporex",
       "description": "Déposez le rapport annuel de votre société fédérale (LCSA) auprès de Corporations Canada. Korporex le prépare et le soumet pour garder votre société en règle."
     },
+    "annualResolutionOn": {
+      "title": "Résolutions annuelles de l'Ontario pour votre livre de procès-verbaux | Korporex",
+      "description": "Résolutions annuelles des administrateurs et des actionnaires pour votre société ontarienne. Korporex prépare les résolutions (LSAO) approuvant vos états financiers, administrateurs, dirigeants et vérificateur."
+    },
+    "annualResolutionFederal": {
+      "title": "Résolutions annuelles fédérales pour votre livre de procès-verbaux | Korporex",
+      "description": "Résolutions annuelles des administrateurs et des actionnaires pour votre société fédérale (LCSA). Korporex prépare les résolutions approuvant vos états financiers, administrateurs, dirigeants et vérificateur."
+    },
     "noticeOfChange": {
       "title": "Déposer un avis de changement | Korporex",
       "description": "Signalez les changements aux administrateurs ou au siège social de votre société. Korporex prépare et dépose l'avis de changement requis auprès du registre."

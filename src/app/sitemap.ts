@@ -32,6 +32,8 @@ const STATIC_PATHS = [
   "/privacy-policy",
   // Individual service pages
   "/services/amalgamation",
+  "/services/annual-resolution-federal",
+  "/services/annual-resolution-on",
   "/services/annual-return-federal",
   "/services/annual-return-on",
   "/services/articles-amendment",

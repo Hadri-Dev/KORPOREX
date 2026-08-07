@@ -104,11 +104,13 @@ const categories: Category[] = [
   {
     icon: ClipboardCheck,
     title: "Compliance Filings",
-    description: "Stay in good standing with required government filings for Ontario and federal corporations.",
+    description: "Stay in good standing with the required government filings and annual minute-book resolutions for Ontario and federal corporations.",
     services: [
       { name: "Initial Return (Ontario)", from: "$99", href: "/services/initial-return-on" },
-      { name: "Annual Return - Ontario", from: "$149", href: "/services/annual-return-on" },
-      { name: "Annual Return - Federal", from: "$149", href: "/services/annual-return-federal" },
+      { name: "Annual Return - Ontario", from: "$49.99", href: "/services/annual-return-on" },
+      { name: "Annual Return - Federal", from: "$49.99", href: "/services/annual-return-federal" },
+      { name: "Annual Resolution - Ontario", from: "$199.99", href: "/services/annual-resolution-on" },
+      { name: "Annual Resolution - Federal", from: "$199.99", href: "/services/annual-resolution-federal" },
       { name: "Notice of Change", from: "$129", href: "/services/notice-of-change" },
     ],
   },
