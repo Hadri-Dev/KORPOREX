@@ -231,10 +231,14 @@ const JURISDICTION_INFO = [
   },
 ];
 
-const PKG_INFO: { id: Pkg; label: string; desc: string }[] = [
-  { id: "basic",    label: "Basic",    desc: "Essential incorporation documents. Government fees included." },
-  { id: "standard", label: "Standard", desc: "Full package with minute book, share certificates, and more." },
-  { id: "premium",  label: "Premium",  desc: "Complete package with first annual return filing and priority turnaround." },
+// Copy kept in sync with the package cards on /services.
+const PKG_INFO: { id: Pkg; label: string; audience: string; desc: string }[] = [
+  { id: "basic",    label: "Basic",    audience: "For solo founders",
+    desc: "Consultants, freelancers, and single-owner holding companies." },
+  { id: "standard", label: "Standard", audience: "For founding teams",
+    desc: "Co-founders, spouses incorporating together, and small partnerships ready to operate under a business name." },
+  { id: "premium",  label: "Premium",  audience: "For multi-stakeholder businesses",
+    desc: "Multiple founders, advisors, or family members with a layered share structure." },
 ];
 
 // Google Places location-bias rectangles per jurisdiction. Tuple format is
@@ -617,7 +621,7 @@ function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
       <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Choose Your Package</h2>
       <p className="text-gray-500 text-sm mb-8">All prices include government filing fees. Prices in CAD.</p>
       <div className="space-y-3 mb-6">
-        {PKG_INFO.map(({ id, label, desc }) => {
+        {PKG_INFO.map(({ id, label, audience, desc }) => {
           const price = PRICES[jurisdiction][id];
           return (
             <button key={id} onClick={() => onChange(id)}
@@ -629,7 +633,8 @@ function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
                   </div>
                   <div>
                     <p className="font-semibold text-navy-900 text-sm">{label}</p>
-                    <p className="text-xs text-gray-500">{desc}</p>
+                    <p className="text-[0.65rem] font-semibold text-gold-600 uppercase tracking-wide mt-0.5">{audience}</p>
+                    <p className="text-xs text-gray-500 mt-1">{desc}</p>
                   </div>
                 </div>
                 <span className="font-serif text-2xl font-bold text-navy-900 shrink-0">${price}</span>
