@@ -111,9 +111,7 @@ const pricingData: Record<Jurisdiction, {
 const everythingIncluded = [
   "All government filing fees (no hidden costs)",
   "Digital document delivery within 24 hours",
-  "Secure document storage in your Korporex account",
-  "Post-filing Q&A support by email",
-  "Filing confirmation and tracking",
+  "Standard Digital Minute Book",
   "Available to Canadian and international founders",
 ];
 
