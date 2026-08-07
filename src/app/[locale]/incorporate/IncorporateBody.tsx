@@ -113,11 +113,21 @@ interface WizardData {
 // can recalculate totals from the same source. PRICES and getNuansFee() are
 // imported above; kept inline references below read from those.
 
-const PKG_FEATURES: Record<Pkg, string[]> = {
-  basic:    ["Articles of Incorporation", "Corporate bylaws", "Certificate of Incorporation", "Digital document delivery", "Digital document storage"],
+// Basic differs by jurisdiction: the Ontario initial return is a required
+// post-incorporation filing with no federal counterpart at this stage.
+const BASIC_FEATURES: Record<Jurisdiction, string[]> = {
+  federal: ["Articles of Incorporation", "Certificate of Incorporation", "Standard Corporate By-laws", "Standard Digital Minute Book"],
+  ontario: ["Articles of Incorporation", "Certificate of Incorporation", "Initial Return Filing", "Standard Corporate By-laws", "Standard Digital Minute Book"],
+};
+
+const PKG_FEATURES: Record<Exclude<Pkg, "basic">, string[]> = {
   standard: ["Everything in Basic", "Corporate minute book", "Share certificates", "Banking resolution"],
   premium:  ["Everything in Standard", "First annual return filing", "Priority 12-hour turnaround", "Dedicated account support"],
 };
+
+function packageFeatures(jurisdiction: Jurisdiction, pkg: Pkg): string[] {
+  return pkg === "basic" ? BASIC_FEATURES[jurisdiction] : PKG_FEATURES[pkg];
+}
 
 const CA_PROVINCES = [
   { code: "AB", name: "Alberta" },
@@ -234,7 +244,7 @@ const JURISDICTION_INFO = [
 ];
 
 const PKG_INFO: { id: Pkg; label: string; desc: string }[] = [
-  { id: "basic",    label: "Basic",    desc: "Essential incorporation documents. Government fees included." },
+  { id: "basic",    label: "Basic",    desc: "Essential incorporation documents." },
   { id: "standard", label: "Standard", desc: "Full package with minute book, share certificates, and more." },
   { id: "premium",  label: "Premium",  desc: "Complete package with first annual return filing and priority turnaround." },
 ];
@@ -637,7 +647,7 @@ function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
                 <span className="font-serif text-2xl font-bold text-navy-900 shrink-0">${price}</span>
               </div>
               <ul className="ml-7 space-y-1">
-                {PKG_FEATURES[id].map((f) => (
+                {packageFeatures(jurisdiction, id).map((f) => (
                   <li key={f} className="text-xs text-gray-600 flex items-center gap-1.5">
                     <Check size={10} className="text-navy-700 shrink-0" /> {f}
                   </li>
