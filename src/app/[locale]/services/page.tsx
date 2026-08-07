@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { ArrowRight, Building2, FileText, Edit3, ClipboardCheck, RefreshCw, ScaleIcon, Check, Star } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
 import { buildSeoMetadata } from "@/lib/seoMeta";
+import { EXTRA_NAME_SEARCH_FEE } from "@/lib/pricing";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -56,7 +57,7 @@ const packageSummary = [
     audience: "For founding teams",
     blurb: "Co-founders, spouses incorporating together, and small partnerships ready to operate under a business name.",
     highlights: [
-      "Named or numbered (NUANS included)",
+      "Named or numbered (one NUANS name search included)",
       "Up to 3 directors, 3 shareholders, 3 officers",
       "Up to 3 classes of shares",
     ],
@@ -69,7 +70,7 @@ const packageSummary = [
     audience: "For multi-stakeholder businesses",
     blurb: "Multiple founders, advisors, or family members with a layered share structure.",
     highlights: [
-      "Named or numbered (NUANS included)",
+      "Named or numbered (one NUANS name search included)",
       "Up to 5 directors, 5 shareholders, 5 officers",
       "Up to 5 classes of shares",
     ],
@@ -241,7 +242,12 @@ export default function ServicesPage() {
                 <p className="text-xs text-gray-500 mt-4 leading-relaxed">
                   All packages include the Articles of Incorporation filing, Certificate of
                   Incorporation, Company key, Standard Digital Minute Book, all mandatory
-                  post-incorporation filings, and 24-hour turnaround.
+                  post-incorporation filings, and 24-hour turnaround. Standard and Premium
+                  include one NUANS name search for the name you file; each additional search
+                  is ${EXTRA_NAME_SEARCH_FEE.toFixed(2)} + HST and is ordered separately as a{" "}
+                  <Link href="/nuans" className="text-navy-900 underline underline-offset-2 hover:text-navy-700">
+                    NUANS report
+                  </Link>.
                 </p>
               </div>
             </div>

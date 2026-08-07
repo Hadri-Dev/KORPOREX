@@ -292,7 +292,7 @@
         },
         "transparent": {
           "title": "Tarification transparente",
-          "description": "Les frais de dépôt gouvernementaux sont inclus dans nos prix. Les taxes et les frais de recherche de nom NUANS ne sont pas inclus et sont indiqués séparément au paiement."
+          "description": "Les frais de dépôt gouvernementaux sont inclus dans nos prix. Les forfaits Standard et Premium comprennent une seule recherche de nom NUANS; toute recherche supplémentaire et les taxes applicables sont indiquées séparément au paiement."
         }
       }
     },
@@ -500,7 +500,7 @@
           },
           {
             "q": "Qu'est-ce qu'une recherche de nom NUANS?",
-            "a": "NUANS (Newly Upgraded Automated Name Search) est une recherche dans une base de données gouvernementale qui compare le nom proposé de votre société par actions aux sociétés et aux marques de commerce déjà enregistrées. Elle est requise pour les constitutions fédérales, ontariennes et plusieurs autres constitutions provinciales avec dénomination. Si vous constituez une société à dénomination numérique (p. ex., 1234567 Canada Inc.), aucune recherche NUANS n'est requise. Korporex coordonne la recherche NUANS pour vous au besoin, mais les frais du rapport NUANS ne sont pas compris dans le prix de notre forfait et sont facturés séparément."
+            "a": "NUANS (Newly Upgraded Automated Name Search) est une recherche dans une base de données gouvernementale qui compare le nom proposé de votre société par actions aux sociétés et aux marques de commerce déjà enregistrées. Elle est requise pour les constitutions fédérales, ontariennes et plusieurs autres constitutions provinciales avec dénomination. Si vous constituez une société à dénomination numérique (p. ex., 1234567 Canada Inc.), aucune recherche NUANS n'est requise. Korporex coordonne la recherche NUANS pour vous au besoin. Nos forfaits Standard et Premium comprennent une (1) recherche de nom NUANS, pour l'unique nom que vous déposez. Si ce nom n'est pas disponible et que vous souhaitez en essayer un autre, chaque recherche additionnelle coûte 39,99 $ + TVH et se commande séparément à korporex.ca/nuans."
           },
           {
             "q": "Quels types de sociétés puis-je constituer?",
@@ -553,8 +553,8 @@
             "a": "Non. Tous les prix sont affichés en dollars canadiens (CAD) et excluent les taxes fédérales et provinciales canadiennes applicables (TPS/TVH/TVQ). Le montant de taxe applicable est calculé en temps réel pendant que vous remplissez le formulaire de constitution, en fonction de votre adresse de facturation, et est clairement affiché au moment du paiement. Les clients internationaux (facturation à l'extérieur du Canada) ne sont généralement pas assujettis à la taxe de vente canadienne."
           },
           {
-            "q": "Les frais NUANS sont-ils compris?",
-            "a": "Non. Les frais du rapport de recherche de nom NUANS exigés par le gouvernement ne sont pas compris dans les prix de nos forfaits. Si votre constitution nécessite un rapport NUANS (sociétés fédérales, ontariennes et certaines autres sociétés provinciales avec dénomination), les frais du rapport sont facturés séparément. Vous pouvez éviter entièrement les frais NUANS en choisissant une société à dénomination numérique."
+            "q": "Combien de recherches de nom NUANS sont comprises?",
+            "a": "Une seule. Nos forfaits Standard et Premium comprennent un (1) rapport de recherche de nom NUANS, pour l'unique nom que vous soumettez au dépôt. Le forfait Basic vise les sociétés à dénomination numérique, pour lesquelles aucune recherche n'est requise. Si le nom n'est pas disponible, ou si vous souhaitez vérifier d'autres choix de nom, chaque recherche NUANS additionnelle coûte 39,99 $ + TVH et se commande séparément à korporex.ca/nuans. Vous pouvez éviter entièrement les frais de recherche de nom en choisissant une société à dénomination numérique."
           }
         ]
       },

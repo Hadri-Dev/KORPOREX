@@ -156,6 +156,16 @@ export default function TermsPage() {
               based on your billing address.
             </p>
             <p>
+              <strong>Name searches are limited to one per order.</strong> Where a package or
+              flat-fee service is described as including a NUANS or other name search, that
+              means one (1) name-search report covering the single name submitted for filing.
+              It is not an unlimited or open-ended entitlement. If the searched name is
+              unavailable, is rejected by the registry, or you wish to test further name
+              choices, each additional search is a separate chargeable order placed through our{" "}
+              <Link href="/nuans" className="text-navy-900 underline underline-offset-2">NUANS report</Link>{" "}
+              service at the rate then displayed on that page, plus applicable taxes.
+            </p>
+            <p>
               Payment is processed by Stripe Payments Canada, Ltd. and its affiliates
               (collectively, &ldquo;Stripe&rdquo;). You agree to Stripe&rsquo;s own terms of
               service and privacy policy when you enter payment details on Stripe&rsquo;s

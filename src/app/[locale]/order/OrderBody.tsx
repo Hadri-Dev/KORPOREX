@@ -3,7 +3,7 @@
 import { Link } from "@/i18n/navigation";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import { useState } from "react";
-import { REG_OFFICE_OPTIONS } from "@/lib/pricing";
+import { REG_OFFICE_OPTIONS, EXTRA_NAME_SEARCH_FEE } from "@/lib/pricing";
 
 type Jurisdiction = "federal" | "ontario";
 
@@ -39,7 +39,7 @@ const pricingData: Record<Jurisdiction, {
       description: "For founding teams.\nBuilt for co-founders, spouses incorporating together, and small partnerships ready to operate under a business name.",
       features: [
         "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
-        "Numbered or named corporation (NUANS included)",
+        "Numbered or named corporation (one NUANS name search included)",
         "Up to 3 Classes of Shares",
         "Up to 3 Shareholders, 3 Directors, 3 Officers",
         "Standard Digital Minute Book",
@@ -53,7 +53,7 @@ const pricingData: Record<Jurisdiction, {
       description: "For multi-stakeholder Businesses.\nDesigned for businesses with multiple founders, advisors, or family members, and the share structure to match.",
       features: [
         "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
-        "Numbered or named corporation (NUANS included)",
+        "Numbered or named corporation (one NUANS name search included)",
         "Up to 5 Classes of Shares",
         "Up to 5 Shareholders, 5 Directors, 5 Officers",
         "Standard Digital Minute Book",
@@ -83,7 +83,7 @@ const pricingData: Record<Jurisdiction, {
       description: "For founding teams.\nBuilt for co-founders, spouses incorporating together, and small partnerships ready to operate under a business name.",
       features: [
         "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
-        "Numbered or named corporation (NUANS included)",
+        "Numbered or named corporation (one NUANS name search included)",
         "Up to 3 Classes of Shares",
         "Up to 3 Shareholders, 3 Directors, 3 Officers",
         "Standard Digital Minute Book",
@@ -97,7 +97,7 @@ const pricingData: Record<Jurisdiction, {
       description: "For multi-stakeholder Businesses.\nDesigned for businesses with multiple founders, advisors, or family members, and the share structure to match.",
       features: [
         "Articles of Incorporation filing, including Certificate of Incorporation & Company key",
-        "Numbered or named corporation (NUANS included)",
+        "Numbered or named corporation (one NUANS name search included)",
         "Up to 5 Classes of Shares",
         "Up to 5 Shareholders, 5 Directors, 5 Officers",
         "Standard Digital Minute Book",
@@ -131,7 +131,8 @@ export default function PricingPage() {
           </h1>
           <p className="text-lg text-gray-300 max-w-xl mx-auto">
             All prices are in Canadian dollars and include government filing fees.
-            Applicable taxes and NUANS name-search fees are not included and will be shown separately at checkout.
+            Standard and Premium include one NUANS name search; additional searches are
+            ${EXTRA_NAME_SEARCH_FEE.toFixed(2)} + HST each. Applicable taxes are shown separately at checkout.
           </p>
         </div>
       </section>

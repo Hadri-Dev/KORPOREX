@@ -182,14 +182,18 @@ export default function CorporationNameSection({
               </p>
               <p>
                 <strong>This is not an official NUANS search.</strong> The registry lookup above is a
-                preliminary check against publicly available business registries only. The official
-                NUANS Name Reservation Report (required to incorporate) is included in your Korporex
-                package and is filed automatically after checkout.
+                preliminary check against publicly available business registries only. Your Korporex
+                package includes <strong>one (1)</strong> official NUANS Name Reservation Report
+                (required to incorporate), for the single name you submit here. It is ordered
+                automatically after checkout.
               </p>
               <p>
                 <strong>Your business name is not guaranteed.</strong> Final approval rests with the
                 government. The name may still be rejected if it conflicts with an existing
-                corporation or fails the official NUANS review.
+                corporation or fails the official NUANS review. Because the included search is
+                already used at that point, any further name you want to search is a separate
+                order at{" "}
+                <a href="/nuans" className="underline underline-offset-2">korporex.ca/nuans</a>.
               </p>
             </div>
           </div>

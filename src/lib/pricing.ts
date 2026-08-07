@@ -169,9 +169,18 @@ export const PKG_LABELS: Record<Pkg, string> = {
   premium: "Premium",
 };
 
+// Standard and Premium bundle exactly ONE name-search report — the search for
+// the single name being filed. If that name comes back unavailable and the
+// customer wants to test another, the further search is a separate order
+// through /nuans at EXTRA_NAME_SEARCH_FEE. Never describe the bundled search
+// in the plural or as unlimited: the pass-through cost is per search.
+export const NAME_SEARCHES_INCLUDED = 1;
+export const EXTRA_NAME_SEARCH_FEE = 39.99;
+export const EXTRA_NAME_SEARCH_PATH = "/nuans";
+
 // NUANS is bundled into Standard and Premium packages (the feature list says
-// "NUANS included"). Basic is numbered-only via the wizard, so the named
-// branch effectively never fires for Basic either. The fee-applies check
+// "one NUANS search included"). Basic is numbered-only via the wizard, so the
+// named branch effectively never fires for Basic either. The fee-applies check
 // therefore only ever returns true if someone bypasses the wizard and sends
 // a (pkg=basic, corpNameType=named) combination via the API — kept as a
 // defensive fallback rather than because it's a customer-reachable path.

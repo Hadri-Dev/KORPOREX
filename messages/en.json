@@ -292,7 +292,7 @@
         },
         "transparent": {
           "title": "Transparent Pricing",
-          "description": "Government filing fees included in our prices. Taxes and NUANS name-search fees are not included and shown separately at checkout."
+          "description": "Government filing fees included in our prices. Standard and Premium include one NUANS name search; further searches and applicable taxes are shown separately at checkout."
         }
       }
     },
@@ -500,7 +500,7 @@
           },
           {
             "q": "What is a NUANS name search?",
-            "a": "NUANS (Newly Upgraded Automated Name Search) is a government database search that checks your proposed corporation name against existing registered corporations and trademarks. It is required for federal, Ontario, and several other named provincial incorporations. If you incorporate as a numbered corporation (e.g., 1234567 Canada Inc.), no NUANS search is required. Korporex coordinates the NUANS search for you when needed, but the NUANS report fee is not included in our package price and is charged separately."
+            "a": "NUANS (Newly Upgraded Automated Name Search) is a government database search that checks your proposed corporation name against existing registered corporations and trademarks. It is required for federal, Ontario, and several other named provincial incorporations. If you incorporate as a numbered corporation (e.g., 1234567 Canada Inc.), no NUANS search is required. Korporex coordinates the NUANS search for you when needed. Our Standard and Premium packages include one (1) NUANS name search, for the single name you file. If that name is unavailable and you want to test another, each additional search is $39.99 + HST and is ordered separately at korporex.ca/nuans."
           },
           {
             "q": "What types of corporations can I incorporate?",
@@ -553,8 +553,8 @@
             "a": "No. All prices are displayed in Canadian dollars (CAD) and exclude applicable Canadian federal and provincial taxes (GST/HST/QST). The applicable tax amount is calculated live as you fill out the incorporation form based on your billing address and shown clearly at checkout. International clients (billing outside Canada) are generally not charged Canadian sales tax."
           },
           {
-            "q": "Are NUANS fees included?",
-            "a": "No. Government-mandated NUANS name-search report fees are not included in our package prices. If your incorporation requires a NUANS report (federal, Ontario, and certain other named provincial corporations), the report fee is charged separately. You can avoid the NUANS fee entirely by choosing a numbered corporation."
+            "q": "How many NUANS name searches are included?",
+            "a": "One. Our Standard and Premium packages include a single (1) NUANS name-search report, covering the one name you submit for filing. The Basic package is for numbered corporations, so no search is required. If your name comes back unavailable, or you want to pre-screen further name choices, each additional NUANS search is $39.99 + HST and is ordered separately at korporex.ca/nuans. You can avoid name-search fees entirely by choosing a numbered corporation."
           }
         ]
       },
