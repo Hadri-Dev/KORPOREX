@@ -685,6 +685,10 @@
     "continuance": {
       "title": "Continue a Corporation Between Jurisdictions | Korporex",
       "description": "Move your corporation to a new jurisdiction. Korporex prepares and files your Articles of Continuance to import or export between federal and Ontario."
+    },
+    "initialMinuteBook": {
+      "title": "Initial Minute Book for Your Corporation | Korporex",
+      "description": "Incorporated without a minute book? Korporex prepares your by-laws, organizational resolutions, share certificates, and registers as a complete digital minute book."
     }
   }
 }

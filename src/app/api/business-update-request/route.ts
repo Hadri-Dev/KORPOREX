@@ -6,9 +6,12 @@ import {
   type RevivalSubmission,
   type AmalgamationSubmission,
   type ContinuanceSubmission,
+  type InitialMinuteBookSubmission,
 } from "@/lib/businessUpdateSchemas";
 import {
   BUSINESS_UPDATE_SERVICES,
+  MINUTE_BOOK_PRICING,
+  computeMinuteBookSubtotal,
   type BusinessUpdateServiceSlug,
 } from "@/lib/businessUpdateServices";
 import { getTaxRate } from "@/lib/pricing";
@@ -24,14 +27,28 @@ type BusinessUpdatePayload =
   | DissolutionSubmission
   | RevivalSubmission
   | AmalgamationSubmission
-  | ContinuanceSubmission;
+  | ContinuanceSubmission
+  | InitialMinuteBookSubmission;
+
+function minuteBookCounts(p: InitialMinuteBookSubmission) {
+  return {
+    shareClasses: p.shareClasses.length,
+    shareholders: p.shareholders.length,
+    directors: p.directors.length,
+    officers: p.officers.length,
+  };
+}
 
 function computeBusinessUpdatePricing(
   service: BusinessUpdateServiceSlug,
+  payload: BusinessUpdatePayload,
   billingCountry: string,
   billingRegion: string
 ): Pricing {
-  const subtotal = BUSINESS_UPDATE_SERVICES[service].price;
+  const subtotal =
+    service === "initial-minute-book"
+      ? computeMinuteBookSubtotal(minuteBookCounts(payload as InitialMinuteBookSubmission))
+      : BUSINESS_UPDATE_SERVICES[service].price;
   const taxRate = getTaxRate(billingCountry, billingRegion);
   const tax = Math.round(subtotal * taxRate * 100) / 100;
   const total = Math.round((subtotal + tax) * 100) / 100;
@@ -52,7 +69,7 @@ export async function POST(req: Request) {
 
   const billing = payload.billingAddress;
   const billingName = payload.billingName;
-  const pricing = computeBusinessUpdatePricing(service, billing.country, billing.region);
+  const pricing = computeBusinessUpdatePricing(service, payload, billing.country, billing.region);
   const orderRef = generateOrderRef();
 
   const customerEmail = payload.contact.contactEmail;
@@ -92,7 +109,7 @@ export async function POST(req: Request) {
     {
       price_data: {
         currency: "cad",
-        product_data: { name: meta.longLabel, description: meta.tagline },
+        product_data: { name: meta.longLabel, description: lineItemDescription(service, payload) },
         unit_amount: Math.round(pricing.subtotal * 100),
       },
       quantity: 1,
@@ -159,6 +176,19 @@ export async function POST(req: Request) {
 
 type Summary = { jurisdiction: string; corpName: string; corpNumber: string };
 
+/** Stripe line-item description. Static tagline for flat-priced services; the
+ *  minute book spells out the counts its computed subtotal is based on. */
+function lineItemDescription(
+  service: BusinessUpdateServiceSlug,
+  payload: BusinessUpdatePayload
+): string {
+  if (service === "initial-minute-book") {
+    const c = minuteBookCounts(payload as InitialMinuteBookSubmission);
+    return `${c.shareClasses} share ${c.shareClasses === 1 ? "class" : "classes"}, ${c.shareholders} shareholder${c.shareholders === 1 ? "" : "s"}, ${c.directors} director${c.directors === 1 ? "" : "s"}, ${c.officers} officer${c.officers === 1 ? "" : "s"}`;
+  }
+  return BUSINESS_UPDATE_SERVICES[service].tagline;
+}
+
 function extractSummary(
   service: BusinessUpdateServiceSlug,
   payload: BusinessUpdatePayload
@@ -190,6 +220,14 @@ function extractSummary(
         jurisdiction: `${p.currentJurisdiction} → ${p.destinationJurisdiction}`,
         corpName: p.currentCorpName,
         corpNumber: p.currentCorpNumber,
+      };
+    }
+    case "initial-minute-book": {
+      const p = payload as InitialMinuteBookSubmission;
+      return {
+        jurisdiction: p.corporation.jurisdiction,
+        corpName: p.corporation.corpName,
+        corpNumber: p.corporation.corpNumber,
       };
     }
   }
@@ -359,7 +397,7 @@ function buildHtmlBody(args: {
       ? `Tax (${(pricing.taxRate * 100).toFixed(pricing.taxRate === 0.14975 ? 3 : 0)}% — ${payload.billingAddress.region})`
       : "Tax";
   const pricingRows = [
-    row(serviceLabel, `$${pricing.subtotal.toFixed(2)}`),
+    ...subtotalRows(service, serviceLabel, payload, pricing),
     row(taxLabel, `$${pricing.tax.toFixed(2)}`),
     row("Total (CAD)", `$${pricing.total.toFixed(2)}`),
   ].join("");
@@ -383,6 +421,36 @@ function buildHtmlBody(args: {
     "Billing",
     `<table style="width:100%;border-collapse:collapse;">${billingRows}</table>`
   )}${note}</div></body></html>`;
+}
+
+/** Subtotal line(s) for the Pricing section. Flat-priced services get one row;
+ *  the minute book itemizes the base price plus each per-item add-on so the
+ *  operator can verify the charge against the counts at a glance. */
+function subtotalRows(
+  service: BusinessUpdateServiceSlug,
+  serviceLabel: string,
+  payload: BusinessUpdatePayload,
+  pricing: Pricing
+): string[] {
+  if (service !== "initial-minute-book") {
+    return [row(serviceLabel, `$${pricing.subtotal.toFixed(2)}`)];
+  }
+  const p = payload as InitialMinuteBookSubmission;
+  const c = minuteBookCounts(p);
+  const base = BUSINESS_UPDATE_SERVICES["initial-minute-book"].price;
+  const rows = [
+    row(`${serviceLabel} (base: 1 share class, 1 shareholder, 1 director, 1 officer)`, `$${base.toFixed(2)}`),
+  ];
+  const addon = (label: string, count: number, unit: number) => {
+    const extra = Math.max(0, count - 1);
+    if (extra > 0) rows.push(row(`${label} × ${extra} @ $${unit}`, `$${(extra * unit).toFixed(2)}`));
+  };
+  addon("Additional share classes", c.shareClasses, MINUTE_BOOK_PRICING.extraShareClass);
+  addon("Additional shareholders", c.shareholders, MINUTE_BOOK_PRICING.extraShareholder);
+  addon("Additional directors", c.directors, MINUTE_BOOK_PRICING.extraDirector);
+  addon("Additional officers", c.officers, MINUTE_BOOK_PRICING.extraOfficer);
+  rows.push(row("Subtotal", `$${pricing.subtotal.toFixed(2)}`));
+  return rows;
 }
 
 function serviceDetailHtml(
@@ -505,6 +573,41 @@ function serviceDetailHtml(
       )}</div>`;
       const directors = `<p style="margin:18px 0 8px;color:#6b7280;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Directors of continued corp (${p.directors.length})</p>${p.directors.map(personCard).join("")}`;
       return `<table style="width:100%;border-collapse:collapse;">${rows}</table>${reason}${office}${directors}`;
+    }
+    case "initial-minute-book": {
+      const p = payload as InitialMinuteBookSubmission;
+      const rows = [row("Incorporation date", p.incorporationDate)].join("");
+      const office = `<div style="margin-top:12px;padding:12px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:13px;color:#111827;"><strong>Registered office:</strong><br>${escapeHtml(
+        formatAddress(p.registeredOffice)
+      )}</div>`;
+      const shareClasses = `<p style="margin:18px 0 8px;color:#6b7280;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Share classes (${p.shareClasses.length})</p>${p.shareClasses
+        .map(
+          (c, i) =>
+            `<div style="margin-bottom:8px;padding:10px 12px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:13px;line-height:1.7;color:#111827;"><strong>Class ${
+              i + 1
+            }:</strong> ${escapeHtml(c.className)}${
+              c.rightsNotes ? `<br><strong>Rights:</strong> ${escapeHtml(c.rightsNotes)}` : ""
+            }</div>`
+        )
+        .join("")}`;
+      const shareholders = `<p style="margin:18px 0 8px;color:#6b7280;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Shareholders (${p.shareholders.length})</p>${p.shareholders
+        .map((s) => {
+          const lines = [
+            `<strong>Name:</strong> ${escapeHtml(`${s.firstName} ${s.lastName}`)}`,
+            `<strong>Class:</strong> ${escapeHtml(s.shareClass)}`,
+            `<strong>Shares:</strong> ${escapeHtml(s.numberOfShares)} @ $${escapeHtml(s.pricePerShare)} per share`,
+            ...(s.issueDate ? [`<strong>Issued:</strong> ${escapeHtml(s.issueDate)}`] : []),
+            `<strong>Address:</strong> ${escapeHtml(formatAddress(s.address))}`,
+          ];
+          return `<div style="margin-bottom:8px;padding:10px 12px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:13px;line-height:1.7;color:#111827;">${lines.join("<br>")}</div>`;
+        })
+        .join("")}`;
+      const directors = `<p style="margin:18px 0 8px;color:#6b7280;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Directors (${p.directors.length})</p>${p.directors.map(personCard).join("")}`;
+      const officers = `<p style="margin:18px 0 8px;color:#6b7280;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Officers (${p.officers.length})</p>${p.officers.map(personCard).join("")}`;
+      const notes = p.notes
+        ? `<div style="margin-top:12px;padding:12px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:13px;color:#111827;white-space:pre-wrap;"><strong>Notes:</strong><br>${escapeHtml(p.notes)}</div>`
+        : "";
+      return `<table style="width:100%;border-collapse:collapse;">${rows}</table>${office}${shareClasses}${shareholders}${directors}${officers}${notes}`;
     }
   }
 }

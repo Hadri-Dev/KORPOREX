@@ -27,6 +27,7 @@ const STEP_FIELDS: string[][] = [
     "specialResolutionDate",
     "effectiveDate",
     "finalReturnsFiled",
+    "notes",
   ],
   ["contact"],
   ["billingName", "billingAddress"],
@@ -81,6 +82,7 @@ export default function DissolveBusinessPage() {
         "specialResolutionDate",
         "effectiveDate",
         "finalReturnsFiled",
+        "notes",
       ],
       3: ["contact"],
     };

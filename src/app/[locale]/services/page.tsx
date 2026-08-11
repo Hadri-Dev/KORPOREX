@@ -126,8 +126,10 @@ const categories: Category[] = [
   {
     icon: RefreshCw,
     title: "Business Updates",
-    description: "Dissolve, revive, amalgamate, or continue your corporation between jurisdictions.",
+    description:
+      "Dissolve, revive, amalgamate, or continue your corporation between jurisdictions. Or get the minute book your corporation is missing.",
     services: [
+      { name: "Initial Minute Book", from: "$399", href: "/services/initial-minute-book" },
       { name: "Dissolve a Business", from: "$199", href: "/services/dissolve-business" },
       { name: "Revive a Business", from: "$249", href: "/services/revive-business" },
       { name: "Amalgamation", from: "$499", href: "/services/amalgamation" },

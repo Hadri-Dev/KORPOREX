@@ -13,6 +13,10 @@
 //                          OBCA s.174-179
 //   continuance          → CBCA s.187 (continuance INTO federal) / s.188 (OUT)
 //                          OBCA s.180 (continuance INTO Ontario) / s.181 (OUT)
+//   initial-minute-book  → CBCA s.20 / OBCA s.140 (corporate records). Not a
+//                          registry filing: Korporex prepares the by-laws,
+//                          organizational resolutions, share certificates, and
+//                          registers for an already-incorporated corporation.
 
 import { z } from "zod";
 import {
@@ -384,6 +388,93 @@ export const continuanceSchema = z
 
 export type ContinuanceSubmission = z.infer<typeof continuanceSchema>;
 
+// ── 5. Initial Minute Book ──────────────────────────────────────────────────
+//
+// Post-incorporation organization for a corporation that was incorporated
+// without a minute book (typically a self-filed incorporation). Captures the
+// corporation's identifiers plus the share structure, shareholders, directors,
+// and officers the drafter needs to prepare the by-laws, organizational
+// resolutions, share certificates, and statutory registers.
+//
+// Pricing is count-based (base covers 1 share class / 1 shareholder /
+// 1 director / 1 officer); see MINUTE_BOOK_PRICING in businessUpdateServices.
+
+export const minuteBookShareClassSchema = z.object({
+  /** Class designation exactly as it appears in the Articles (e.g. "Class A
+   *  Common"). Used as the key shareholders reference below. */
+  className: z.string().trim().min(1, "Required").max(120),
+  /** Optional summary of the rights attached to this class (voting, dividends,
+   *  redemption). The drafter transcribes the definitive text from the Articles. */
+  rightsNotes: z.string().trim().max(1000).optional().or(z.literal("")),
+});
+
+export const minuteBookShareholderSchema = z.object({
+  firstName: z.string().trim().min(1, "Required").max(100),
+  lastName: z.string().trim().min(1, "Required").max(100),
+  /** Must match the className of one of the classes entered above
+   *  (cross-checked in the superRefine). */
+  shareClass: z.string().trim().min(1, "Select a share class").max(120),
+  numberOfShares: z
+    .string()
+    .trim()
+    .min(1, "Required")
+    .max(20)
+    .refine((v) => /^[1-9][0-9]*$/.test(v), "Enter a whole number of shares"),
+  pricePerShare: z
+    .string()
+    .trim()
+    .min(1, "Required")
+    .max(20)
+    .refine((v) => Number.isFinite(Number(v)) && Number(v) > 0, "Enter a positive amount"),
+  issueDate: z.string().trim().max(20).optional().or(z.literal("")),
+  address: addressSchema,
+});
+
+export const initialMinuteBookSchema = z
+  .object({
+    corporation: corporationIdSchema,
+    incorporationDate: z.string().trim().min(8, "Required").max(20),
+    registeredOffice: addressSchema,
+    shareClasses: z
+      .array(minuteBookShareClassSchema)
+      .min(1, "At least one class of shares is required")
+      .max(10),
+    shareholders: z
+      .array(minuteBookShareholderSchema)
+      .min(1, "At least one shareholder is required")
+      .max(20),
+    directors: z.array(currentDirectorSchema).min(1, "At least one director is required").max(20),
+    officers: z.array(currentOfficerSchema).min(1, "At least one officer is required").max(20),
+    notes: z.string().trim().max(2000).optional().or(z.literal("")),
+    contact: contactSchema,
+  })
+  .merge(billingSchema)
+  .superRefine((data, ctx) => {
+    const seen = new Set<string>();
+    data.shareClasses.forEach((c, i) => {
+      const key = c.className.trim().toLowerCase();
+      if (seen.has(key)) {
+        ctx.addIssue({
+          path: ["shareClasses", i, "className"],
+          code: z.ZodIssueCode.custom,
+          message: "Each class name must be unique",
+        });
+      }
+      seen.add(key);
+    });
+    data.shareholders.forEach((s, i) => {
+      if (s.shareClass && !seen.has(s.shareClass.trim().toLowerCase())) {
+        ctx.addIssue({
+          path: ["shareholders", i, "shareClass"],
+          code: z.ZodIssueCode.custom,
+          message: "Must match one of the share classes entered above",
+        });
+      }
+    });
+  });
+
+export type InitialMinuteBookSubmission = z.infer<typeof initialMinuteBookSchema>;
+
 // ── Discriminated union for the API route ───────────────────────────────────
 
 export const businessUpdateRequestSchema = z.discriminatedUnion("service", [
@@ -391,6 +482,7 @@ export const businessUpdateRequestSchema = z.discriminatedUnion("service", [
   z.object({ service: z.literal("revive-business"), payload: revivalSchema }),
   z.object({ service: z.literal("amalgamation"), payload: amalgamationSchema }),
   z.object({ service: z.literal("continuance"), payload: continuanceSchema }),
+  z.object({ service: z.literal("initial-minute-book"), payload: initialMinuteBookSchema }),
 ]);
 
 export type BusinessUpdateRequest = z.infer<typeof businessUpdateRequestSchema>;

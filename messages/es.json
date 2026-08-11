@@ -685,6 +685,10 @@
     "continuance": {
       "title": "Continuar una Sociedad Entre Jurisdicciones | Korporex",
       "description": "Traslada tu sociedad a una nueva jurisdicción. Korporex prepara y presenta tus estatutos de continuación entre el nivel federal y Ontario."
+    },
+    "initialMinuteBook": {
+      "title": "Libro de Actas Inicial para tu Sociedad | Korporex",
+      "description": "¿Constituiste tu sociedad sin libro de actas? Korporex prepara tus estatutos internos, resoluciones de organización, certificados de acciones y registros en un libro de actas digital completo."
     }
   }
 }

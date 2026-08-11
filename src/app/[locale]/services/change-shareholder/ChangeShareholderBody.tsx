@@ -18,7 +18,7 @@ const SERVICE = AMENDMENT_SERVICES["change-shareholder"];
 const STEP_LABELS = ["Corporation", "Shares", "Contact", "Billing"];
 const STEP_FIELDS: string[][] = [
   ["corporation"],
-  ["changeType", "shareClass", "numberOfShares", "effectiveDate", "fromParty", "toParty"],
+  ["changeType", "shareClass", "numberOfShares", "effectiveDate", "fromParty", "toParty", "notes"],
   ["contact"],
   ["billingName", "billingAddress"],
 ];
@@ -127,7 +127,7 @@ export default function ChangeShareholderPage() {
   async function gotoStep(next: number) {
     const fieldsByStep: Record<number, Array<keyof ChangeShareholderSubmission | string>> = {
       1: ["corporation"],
-      2: ["changeType", "shareClass", "numberOfShares", "effectiveDate", "fromParty", "toParty"],
+      2: ["changeType", "shareClass", "numberOfShares", "effectiveDate", "fromParty", "toParty", "notes"],
       3: ["contact"],
     };
     const fields = fieldsByStep[step];

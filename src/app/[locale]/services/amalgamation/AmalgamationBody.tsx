@@ -23,7 +23,7 @@ const STEP_LABELS = ["Setup", "Name & Office", "Directors", "Contact", "Billing"
 const STEP_FIELDS: string[][] = [
   ["newJurisdiction", "amalgamationType", "predecessors"],
   ["newCorpNameType", "newCorpName", "newLegalEnding", "registeredOffice"],
-  ["directors", "shareStructureNotes", "agreementDate", "specialResolutionsDate", "effectiveDate"],
+  ["directors", "shareStructureNotes", "agreementDate", "specialResolutionsDate", "effectiveDate", "notes"],
   ["contact"],
   ["billingName", "billingAddress"],
 ];
@@ -85,7 +85,7 @@ export default function AmalgamationPage() {
     const fieldsByStep: Record<number, Array<keyof AmalgamationSubmission | string>> = {
       1: ["newJurisdiction", "amalgamationType", "predecessors"],
       2: ["newCorpNameType", "newCorpName", "newLegalEnding", "registeredOffice"],
-      3: ["directors", "shareStructureNotes", "agreementDate", "specialResolutionsDate", "effectiveDate"],
+      3: ["directors", "shareStructureNotes", "agreementDate", "specialResolutionsDate", "effectiveDate", "notes"],
       4: ["contact"],
     };
     const fields = fieldsByStep[step];

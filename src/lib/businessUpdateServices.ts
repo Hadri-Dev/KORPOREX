@@ -7,7 +7,8 @@ export type BusinessUpdateServiceSlug =
   | "dissolve-business"
   | "revive-business"
   | "amalgamation"
-  | "continuance";
+  | "continuance"
+  | "initial-minute-book";
 
 export type BusinessUpdateService = {
   slug: BusinessUpdateServiceSlug;
@@ -63,10 +64,51 @@ export const BUSINESS_UPDATE_SERVICES: Record<BusinessUpdateServiceSlug, Busines
       "File Articles of Continuance to move your corporation from its home jurisdiction to a new one (e.g. continue an Ontario corporation as a CBCA corporation, or vice versa). Requires authorization from both the departing and the receiving registry.",
     path: "/services/continuance",
   },
+  "initial-minute-book": {
+    slug: "initial-minute-book",
+    label: "Initial Minute Book",
+    longLabel: "Initial Corporate Minute Book",
+    price: 399,
+    tagline: "Complete digital minute book for a corporation that incorporated without one.",
+    description:
+      "Both the CBCA and the OBCA require every corporation to maintain corporate records: by-laws, organizational resolutions, share certificates, and the registers of directors, officers, and shareholders. If you incorporated on your own and never organized the corporation, Korporex prepares a complete digital minute book ready for signature.",
+    path: "/services/initial-minute-book",
+  },
 };
 
 export const BUSINESS_UPDATE_SLUGS = Object.keys(BUSINESS_UPDATE_SERVICES) as BusinessUpdateServiceSlug[];
 
 export function isBusinessUpdateSlug(s: string): s is BusinessUpdateServiceSlug {
   return s in BUSINESS_UPDATE_SERVICES;
+}
+
+// ── Initial Minute Book pricing ─────────────────────────────────────────────
+// The $399 base price covers 1 class of shares, 1 shareholder, 1 director,
+// and 1 officer. Each additional item bills at the per-unit rates below.
+// Shared by the wizard's live order summary and the API route's server-side
+// recomputation, so the two can never drift.
+
+export const MINUTE_BOOK_PRICING = {
+  extraShareClass: 75,
+  extraShareholder: 50,
+  extraDirector: 50,
+  extraOfficer: 50,
+} as const;
+
+export type MinuteBookCounts = {
+  shareClasses: number;
+  shareholders: number;
+  directors: number;
+  officers: number;
+};
+
+export function computeMinuteBookSubtotal(counts: MinuteBookCounts): number {
+  const extra = (n: number) => Math.max(0, n - 1);
+  return (
+    BUSINESS_UPDATE_SERVICES["initial-minute-book"].price +
+    extra(counts.shareClasses) * MINUTE_BOOK_PRICING.extraShareClass +
+    extra(counts.shareholders) * MINUTE_BOOK_PRICING.extraShareholder +
+    extra(counts.directors) * MINUTE_BOOK_PRICING.extraDirector +
+    extra(counts.officers) * MINUTE_BOOK_PRICING.extraOfficer
+  );
 }

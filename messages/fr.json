@@ -685,6 +685,10 @@
     "continuance": {
       "title": "Proroger une société entre territoires | Korporex",
       "description": "Transférez votre société vers un nouveau territoire. Korporex prépare et dépose vos statuts de prorogation entre le fédéral et l'Ontario."
+    },
+    "initialMinuteBook": {
+      "title": "Livre de procès-verbaux initial pour votre société | Korporex",
+      "description": "Société constituée sans livre de procès-verbaux? Korporex prépare vos règlements administratifs, résolutions d'organisation, certificats d'actions et registres en un livre numérique complet."
     }
   }
 }
