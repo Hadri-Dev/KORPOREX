@@ -72,7 +72,6 @@ export default function AddressFields({ name, errors, canadaOnly = true }: Props
           onChange={(v) => setValue(`${name}.street`, v, { shouldValidate: true })}
           onAddressSelected={applyParsed}
           countryRestrict={canadaOnly ? ["ca"] : undefined}
-          placeholder="123 Main St"
           className={iCls}
         />
       </Field>

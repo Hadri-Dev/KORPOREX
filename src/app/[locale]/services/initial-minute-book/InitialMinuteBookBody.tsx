@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm, FormProvider, useFieldArray } from "react-hook-form";
+import { useForm, FormProvider, useFieldArray, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Trash2 } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
@@ -33,6 +33,71 @@ const STEP_FIELDS: string[][] = [
 ];
 
 const emptyAddress = { street: "", city: "", region: "", postalCode: "", country: "CA" };
+
+// Standard class names customers can pick from. Labels mirror the incorporation
+// wizard's SHARE_CLASS_OPTIONS so both flows describe the same structures; the
+// Other option keeps arbitrary Articles wording possible.
+const SHARE_CLASS_NAME_OPTIONS = [
+  "Common Shares",
+  "Class A Common Shares",
+  "Class B Common Shares (non-voting)",
+  "Class C Preferred Shares",
+  "Class D Special Shares",
+  "Class E Redeemable Preferred Shares",
+];
+const OTHER_CLASS = "__other__";
+
+function ShareClassNameField({ idx, error }: { idx: number; error?: string }) {
+  const { register, setValue, watch } = useFormContext<InitialMinuteBookSubmission>();
+  const value = watch(`shareClasses.${idx}.className`) ?? "";
+  const [custom, setCustom] = useState(
+    () => value !== "" && !SHARE_CLASS_NAME_OPTIONS.includes(value)
+  );
+  const selectValue = custom ? OTHER_CLASS : SHARE_CLASS_NAME_OPTIONS.includes(value) ? value : "";
+  return (
+    <div className="space-y-4">
+      <Field
+        label="Class name *"
+        error={custom ? undefined : error}
+        hint={custom ? undefined : "Pick the class as it appears in your Articles of Incorporation."}
+      >
+        <select
+          value={selectValue}
+          onChange={(e) => {
+            if (e.target.value === OTHER_CLASS) {
+              setCustom(true);
+              setValue(`shareClasses.${idx}.className`, "", { shouldValidate: false });
+            } else {
+              setCustom(false);
+              setValue(`shareClasses.${idx}.className`, e.target.value, { shouldValidate: true });
+            }
+          }}
+          className={sCls}
+        >
+          <option value="">Select…</option>
+          {SHARE_CLASS_NAME_OPTIONS.map((n) => (
+            <option key={n} value={n}>{n}</option>
+          ))}
+          <option value={OTHER_CLASS}>Other (type the exact class name)</option>
+        </select>
+      </Field>
+      {custom && (
+        <Field
+          label="Exact class name *"
+          error={error}
+          hint='As written in your Articles, e.g. "Class F Special Shares".'
+        >
+          <input
+            type="text"
+            {...register(`shareClasses.${idx}.className`)}
+            className={iCls}
+            placeholder="Class F Special Shares"
+          />
+        </Field>
+      )}
+    </div>
+  );
+}
 
 const emptyShareClass: InitialMinuteBookSubmission["shareClasses"][number] = {
   className: "",
@@ -243,9 +308,7 @@ export default function InitialMinuteBookPage() {
                           )}
                         </div>
                         <div className="space-y-4">
-                          <Field label="Class name *" error={e?.className?.message} hint='As written in the Articles, e.g. "Class A Common".'>
-                            <input type="text" {...register(`shareClasses.${idx}.className`)} className={iCls} placeholder="Class A Common" />
-                          </Field>
+                          <ShareClassNameField idx={idx} error={e?.className?.message} />
                           <Field label="Rights and restrictions" error={e?.rightsNotes?.message} hint="Optional. Voting, dividends, redemption. We transcribe the definitive text from your Articles.">
                             <textarea {...register(`shareClasses.${idx}.rightsNotes`)} rows={2} className={`${iCls} resize-none`} />
                           </Field>
