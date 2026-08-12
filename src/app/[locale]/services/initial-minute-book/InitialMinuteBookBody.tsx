@@ -233,7 +233,7 @@ export default function InitialMinuteBookPage() {
           <p className="text-lg text-gray-600 leading-relaxed">{SERVICE.description}</p>
           <p className="mt-4 text-sm text-gray-500">
             <span className="font-semibold text-navy-900">${SERVICE.price} CAD</span> + applicable tax. Includes 1 class of
-            shares, 1 shareholder, 1 director, and 1 officer. Delivered within 2 business days.
+            shares, 1 shareholder, 1 director, and 1 officer. Delivered within 3 to 5 business days.
           </p>
           <p className="mt-1 text-xs text-gray-500">
             Each additional class of shares ${MINUTE_BOOK_PRICING.extraShareClass}; each additional shareholder, director,

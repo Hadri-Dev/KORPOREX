@@ -1,6 +1,9 @@
 # Progress
 
 ## Log
+### 2026-08-11 (later 3) - Minute-book hero copy: delivery window now "3 to 5 business days"
+- Owner-requested change from "2 business days" in [InitialMinuteBookBody.tsx](src/app/[locale]/services/initial-minute-book/InitialMinuteBookBody.tsx). Typecheck + lint clean.
+
 ### 2026-08-11 (later 2) - Fixed $0-tax checkout: getTaxRate now normalizes free-text billing regions
 - **Bug (owner-reported via a live $399 minute-book test that reached Stripe with no HST line)**: `getTaxRate` in [pricing.ts](src/lib/pricing.ts) required exactly `country === "CA"` and an uppercase 2-letter province code. Billing addresses on every service wizard use `AddressFields` with `canadaOnly={false}`, where province and country are free text, so "Ontario"/"Canada" (or lowercase codes, or "Québec") silently produced a 0% tax rate. Affected every paid flow that computes tax off the billing address (all service wizards + incorporation), whenever the customer typed the address instead of picking a Google suggestion.
 - **Fix 1 (money path, all services at once)**: `getTaxRate` now normalizes country ("CA"/"CAN"/"Canada", any case) and region (trim, uppercase, strip accents and periods, alias map: full province names + common shorts like ONT/QUE/PQ/PEI/NFLD/NWT). New exports `normalizeCaRegion` + `isCanadaCountry`. Verified by compiling pricing.ts standalone and running 15 cases (incl. "Canada"/"Ontario" → 0.13, "Québec" → 0.14975, US → 0); all pass. Unrecognized regions still yield 0 (no invented tax).
