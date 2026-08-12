@@ -153,9 +153,52 @@ export const CA_TAX_RATES: Record<string, number> = {
   QC: 0.14975,
 };
 
+// Free-text billing forms produce values like "Ontario", "ont.", "Québec", or
+// "Canada". Tax must never silently drop to zero over formatting, so both the
+// country and the region are normalized before the rate lookup.
+const CA_REGION_ALIASES: Record<string, string> = {
+  ONTARIO: "ON",
+  ONT: "ON",
+  QUEBEC: "QC",
+  QUE: "QC",
+  PQ: "QC",
+  "BRITISH COLUMBIA": "BC",
+  ALBERTA: "AB",
+  ALTA: "AB",
+  MANITOBA: "MB",
+  MAN: "MB",
+  SASKATCHEWAN: "SK",
+  SASK: "SK",
+  "NOVA SCOTIA": "NS",
+  "NEW BRUNSWICK": "NB",
+  "PRINCE EDWARD ISLAND": "PE",
+  PEI: "PE",
+  "NEWFOUNDLAND AND LABRADOR": "NL",
+  NEWFOUNDLAND: "NL",
+  NFLD: "NL",
+  "NORTHWEST TERRITORIES": "NT",
+  NWT: "NT",
+  YUKON: "YT",
+  NUNAVUT: "NU",
+};
+
+export function normalizeCaRegion(region: string): string {
+  const r = region
+    .trim()
+    .toUpperCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\./g, "");
+  return CA_REGION_ALIASES[r] ?? r;
+}
+
+export function isCanadaCountry(country: string): boolean {
+  return /^(ca|can|canada)$/i.test(country.trim());
+}
+
 export function getTaxRate(country: string, region: string): number {
-  if (country !== "CA") return 0;
-  return CA_TAX_RATES[region] ?? 0;
+  if (!isCanadaCountry(country)) return 0;
+  return CA_TAX_RATES[normalizeCaRegion(region)] ?? 0;
 }
 
 export const JURISDICTION_LABELS: Record<Jurisdiction, string> = {

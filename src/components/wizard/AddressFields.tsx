@@ -2,6 +2,7 @@
 
 import { useFormContext } from "react-hook-form";
 import AddressAutocomplete, { type ParsedAddress } from "@/components/AddressAutocomplete";
+import { isCanadaCountry } from "@/lib/pricing";
 import { Field, iCls, sCls } from "./WizardUI";
 
 // Canadian provinces dropdown — used for both billing and business addresses
@@ -52,6 +53,12 @@ function msg(e: FieldErr): string | undefined {
 export default function AddressFields({ name, errors, canadaOnly = true }: Props) {
   const { register, setValue, watch } = useFormContext();
   const streetValue: string = watch(`${name}.street`) ?? "";
+  const countryValue: string = watch(`${name}.country`) ?? "";
+  // Province dropdown whenever the address is Canadian, including in
+  // international mode once the customer's country reads as Canada. Free-text
+  // provinces ("Ontario") previously slipped past the tax-rate lookup.
+  const canadianRegion = canadaOnly || isCanadaCountry(countryValue);
+  const countryReg = register(`${name}.country`);
   const e: Errors = errors ?? {};
 
   function applyParsed(parsed: ParsedAddress) {
@@ -79,8 +86,8 @@ export default function AddressFields({ name, errors, canadaOnly = true }: Props
         <Field label="City *" error={msg(e.city)}>
           <input type="text" {...register(`${name}.city`)} className={iCls} placeholder="Toronto" />
         </Field>
-        <Field label="Province *" error={msg(e.region)}>
-          {canadaOnly ? (
+        <Field label={canadianRegion ? "Province *" : "Province / State *"} error={msg(e.region)}>
+          {canadianRegion ? (
             <select {...register(`${name}.region`)} className={sCls}>
               <option value="">Select…</option>
               {CA_PROVINCES.map((p) => (
@@ -111,7 +118,16 @@ export default function AddressFields({ name, errors, canadaOnly = true }: Props
         <Field label="Country *" error={msg(e.country)}>
           <input
             type="text"
-            {...register(`${name}.country`)}
+            {...countryReg}
+            onChange={(ev) => {
+              countryReg.onChange(ev);
+              // Region input switches between province dropdown and free text
+              // when the country's Canada-ness flips; clear the stale value so
+              // the customer re-picks in the new mode.
+              if (isCanadaCountry(ev.target.value) !== canadianRegion) {
+                setValue(`${name}.region`, "", { shouldValidate: false });
+              }
+            }}
             className={iCls}
             defaultValue={canadaOnly ? "CA" : ""}
             readOnly={canadaOnly}
