@@ -180,6 +180,15 @@ const CA_REGION_ALIASES: Record<string, string> = {
   NWT: "NT",
   YUKON: "YT",
   NUNAVUT: "NU",
+  // French province names (bilingual site). Keys are the post-normalization
+  // forms: accents stripped, hyphens collapsed to single spaces.
+  "COLOMBIE BRITANNIQUE": "BC",
+  "NOUVELLE ECOSSE": "NS",
+  "NOUVEAU BRUNSWICK": "NB",
+  "ILE DU PRINCE EDOUARD": "PE",
+  "TERRE NEUVE ET LABRADOR": "NL",
+  "TERRE NEUVE": "NL",
+  "TERRITOIRES DU NORD OUEST": "NT",
 };
 
 export function normalizeCaRegion(region: string): string {
@@ -188,12 +197,19 @@ export function normalizeCaRegion(region: string): string {
     .toUpperCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\./g, "");
+    .replace(/\./g, "")
+    .replace(/[-\s]+/g, " ");
   return CA_REGION_ALIASES[r] ?? r;
 }
 
 export function isCanadaCountry(country: string): boolean {
-  return /^(ca|can|canada)$/i.test(country.trim());
+  const c = country
+    .trim()
+    .toUpperCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[.\s]/g, "");
+  return c === "CA" || c === "CAN" || c === "CANADA";
 }
 
 export function getTaxRate(country: string, region: string): number {

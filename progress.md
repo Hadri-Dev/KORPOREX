@@ -1,6 +1,12 @@
 # Progress
 
 ## Log
+### 2026-08-11 (later 4) - Tax audit of all 8 checkout flows + final hardening
+- 8-agent audit verdict: every checkout flow (incorporate, legal-consult, nuans, registrations, amendments, compliance, change-name, business-updates) computes tax server-side and adds the Stripe tax line. No missing-HST flow.
+- Hardening shipped in [pricing.ts](src/lib/pricing.ts): isCanadaCountry now strips periods/accents/whitespace ("Can." works, "Cambodia" still excluded); normalizeCaRegion collapses hyphens and maps French province names (Colombie-Britannique etc.). Verified by compiling pricing.ts standalone: 15 executed cases pass.
+- Remaining LOW-sev audit note (not fixed, direct-API-only since the UI forces a province dropdown for Canada): server accepts country=Canada with an unrecognizable region as silent 0% tax instead of rejecting; no Stripe automatic_tax fallback. Consider a 400 guard in the API routes next session.
+- Typecheck + lint clean. Session ended at owner's request (usage limit).
+
 ### 2026-08-11 (later 3) - Minute-book hero copy: delivery window now "3 to 5 business days"
 - Owner-requested change from "2 business days" in [InitialMinuteBookBody.tsx](src/app/[locale]/services/initial-minute-book/InitialMinuteBookBody.tsx). Typecheck + lint clean.
 
