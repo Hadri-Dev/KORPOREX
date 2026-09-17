@@ -289,7 +289,7 @@ const addressSchema = z.object({
 });
 
 // `isCanadianResident` is a CBCA concept and is only ever shown on the federal
-// flow — Ontario repealed its resident-director requirement in 2021, so Step 4
+// flow, since Ontario repealed its resident-director requirement in 2021. Step 4
 // renders no control for it there. Validating it on Ontario would therefore
 // reject the form with an error the customer has no way to see or fix, which
 // is exactly what happened to anyone who started on Federal, entered a
@@ -480,7 +480,7 @@ function BackBtn({ onClick }: { onClick: () => void }) {
 // Shown when a step refuses to advance. Every field that can fail renders its
 // own inline error, but a schema/UI mismatch can hide one (see the
 // isCanadianResident note above), and a silent dead Continue button is the
-// worst possible outcome — the customer has no idea what to fix and leaves.
+// worst possible outcome: the customer has no idea what to fix and leaves.
 // This is the backstop: it always appears, and it scrolls the first inline
 // error into view.
 function InvalidNotice({ show }: { show: boolean }) {
