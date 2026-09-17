@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useForm, useFieldArray, FormProvider, useFormContext } from "react-hook-form";
+import { useForm, useFieldArray, FormProvider, useFormContext, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link } from "@/i18n/navigation";
@@ -81,7 +81,8 @@ interface Director {
   firstName: string; lastName: string; email: string;
   dateOfBirth: string;
   citizenshipStatus: CitizenshipStatus;
-  isCanadianResident: ResidentChoice;
+  /** "" on Ontario, where the CBCA residency question is not asked. */
+  isCanadianResident: ResidentChoice | "";
   taxResidencyCountry: string;
   address: Address;
 }
@@ -287,18 +288,29 @@ const addressSchema = z.object({
   country: z.string().min(2, "Required"),
 });
 
-const directorSchema = z.object({
-  firstName: z.string().min(1, "Required"),
-  lastName: z.string().min(1, "Required"),
-  email: z.string().email("Valid email required"),
-  dateOfBirth: z.string().min(1, "Required"),
-  citizenshipStatus: z.enum(["citizen", "permanent_resident", "other"], {
-    message: "Select citizenship status",
-  }),
-  isCanadianResident: z.enum(["yes", "no"], { message: "Required" }),
-  taxResidencyCountry: z.string().min(2, "Select a country"),
-  address: addressSchema,
-});
+// `isCanadianResident` is a CBCA concept and is only ever shown on the federal
+// flow — Ontario repealed its resident-director requirement in 2021, so Step 4
+// renders no control for it there. Validating it on Ontario would therefore
+// reject the form with an error the customer has no way to see or fix, which
+// is exactly what happened to anyone who started on Federal, entered a
+// director, then switched to Ontario: the unset value travelled with the
+// director record and Continue silently did nothing. So the field is required
+// only where it is visible.
+const makeDirectorSchema = (isFederal: boolean) =>
+  z.object({
+    firstName: z.string().min(1, "Required"),
+    lastName: z.string().min(1, "Required"),
+    email: z.string().email("Valid email required"),
+    dateOfBirth: z.string().min(1, "Required"),
+    citizenshipStatus: z.enum(["citizen", "permanent_resident", "other"], {
+      message: "Select citizenship status",
+    }),
+    isCanadianResident: isFederal
+      ? z.enum(["yes", "no"], { message: "Required" })
+      : z.enum(["yes", "no"]).or(z.literal("")),
+    taxResidencyCountry: z.string().min(2, "Select a country"),
+    address: addressSchema,
+  });
 
 const shareholderSchema = z.object({
   firstName: z.string().min(1, "Required"),
@@ -348,13 +360,13 @@ const s3 = z.object({
 const countField = (msg: string) =>
   z.string().min(1, "Required").refine((v) => /^\d+$/.test(v) && Number(v) >= 1, msg);
 
-const s4 = z
+const makeS4 = (isFederal: boolean) => z
   .object({
     directorCountType: directorCountTypeSchema,
     directorCountFixed: z.string(),
     directorCountMin: z.string(),
     directorCountMax: z.string(),
-    directors: z.array(directorSchema).min(1),
+    directors: z.array(makeDirectorSchema(isFederal)).min(1),
   })
   .superRefine((v, ctx) => {
     const listed = v.directors.length;
@@ -463,6 +475,30 @@ function BackBtn({ onClick }: { onClick: () => void }) {
       <ChevronLeft size={16} strokeWidth={2.5} /> Back
     </button>
   );
+}
+
+// Shown when a step refuses to advance. Every field that can fail renders its
+// own inline error, but a schema/UI mismatch can hide one (see the
+// isCanadianResident note above), and a silent dead Continue button is the
+// worst possible outcome — the customer has no idea what to fix and leaves.
+// This is the backstop: it always appears, and it scrolls the first inline
+// error into view.
+function InvalidNotice({ show }: { show: boolean }) {
+  if (!show) return null;
+  return (
+    <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2.5" role="alert">
+      Some required information is missing or needs correcting. Please review the fields marked in
+      red above. If everything looks filled in, email us at{" "}
+      <a href="mailto:contact@korporex.ca" className="underline underline-offset-2">contact@korporex.ca</a>{" "}
+      and we&rsquo;ll finish the order for you.
+    </p>
+  );
+}
+
+function scrollToFirstError() {
+  if (typeof document === "undefined") return;
+  const el = document.querySelector('[role="alert"], .text-red-500, .text-red-600');
+  el?.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function NextBtn({ label = "Continue", disabled = false }: { label?: string; disabled?: boolean }) {
@@ -846,6 +882,7 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack, snapshot }: {
   });
   const { register, handleSubmit, watch, setValue, getValues, formState: { errors } } = form;
   useEffect(() => { snapshot.current = () => getValues(); return () => { snapshot.current = null; }; }, [snapshot, getValues]);
+  const [invalid, setInvalid] = useState(false);
   const corpNameType = watch("corpNameType");
   const businessName = watch("businessName");
   const nameConfirmation = watch("nameConfirmation");
@@ -868,7 +905,13 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack, snapshot }: {
         <BackBtn onClick={onBack} />
         <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Business Details</h2>
         <p className="text-gray-500 text-sm mb-8">Tell us about the business you&apos;re incorporating.</p>
-        <form onSubmit={handleSubmit(onNext)} className="space-y-5">
+        <form
+          onSubmit={handleSubmit(
+            (d) => { setInvalid(false); onNext(d); },
+            () => { setInvalid(true); scrollToFirstError(); }
+          )}
+          className="space-y-5"
+        >
           <CorporationNameSection
             value={{
               corpNameType,
@@ -978,6 +1021,7 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack, snapshot }: {
             </Field>
           </div>
 
+          <InvalidNotice show={invalid} />
           <NextBtn />
         </form>
       </div>
@@ -987,7 +1031,10 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack, snapshot }: {
 
 // ─── Step 4 — Directors ───────────────────────────────────────────────────────
 
-type S4 = z.infer<typeof s4>;
+// The Ontario variant is the permissive one (it allows "" for the
+// federal-only resident-Canadian field), so it is what the form type is
+// derived from. Step 4 picks the matching schema per jurisdiction at runtime.
+type S4 = z.infer<ReturnType<typeof makeS4>>;
 const emptyAddress: Address = { street: "", city: "", region: "", postalCode: "", country: "CA" };
 const emptyDir: Director = {
   firstName: "", lastName: "", email: "",
@@ -996,26 +1043,29 @@ const emptyDir: Director = {
   // Zod rejects it at submit time so the customer is forced to pick.
   // Same pattern used for `legalEnding` on Step 3.
   citizenshipStatus: "" as CitizenshipStatus,
-  // Unset by default. For federal, customer must pick a radio option (Zod rejects "").
-  // For non-federal, Step4 reseeds this to "no" so the existing checkbox UI
-  // (unchecked = no) passes validation without forced interaction.
-  isCanadianResident: "" as ResidentChoice,
+  // Unset by default and left that way on Ontario, where no control for it is
+  // rendered and the schema does not require it. On federal the customer has
+  // to pick a radio option (Zod rejects "").
+  isCanadianResident: "",
   taxResidencyCountry: "",
   address: { ...emptyAddress },
 };
 
 function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Partial<S4>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S4) => void; onBack: () => void; snapshot: SnapshotRef }) {
   const isFederal = jurisdiction === "federal";
-  // Federal customers must consciously pick "yes" or "no" — seed unset so the
-  // radio group renders with neither option selected. Non-federal preserves
-  // the legacy checkbox-as-boolean UX, so seed "no" (= unchecked).
-  const seedDir: Director = isFederal ? emptyDir : { ...emptyDir, isCanadianResident: "no" };
+  // Federal customers must consciously pick "yes" or "no", so the radio group
+  // renders with neither option selected. Ontario shows no control at all and
+  // the schema leaves the field optional there, so the same unset seed works
+  // for both.
+  const seedDir: Director = emptyDir;
+  // Required only on federal, where the radio group is actually on screen.
+  const schema = useMemo(() => makeS4(isFederal), [isFederal]);
   // Basic is single-director per the package feature list. Clamp carryover
   // state if the customer downgraded from Standard/Premium mid-flow.
   const basicLocked = pkg === "basic";
   const initialDirs = def.directors?.length ? def.directors : [seedDir];
   const form = useForm<S4>({
-    resolver: zodResolver(s4),
+    resolver: zodResolver(schema) as Resolver<S4>,
     defaultValues: {
       // Basic is a single-director package, so the Articles always fix the
       // count at 1 and the picker below renders read-only.
@@ -1037,6 +1087,7 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
 
   useEffect(() => { snapshot.current = () => getValues(); return () => { snapshot.current = null; }; }, [snapshot, getValues]);
 
+  const [invalid, setInvalid] = useState(false);
   const countType = watch("directorCountType");
   const fixedCount = Number(watch("directorCountFixed"));
   const maxCount = Number(watch("directorCountMax"));
@@ -1053,7 +1104,13 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
         <BackBtn onClick={onBack} />
         <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Directors</h2>
         <p className="text-gray-500 text-sm mb-8">At least one director is required. Directors must be 18 or older. International directors are supported; residency requirements vary by jurisdiction.</p>
-        <form onSubmit={handleSubmit(onNext)} className="space-y-6">
+        <form
+          onSubmit={handleSubmit(
+            (d) => { setInvalid(false); onNext(d); },
+            () => { setInvalid(true); scrollToFirstError(); }
+          )}
+          className="space-y-6"
+        >
           {/* Number of directors declared in the Articles. Either a fixed
               count or a minimum/maximum range; the director records below
               must match whichever the customer chooses. */}
@@ -1231,6 +1288,7 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
               {countMismatch}
             </p>
           )}
+          <InvalidNotice show={invalid && !countMismatch} />
           <NextBtn />
         </form>
       </div>
@@ -1266,6 +1324,8 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
   const { fields, append, remove } = useFieldArray({ control, name: "shareholders" });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const se = (errors.shareholders as any) ?? [];
+
+  const [invalid, setInvalid] = useState(false);
 
   useEffect(() => { snapshot.current = () => getValues(); return () => { snapshot.current = null; }; }, [snapshot, getValues]);
 
@@ -1303,10 +1363,14 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
         <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Shareholders</h2>
         <p className="text-gray-500 text-sm mb-8">List all initial shareholders of the corporation. International shareholders are supported.</p>
         <form
-          onSubmit={handleSubmit((d) => {
-            if (noClassesSelected) return;
-            onNext(d);
-          })}
+          onSubmit={handleSubmit(
+            (d) => {
+              if (noClassesSelected) { setInvalid(true); scrollToFirstError(); return; }
+              setInvalid(false);
+              onNext(d);
+            },
+            () => { setInvalid(true); scrollToFirstError(); }
+          )}
           className="space-y-6"
         >
           {useStructuredPicker && (
@@ -1453,6 +1517,7 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
               <Plus size={14} /> Add Another Shareholder
             </button>
           )}
+          <InvalidNotice show={invalid && !noClassesSelected} />
           <NextBtn />
         </form>
       </div>
@@ -1489,6 +1554,8 @@ function Step6({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const oe = (errors.officers as any) ?? [];
 
+  const [invalid, setInvalid] = useState(false);
+
   useEffect(() => { snapshot.current = () => getValues(); return () => { snapshot.current = null; }; }, [snapshot, getValues]);
 
   return (
@@ -1497,7 +1564,13 @@ function Step6({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
         <BackBtn onClick={onBack} />
         <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Officers</h2>
         <p className="text-gray-500 text-sm mb-8">List the corporation&rsquo;s officers and their positions. At least one officer is required.</p>
-        <form onSubmit={handleSubmit(onNext)} className="space-y-6">
+        <form
+          onSubmit={handleSubmit(
+            (d) => { setInvalid(false); onNext(d); },
+            () => { setInvalid(true); scrollToFirstError(); }
+          )}
+          className="space-y-6"
+        >
           {fields.map((field, i) => (
             <div key={field.id} className="border border-gray-200 rounded-lg p-6">
               <div className="flex items-center justify-between mb-5">
@@ -1591,6 +1664,7 @@ function Step6({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
             </div>
           </div>
 
+          <InvalidNotice show={invalid} />
           <NextBtn />
         </form>
       </div>
@@ -1627,6 +1701,7 @@ function Step7({ jurisdiction, def, onNext, onBack, snapshot }: {
   });
   const { handleSubmit, watch, setValue, getValues } = form;
   useEffect(() => { snapshot.current = () => getValues(); return () => { snapshot.current = null; }; }, [snapshot, getValues]);
+  const [invalid, setInvalid] = useState(false);
   const selectedAddon = watch("regOfficeAddon");
 
   // When a Korporex add-on is selected, mirror that location's address into the
@@ -1659,7 +1734,13 @@ function Step7({ jurisdiction, def, onNext, onBack, snapshot }: {
         <BackBtn onClick={onBack} />
         <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Registered Office</h2>
         <p className="text-gray-500 text-sm mb-8">Must be a physical address in {jurisLabel}, not a P.O. Box.</p>
-        <form onSubmit={handleSubmit(onNext)} className="space-y-5">
+        <form
+          onSubmit={handleSubmit(
+            (d) => { setInvalid(false); onNext(d); },
+            () => { setInvalid(true); scrollToFirstError(); }
+          )}
+          className="space-y-5"
+        >
           {addonEligible && (
             <div className="space-y-3">
               <p className="text-xs font-semibold tracking-[0.1em] uppercase text-gray-500">
@@ -1729,6 +1810,7 @@ function Step7({ jurisdiction, def, onNext, onBack, snapshot }: {
             </div>
           )}
 
+          <InvalidNotice show={invalid} />
           <NextBtn label="Continue to Review" />
         </form>
       </div>
@@ -2062,6 +2144,20 @@ function IncorporateWizard() {
 
   function patch(p: Partial<WizardData>) { setData((prev) => ({ ...prev, ...p })); }
 
+  // Changing jurisdiction changes which questions Step 4 asks. The CBCA
+  // resident-Canadian declaration is federal-only, so any answer carried over
+  // from the other jurisdiction is discarded rather than silently standing in
+  // for a declaration the customer never made.
+  function setJurisdiction(jurisdiction: Jurisdiction) {
+    setData((prev) => ({
+      ...prev,
+      jurisdiction,
+      directors: prev.jurisdiction === jurisdiction
+        ? prev.directors
+        : prev.directors.map((d) => ({ ...d, isCanadianResident: "" as const })),
+    }));
+  }
+
   function go(next: number) {
     setStep(next);
     setMaxReached((prev) => Math.max(prev, next));
@@ -2118,7 +2214,7 @@ function IncorporateWizard() {
         </div>
       )}
       <div className="pb-20">
-        {step === 1 && <Step1 value={data.jurisdiction} onChange={(jurisdiction) => patch({ jurisdiction })} onNext={() => go(2)} />}
+        {step === 1 && <Step1 value={data.jurisdiction} onChange={setJurisdiction} onNext={() => go(2)} />}
         {step === 2 && <Step2 jurisdiction={data.jurisdiction} value={data.pkg} onChange={(pkg) => patch({ pkg })} onNext={() => go(3)} onBack={() => setStep(1)} />}
         {step === 3 && <Step3
           snapshot={snapshot}

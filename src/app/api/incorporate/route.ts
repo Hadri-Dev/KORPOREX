@@ -36,13 +36,18 @@ const addressSchema = z.object({
   country: z.string().trim().min(2).max(60),
 });
 
+// `isCanadianResident` is the CBCA resident-Canadian declaration. It is only
+// asked on the federal flow (Ontario repealed its resident-director
+// requirement in 2021 and the wizard renders no control for it there), so ""
+// is accepted here and the federal requirement is enforced in the refinement
+// on the schema object below.
 const directorSchema = z.object({
   firstName: z.string().trim().min(1).max(100),
   lastName: z.string().trim().min(1).max(100),
   email: z.string().trim().email().max(320),
   dateOfBirth: z.string().trim().min(1).max(20),
   citizenshipStatus: z.enum(["citizen", "permanent_resident", "other"]),
-  isCanadianResident: z.enum(["yes", "no"]),
+  isCanadianResident: z.enum(["yes", "no"]).or(z.literal("")),
   taxResidencyCountry: z.string().trim().min(2).max(10),
   address: addressSchema,
 });
@@ -108,8 +113,19 @@ const schema = z.object({
   billingName: z.string().trim().min(1).max(200),
   billingAddress: addressSchema,
 }).superRefine((v, ctx) => {
-  // Mirror of the client-side rule, re-checked here because the client is not
+  // Mirror of the client-side rules, re-checked here because the client is not
   // a trust boundary.
+  if (v.jurisdiction === "federal") {
+    v.directors.forEach((d, i) => {
+      if (d.isCanadianResident !== "yes" && d.isCanadianResident !== "no") {
+        ctx.addIssue({
+          code: "custom",
+          path: ["directors", i, "isCanadianResident"],
+          message: "Resident Canadian declaration is required on federal incorporations.",
+        });
+      }
+    });
+  }
   const listed = v.directors.length;
   if (v.directorCountType === "fixed") {
     const fixed = Number(v.directorCountFixed);
@@ -446,7 +462,7 @@ function buildHtmlBody(
         "Date of birth": x.dateOfBirth,
         Citizenship: citizenshipLabel,
         ...(showResidencyRow
-          ? { "CBCA resident Canadian": x.isCanadianResident === "yes" ? "Yes" : "No" }
+          ? { "CBCA resident Canadian": x.isCanadianResident === "yes" ? "Yes" : x.isCanadianResident === "no" ? "No" : "Not stated" }
           : {}),
         "Tax residency": taxRes,
         Address: formatAddress(x.address),
