@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import { CheckCircle, ArrowRight, Mail, Clock, FileText, Building2 } from "lucide-react";
 import { stripe } from "@/lib/stripe";
+import ClearDraft from "./ClearDraft";
 
 // Render on demand so we can verify the Stripe session when the user arrives
 // from a successful checkout redirect.
@@ -69,6 +70,8 @@ export default async function ConfirmationPage({ searchParams }: PageProps) {
 
   return (
     <>
+      {/* Order submitted — drop the browser-side wizard draft. */}
+      <ClearDraft />
       <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
         <div className="max-w-3xl mx-auto text-center">
           <div className="flex justify-center mb-6">

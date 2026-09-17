@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useForm, useFieldArray, FormProvider, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,6 +32,19 @@ import {
   type OfficerPosition,
 } from "@/lib/officerPositions";
 import { ALL_COUNTRIES } from "@/lib/countries";
+import {
+  SIGNING_AUTHORITY_OPTIONS,
+  BANKING_AUTHORITY_OPTIONS,
+  signingAuthoritySchema,
+  bankingAuthoritySchema,
+  directorCountTypeSchema,
+  signingAuthorityLabel,
+  bankingAuthorityLabel,
+  type SigningAuthority,
+  type BankingAuthority,
+  type DirectorCountType,
+} from "@/lib/incorporateOptions";
+import { loadDraft, saveDraft, clearDraft } from "@/lib/incorporateDraft";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -76,6 +89,8 @@ interface Shareholder {
   firstName: string; lastName: string;
   shareClass: string; numberOfShares: string;
   pricePerShare: string;
+  /** ISO country code of the shareholder's citizenship (see ALL_COUNTRIES). */
+  citizenship: string;
   address: Address;
 }
 interface Officer {
@@ -91,22 +106,41 @@ interface WizardData {
   jurisdiction: Jurisdiction; pkg: Pkg;
   corpNameType: CorpNameType;
   businessName: string;
+  /** Retyped confirmation of businessName, kept so Step 3 round-trips when
+      the customer jumps away and back via the progress bar. */
+  nameConfirmation: string;
   legalEnding: LegalEnding | "";
   officialEmail: string;
   naicsCode: string;
   businessActivity: string;
   fiscalYearEndMonth: string;
   fiscalYearEndDay: string;
+  /** Whether the Articles fix the number of directors or set a min/max range. */
+  directorCountType: DirectorCountType;
+  /** Used when directorCountType === "fixed". Numeric string. */
+  directorCountFixed: string;
+  /** Used when directorCountType === "range". Numeric strings. */
+  directorCountMin: string;
+  directorCountMax: string;
   directors: Director[];
   shareholders: Shareholder[];
   /** Standard package only: codes ("A" | "B" | "C") of share classes the customer chose to include in the Articles. Empty for Basic and Premium. */
   shareClasses: string[];
   officers: Officer[];
+  /** Who may sign contracts and instruments for the corporation. */
+  signingAuthority: SigningAuthority | "";
+  /** Who may sign cheques and operate the corporation's bank accounts. */
+  bankingAuthority: BankingAuthority | "";
   regOffice: Address;
   regOfficeAddon: RegOfficeAddon;
   billingName: string;
   billingAddress: Address;
 }
+
+// Each step form publishes a getter for its current (possibly incomplete)
+// values here, so the wizard can capture what the customer typed before they
+// jump to another step via the progress bar. Set on mount, cleared on unmount.
+type SnapshotRef = { current: (() => Record<string, unknown>) | null };
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -278,6 +312,7 @@ const shareholderSchema = z.object({
     (v) => !isNaN(Number(v)) && Number(v) > 0,
     "Must be a positive amount"
   ),
+  citizenship: z.string().min(2, "Select a country"),
   address: addressSchema,
 });
 
@@ -307,12 +342,88 @@ const s3 = z.object({
   { message: "Names don't match. Please retype it exactly as above.", path: ["nameConfirmation"] }
 );
 
-const s4 = z.object({ directors: z.array(directorSchema).min(1) });
+// Step 4 carries both the director-count structure declared in the Articles
+// and the individual director records. The two must agree: a fixed count of 3
+// needs exactly 3 directors listed; a 3-5 range needs 3, 4 or 5.
+const countField = (msg: string) =>
+  z.string().min(1, "Required").refine((v) => /^\d+$/.test(v) && Number(v) >= 1, msg);
+
+const s4 = z
+  .object({
+    directorCountType: directorCountTypeSchema,
+    directorCountFixed: z.string(),
+    directorCountMin: z.string(),
+    directorCountMax: z.string(),
+    directors: z.array(directorSchema).min(1),
+  })
+  .superRefine((v, ctx) => {
+    const listed = v.directors.length;
+    if (v.directorCountType === "fixed") {
+      const parsed = countField("Enter a whole number of 1 or more").safeParse(v.directorCountFixed);
+      if (!parsed.success) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["directorCountFixed"],
+          message: parsed.error.issues[0]?.message ?? "Required",
+        });
+        return;
+      }
+      const fixed = Number(v.directorCountFixed);
+      if (listed !== fixed) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["directors"],
+          message: `You set a fixed number of ${fixed} director${fixed === 1 ? "" : "s"}, so please provide information for exactly ${fixed}. You have ${listed}.`,
+        });
+      }
+      return;
+    }
+
+    const minParsed = countField("Enter a whole number of 1 or more").safeParse(v.directorCountMin);
+    const maxParsed = countField("Enter a whole number of 1 or more").safeParse(v.directorCountMax);
+    if (!minParsed.success) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["directorCountMin"],
+        message: minParsed.error.issues[0]?.message ?? "Required",
+      });
+    }
+    if (!maxParsed.success) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["directorCountMax"],
+        message: maxParsed.error.issues[0]?.message ?? "Required",
+      });
+    }
+    if (!minParsed.success || !maxParsed.success) return;
+
+    const min = Number(v.directorCountMin);
+    const max = Number(v.directorCountMax);
+    if (max < min) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["directorCountMax"],
+        message: "Maximum must be the same as or greater than the minimum",
+      });
+      return;
+    }
+    if (listed < min || listed > max) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["directors"],
+        message: `You set a minimum of ${min} and a maximum of ${max}, so please provide information for between ${min} and ${max} directors. You have ${listed}.`,
+      });
+    }
+  });
 const s5 = z.object({
   shareholders: z.array(shareholderSchema).min(1),
   shareClasses: z.array(z.string()),
 });
-const s6 = z.object({ officers: z.array(officerSchema).min(1) });
+const s6 = z.object({
+  officers: z.array(officerSchema).min(1),
+  signingAuthority: signingAuthoritySchema,
+  bankingAuthority: bankingAuthoritySchema,
+});
 const s7 = z.object({
   regOffice: addressSchema,
   regOfficeAddon: z.enum(["none", "korporex", "burlington"]),
@@ -513,7 +624,15 @@ function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPref
 
 // ─── Progress Bar ─────────────────────────────────────────────────────────────
 
-function ProgressBar({ current }: { current: number }) {
+// `onJump` lets the customer move straight to any step they've already
+// reached by clicking it. Steps ahead of `maxReached` stay disabled: they
+// depend on data the earlier steps collect, so jumping forward past an
+// unfilled step would land on a form with nothing to validate against.
+function ProgressBar({ current, maxReached, onJump }: {
+  current: number;
+  maxReached: number;
+  onJump: (step: number) => void;
+}) {
   const total = STEP_LABELS.length;
   return (
     <div className="bg-navy-900 border-b border-white/10 px-6 py-6 sticky top-[72px] z-40">
@@ -526,28 +645,66 @@ function ProgressBar({ current }: { current: number }) {
         <div className="md:hidden w-full bg-white/15 h-1.5 rounded-full">
           <div className="bg-gold-500 h-1.5 rounded-full transition-all" style={{ width: `${(current / total) * 100}%` }} />
         </div>
+        {/* mobile: tappable step numbers */}
+        <div className="md:hidden flex items-center gap-1.5 mt-3 overflow-x-auto">
+          {STEP_LABELS.map((label, idx) => {
+            const num = idx + 1;
+            const reachable = num <= maxReached;
+            const active = num === current;
+            return (
+              <button
+                key={label}
+                type="button"
+                onClick={() => reachable && onJump(num)}
+                disabled={!reachable}
+                aria-label={`Step ${num}: ${label}`}
+                aria-current={active ? "step" : undefined}
+                className={`w-8 h-8 shrink-0 rounded-full text-xs font-bold transition-all
+                  ${active
+                    ? "bg-white text-navy-900 ring-2 ring-gold-500"
+                    : reachable
+                      ? "bg-gold-500 text-navy-900"
+                      : "bg-white/10 text-white/50 border border-white/25 cursor-not-allowed"}`}
+              >
+                {num}
+              </button>
+            );
+          })}
+        </div>
         {/* desktop */}
         <div className="hidden md:flex items-start">
           {STEP_LABELS.map((label, idx) => {
             const num = idx + 1;
             const done = num < current;
             const active = num === current;
+            const reachable = num <= maxReached;
             return (
               <div key={label} className="flex items-start flex-1 last:flex-none">
-                <div className="flex flex-col items-center shrink-0 w-24">
+                <button
+                  type="button"
+                  onClick={() => reachable && onJump(num)}
+                  disabled={!reachable}
+                  aria-current={active ? "step" : undefined}
+                  title={reachable ? `Go to step ${num}: ${label}` : `Complete the earlier steps to reach ${label}`}
+                  className={`flex flex-col items-center shrink-0 w-24 group rounded-md
+                    ${reachable ? "cursor-pointer" : "cursor-not-allowed"}
+                    focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900`}
+                >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all
                     ${done
-                      ? "bg-gold-500 text-navy-900 shadow-sm"
+                      ? "bg-gold-500 text-navy-900 shadow-sm group-hover:bg-gold-400"
                       : active
                         ? "bg-white text-navy-900 ring-2 ring-gold-500 ring-offset-2 ring-offset-navy-900 shadow-md"
-                        : "bg-white/10 text-white/60 border border-white/25"}`}>
+                        : reachable
+                          ? "bg-white/25 text-white border border-white/40 group-hover:bg-white/40"
+                          : "bg-white/10 text-white/60 border border-white/25"}`}>
                     {done ? <Check size={16} strokeWidth={2.5} /> : num}
                   </div>
                   <span className={`text-xs mt-2 whitespace-nowrap text-center tracking-wide
-                    ${active ? "text-white font-semibold" : done ? "text-white/85 font-medium" : "text-white/60 font-medium"}`}>
+                    ${active ? "text-white font-semibold" : done ? "text-white/85 font-medium group-hover:text-white" : "text-white/60 font-medium"}`}>
                     {label}
                   </span>
-                </div>
+                </button>
                 {idx < STEP_LABELS.length - 1 && (
                   <div className={`flex-1 h-0.5 mx-1 mt-5 rounded-full transition-colors
                     ${done ? "bg-gold-500" : "bg-white/20"}`} />
@@ -655,12 +812,13 @@ function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
 
 type S3 = z.infer<typeof s3>;
 
-function Step3({ jurisdiction, pkg, def, onNext, onBack }: {
+function Step3({ jurisdiction, pkg, def, onNext, onBack, snapshot }: {
   jurisdiction: Jurisdiction;
   pkg: Pkg;
   def: Partial<S3>;
   onNext: (d: S3) => void;
   onBack: () => void;
+  snapshot: SnapshotRef;
 }) {
   // Basic package is numbered-only — Named requires Standard or Premium.
   // Force corpNameType to "numbered" regardless of what `def` carries over
@@ -686,7 +844,8 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack }: {
       ...(basicLocked ? { corpNameType: "numbered" as const } : {}),
     },
   });
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = form;
+  const { register, handleSubmit, watch, setValue, getValues, formState: { errors } } = form;
+  useEffect(() => { snapshot.current = () => getValues(); return () => { snapshot.current = null; }; }, [snapshot, getValues]);
   const corpNameType = watch("corpNameType");
   const businessName = watch("businessName");
   const nameConfirmation = watch("nameConfirmation");
@@ -845,7 +1004,7 @@ const emptyDir: Director = {
   address: { ...emptyAddress },
 };
 
-function Step4({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S4>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S4) => void; onBack: () => void }) {
+function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Partial<S4>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S4) => void; onBack: () => void; snapshot: SnapshotRef }) {
   const isFederal = jurisdiction === "federal";
   // Federal customers must consciously pick "yes" or "no" — seed unset so the
   // radio group renders with neither option selected. Non-federal preserves
@@ -857,12 +1016,36 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S4>; j
   const initialDirs = def.directors?.length ? def.directors : [seedDir];
   const form = useForm<S4>({
     resolver: zodResolver(s4),
-    defaultValues: { directors: basicLocked ? initialDirs.slice(0, 1) : initialDirs },
+    defaultValues: {
+      // Basic is a single-director package, so the Articles always fix the
+      // count at 1 and the picker below renders read-only.
+      directorCountType: basicLocked ? "fixed" : def.directorCountType ?? "fixed",
+      directorCountFixed: basicLocked ? "1" : def.directorCountFixed ?? "1",
+      directorCountMin: basicLocked ? "1" : def.directorCountMin ?? "1",
+      directorCountMax: basicLocked ? "1" : def.directorCountMax ?? "5",
+      directors: basicLocked ? initialDirs.slice(0, 1) : initialDirs,
+    },
   });
-  const { register, handleSubmit, control, formState: { errors } } = form;
+  const { register, handleSubmit, control, watch, getValues, formState: { errors } } = form;
   const { fields, append, remove } = useFieldArray({ control, name: "directors" });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const de = (errors.directors as any) ?? [];
+  // The superRefine count mismatch attaches to the `directors` array itself,
+  // not to an element, so it surfaces as `.message` on the array node.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const countMismatch: string | undefined = (errors.directors as any)?.message;
+
+  useEffect(() => { snapshot.current = () => getValues(); return () => { snapshot.current = null; }; }, [snapshot, getValues]);
+
+  const countType = watch("directorCountType");
+  const fixedCount = Number(watch("directorCountFixed"));
+  const maxCount = Number(watch("directorCountMax"));
+  // Cap on how many director records the customer can add, derived from the
+  // structure they chose above. Falls back to no cap while the number is blank.
+  const addCap = countType === "fixed"
+    ? (Number.isFinite(fixedCount) && fixedCount > 0 ? fixedCount : Infinity)
+    : (Number.isFinite(maxCount) && maxCount > 0 ? maxCount : Infinity);
+  const atCap = fields.length >= addCap;
 
   return (
     <FormProvider {...form}>
@@ -871,6 +1054,71 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S4>; j
         <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Directors</h2>
         <p className="text-gray-500 text-sm mb-8">At least one director is required. Directors must be 18 or older. International directors are supported; residency requirements vary by jurisdiction.</p>
         <form onSubmit={handleSubmit(onNext)} className="space-y-6">
+          {/* Number of directors declared in the Articles. Either a fixed
+              count or a minimum/maximum range; the director records below
+              must match whichever the customer chooses. */}
+          <div className="border border-gray-200 rounded-lg p-6 bg-cream-50">
+            <p className="font-serif font-bold text-navy-900 text-base mb-1">
+              Please specify the Number of Directors for your Corporation
+            </p>
+            <div className="text-sm text-gray-600 leading-relaxed space-y-2 mb-5">
+              <p>
+                The number of directors can be a fixed number of directors (e.g. 3) or a
+                minimum/maximum number (e.g. minimum 3, maximum 5).
+              </p>
+              <p>
+                If you indicated 3 as the fixed number, you must provide the director information for
+                3 directors. If you indicated 3 as a minimum and 5 as a maximum, you must provide the
+                information for either 3, 4, or 5 directors.
+              </p>
+            </div>
+
+            {basicLocked ? (
+              <>
+                <input type="hidden" {...register("directorCountType")} />
+                <input type="hidden" {...register("directorCountFixed")} />
+                <input type="hidden" {...register("directorCountMin")} />
+                <input type="hidden" {...register("directorCountMax")} />
+                <p className="text-sm text-navy-900 bg-white border-2 border-navy-900 px-4 py-3">
+                  Your Basic package includes one director, so the Articles will fix the number of
+                  directors at <strong>1</strong>. Choose Standard or Premium if you need more.
+                </p>
+              </>
+            ) : (
+              <>
+                <Field label="Number of Directors *" error={errors.directorCountType?.message}>
+                  <div className="grid grid-cols-2 gap-3">
+                    <label className="flex items-center gap-2 border-2 border-gold-200 bg-white px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium">
+                      <input type="radio" value="fixed" {...register("directorCountType")} className="accent-navy-900" />
+                      Fixed Number
+                    </label>
+                    <label className="flex items-center gap-2 border-2 border-gold-200 bg-white px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium">
+                      <input type="radio" value="range" {...register("directorCountType")} className="accent-navy-900" />
+                      Minimum / Maximum
+                    </label>
+                  </div>
+                </Field>
+
+                {countType === "fixed" ? (
+                  <div className="mt-4 max-w-[12rem]">
+                    <Field label="Fixed Number of Directors *" error={errors.directorCountFixed?.message}>
+                      <input type="number" min="1" step="1" {...register("directorCountFixed")} className={iCls} />
+                    </Field>
+                  </div>
+                ) : (
+                  <div className="mt-4 grid grid-cols-2 gap-4">
+                    <Field label="Minimum Number of Directors *" error={errors.directorCountMin?.message}>
+                      <input type="number" min="1" step="1" {...register("directorCountMin")} className={iCls} />
+                    </Field>
+                    <Field label="Maximum Number of Directors *" error={errors.directorCountMax?.message}>
+                      <input type="number" min="1" step="1" {...register("directorCountMax")} className={iCls} />
+                    </Field>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+
           {fields.map((field, i) => (
             <div key={field.id} className="border border-gray-200 rounded-lg p-6">
               <div className="flex items-center justify-between mb-5">
@@ -973,10 +1221,15 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S4>; j
             </div>
           ))}
           {!basicLocked && (
-            <button type="button" onClick={() => append(seedDir)}
-              className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
+            <button type="button" onClick={() => append(seedDir)} disabled={atCap}
+              className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent">
               <Plus size={14} /> Add Another Director
             </button>
+          )}
+          {countMismatch && (
+            <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2.5" role="alert">
+              {countMismatch}
+            </p>
           )}
           <NextBtn />
         </form>
@@ -992,10 +1245,13 @@ const emptySH: Shareholder = {
   firstName: "", lastName: "",
   shareClass: "Common", numberOfShares: "100",
   pricePerShare: "1.00",
+  // Cast: "" renders the "-- Select a country --" placeholder; Zod rejects it
+  // at submit so the customer has to choose.
+  citizenship: "",
   address: { ...emptyAddress },
 };
 
-function Step5({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S5>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S5) => void; onBack: () => void }) {
+function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Partial<S5>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S5) => void; onBack: () => void; snapshot: SnapshotRef }) {
   const basicLocked = pkg === "basic";
   const useStructuredPicker = pkg === "standard" || pkg === "premium";
   const initialSh = def.shareholders?.length ? def.shareholders : [emptySH];
@@ -1006,10 +1262,12 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S5>; j
       shareClasses: def.shareClasses ?? [],
     },
   });
-  const { register, handleSubmit, control, formState: { errors }, watch, setValue } = form;
+  const { register, handleSubmit, control, formState: { errors }, watch, setValue, getValues } = form;
   const { fields, append, remove } = useFieldArray({ control, name: "shareholders" });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const se = (errors.shareholders as any) ?? [];
+
+  useEffect(() => { snapshot.current = () => getValues(); return () => { snapshot.current = null; }; }, [snapshot, getValues]);
 
   // Classes offered for this package — Standard sees the first three,
   // Premium sees all five.
@@ -1161,6 +1419,17 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S5>; j
                     />
                   </div>
                 </Field>
+                {/* Citizenship of the shareholder. Separate from the address
+                    country below. A shareholder can live in one country and
+                    hold citizenship of another. */}
+                <Field label="Citizenship *" error={se[i]?.citizenship?.message}>
+                  <select {...register(`shareholders.${i}.citizenship`)} className={sCls}>
+                    <option value="">-- Select a country --</option>
+                    {ALL_COUNTRIES.map((c) => (
+                      <option key={c.code} value={c.code}>{c.name}</option>
+                    ))}
+                  </select>
+                </Field>
               </div>
               {/* Informational note. Deliberately definitional / illustrative
                   — describes what the field *is*, with arithmetic example.
@@ -1201,17 +1470,26 @@ const emptyOfficer: Officer = {
   address: { ...emptyAddress },
 };
 
-function Step6({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S6>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S6) => void; onBack: () => void }) {
+function Step6({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Partial<S6>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S6) => void; onBack: () => void; snapshot: SnapshotRef }) {
   const basicLocked = pkg === "basic";
   const initialOfc = def.officers?.length ? def.officers : [emptyOfficer];
   const form = useForm<S6>({
     resolver: zodResolver(s6),
-    defaultValues: { officers: basicLocked ? initialOfc.slice(0, 1) : initialOfc },
+    defaultValues: {
+      officers: basicLocked ? initialOfc.slice(0, 1) : initialOfc,
+      // Casts: "" is the unselected state the radio groups render with;
+      // Zod rejects it at submit so the customer must pick. Same pattern as
+      // `legalEnding` on Step 3.
+      signingAuthority: (def.signingAuthority ?? "") as SigningAuthority,
+      bankingAuthority: (def.bankingAuthority ?? "") as BankingAuthority,
+    },
   });
-  const { register, handleSubmit, control, formState: { errors } } = form;
+  const { register, handleSubmit, control, getValues, formState: { errors } } = form;
   const { fields, append, remove } = useFieldArray({ control, name: "officers" });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const oe = (errors.officers as any) ?? [];
+
+  useEffect(() => { snapshot.current = () => getValues(); return () => { snapshot.current = null; }; }, [snapshot, getValues]);
 
   return (
     <FormProvider {...form}>
@@ -1254,6 +1532,65 @@ function Step6({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S6>; j
               <Plus size={14} /> Add Another Officer
             </button>
           )}
+
+          {/* Signing authority, recorded in the organizational resolutions
+              that accompany the incorporation. */}
+          <div className="border border-gray-200 rounded-lg p-6 bg-cream-50 space-y-6">
+            <div>
+              <p className="font-serif font-bold text-navy-900 text-base mb-1">
+                Authorized Signing Officers
+              </p>
+              <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                Who may sign contracts, instruments and other documents on behalf of the
+                corporation?
+              </p>
+              <Field label="Authorized Signing Officers *" error={errors.signingAuthority?.message}>
+                <div className="space-y-2.5">
+                  {SIGNING_AUTHORITY_OPTIONS.map((opt) => (
+                    <label
+                      key={opt.value}
+                      className="flex items-center gap-2.5 border-2 border-gold-200 bg-white px-4 py-3 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium"
+                    >
+                      <input type="radio" value={opt.value} {...register("signingAuthority")} className="accent-navy-900" />
+                      {opt.label}
+                    </label>
+                  ))}
+                </div>
+              </Field>
+            </div>
+
+            <div className="pt-6 border-t border-gray-200">
+              <p className="font-serif font-bold text-navy-900 text-base mb-1">
+                Banking Signing Authority
+              </p>
+              <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                Who may sign cheques and operate the corporation&rsquo;s bank accounts? Your bank
+                will ask for this when you open the business account.
+              </p>
+              <Field label="Banking Signing Authority *" error={errors.bankingAuthority?.message}>
+                <div className="space-y-2.5">
+                  {BANKING_AUTHORITY_OPTIONS.map((opt) => (
+                    <label
+                      key={opt.value}
+                      className="flex items-center gap-2.5 border-2 border-gold-200 bg-white px-4 py-3 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium"
+                    >
+                      <input type="radio" value={opt.value} {...register("bankingAuthority")} className="accent-navy-900" />
+                      {opt.label}
+                    </label>
+                  ))}
+                </div>
+              </Field>
+              <p className="text-xs text-gray-500 italic leading-relaxed mt-4">
+                Make sure the officers you listed above cover the choices here. Korporex does not
+                provide legal advice on signing authority. If you&rsquo;re unsure,{" "}
+                <Link href="/legal-consultation" className="text-navy-900 underline underline-offset-2">
+                  speak with a corporate lawyer
+                </Link>
+                .
+              </p>
+            </div>
+          </div>
+
           <NextBtn />
         </form>
       </div>
@@ -1264,11 +1601,12 @@ function Step6({ def, jurisdiction, pkg, onNext, onBack }: { def: Partial<S6>; j
 // ─── Step 7 — Registered Office ───────────────────────────────────────────────
 
 type S7 = z.infer<typeof s7>;
-function Step7({ jurisdiction, def, onNext, onBack }: {
+function Step7({ jurisdiction, def, onNext, onBack, snapshot }: {
   jurisdiction: Jurisdiction;
   def: Partial<S7>;
   onNext: (d: S7) => void;
   onBack: () => void;
+  snapshot: SnapshotRef;
 }) {
   const regionLock = jurisdiction === "ontario" ? "ON" : undefined;
   const regionAllow = jurisdiction === "federal" ? CA_PROVINCES.map((p) => p.code) : undefined;
@@ -1287,7 +1625,8 @@ function Step7({ jurisdiction, def, onNext, onBack }: {
       },
     },
   });
-  const { handleSubmit, watch, setValue } = form;
+  const { handleSubmit, watch, setValue, getValues } = form;
+  useEffect(() => { snapshot.current = () => getValues(); return () => { snapshot.current = null; }; }, [snapshot, getValues]);
   const selectedAddon = watch("regOfficeAddon");
 
   // When a Korporex add-on is selected, mirror that location's address into the
@@ -1435,10 +1774,11 @@ function AddonOption({ selected, onSelect, title, subtitle, price, priceSub }: {
 // ─── Step 8 — Review & Pay ────────────────────────────────────────────────────
 
 type S8 = z.infer<typeof s8>;
-function Step8({ data, onBack, onPay }: {
+function Step8({ data, onBack, onPay, snapshot }: {
   data: WizardData;
   onBack: () => void;
   onPay: (billing: { billingName: string; billingAddress: Address }) => Promise<void>;
+  snapshot: SnapshotRef;
 }) {
   const form = useForm<S8>({
     resolver: zodResolver(s8),
@@ -1453,7 +1793,8 @@ function Step8({ data, onBack, onPay }: {
       },
     },
   });
-  const { register, handleSubmit, watch, formState: { errors } } = form;
+  const { register, handleSubmit, watch, getValues, formState: { errors } } = form;
+  useEffect(() => { snapshot.current = () => getValues(); return () => { snapshot.current = null; }; }, [snapshot, getValues]);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -1515,9 +1856,17 @@ function Step8({ data, onBack, onPay }: {
               ["Package", pkgLabel],
               ["Corporation", corpName],
               ["Official Email", data.officialEmail || "-"],
+              [
+                "Number of Directors",
+                data.directorCountType === "fixed"
+                  ? `Fixed at ${data.directorCountFixed}`
+                  : `Minimum ${data.directorCountMin}, maximum ${data.directorCountMax}`,
+              ],
               ["Directors", String(data.directors.length)],
               ["Shareholders", String(data.shareholders.length)],
               ["Officers", String(data.officers.length)],
+              ["Signing Officers", data.signingAuthority ? signingAuthorityLabel(data.signingAuthority) : "-"],
+              ["Banking Authority", data.bankingAuthority ? bankingAuthorityLabel(data.bankingAuthority) : "-"],
               [
                 "Registered Office",
                 data.regOfficeAddon !== "none"
@@ -1615,12 +1964,19 @@ const init: WizardData = {
   jurisdiction: "ontario", pkg: "standard",
   corpNameType: "named",
   businessName: "",
+  nameConfirmation: "",
   legalEnding: "",
   officialEmail: "",
   naicsCode: "",
   businessActivity: "",
   fiscalYearEndMonth: "", fiscalYearEndDay: "",
+  directorCountType: "fixed",
+  directorCountFixed: "1",
+  directorCountMin: "1",
+  directorCountMax: "5",
   directors: [], shareholders: [], shareClasses: [], officers: [],
+  signingAuthority: "",
+  bankingAuthority: "",
   regOffice: { street: "", city: "", region: "", postalCode: "", country: "CA" },
   regOfficeAddon: "none",
   billingName: "",
@@ -1660,6 +2016,45 @@ function IncorporateWizard() {
     ...(presetJurisdiction ? { jurisdiction: presetJurisdiction } : {}),
     ...(presetPkg ? { pkg: presetPkg } : {}),
   });
+  // Furthest step the customer has reached. The progress bar lets them click
+  // back to anything at or before this; steps beyond it stay locked because
+  // they depend on data the intervening steps collect.
+  const [maxReached, setMaxReached] = useState(step);
+  // Draft restore runs after mount (localStorage is unavailable during SSR),
+  // so writes are suppressed until it has had its chance. Otherwise the first
+  // render would overwrite the saved draft with a blank one.
+  const [draftLoaded, setDraftLoaded] = useState(false);
+  const [restoredDraft, setRestoredDraft] = useState(false);
+  const snapshot: SnapshotRef = useRef<(() => Record<string, unknown>) | null>(null);
+
+  // Restore an in-progress draft from this browser, if there is one. A
+  // jurisdiction/package deep-link still wins over the stored value so a
+  // customer who clicks "Federal" gets Federal, keeping everything else.
+  useEffect(() => {
+    const draft = loadDraft<Partial<WizardData>>();
+    if (draft) {
+      setData((prev) => ({
+        ...prev,
+        ...draft.data,
+        ...(presetJurisdiction ? { jurisdiction: presetJurisdiction } : {}),
+        ...(presetPkg ? { pkg: presetPkg } : {}),
+      }));
+      const resumeAt = Math.min(Math.max(draft.step, presetJurisdiction ? 2 : 1), STEP_LABELS.length);
+      setStep(resumeAt);
+      setMaxReached(resumeAt);
+      setRestoredDraft(true);
+    }
+    setDraftLoaded(true);
+    // Deep-link params are read once on mount; re-running on their identity
+    // would fight the customer's in-wizard navigation.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Persist after every change so an abandoned form can be picked back up.
+  useEffect(() => {
+    if (!draftLoaded) return;
+    saveDraft(step, data);
+  }, [draftLoaded, step, data]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -1667,18 +2062,72 @@ function IncorporateWizard() {
 
   function patch(p: Partial<WizardData>) { setData((prev) => ({ ...prev, ...p })); }
 
+  function go(next: number) {
+    setStep(next);
+    setMaxReached((prev) => Math.max(prev, next));
+  }
+
+  // Progress-bar click. Capture whatever the current step's form holds first
+  // (even if it doesn't validate yet) so nothing typed is thrown away, then
+  // move. Unknown keys from a step schema (`nameConfirmation` aside, which is
+  // part of WizardData) are dropped so the draft stays well-formed.
+  function jumpTo(target: number) {
+    if (target === step || target > maxReached) return;
+    const snap = snapshot.current?.();
+    if (snap) {
+      const allowed = Object.keys(init) as Array<keyof WizardData>;
+      const clean: Partial<WizardData> = {};
+      for (const k of allowed) {
+        if (k in snap) (clean as Record<string, unknown>)[k] = snap[k];
+      }
+      patch(clean);
+    }
+    setStep(target);
+  }
+
+  function startOver() {
+    clearDraft();
+    snapshot.current = null;
+    setData({
+      ...init,
+      ...(presetJurisdiction ? { jurisdiction: presetJurisdiction } : {}),
+      ...(presetPkg ? { pkg: presetPkg } : {}),
+    });
+    setRestoredDraft(false);
+    setStep(presetJurisdiction ? 2 : 1);
+    setMaxReached(presetJurisdiction ? 2 : 1);
+  }
+
   return (
     <div className="min-h-screen bg-white">
-      <ProgressBar current={step} />
+      <ProgressBar current={step} maxReached={maxReached} onJump={jumpTo} />
+      {restoredDraft && (
+        <div className="bg-cream-50 border-b border-gold-200">
+          <div className="max-w-5xl mx-auto px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-gray-700">
+              We restored the details you entered last time. Nothing has been submitted or charged yet.
+            </p>
+            <button
+              type="button"
+              onClick={startOver}
+              className="text-sm font-semibold text-navy-900 underline underline-offset-2 hover:text-navy-700"
+            >
+              Start over
+            </button>
+          </div>
+        </div>
+      )}
       <div className="pb-20">
-        {step === 1 && <Step1 value={data.jurisdiction} onChange={(jurisdiction) => patch({ jurisdiction })} onNext={() => setStep(2)} />}
-        {step === 2 && <Step2 jurisdiction={data.jurisdiction} value={data.pkg} onChange={(pkg) => patch({ pkg })} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
+        {step === 1 && <Step1 value={data.jurisdiction} onChange={(jurisdiction) => patch({ jurisdiction })} onNext={() => go(2)} />}
+        {step === 2 && <Step2 jurisdiction={data.jurisdiction} value={data.pkg} onChange={(pkg) => patch({ pkg })} onNext={() => go(3)} onBack={() => setStep(1)} />}
         {step === 3 && <Step3
+          snapshot={snapshot}
           jurisdiction={data.jurisdiction}
           pkg={data.pkg}
           def={{
             corpNameType: data.corpNameType,
             businessName: data.businessName,
+            nameConfirmation: data.nameConfirmation,
             legalEnding: data.legalEnding === "" ? undefined : data.legalEnding,
             officialEmail: data.officialEmail,
             naicsCode: data.naicsCode,
@@ -1690,17 +2139,32 @@ function IncorporateWizard() {
             // Clear name for numbered corps so review screen reflects accurately.
             const next = { ...d, businessName: d.corpNameType === "numbered" ? "" : d.businessName ?? "" };
             patch(next);
-            setStep(4);
+            go(4);
           }}
           onBack={() => setStep(2)}
         />}
-        {step === 4 && <Step4 jurisdiction={data.jurisdiction} pkg={data.pkg} def={{ directors: data.directors }} onNext={(d) => { patch(d); setStep(5); }} onBack={() => setStep(3)} />}
-        {step === 5 && <Step5 jurisdiction={data.jurisdiction} pkg={data.pkg} def={{ shareholders: data.shareholders, shareClasses: data.shareClasses }} onNext={(d) => { patch(d); setStep(6); }} onBack={() => setStep(4)} />}
-        {step === 6 && <Step6 jurisdiction={data.jurisdiction} pkg={data.pkg} def={{ officers: data.officers }} onNext={(d) => { patch(d); setStep(7); }} onBack={() => setStep(5)} />}
-        {step === 7 && <Step7 jurisdiction={data.jurisdiction}
+        {step === 4 && <Step4 snapshot={snapshot} jurisdiction={data.jurisdiction} pkg={data.pkg}
+          def={{
+            directors: data.directors,
+            directorCountType: data.directorCountType,
+            directorCountFixed: data.directorCountFixed,
+            directorCountMin: data.directorCountMin,
+            directorCountMax: data.directorCountMax,
+          }}
+          onNext={(d) => { patch(d); go(5); }} onBack={() => setStep(3)} />}
+        {step === 5 && <Step5 snapshot={snapshot} jurisdiction={data.jurisdiction} pkg={data.pkg} def={{ shareholders: data.shareholders, shareClasses: data.shareClasses }} onNext={(d) => { patch(d); go(6); }} onBack={() => setStep(4)} />}
+        {step === 6 && <Step6 snapshot={snapshot} jurisdiction={data.jurisdiction} pkg={data.pkg}
+          def={{
+            officers: data.officers,
+            signingAuthority: data.signingAuthority === "" ? undefined : data.signingAuthority,
+            bankingAuthority: data.bankingAuthority === "" ? undefined : data.bankingAuthority,
+          }}
+          onNext={(d) => { patch(d); go(7); }} onBack={() => setStep(5)} />}
+        {step === 7 && <Step7 snapshot={snapshot} jurisdiction={data.jurisdiction}
           def={{ regOffice: data.regOffice, regOfficeAddon: data.regOfficeAddon }}
-          onNext={(d) => { patch(d); setStep(8); }} onBack={() => setStep(6)} />}
+          onNext={(d) => { patch(d); go(8); }} onBack={() => setStep(6)} />}
         {step === 8 && <Step8
+          snapshot={snapshot}
           data={data}
           onBack={() => setStep(7)}
           onPay={async (billing) => {
@@ -1716,10 +2180,16 @@ function IncorporateWizard() {
               businessActivity: data.businessActivity,
               fiscalYearEndMonth: data.fiscalYearEndMonth,
               fiscalYearEndDay: data.fiscalYearEndDay,
+              directorCountType: data.directorCountType,
+              directorCountFixed: data.directorCountFixed,
+              directorCountMin: data.directorCountMin,
+              directorCountMax: data.directorCountMax,
               directors: data.directors,
               shareholders: data.shareholders,
               shareClasses: data.shareClasses,
               officers: data.officers,
+              signingAuthority: data.signingAuthority,
+              bankingAuthority: data.bankingAuthority,
               regOffice: data.regOffice,
               regOfficeAddon: data.regOfficeAddon,
               billingName: billing.billingName,

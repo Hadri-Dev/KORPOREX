@@ -10,6 +10,13 @@ import {
 } from "@/lib/pricing";
 import { legalEndingSchema } from "@/lib/legalEndings";
 import { officerPositionSchema } from "@/lib/officerPositions";
+import {
+  signingAuthoritySchema,
+  bankingAuthoritySchema,
+  directorCountTypeSchema,
+  signingAuthorityLabel,
+  bankingAuthorityLabel,
+} from "@/lib/incorporateOptions";
 import { ALL_COUNTRIES } from "@/lib/countries";
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
@@ -56,6 +63,7 @@ const shareholderSchema = z.object({
     .min(1)
     .max(20)
     .refine((v) => !isNaN(Number(v)) && Number(v) > 0, "Positive amount required"),
+  citizenship: z.string().trim().min(2).max(10),
   address: addressSchema,
 });
 
@@ -78,6 +86,13 @@ const schema = z.object({
   businessActivity: z.string().trim().min(10).max(2000),
   fiscalYearEndMonth: z.string().trim().min(1).max(20),
   fiscalYearEndDay: z.string().trim().min(1).max(2),
+  // Number of directors declared in the Articles: either a fixed count or a
+  // min/max range. The count of `directors` below must agree, enforced by
+  // the refinement on the schema object.
+  directorCountType: directorCountTypeSchema,
+  directorCountFixed: z.string().trim().max(4).default("1"),
+  directorCountMin: z.string().trim().max(4).default("1"),
+  directorCountMax: z.string().trim().max(4).default("1"),
   directors: z.array(directorSchema).min(1).max(20),
   shareholders: z.array(shareholderSchema).min(1).max(50),
   // Codes ("A" | "B" | "C") of the share classes the customer chose to
@@ -86,10 +101,28 @@ const schema = z.object({
   // strings (forward-compat for Premium when it gets its own picker).
   shareClasses: z.array(z.string()).max(10).default([]),
   officers: z.array(officerSchema).min(1).max(50),
+  signingAuthority: signingAuthoritySchema,
+  bankingAuthority: bankingAuthoritySchema,
   regOffice: addressSchema,
   regOfficeAddon: z.enum(["none", "korporex", "burlington"]).default("none"),
   billingName: z.string().trim().min(1).max(200),
   billingAddress: addressSchema,
+}).superRefine((v, ctx) => {
+  // Mirror of the client-side rule, re-checked here because the client is not
+  // a trust boundary.
+  const listed = v.directors.length;
+  if (v.directorCountType === "fixed") {
+    const fixed = Number(v.directorCountFixed);
+    if (!Number.isInteger(fixed) || fixed < 1 || listed !== fixed) {
+      ctx.addIssue({ code: "custom", path: ["directors"], message: "Director count does not match the fixed number." });
+    }
+    return;
+  }
+  const min = Number(v.directorCountMin);
+  const max = Number(v.directorCountMax);
+  if (!Number.isInteger(min) || !Number.isInteger(max) || min < 1 || max < min || listed < min || listed > max) {
+    ctx.addIssue({ code: "custom", path: ["directors"], message: "Director count does not match the minimum/maximum." });
+  }
 });
 
 type Submission = z.infer<typeof schema>;
@@ -361,6 +394,14 @@ function buildHtmlBody(
     row("NAICS code", d.naicsCode),
     row("Business activity", d.businessActivity),
     row("Fiscal year end", `${d.fiscalYearEndMonth} ${d.fiscalYearEndDay}`),
+    row(
+      "Number of directors (Articles)",
+      d.directorCountType === "fixed"
+        ? `Fixed at ${d.directorCountFixed}`
+        : `Minimum ${d.directorCountMin}, maximum ${d.directorCountMax}`
+    ),
+    row("Authorized signing officers", signingAuthorityLabel(d.signingAuthority)),
+    row("Banking signing authority", bankingAuthorityLabel(d.bankingAuthority)),
   ].join("");
 
   const addonLabel =
@@ -447,8 +488,10 @@ function buildHtmlBody(
       const shares = Number(x.numberOfShares);
       const price = Number(x.pricePerShare);
       const subscription = isFinite(shares * price) ? (shares * price).toFixed(2) : "—";
+      const cz = ALL_COUNTRIES.find((c) => c.code === x.citizenship);
       return {
         Name: `${x.firstName} ${x.lastName}`,
+        Citizenship: cz ? `${cz.name} (${cz.code})` : x.citizenship || "—",
         "Share class": x.shareClass,
         Shares: x.numberOfShares,
         "Price per share": `$${Number(x.pricePerShare).toFixed(2)} CAD`,
