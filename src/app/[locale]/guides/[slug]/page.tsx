@@ -10,6 +10,7 @@ import {
   getAlternateSlugs,
   getRelatedArticles,
   guideUrl,
+  isGuideHrefLive,
   isPublished,
   resolveLocalizedSlug,
   SITE_URL,
@@ -91,7 +92,7 @@ function formatDate(iso: string, locale: Locale): string {
   });
 }
 
-function renderSection(section: ArticleSection, index: number) {
+function renderSection(section: ArticleSection, index: number, locale: Locale) {
   switch (section.type) {
     case "heading":
       return (
@@ -110,6 +111,10 @@ function renderSection(section: ArticleSection, index: number) {
             ? section.parts.map((part, i) =>
                 typeof part === "string" ? (
                   <span key={i}>{part}</span>
+                ) : !isGuideHrefLive(part.href, locale) ? (
+                  // Target guide is scheduled but not live yet: render the
+                  // anchor text as plain prose rather than a link to a 404.
+                  <span key={i}>{part.text}</span>
                 ) : (
                   <Link
                     key={i}
@@ -267,7 +272,7 @@ export default async function ArticlePage({ params }: Params) {
       <section className="bg-white py-10 px-6">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-[1fr_240px] gap-12">
           <article className="min-w-0">
-            {article.content.map((section, i) => renderSection(section, i))}
+            {article.content.map((section, i) => renderSection(section, i, locale))}
 
             <div className="mt-16 pt-8 border-t border-gray-100 text-xs text-gray-500 leading-relaxed">
               {t("disclaimer")}
