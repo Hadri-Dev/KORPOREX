@@ -28,6 +28,11 @@ export const PAGE_REGISTRY: RegistryPage[] = [
   { path: "/guides/federal-vs-provincial-incorporation", title: "Federal vs provincial incorporation", type: "resource" },
   { path: "/guides/what-is-nuans-name-search", title: "What is a NUANS name search", type: "resource" },
   { path: "/guides/corporate-annual-returns-canada", title: "Corporate annual returns in Canada", type: "resource" },
+  { path: "/guides/nuans-report-for-law-firms", title: "NUANS reports for law firms", type: "resource" },
+  { path: "/guides/how-to-read-a-nuans-report", title: "How to read a NUANS report", type: "resource" },
+  { path: "/guides/nuans-report-cost-canada", title: "NUANS report cost in Canada", type: "resource" },
+  { path: "/guides/which-provinces-require-nuans", title: "Which provinces require a NUANS report", type: "resource" },
+  { path: "/guides/corporate-name-rejected-canada", title: "Corporate name refused", type: "resource" },
   // Legal / static
   { path: "/about", title: "About", type: "marketing" },
   { path: "/contact", title: "Contact", type: "marketing" },
