@@ -1,7 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ArrowRight, BookOpen, ChevronLeft, ChevronRight, FileText, HelpCircle } from "lucide-react";
+import { ArrowRight, BookOpen, Calendar, ChevronLeft, ChevronRight, Clock, FileText, HelpCircle, User } from "lucide-react";
 import {
   CATEGORY_KEY,
   getArticlesByLocale,
@@ -28,6 +28,26 @@ const CATEGORY_CARDS: { key: string; icon: React.ElementType }[] = [
   { key: "compliance", icon: FileText },
   { key: "jurisdiction", icon: HelpCircle },
 ];
+
+const DATE_LOCALE: Record<Locale, string> = {
+  en: "en-CA",
+  fr: "fr-CA",
+  es: "es",
+};
+
+// Card byline date. Accepts a plain "YYYY-MM-DD" (updated) or a full ISO
+// timestamp (publishedAt) and formats the date part only, in UTC so the
+// rendered day never shifts with the server timezone.
+function formatCardDate(value: string, locale: Locale): string {
+  const [year, month, day] = value.slice(0, 10).split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.toLocaleDateString(DATE_LOCALE[locale], {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
 
 function indexUrl(locale: Locale): string {
   return `${SITE_URL}${locale === "en" ? "" : `/${locale}`}/guides`;
@@ -119,7 +139,7 @@ export default async function GuidesPage({ params, searchParams }: Params) {
             {t("latestResources")}
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {articles.map(({ slug, category, title, excerpt, readTime }) => (
+            {articles.map(({ slug, category, title, excerpt, readTime, updated, publishedAt }) => (
               <Link
                 key={slug}
                 href={`/guides/${slug}`}
@@ -135,9 +155,19 @@ export default async function GuidesPage({ params, searchParams }: Params) {
                   <p className="text-sm text-gray-600 leading-relaxed flex-1 mb-5">
                     {excerpt}
                   </p>
-                  <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                    <span className="text-xs text-gray-400">{readTime}</span>
-                    <ArrowRight size={14} className="text-gray-400 group-hover:text-navy-900 transition-colors" />
+                  <div className="flex items-center justify-between gap-3 mt-auto pt-4 border-t border-gray-100">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400">
+                      <span className="inline-flex items-center gap-1">
+                        <User size={12} /> Korporex
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <Calendar size={12} /> {formatCardDate(publishedAt ?? updated, locale)}
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <Clock size={12} /> {readTime}
+                      </span>
+                    </div>
+                    <ArrowRight size={14} className="shrink-0 text-gray-400 group-hover:text-navy-900 transition-colors" />
                   </div>
                 </div>
               </Link>
