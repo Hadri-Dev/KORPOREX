@@ -7,14 +7,16 @@ import {
   type AmalgamationSubmission,
   type ContinuanceSubmission,
   type InitialMinuteBookSubmission,
+  type RegisteredOfficeSubmission,
 } from "@/lib/businessUpdateSchemas";
 import {
   BUSINESS_UPDATE_SERVICES,
   MINUTE_BOOK_PRICING,
   computeMinuteBookSubtotal,
+  computeRegisteredOfficeSubtotal,
   type BusinessUpdateServiceSlug,
 } from "@/lib/businessUpdateServices";
-import { getTaxRate } from "@/lib/pricing";
+import { getTaxRate, REG_OFFICE_OPTIONS } from "@/lib/pricing";
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
 import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
@@ -28,7 +30,8 @@ type BusinessUpdatePayload =
   | RevivalSubmission
   | AmalgamationSubmission
   | ContinuanceSubmission
-  | InitialMinuteBookSubmission;
+  | InitialMinuteBookSubmission
+  | RegisteredOfficeSubmission;
 
 function minuteBookCounts(p: InitialMinuteBookSubmission) {
   return {
@@ -48,7 +51,9 @@ function computeBusinessUpdatePricing(
   const subtotal =
     service === "initial-minute-book"
       ? computeMinuteBookSubtotal(minuteBookCounts(payload as InitialMinuteBookSubmission))
-      : BUSINESS_UPDATE_SERVICES[service].price;
+      : service === "registered-office"
+        ? computeRegisteredOfficeSubtotal((payload as RegisteredOfficeSubmission).location)
+        : BUSINESS_UPDATE_SERVICES[service].price;
   const taxRate = getTaxRate(billingCountry, billingRegion);
   const tax = Math.round(subtotal * taxRate * 100) / 100;
   const total = Math.round((subtotal + tax) * 100) / 100;
@@ -109,7 +114,7 @@ export async function POST(req: Request) {
     {
       price_data: {
         currency: "cad",
-        product_data: { name: meta.longLabel, description: lineItemDescription(service, payload) },
+        product_data: { name: lineItemName(service, payload), description: lineItemDescription(service, payload) },
         unit_amount: Math.round(pricing.subtotal * 100),
       },
       quantity: 1,
@@ -148,6 +153,9 @@ export async function POST(req: Request) {
         jurisdiction: summary.jurisdiction,
         corpName: summary.corpName,
         corpNumber: summary.corpNumber,
+        ...(service === "registered-office"
+          ? { regOfficeLocation: (payload as RegisteredOfficeSubmission).location }
+          : {}),
       },
       payment_intent_data: {
         description: `Korporex - ${orderRef} - ${meta.longLabel}`,
@@ -176,6 +184,16 @@ export async function POST(req: Request) {
 
 type Summary = { jurisdiction: string; corpName: string; corpNumber: string };
 
+/** Stripe line-item name. The registered office names its location so the
+ *  receipt shows which office the customer bought. */
+function lineItemName(service: BusinessUpdateServiceSlug, payload: BusinessUpdatePayload): string {
+  if (service === "registered-office") {
+    const opt = REG_OFFICE_OPTIONS[(payload as RegisteredOfficeSubmission).location];
+    return `Registered office address: ${opt.locationLabel} (12 months)`;
+  }
+  return BUSINESS_UPDATE_SERVICES[service].longLabel;
+}
+
 /** Stripe line-item description. Static tagline for flat-priced services; the
  *  minute book spells out the counts its computed subtotal is based on. */
 function lineItemDescription(
@@ -185,6 +203,10 @@ function lineItemDescription(
   if (service === "initial-minute-book") {
     const c = minuteBookCounts(payload as InitialMinuteBookSubmission);
     return `${c.shareClasses} share ${c.shareClasses === 1 ? "class" : "classes"}, ${c.shareholders} shareholder${c.shareholders === 1 ? "" : "s"}, ${c.directors} director${c.directors === 1 ? "" : "s"}, ${c.officers} officer${c.officers === 1 ? "" : "s"}`;
+  }
+  if (service === "registered-office") {
+    const opt = REG_OFFICE_OPTIONS[(payload as RegisteredOfficeSubmission).location];
+    return `Registered office address in ${opt.locationLabel}, Ontario, chosen by Korporex. Includes filing the change of registered office and monthly mail scans emailed to you. 12-month term billed annually in advance. Non-refundable.`;
   }
   return BUSINESS_UPDATE_SERVICES[service].tagline;
 }
@@ -222,8 +244,9 @@ function extractSummary(
         corpNumber: p.currentCorpNumber,
       };
     }
-    case "initial-minute-book": {
-      const p = payload as InitialMinuteBookSubmission;
+    case "initial-minute-book":
+    case "registered-office": {
+      const p = payload as InitialMinuteBookSubmission | RegisteredOfficeSubmission;
       return {
         jurisdiction: p.corporation.jurisdiction,
         corpName: p.corporation.corpName,
@@ -432,8 +455,17 @@ function subtotalRows(
   payload: BusinessUpdatePayload,
   pricing: Pricing
 ): string[] {
+  if (service === "registered-office") {
+    const opt = REG_OFFICE_OPTIONS[(payload as RegisteredOfficeSubmission).location];
+    return [
+      row(
+        `Registered office: ${opt.locationLabel} (12 months, billed annually)`,
+        `$${pricing.subtotal.toFixed(2)}`
+      ),
+    ];
+  }
   if (service !== "initial-minute-book") {
-    return [row(serviceLabel, `$${pricing.subtotal.toFixed(2)}`)];
+    return [row(serviceLabel, `${pricing.subtotal.toFixed(2)}`)];
   }
   const p = payload as InitialMinuteBookSubmission;
   const c = minuteBookCounts(p);
@@ -573,6 +605,31 @@ function serviceDetailHtml(
       )}</div>`;
       const directors = `<p style="margin:18px 0 8px;color:#6b7280;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Directors of continued corp (${p.directors.length})</p>${p.directors.map(personCard).join("")}`;
       return `<table style="width:100%;border-collapse:collapse;">${rows}</table>${reason}${office}${directors}`;
+    }
+    case "registered-office": {
+      const p = payload as RegisteredOfficeSubmission;
+      const opt = REG_OFFICE_OPTIONS[p.location];
+      const rows = [
+        row("Office location", opt.locationLabel),
+        row("Korporex address", opt.addressAssignedAtFiling ? "To be assigned by Korporex" : formatAddress(opt.address)),
+        ...(p.corporation.businessNumber ? [row("Business number", p.corporation.businessNumber)] : []),
+        ...(p.corporation.jurisdiction === "federal"
+          ? [row("Articles name Ontario as RO province", p.federalArticlesOntario ? "Yes (confirmed)" : "No")]
+          : []),
+        row("Non-refundable 12-month term accepted", p.acceptTerms ? "Yes" : "No"),
+      ].join("");
+      const current = `<div style="margin-top:12px;padding:12px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:13px;color:#111827;"><strong>Current registered office (being replaced):</strong><br>${escapeHtml(
+        formatAddress(p.currentRegisteredOffice)
+      )}</div>`;
+      const action = `<p style="margin:12px 0 0;color:#92400e;font-size:12px;line-height:1.6;"><strong>ACTION REQUIRED:</strong> ${
+        opt.addressAssignedAtFiling ? "assign a downtown Toronto address, then " : ""
+      }prepare the directors' resolution and file the change of registered office (${
+        p.corporation.jurisdiction === "federal" ? "Corporations Canada Form 3" : "Ontario Business Registry Notice of Change"
+      }). 12-month term starts on filing.</p>`;
+      const notes = p.notes
+        ? `<div style="margin-top:12px;padding:12px;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;font-size:13px;color:#111827;white-space:pre-wrap;"><strong>Notes:</strong><br>${escapeHtml(p.notes)}</div>`
+        : "";
+      return `<table style="width:100%;border-collapse:collapse;">${rows}</table>${current}${action}${notes}`;
     }
     case "initial-minute-book": {
       const p = payload as InitialMinuteBookSubmission;

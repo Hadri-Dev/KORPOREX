@@ -3,12 +3,15 @@
 // dedicated wizard. Pricing is recomputed server-side from these constants in
 // /api/business-update-request — never trust totals sent from the client.
 
+import { REG_OFFICE_OPTIONS, type RegOfficeLocation } from "./pricing";
+
 export type BusinessUpdateServiceSlug =
   | "dissolve-business"
   | "revive-business"
   | "amalgamation"
   | "continuance"
-  | "initial-minute-book";
+  | "initial-minute-book"
+  | "registered-office";
 
 export type BusinessUpdateService = {
   slug: BusinessUpdateServiceSlug;
@@ -74,6 +77,18 @@ export const BUSINESS_UPDATE_SERVICES: Record<BusinessUpdateServiceSlug, Busines
       "Both the CBCA and the OBCA require every corporation to maintain corporate records: by-laws, organizational resolutions, share certificates, and the registers of directors, officers, and shareholders. If you incorporated on your own and never organized the corporation, Korporex prepares a complete digital minute book ready for signature.",
     path: "/services/initial-minute-book",
   },
+  "registered-office": {
+    slug: "registered-office",
+    label: "Registered Office",
+    longLabel: "Korporex Registered Office Address (12 months)",
+    // Lowest tier (Burlington annual). The charged amount depends on the chosen
+    // location; see computeRegisteredOfficeSubtotal.
+    price: REG_OFFICE_OPTIONS.burlington.annual,
+    tagline: "Use a Korporex office in Toronto or Burlington as your corporation's registered office.",
+    description:
+      "Use a Korporex office in Downtown Toronto or Burlington as your corporation's registered office address. We file the change of registered office with the registry and email you a scan of the mail received at the address every month. Billed annually in advance.",
+    path: "/services/registered-office",
+  },
 };
 
 export const BUSINESS_UPDATE_SLUGS = Object.keys(BUSINESS_UPDATE_SERVICES) as BusinessUpdateServiceSlug[];
@@ -111,4 +126,12 @@ export function computeMinuteBookSubtotal(counts: MinuteBookCounts): number {
     extra(counts.directors) * MINUTE_BOOK_PRICING.extraDirector +
     extra(counts.officers) * MINUTE_BOOK_PRICING.extraOfficer
   );
+}
+
+// ── Registered Office pricing ───────────────────────────────────────────────
+// Same tiers and amounts as the incorporation wizard's registered office
+// add-on (REG_OFFICE_OPTIONS in pricing.ts), billed as one 12-month term.
+
+export function computeRegisteredOfficeSubtotal(location: RegOfficeLocation): number {
+  return REG_OFFICE_OPTIONS[location].annual;
 }

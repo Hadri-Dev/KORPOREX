@@ -49,6 +49,7 @@ const STATIC_PATHS = [
   "/services/initial-minute-book",
   "/services/initial-return-on",
   "/services/notice-of-change",
+  "/services/registered-office",
   "/services/revive-business",
   "/services/sole-proprietorship",
 ];

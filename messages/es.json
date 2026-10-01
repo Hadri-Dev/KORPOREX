@@ -689,6 +689,10 @@
     "initialMinuteBook": {
       "title": "Libro de Actas Inicial para tu Sociedad | Korporex",
       "description": "¿Constituiste tu sociedad sin libro de actas? Korporex prepara tus estatutos internos, resoluciones de organización, certificados de acciones y registros en un libro de actas digital completo."
+    },
+    "registeredOffice": {
+      "title": "Domicilio Social en Toronto o Burlington | Korporex",
+      "description": "Usa una oficina de Korporex en el centro de Toronto o en Burlington como domicilio social de tu sociedad. Presentamos el cambio y te enviamos tu correo escaneado cada mes."
     }
   }
 }

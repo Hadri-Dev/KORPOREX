@@ -689,6 +689,10 @@
     "initialMinuteBook": {
       "title": "Initial Minute Book for Your Corporation | Korporex",
       "description": "Incorporated without a minute book? Korporex prepares your by-laws, organizational resolutions, share certificates, and registers as a complete digital minute book."
+    },
+    "registeredOffice": {
+      "title": "Registered Office Address in Toronto or Burlington | Korporex",
+      "description": "Use a Korporex office in Downtown Toronto or Burlington as your corporation's registered office. We file the change and email you monthly mail scans."
     }
   }
 }

@@ -127,13 +127,14 @@ const categories: Category[] = [
     icon: RefreshCw,
     title: "Business Updates",
     description:
-      "Dissolve, revive, amalgamate, or continue your corporation between jurisdictions. Or get the minute book your corporation is missing.",
+      "Dissolve, revive, amalgamate, or continue your corporation between jurisdictions. Get the minute book your corporation is missing, or use a Korporex office as your registered office.",
     services: [
       { name: "Initial Minute Book", from: "$399", href: "/services/initial-minute-book" },
       { name: "Dissolve a Business", from: "$199", href: "/services/dissolve-business" },
       { name: "Revive a Business", from: "$249", href: "/services/revive-business" },
       { name: "Amalgamation", from: "$499", href: "/services/amalgamation" },
       { name: "Continuance Between Jurisdictions", from: "$349", href: "/services/continuance" },
+      { name: "Registered Office", from: "$599.88/yr", href: "/services/registered-office" },
     ],
   },
 ];

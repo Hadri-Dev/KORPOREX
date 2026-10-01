@@ -17,6 +17,11 @@
 //                          registry filing: Korporex prepares the by-laws,
 //                          organizational resolutions, share certificates, and
 //                          registers for an already-incorporated corporation.
+//   registered-office    → CBCA s.19 (Form 3, Change of Registered Office
+//                          Address) / OBCA s.14 (Notice of Change). Korporex
+//                          supplies the address for a 12-month term and files
+//                          the change. A federal corporation's articles must
+//                          name Ontario as the province of the registered office.
 
 import { z } from "zod";
 import {
@@ -475,6 +480,37 @@ export const initialMinuteBookSchema = z
 
 export type InitialMinuteBookSubmission = z.infer<typeof initialMinuteBookSchema>;
 
+// ── 6. Registered Office Address ────────────────────────────────────────────
+//
+// An existing corporation moves its registered office to a Korporex address.
+// Location values match RegOfficeLocation in pricing.ts ("korporex" is the
+// Downtown Toronto tier, kept for consistency with incorporation orders).
+
+export const registeredOfficeSchema = z
+  .object({
+    location: z.enum(["korporex", "burlington"], { message: "Select an office location" }),
+    corporation: corporationIdSchema,
+    currentRegisteredOffice: addressSchema,
+    /** Federal only: the articles must name Ontario as the registered office province. */
+    federalArticlesOntario: z.boolean().optional(),
+    notes: z.string().trim().max(2000).optional().or(z.literal("")),
+    contact: contactSchema,
+    acceptTerms: z.literal(true, { message: "Please confirm to continue" }),
+  })
+  .merge(billingSchema)
+  .superRefine((data, ctx) => {
+    if (data.corporation.jurisdiction === "federal" && data.federalArticlesOntario !== true) {
+      ctx.addIssue({
+        path: ["federalArticlesOntario"],
+        code: z.ZodIssueCode.custom,
+        message:
+          "A Korporex address can only be used if your articles name Ontario as the province of your registered office",
+      });
+    }
+  });
+
+export type RegisteredOfficeSubmission = z.infer<typeof registeredOfficeSchema>;
+
 // ── Discriminated union for the API route ───────────────────────────────────
 
 export const businessUpdateRequestSchema = z.discriminatedUnion("service", [
@@ -483,6 +519,7 @@ export const businessUpdateRequestSchema = z.discriminatedUnion("service", [
   z.object({ service: z.literal("amalgamation"), payload: amalgamationSchema }),
   z.object({ service: z.literal("continuance"), payload: continuanceSchema }),
   z.object({ service: z.literal("initial-minute-book"), payload: initialMinuteBookSchema }),
+  z.object({ service: z.literal("registered-office"), payload: registeredOfficeSchema }),
 ]);
 
 export type BusinessUpdateRequest = z.infer<typeof businessUpdateRequestSchema>;
