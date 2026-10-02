@@ -596,6 +596,10 @@ async function handleBusinessUpdatePaid(session: Stripe.Checkout.Session) {
   const serviceLabel = session.metadata?.serviceLabel ?? service;
   const corpName = session.metadata?.corpName ?? "";
   const corpNumber = session.metadata?.corpNumber ?? "";
+  // Set only for the registered-office service ("korporex" = Toronto tier).
+  const regOfficeRaw = session.metadata?.regOfficeLocation;
+  const regOfficeLocation =
+    regOfficeRaw === "korporex" || regOfficeRaw === "burlington" ? regOfficeRaw : null;
   const jurisdictionRaw = session.metadata?.jurisdiction ?? "";
   // Amalgamation / continuance pass a non-simple jurisdiction string ("federal",
   // "ontario", or "from → to" for continuance). Pretty-print only the simple cases.
@@ -622,6 +626,9 @@ async function handleBusinessUpdatePaid(session: Stripe.Checkout.Session) {
     ["Jurisdiction", jurisdictionLabel],
     ...(corpName ? ([["Corporation", corpName]] as Array<[string, string]>) : []),
     ...(corpNumber ? ([["Corporation number", corpNumber]] as Array<[string, string]>) : []),
+    ...(regOfficeLocation
+      ? ([["Office location", REG_OFFICE_OPTIONS[regOfficeLocation].locationLabel]] as Array<[string, string]>)
+      : []),
     ["Customer", `${customerName} <${customerEmail}>`],
     ["Amount paid", `$${amountTotal} ${currency}`],
     ["Stripe session", session.id],
