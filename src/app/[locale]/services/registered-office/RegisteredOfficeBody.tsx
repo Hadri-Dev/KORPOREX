@@ -30,11 +30,11 @@ const LOCATIONS: RegOfficeLocation[] = ["korporex", "burlington"];
 
 const LOCATION_COPY: Record<RegOfficeLocation, { title: string; subtitle: string }> = {
   korporex: {
-    title: "Korporex office: Toronto",
+    title: "Toronto",
     subtitle: "Downtown Toronto address chosen by Korporex. Mail scans emailed to you monthly.",
   },
   burlington: {
-    title: "Korporex office: Burlington",
+    title: "Burlington",
     subtitle: "Burlington, Ontario address chosen by Korporex. Mail scans emailed to you monthly.",
   },
 };
