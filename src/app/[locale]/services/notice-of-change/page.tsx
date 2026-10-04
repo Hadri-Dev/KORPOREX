@@ -1,3 +1,5 @@
+import ServiceContentSection from "@/components/ServiceContentSection";
+import { content } from "@/lib/serviceContent/notice-of-change";
 import ServiceRelatedGuides from "@/components/ServiceRelatedGuides";
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
@@ -16,6 +18,7 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
   return (
     <>
       <NoticeOfChangeBody />
+      <ServiceContentSection locale={locale} path="/services/notice-of-change" content={content} />
       <ServiceRelatedGuides locale={locale} path="/services/notice-of-change" />
     </>
   );

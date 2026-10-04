@@ -1,3 +1,5 @@
+import ServiceContentSection from "@/components/ServiceContentSection";
+import { content } from "@/lib/serviceContent/nuans";
 import ServiceRelatedGuides from "@/components/ServiceRelatedGuides";
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
@@ -55,6 +57,7 @@ export default async function NuansReportPage({ params }: PageProps) {
   return (
     <>
       <NuansReportBody />
+      <ServiceContentSection locale={locale as Locale} path="/nuans" content={content} />
       <ServiceRelatedGuides locale={locale as Locale} path="/nuans" />
     </>
   );

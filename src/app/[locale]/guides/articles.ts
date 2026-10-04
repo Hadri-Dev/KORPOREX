@@ -1,11 +1,16 @@
 import type { Locale } from "@/i18n/routing";
 import { expanded as annualReturns } from "./content/annual-returns";
+import { expanded as corporateTaxRate } from "./content/corporate-tax-rate";
 import { expanded as costToIncorporateOntario } from "./content/cost-to-incorporate-ontario";
 import { expanded as dissolveCorporationOntario } from "./content/dissolve-corporation-ontario";
+import { expanded as holdingCompany } from "./content/holding-company";
+import { expanded as incorporatingOntario } from "./content/incorporating-ontario";
+import { expanded as minuteBook } from "./content/minute-book";
 import { expanded as nuansNameSearch } from "./content/nuans-name-search";
 import { nuansReportAlberta } from "./content/nuans-report-alberta";
 import { nuansReportOntario } from "./content/nuans-report-ontario";
 import { expanded as registerBusinessOntario } from "./content/register-business-ontario";
+import { expanded as salaryVsDividends } from "./content/salary-vs-dividends";
 
 export type { Locale };
 
@@ -2315,7 +2320,7 @@ export const articles: Article[] = [
     title: "Corporate Tax Rates in Canada and the Small Business Deduction",
     excerpt:
       "The low small business tax rate is one of the main reasons people incorporate. Here is how corporate tax rates work in Canada and what the small business deduction really does.",
-    metaTitle: "Corporate Tax Rates in Canada | Korporex",
+    metaTitle: "Corporate Tax Rates in Canada (2026) | Korporex",
     metaDescription:
       "How corporate tax rates work in Canada: the general rate, the small business deduction on the first $500,000 of active income, and combined Ontario rates.",
     readTime: "6 min read",
@@ -2694,7 +2699,7 @@ export const articles: Article[] = [
     title: "Les taux d'imposition des sociétés au Canada et la déduction pour petites entreprises",
     excerpt:
       "Le faible taux des petites entreprises est l'une des grandes raisons de se constituer. Voici comment fonctionnent les taux d'imposition des sociétés au Canada et ce que fait vraiment la déduction.",
-    metaTitle: "Taux d'imposition des sociétés au Canada | Korporex",
+    metaTitle: "Taux d'imposition des sociétés au Canada (2026) | Korporex",
     metaDescription:
       "Les taux d'imposition des sociétés au Canada : le taux général, la déduction pour petites entreprises sur les premiers 500 000 $, et les taux combinés.",
     readTime: "6 min de lecture",
@@ -3073,7 +3078,7 @@ export const articles: Article[] = [
     title: "Las tasas del impuesto de sociedades en Canadá y la deducción para pequeñas empresas",
     excerpt:
       "La baja tasa para pequeñas empresas es una de las grandes razones para constituirse. Aquí está cómo funcionan las tasas del impuesto de sociedades en Canadá y qué hace de verdad la deducción.",
-    metaTitle: "Tasas del impuesto de sociedades en Canadá | Korporex",
+    metaTitle: "Tasas del impuesto de sociedades en Canadá (2026) | Korporex",
     metaDescription:
       "Las tasas del impuesto de sociedades en Canadá: la tasa general, la deducción para pequeñas empresas sobre los primeros 500 000 $, y las tasas combinadas.",
     readTime: "6 min de lectura",
@@ -3767,10 +3772,15 @@ type ExpandedArticle = Pick<Article, "readTime" | "content"> & {
 };
 const EXPANDED: Record<string, { updated: string; byLocale: Record<Locale, ExpandedArticle> }> = {
   "annual-returns": { updated: "2026-10-04", byLocale: annualReturns },
+  "corporate-tax-rate": { updated: "2026-10-04", byLocale: corporateTaxRate },
   "cost-to-incorporate-ontario": { updated: "2026-10-04", byLocale: costToIncorporateOntario },
   "dissolve-corporation-ontario": { updated: "2026-10-04", byLocale: dissolveCorporationOntario },
+  "holding-company": { updated: "2026-10-04", byLocale: holdingCompany },
+  "incorporating-ontario": { updated: "2026-10-04", byLocale: incorporatingOntario },
+  "minute-book": { updated: "2026-10-04", byLocale: minuteBook },
   "nuans-name-search": { updated: "2026-10-04", byLocale: nuansNameSearch },
   "register-business-ontario": { updated: "2026-10-04", byLocale: registerBusinessOntario },
+  "salary-vs-dividends": { updated: "2026-10-04", byLocale: salaryVsDividends },
 };
 for (const a of articles) {
   const e = EXPANDED[a.group];

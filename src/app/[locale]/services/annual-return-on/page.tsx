@@ -1,3 +1,5 @@
+import ServiceContentSection from "@/components/ServiceContentSection";
+import { content } from "@/lib/serviceContent/annual-return-on";
 import ServiceRelatedGuides from "@/components/ServiceRelatedGuides";
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
@@ -16,6 +18,7 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
   return (
     <>
       <AnnualReturnOnBody />
+      <ServiceContentSection locale={locale} path="/services/annual-return-on" content={content} />
       <ServiceRelatedGuides locale={locale} path="/services/annual-return-on" />
     </>
   );

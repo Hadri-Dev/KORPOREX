@@ -201,7 +201,7 @@ export default function RegisteredOfficeBody() {
                         : `Korporex provides a registered office address in ${opt.locationLabel}, Ontario, chosen by Korporex. The specific street address is not disclosed in advance.`}
                     </p>
                     <ul className="text-xs text-gray-700 mt-3 space-y-1.5 list-disc pl-5">
-                      <li>We prepare the directors&apos; resolution and file the change of registered office with the registry.</li>
+                      <li>We prepare the resolution the move requires (a directors&apos; resolution, or a special resolution of the shareholders when the office moves to a different municipality) and file the change of registered office with the registry.</li>
                       <li>Monthly scanned copy of mail received at the address, emailed to you.</li>
                       <li>The Korporex address appears on the public corporate registry.</li>
                       <li>

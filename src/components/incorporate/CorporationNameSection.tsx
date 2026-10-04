@@ -184,7 +184,7 @@ export default function CorporationNameSection({
                 <strong>This is not an official NUANS search.</strong> The registry lookup above is a
                 preliminary check against publicly available business registries only. Your Korporex
                 package includes <strong>one (1)</strong> official NUANS Name Reservation Report
-                (required to incorporate), for the single name you submit here. It is ordered
+                (required for a named Ontario corporation), for the single name you submit here. It is ordered
                 automatically after checkout.
               </p>
               <p>

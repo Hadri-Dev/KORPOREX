@@ -1,4 +1,4 @@
-import type { Locale } from "@/i18n/routing";
+import type { ServiceContentByLocale } from "./types";
 
 // Server-rendered copy under the dissolution order form. The form is a client
 // wizard with almost no crawlable text, so this block carries the page's
@@ -6,21 +6,7 @@ import type { Locale } from "@/i18n/routing";
 // /guides/<dissolve slug> keeps the informational "how to" intent. Each block
 // links to the guide in the same locale so the two pages reinforce each other
 // instead of competing for the same query.
-export type Inline = string | { text: string; href: string };
-
-export type DissolveContent = {
-  title: string;
-  blocks: (
-    | { type: "h3"; text: string }
-    | { type: "p"; parts: Inline[] }
-    | { type: "list"; items: string[] }
-  )[];
-  faqTitle: string;
-  disclaimer: string;
-  faq: { q: string; a: string }[];
-};
-
-export const DISSOLVE_CONTENT: Record<Locale, DissolveContent> = {
+export const content: ServiceContentByLocale = {
   en: {
     title: "Dissolve your corporation online",
     blocks: [

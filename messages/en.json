@@ -665,11 +665,11 @@
     },
     "annualResolutionOn": {
       "title": "Ontario Annual Resolutions for Your Minute Book | Korporex",
-      "description": "Annual director and shareholder resolutions for your Ontario corporation. Korporex prepares the OBCA resolutions approving your financial statements, directors, officers, and auditor."
+      "description": "Annual director and shareholder resolutions for your Ontario (OBCA) corporation: financial statements, directors, officers and auditor, prepared by Korporex."
     },
     "annualResolutionFederal": {
       "title": "Federal Annual Resolutions for Your Minute Book | Korporex",
-      "description": "Annual director and shareholder resolutions for your federal (CBCA) corporation. Korporex prepares the resolutions approving your financial statements, directors, officers, and auditor."
+      "description": "Annual director and shareholder resolutions for your federal (CBCA) corporation: financial statements, directors, officers and auditor, prepared by Korporex."
     },
     "noticeOfChange": {
       "title": "File a Notice of Change | Korporex",
@@ -693,7 +693,7 @@
     },
     "initialMinuteBook": {
       "title": "Initial Minute Book for Your Corporation | Korporex",
-      "description": "Incorporated without a minute book? Korporex prepares your by-laws, organizational resolutions, share certificates, and registers as a complete digital minute book."
+      "description": "Incorporated without a minute book? Korporex prepares your by-laws, organizational resolutions, share certificates and registers as a digital minute book."
     },
     "registeredOffice": {
       "title": "Registered Office Address in Toronto or Burlington | Korporex",

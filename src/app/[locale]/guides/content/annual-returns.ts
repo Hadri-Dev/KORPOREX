@@ -181,11 +181,11 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         type: "paragraph",
-        text: "Dissolution is serious. A dissolved corporation no longer exists as a legal entity. Its name can become available to others, its contracts and property rights enter a legal grey zone, and the people who keep doing business in its name can face personal exposure. Corporate dissolution should be a decision you make on purpose, as described in our guide on how to dissolve a corporation in Ontario, not something that happens because a free or $12 filing was forgotten.",
+        text: "Dissolution is serious. A dissolved corporation no longer exists as a legal entity. Its name can become available to others, its contracts and property rights enter a legal grey zone, and the people who keep doing business in its name can face personal exposure. A voluntary dissolution is a separate, deliberate process, described in our guide on how to dissolve a corporation in Ontario; dissolution for default is the result of missed filings, even ones that are free or cost $12.",
         parts: [
-          "Dissolution is serious. A dissolved corporation no longer exists as a legal entity. Its name can become available to others, its contracts and property rights enter a legal grey zone, and the people who keep doing business in its name can face personal exposure. Corporate dissolution should be a decision you make on purpose, as described in our guide on ",
+          "Dissolution is serious. A dissolved corporation no longer exists as a legal entity. Its name can become available to others, its contracts and property rights enter a legal grey zone, and the people who keep doing business in its name can face personal exposure. A voluntary dissolution is a separate, deliberate process, described in our guide on ",
           { text: "how to dissolve a corporation in Ontario", href: "/guides/how-to-dissolve-a-corporation-in-ontario" },
-          ", not something that happens because a free or $12 filing was forgotten.",
+          "; dissolution for default is the result of missed filings, even ones that are free or cost $12.",
         ],
       },
       {
@@ -456,11 +456,11 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         type: "paragraph",
-        text: "La dissolution est grave. Une société dissoute n'existe plus comme entité juridique. Son nom peut redevenir disponible pour d'autres, ses contrats et droits de propriété entrent dans une zone grise juridique, et les personnes qui continuent de faire affaire en son nom peuvent s'exposer personnellement. La dissolution d'une société devrait être une décision prise délibérément, comme l'explique notre guide sur la façon de dissoudre une société en Ontario, et non la conséquence d'un dépôt gratuit ou à 12 $ oublié.",
+        text: "La dissolution est grave. Une société dissoute n'existe plus comme entité juridique. Son nom peut redevenir disponible pour d'autres, ses contrats et droits de propriété entrent dans une zone grise juridique, et les personnes qui continuent de faire affaire en son nom peuvent s'exposer personnellement. La dissolution volontaire est un processus distinct et délibéré, décrit dans notre guide sur la façon de dissoudre une société en Ontario; la dissolution pour défaut résulte de dépôts manqués, même gratuits ou à 12 $.",
         parts: [
-          "La dissolution est grave. Une société dissoute n'existe plus comme entité juridique. Son nom peut redevenir disponible pour d'autres, ses contrats et droits de propriété entrent dans une zone grise juridique, et les personnes qui continuent de faire affaire en son nom peuvent s'exposer personnellement. La dissolution d'une société devrait être une décision prise délibérément, comme l'explique notre guide sur la façon de ",
+          "La dissolution est grave. Une société dissoute n'existe plus comme entité juridique. Son nom peut redevenir disponible pour d'autres, ses contrats et droits de propriété entrent dans une zone grise juridique, et les personnes qui continuent de faire affaire en son nom peuvent s'exposer personnellement. La dissolution volontaire est un processus distinct et délibéré, décrit dans notre guide sur la façon de ",
           { text: "dissoudre une société en Ontario", href: "/guides/comment-dissoudre-une-societe-en-ontario" },
-          ", et non la conséquence d'un dépôt gratuit ou à 12 $ oublié.",
+          "; la dissolution pour défaut résulte de dépôts manqués, même gratuits ou à 12 $.",
         ],
       },
       {
@@ -731,11 +731,11 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         type: "paragraph",
-        text: "La disolución es grave. Una sociedad disuelta deja de existir como entidad legal. Su nombre puede quedar disponible para otros, sus contratos y derechos de propiedad entran en una zona gris legal, y las personas que siguen haciendo negocios en su nombre pueden quedar expuestas personalmente. La disolución de una sociedad debería ser una decisión tomada a propósito, como explica nuestra guía sobre cómo disolver una sociedad en Ontario, no la consecuencia de olvidar una presentación gratuita o de 12 $.",
+        text: "La disolución es grave. Una sociedad disuelta deja de existir como entidad legal. Su nombre puede quedar disponible para otros, sus contratos y derechos de propiedad entran en una zona gris legal, y las personas que siguen haciendo negocios en su nombre pueden quedar expuestas personalmente. La disolución voluntaria es un proceso distinto y deliberado, descrito en nuestra guía sobre cómo disolver una sociedad en Ontario; la disolución por incumplimiento es el resultado de presentaciones omitidas, incluso gratuitas o de 12 $.",
         parts: [
-          "La disolución es grave. Una sociedad disuelta deja de existir como entidad legal. Su nombre puede quedar disponible para otros, sus contratos y derechos de propiedad entran en una zona gris legal, y las personas que siguen haciendo negocios en su nombre pueden quedar expuestas personalmente. La disolución de una sociedad debería ser una decisión tomada a propósito, como explica nuestra guía sobre cómo ",
+          "La disolución es grave. Una sociedad disuelta deja de existir como entidad legal. Su nombre puede quedar disponible para otros, sus contratos y derechos de propiedad entran en una zona gris legal, y las personas que siguen haciendo negocios en su nombre pueden quedar expuestas personalmente. La disolución voluntaria es un proceso distinto y deliberado, descrito en nuestra guía sobre cómo ",
           { text: "disolver una sociedad en Ontario", href: "/guides/como-disolver-una-sociedad-en-ontario" },
-          ", no la consecuencia de olvidar una presentación gratuita o de 12 $.",
+          "; la disolución por incumplimiento es el resultado de presentaciones omitidas, incluso gratuitas o de 12 $.",
         ],
       },
       {

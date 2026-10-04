@@ -192,7 +192,7 @@ export default function AnnualReturnOntarioPage() {
               <p className="text-gray-500 text-sm mb-8">The Ontario corporation filing the Annual Return.</p>
               <form onSubmit={(e) => { e.preventDefault(); gotoStep(2); }} className="space-y-5">
                 <CorporationIdSection errors={errors.corporation} lockedJurisdiction="ontario" />
-                <Field label="Anniversary date *" error={errors.anniversaryDate?.message} hint="The date of incorporation; the Annual Return is due each year on or after this date.">
+                <Field label="Anniversary date *" error={errors.anniversaryDate?.message} hint="The date of incorporation. The Annual Return itself is due within 6 months after the fiscal year-end.">
                   <input type="date" {...register("anniversaryDate")} className={iCls} />
                 </Field>
                 <Field label="Fiscal year-end *" error={errors.fiscalYearEnd?.message}>

@@ -296,7 +296,7 @@ export default function DissolveBusinessPage() {
                       <span className="text-navy-900">${total.toFixed(2)}</span>
                     </div>
                     <p className="text-xs text-gray-500 mt-2 leading-relaxed">
-                      Government filing fees (Corporations Canada $0 — gratis, or Ontario $25) are pass-through. Final tax / GST closure is handled by you or your accountant.
+                      Government filing fees (Corporations Canada $0 (free), or Ontario $25) are pass-through. Final tax / GST closure is handled by you or your accountant.
                     </p>
                   </div>
                 </div>

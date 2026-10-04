@@ -1,3 +1,5 @@
+import ServiceContentSection from "@/components/ServiceContentSection";
+import { content } from "@/lib/serviceContent/continuance";
 import ServiceRelatedGuides from "@/components/ServiceRelatedGuides";
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
@@ -16,6 +18,7 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
   return (
     <>
       <ContinuanceBody />
+      <ServiceContentSection locale={locale} path="/services/continuance" content={content} />
       <ServiceRelatedGuides locale={locale} path="/services/continuance" />
     </>
   );

@@ -348,7 +348,7 @@ export default function ReviveBusinessPage() {
                       <span className="text-navy-900">${total.toFixed(2)}</span>
                     </div>
                     <p className="text-xs text-gray-500 mt-2 leading-relaxed">
-                      Government filing fees (Corporations Canada $200 / Ontario $250) and any back-filings (annual returns, returned for default) are billed separately as a pass-through.
+                      Government filing fees (Corporations Canada $250 / Ontario $330) and any back-filings (annual returns, returned for default) are billed separately as a pass-through.
                     </p>
                   </div>
                 </div>
