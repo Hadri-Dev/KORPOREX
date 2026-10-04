@@ -589,7 +589,7 @@
   "seo": {
     "home": {
       "title": "Constitución de Empresas en Línea en Canadá | Korporex",
-      "description": "Constituye tu empresa en Canadá en línea con precio fijo todo incluido—tasas gubernamentales incluidas. Documentos federales y de Ontario en 24 horas."
+      "description": "Constituye tu empresa en Canadá en línea desde 599 $, tasas gubernamentales incluidas. Precio fijo, federal o de Ontario, con documentos listos en 24 horas."
     },
     "services": {
       "title": "Servicios de Constitución y Trámites | Korporex",
@@ -597,11 +597,11 @@
     },
     "incorporate": {
       "title": "Constituir una Empresa en Canadá en Línea | Korporex",
-      "description": "Inicia tu constitución federal o de Ontario en línea. Korporex prepara tus estatutos constitutivos y los presenta ante el registro, entregados en 24 horas."
+      "description": "Constituye tu sociedad federal o de Ontario en línea desde 599 $, tasas incluidas. Korporex prepara y presenta tus estatutos, con documentos listos en 24 horas."
     },
     "order": {
       "title": "Paquetes y Precios de Constitución | Korporex",
-      "description": "Compara los paquetes de constitución de Korporex para sociedades federales y de Ontario. Precios fijos transparentes en CAD, con tasas de registro aparte."
+      "description": "Compara los paquetes de Korporex: Ontario desde 599 $, federal desde 749 $, tasas gubernamentales incluidas. Precios fijos en CAD, impuestos al pagar."
     },
     "legalConsultation": {
       "title": "Reserva una Consulta Legal con un Abogado | Korporex",
@@ -664,12 +664,12 @@
       "description": "Presenta la declaración anual de tu sociedad federal (CBCA) ante Corporations Canada. Korporex la prepara y la envía para mantener tu sociedad en regla."
     },
     "annualResolutionOn": {
-      "title": "Resoluciones Anuales de Ontario para tu Libro de Actas | Korporex",
-      "description": "Resoluciones anuales de directores y accionistas para tu sociedad de Ontario. Korporex prepara las resoluciones (OBCA) que aprueban tus estados financieros, directores, funcionarios y auditor."
+      "title": "Resoluciones Anuales en Ontario (OBCA) | Korporex",
+      "description": "Resoluciones anuales de directores y accionistas para tu sociedad de Ontario (OBCA): estados financieros, directores, funcionarios y auditor."
     },
     "annualResolutionFederal": {
-      "title": "Resoluciones Anuales Federales para tu Libro de Actas | Korporex",
-      "description": "Resoluciones anuales de directores y accionistas para tu sociedad federal (CBCA). Korporex prepara las resoluciones que aprueban tus estados financieros, directores, funcionarios y auditor."
+      "title": "Resoluciones Anuales Federales (CBCA) | Korporex",
+      "description": "Resoluciones anuales de directores y accionistas para tu sociedad federal (CBCA): estados financieros, directores, funcionarios y auditor."
     },
     "noticeOfChange": {
       "title": "Presentar un Aviso de Cambio | Korporex",
@@ -693,11 +693,11 @@
     },
     "initialMinuteBook": {
       "title": "Libro de Actas Inicial para tu Sociedad | Korporex",
-      "description": "¿Constituiste tu sociedad sin libro de actas? Korporex prepara tus estatutos internos, resoluciones de organización, certificados de acciones y registros en un libro de actas digital completo."
+      "description": "¿Constituiste tu sociedad sin libro de actas? Korporex prepara tus estatutos internos, resoluciones de organización, certificados de acciones y registros."
     },
     "registeredOffice": {
       "title": "Domicilio Social en Toronto o Burlington | Korporex",
-      "description": "Usa una oficina de Korporex en el centro de Toronto o en Burlington como domicilio social de tu sociedad. Presentamos el cambio y te enviamos tu correo escaneado cada mes."
+      "description": "Usa una oficina de Korporex en el centro de Toronto o en Burlington como domicilio social. Presentamos el cambio y escaneamos tu correo cada mes."
     }
   }
 }

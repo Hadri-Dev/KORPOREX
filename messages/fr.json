@@ -589,7 +589,7 @@
   "seo": {
     "home": {
       "title": "Constitution d'entreprise en ligne au Canada | Korporex",
-      "description": "Constituez votre entreprise au Canada en ligne, tarif forfaitaire tout inclus—frais gouvernementaux compris. Documents fédéraux et ontariens sous 24 heures."
+      "description": "Constituez votre entreprise en ligne au Canada dès 599 $, frais gouvernementaux compris. Tarif fixe, au fédéral ou en Ontario, documents prêts sous 24 heures."
     },
     "services": {
       "title": "Services de constitution et de dépôt corporatif | Korporex",
@@ -597,11 +597,11 @@
     },
     "incorporate": {
       "title": "Constituer une entreprise en ligne au Canada | Korporex",
-      "description": "Lancez votre constitution fédérale ou ontarienne en ligne. Korporex prépare vos statuts constitutifs et les dépose au registre, livrés sous 24 heures."
+      "description": "Constituez votre société au fédéral ou en Ontario en ligne dès 599 $, frais gouvernementaux compris. Korporex prépare et dépose vos statuts sous 24 heures."
     },
     "order": {
       "title": "Forfaits et tarifs de constitution | Korporex",
-      "description": "Comparez les forfaits de constitution Korporex, fédéraux et ontariens. Tarifs forfaitaires en CAD, frais de dépôt gouvernementaux indiqués à part."
+      "description": "Comparez les forfaits Korporex : Ontario dès 599 $, fédéral dès 749 $, frais de dépôt gouvernementaux compris. Tarifs fixes en CAD, taxes au paiement."
     },
     "legalConsultation": {
       "title": "Consultation juridique avec un avocat | Korporex",
@@ -664,12 +664,12 @@
       "description": "Déposez le rapport annuel de votre société fédérale (LCSA) auprès de Corporations Canada. Korporex le prépare et le soumet pour garder votre société en règle."
     },
     "annualResolutionOn": {
-      "title": "Résolutions annuelles de l'Ontario pour votre livre de procès-verbaux | Korporex",
-      "description": "Résolutions annuelles des administrateurs et des actionnaires pour votre société ontarienne. Korporex prépare les résolutions (LSAO) approuvant vos états financiers, administrateurs, dirigeants et vérificateur."
+      "title": "Résolutions annuelles en Ontario (LSAO) | Korporex",
+      "description": "Résolutions annuelles des administrateurs et actionnaires de votre société ontarienne (LSAO) : états financiers, administrateurs, dirigeants et vérificateur."
     },
     "annualResolutionFederal": {
-      "title": "Résolutions annuelles fédérales pour votre livre de procès-verbaux | Korporex",
-      "description": "Résolutions annuelles des administrateurs et des actionnaires pour votre société fédérale (LCSA). Korporex prépare les résolutions approuvant vos états financiers, administrateurs, dirigeants et vérificateur."
+      "title": "Résolutions annuelles fédérales (LCSA) | Korporex",
+      "description": "Résolutions annuelles des administrateurs et actionnaires de votre société fédérale (LCSA) : états financiers, administrateurs, dirigeants et vérificateur."
     },
     "noticeOfChange": {
       "title": "Déposer un avis de changement | Korporex",
@@ -692,12 +692,12 @@
       "description": "Transférez votre société vers un nouveau territoire. Korporex prépare et dépose vos statuts de prorogation entre le fédéral et l'Ontario."
     },
     "initialMinuteBook": {
-      "title": "Livre de procès-verbaux initial pour votre société | Korporex",
-      "description": "Société constituée sans livre de procès-verbaux? Korporex prépare vos règlements administratifs, résolutions d'organisation, certificats d'actions et registres en un livre numérique complet."
+      "title": "Livre de procès-verbaux initial | Korporex",
+      "description": "Société constituée sans livre de procès-verbaux? Korporex prépare vos règlements, résolutions d'organisation, certificats d'actions et registres numériques."
     },
     "registeredOffice": {
       "title": "Adresse de siège social à Toronto ou Burlington | Korporex",
-      "description": "Utilisez un bureau Korporex au centre-ville de Toronto ou à Burlington comme siège social de votre société. Nous déposons le changement et vous envoyons chaque mois votre courrier numérisé."
+      "description": "Utilisez un bureau Korporex au centre-ville de Toronto ou à Burlington comme siège social. Nous déposons le changement et numérisons votre courrier chaque mois."
     }
   }
 }
