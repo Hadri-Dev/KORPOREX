@@ -21,6 +21,8 @@ export type ComplianceServiceSlug =
 export type ComplianceService = {
   slug: ComplianceServiceSlug;
   label: string;
+  /** Keyword-focused page heading (H1); falls back to label. */
+  h1?: string;
   longLabel: string;
   price: number;
   /** Short pitch shown on the services listing tile. */
@@ -35,6 +37,7 @@ export const COMPLIANCE_SERVICES: Record<ComplianceServiceSlug, ComplianceServic
   "initial-return-on": {
     slug: "initial-return-on",
     label: "Initial Return (Ontario)",
+    h1: "File Your Ontario Initial Return",
     longLabel: "Initial Return (Ontario)",
     price: 99,
     tagline: "File the mandatory Initial Return within 60 days of incorporation.",
@@ -45,6 +48,7 @@ export const COMPLIANCE_SERVICES: Record<ComplianceServiceSlug, ComplianceServic
   "annual-return-on": {
     slug: "annual-return-on",
     label: "Annual Return - Ontario",
+    h1: "File Your Ontario Annual Return",
     longLabel: "Annual Return - Ontario",
     price: 49.99,
     tagline: "File your annual corporate information return with the Ontario Business Registry.",
@@ -55,6 +59,7 @@ export const COMPLIANCE_SERVICES: Record<ComplianceServiceSlug, ComplianceServic
   "annual-return-federal": {
     slug: "annual-return-federal",
     label: "Annual Return - Federal",
+    h1: "File Your Federal (CBCA) Annual Return",
     longLabel: "Annual Return - Federal (Form 22)",
     price: 49.99,
     tagline: "File the CBCA Annual Return (Form 22) with Corporations Canada.",
@@ -65,6 +70,7 @@ export const COMPLIANCE_SERVICES: Record<ComplianceServiceSlug, ComplianceServic
   "annual-resolution-on": {
     slug: "annual-resolution-on",
     label: "Annual Resolution - Ontario",
+    h1: "Ontario Annual Resolutions for Your Corporation",
     longLabel: "Annual Resolutions - Ontario (OBCA)",
     price: 199.99,
     tagline: "Annual director and shareholder resolutions for your Ontario corporation's minute book.",
@@ -75,6 +81,7 @@ export const COMPLIANCE_SERVICES: Record<ComplianceServiceSlug, ComplianceServic
   "annual-resolution-federal": {
     slug: "annual-resolution-federal",
     label: "Annual Resolution - Federal",
+    h1: "Federal Annual Resolutions for Your Corporation",
     longLabel: "Annual Resolutions - Federal (CBCA)",
     price: 199.99,
     tagline: "Annual director and shareholder resolutions for your CBCA corporation's minute book.",
@@ -85,6 +92,7 @@ export const COMPLIANCE_SERVICES: Record<ComplianceServiceSlug, ComplianceServic
   "notice-of-change": {
     slug: "notice-of-change",
     label: "Notice of Change",
+    h1: "File an Ontario Notice of Change",
     longLabel: "Notice of Change",
     price: 129,
     tagline: "File multiple corporate changes in a single combined filing.",

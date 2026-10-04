@@ -16,6 +16,8 @@ export type AmendmentServiceSlug =
 export type AmendmentService = {
   slug: AmendmentServiceSlug;
   label: string;
+  /** Keyword-focused page heading (H1); falls back to label. */
+  h1?: string;
   longLabel: string;
   price: number;
   /** Short pitch shown on the services listing tile. */
@@ -30,6 +32,7 @@ export const AMENDMENT_SERVICES: Record<AmendmentServiceSlug, AmendmentService> 
   "change-director": {
     slug: "change-director",
     label: "Change of Director / Officer",
+    h1: "Change Corporate Directors in Ontario or Federally",
     longLabel: "Change of Director / Officer",
     price: 149,
     tagline: "Add, remove, or update a director or officer of your corporation.",
@@ -40,6 +43,7 @@ export const AMENDMENT_SERVICES: Record<AmendmentServiceSlug, AmendmentService> 
   "change-shareholder": {
     slug: "change-shareholder",
     label: "Change of Shareholder",
+    h1: "Record a Change of Shareholders",
     longLabel: "Change of Shareholder",
     price: 149,
     tagline: "Record a share transfer or new issuance in your corporate records.",
@@ -50,6 +54,7 @@ export const AMENDMENT_SERVICES: Record<AmendmentServiceSlug, AmendmentService> 
   "change-address": {
     slug: "change-address",
     label: "Corporation Address Change",
+    h1: "Change Your Corporation's Registered Office Address",
     longLabel: "Corporation Address Change",
     price: 99,
     tagline: "Change your corporation's registered office address.",
@@ -60,6 +65,7 @@ export const AMENDMENT_SERVICES: Record<AmendmentServiceSlug, AmendmentService> 
   "articles-amendment": {
     slug: "articles-amendment",
     label: "Articles of Amendment",
+    h1: "Amend Your Articles of Incorporation",
     longLabel: "Articles of Amendment",
     price: 199,
     tagline: "Amend the Articles of your corporation.",

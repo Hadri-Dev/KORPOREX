@@ -115,7 +115,7 @@ export default function BusinessNumberRegistrationPage() {
     <FormProvider {...form}>
       <section className="bg-cream-50 py-8 px-6 border-b border-gray-100">
         <div className="max-w-2xl mx-auto">
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-navy-900 leading-tight mb-4">{SERVICE.label}</h1>
+          <h1 className="font-serif text-4xl md:text-5xl font-bold text-navy-900 leading-tight mb-4">{SERVICE.h1 ?? SERVICE.label}</h1>
           <p className="text-lg text-gray-600 leading-relaxed">{SERVICE.description}</p>
           <p className="mt-4 text-sm text-gray-500">
             <span className="font-semibold text-navy-900">${SERVICE.price} CAD</span> + applicable tax. Filed within 1–2 business days.

@@ -12,6 +12,8 @@ export type RegistrationServiceSlug =
 export type RegistrationService = {
   slug: RegistrationServiceSlug;
   label: string;
+  /** Keyword-focused page heading (H1); falls back to label. */
+  h1?: string;
   longLabel: string;
   price: number;
   /** Short pitch shown on the services listing tile. */
@@ -26,6 +28,7 @@ export const REGISTRATION_SERVICES: Record<RegistrationServiceSlug, Registration
   "sole-prop-on": {
     slug: "sole-prop-on",
     label: "Sole Proprietorship Registration",
+    h1: "Register a Sole Proprietorship in Ontario",
     longLabel: "Sole Proprietorship Registration — Ontario",
     price: 99,
     tagline: "Register a sole proprietorship in Ontario.",
@@ -36,6 +39,7 @@ export const REGISTRATION_SERVICES: Record<RegistrationServiceSlug, Registration
   "business-name-on": {
     slug: "business-name-on",
     label: "Business Name Registration",
+    h1: "Register a Business Name in Ontario",
     longLabel: "Business Name Registration — Ontario",
     price: 79,
     tagline: "Register a trade name (DBA) in Ontario.",
@@ -46,6 +50,7 @@ export const REGISTRATION_SERVICES: Record<RegistrationServiceSlug, Registration
   "business-number": {
     slug: "business-number",
     label: "Business Number Registration",
+    h1: "Register a CRA Business Number",
     longLabel: "Business Number Registration — CRA",
     price: 99,
     tagline: "Register your business with the CRA for a 9-digit Business Number.",
@@ -56,6 +61,7 @@ export const REGISTRATION_SERVICES: Record<RegistrationServiceSlug, Registration
   "extra-provincial": {
     slug: "extra-provincial",
     label: "Extra-Provincial Registration",
+    h1: "Extra-Provincial Registration for Your Corporation",
     longLabel: "Extra-Provincial Registration",
     price: 199,
     tagline: "Register your existing corporation in another province.",

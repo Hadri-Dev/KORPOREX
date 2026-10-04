@@ -16,6 +16,8 @@ export type BusinessUpdateServiceSlug =
 export type BusinessUpdateService = {
   slug: BusinessUpdateServiceSlug;
   label: string;
+  /** Keyword-focused page heading (H1); falls back to label. */
+  h1?: string;
   longLabel: string;
   price: number;
   /** Short pitch shown on the services listing tile. */
@@ -30,6 +32,7 @@ export const BUSINESS_UPDATE_SERVICES: Record<BusinessUpdateServiceSlug, Busines
   "dissolve-business": {
     slug: "dissolve-business",
     label: "Dissolve a Business",
+    h1: "Dissolve a Corporation in Ontario or Federally",
     longLabel: "Voluntary Dissolution",
     price: 199,
     tagline: "Voluntarily dissolve your corporation with the appropriate registry.",
@@ -40,6 +43,7 @@ export const BUSINESS_UPDATE_SERVICES: Record<BusinessUpdateServiceSlug, Busines
   "revive-business": {
     slug: "revive-business",
     label: "Revive a Business",
+    h1: "Revive a Dissolved Corporation",
     longLabel: "Articles of Revival",
     price: 249,
     tagline: "Bring a dissolved corporation back into existence.",
@@ -50,6 +54,7 @@ export const BUSINESS_UPDATE_SERVICES: Record<BusinessUpdateServiceSlug, Busines
   "amalgamation": {
     slug: "amalgamation",
     label: "Amalgamation",
+    h1: "Amalgamate Corporations in Ontario or Federally",
     longLabel: "Articles of Amalgamation",
     price: 499,
     tagline: "Combine two or more corporations into a single amalgamated entity.",
@@ -60,6 +65,7 @@ export const BUSINESS_UPDATE_SERVICES: Record<BusinessUpdateServiceSlug, Busines
   "continuance": {
     slug: "continuance",
     label: "Continuance Between Jurisdictions",
+    h1: "Continue Your Corporation to Another Jurisdiction",
     longLabel: "Articles of Continuance (Import / Export)",
     price: 349,
     tagline: "Move your corporation from one jurisdiction to another (e.g. Ontario to Federal).",
@@ -70,6 +76,7 @@ export const BUSINESS_UPDATE_SERVICES: Record<BusinessUpdateServiceSlug, Busines
   "initial-minute-book": {
     slug: "initial-minute-book",
     label: "Initial Minute Book",
+    h1: "Get a Minute Book for Your Corporation",
     longLabel: "Initial Corporate Minute Book",
     price: 399,
     tagline: "Complete digital minute book for a corporation that incorporated without one.",
@@ -80,6 +87,7 @@ export const BUSINESS_UPDATE_SERVICES: Record<BusinessUpdateServiceSlug, Busines
   "registered-office": {
     slug: "registered-office",
     label: "Registered Office",
+    h1: "Registered Office Address in Toronto or Burlington",
     longLabel: "Korporex Registered Office Address (12 months)",
     // Lowest tier (Burlington annual). The charged amount depends on the chosen
     // location; see computeRegisteredOfficeSubtotal.
