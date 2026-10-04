@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ...socialMeta({ title, description, url: nuansUrl("es"), locale: locale as Locale }),
     };
   }
-  const title = "NUANS Report Canada | Pre-Screen a Corporate Name | Korporex";
+  const title = "Order a NUANS Report Online | Ontario & Canada | Korporex";
   const description =
     "Order an official NUANS preliminary name-search report before you incorporate in Canada. From $39.99 + HST per name, federal and provincial. Delivered in hours.";
   return {

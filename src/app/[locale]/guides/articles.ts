@@ -3,6 +3,7 @@ import { expanded as annualReturns } from "./content/annual-returns";
 import { expanded as costToIncorporateOntario } from "./content/cost-to-incorporate-ontario";
 import { expanded as dissolveCorporationOntario } from "./content/dissolve-corporation-ontario";
 import { expanded as nuansNameSearch } from "./content/nuans-name-search";
+import { nuansReportOntario } from "./content/nuans-report-ontario";
 import { expanded as registerBusinessOntario } from "./content/register-business-ontario";
 
 export type { Locale };
@@ -3753,6 +3754,7 @@ export const articles: Article[] = [
       { type: "paragraph", text: "Los precios de mercado descritos en esta guía reflejan tarifas publicadas y reportajes a fecha de septiembre de 2026 y pueden cambiar. Nada de lo aquí expuesto es asesoramiento jurídico, y los despachos siguen siendo responsables de sus propias obligaciones profesionales sobre desembolsos, elección de proveedores e información al cliente." },
     ],
   },
+  ...nuansReportOntario,
 ];
 
 // Long-form rewrites kept in ./content/<group>.ts (one file per article group,

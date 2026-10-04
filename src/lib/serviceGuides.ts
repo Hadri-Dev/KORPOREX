@@ -12,7 +12,7 @@ import {
 // in a locale, or scheduled for the future, is skipped.
 export const SERVICE_GUIDES: Record<string, string[]> = {
   "/incorporate": ["incorporate-business-canada", "incorporating-ontario", "cost-to-incorporate-ontario", "incorporate-canada"],
-  "/nuans": ["nuans-name-search", "nuans-by-province", "read-nuans-report", "name-rejected"],
+  "/nuans": ["nuans-report-ontario", "nuans-name-search", "nuans-by-province", "read-nuans-report", "name-rejected"],
   "/services/amalgamation": ["holding-company", "minute-book", "articles-of-incorporation"],
   "/services/annual-resolution-federal": ["minute-book", "annual-returns", "salary-vs-dividends"],
   "/services/annual-resolution-on": ["minute-book", "annual-returns", "salary-vs-dividends"],
@@ -23,7 +23,7 @@ export const SERVICE_GUIDES: Record<string, string[]> = {
   "/services/business-number": ["cra-business-number", "business-vs-corporation-number", "gst-hst-ontario"],
   "/services/change-address": ["annual-returns", "minute-book", "incorporating-ontario"],
   "/services/change-director": ["minute-book", "annual-returns", "shareholder-agreements"],
-  "/services/change-name": ["named-vs-numbered", "nuans-name-search", "name-rejected"],
+  "/services/change-name": ["nuans-report-ontario", "named-vs-numbered", "nuans-name-search", "name-rejected"],
   "/services/change-shareholder": ["shareholder-agreements", "minute-book", "holding-company"],
   "/services/continuance": ["incorporate-canada", "articles-of-incorporation", "minute-book"],
   "/services/dissolve-business": ["dissolve-corporation-ontario", "annual-returns", "minute-book"],

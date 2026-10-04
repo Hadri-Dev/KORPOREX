@@ -68,6 +68,18 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
+        "text": "Our step-by-step guide to the Ontario NUANS report covers every Ontario filing that needs one, what to enter on the Ontario Business Registry, and the timing rules.",
+        "parts": [
+          "Our step-by-step guide to the ",
+          {
+            "text": "Ontario NUANS report",
+            "href": "/guides/nuans-report-ontario"
+          },
+          " covers every Ontario filing that needs one, what to enter on the Ontario Business Registry, and the timing rules."
+        ]
+      },
+      {
+        "type": "paragraph",
         "text": "The same rule applies when an existing Ontario corporation changes its name by articles of amendment: a fresh Ontario-biased report is needed unless the new name is a number name. If you are renaming a corporation rather than starting one, see our corporate name change service.",
         "parts": [
           "The same rule applies when an existing Ontario corporation changes its name by articles of amendment: a fresh Ontario-biased report is needed unless the new name is a number name. If you are renaming a corporation rather than starting one, see our ",
@@ -442,6 +454,18 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
+        "text": "Notre guide étape par étape sur le rapport NUANS en Ontario couvre chaque dépôt ontarien qui en exige un, ce qu'il faut inscrire au Registre des entreprises de l'Ontario et les règles de délai.",
+        "parts": [
+          "Notre guide étape par étape sur le ",
+          {
+            "text": "rapport NUANS en Ontario",
+            "href": "/guides/rapport-nuans-ontario"
+          },
+          " couvre chaque dépôt ontarien qui en exige un, ce qu'il faut inscrire au Registre des entreprises de l'Ontario et les règles de délai."
+        ]
+      },
+      {
+        "type": "paragraph",
         "text": "La même règle s'applique lorsqu'une société ontarienne existante change de nom par statuts de modification : un nouveau rapport à pondération ontarienne est requis, sauf si le nouveau nom est un matricule. Si vous renommez une société plutôt que d'en créer une, consultez notre service de changement de dénomination sociale.",
         "parts": [
           "La même règle s'applique lorsqu'une société ontarienne existante change de nom par statuts de modification : un nouveau rapport à pondération ontarienne est requis, sauf si le nouveau nom est un matricule. Si vous renommez une société plutôt que d'en créer une, consultez notre ",
@@ -813,6 +837,18 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       {
         "type": "paragraph",
         "text": "Ontario funciona al revés. Para constituir una sociedad por acciones de Ontario con un nombre, debe obtener un informe NUANS con ponderación de Ontario (Ontario-biased) de un proveedor privado de búsqueda de nombres. El gobierno de Ontario no realiza la búsqueda por usted, y no se acepta un informe con ponderación federal. Al presentar los estatutos a través del Ontario Business Registry, usted indica el número de referencia del informe, el nombre buscado y la fecha del informe."
+      },
+      {
+        "type": "paragraph",
+        "text": "Nuestra guía paso a paso sobre el informe NUANS en Ontario cubre cada trámite ontariano que lo exige, qué ingresar en el Ontario Business Registry y las reglas de plazo.",
+        "parts": [
+          "Nuestra guía paso a paso sobre el ",
+          {
+            "text": "informe NUANS en Ontario",
+            "href": "/guides/informe-nuans-ontario"
+          },
+          " cubre cada trámite ontariano que lo exige, qué ingresar en el Ontario Business Registry y las reglas de plazo."
+        ]
       },
       {
         "type": "paragraph",
