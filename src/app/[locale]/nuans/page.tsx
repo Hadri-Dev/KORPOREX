@@ -3,7 +3,7 @@ import { content } from "@/lib/serviceContent/nuans";
 import ServiceRelatedGuides from "@/components/ServiceRelatedGuides";
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
-import { socialMeta } from "@/lib/seoMeta";
+import { buildAlternates, socialMeta } from "@/lib/seoMeta";
 import type { Locale } from "@/i18n/routing";
 import NuansReportBody from "./NuansReportBody";
 
@@ -19,34 +19,34 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const isEs = locale === "es";
 
   if (isFr) {
-    const title = "Rapport NUANS Canada | Recherche préliminaire de nom commercial | Korporex";
+    const title = "Rapport NUANS en ligne | Ontario et Canada | Korporex";
     const description =
-      "Commandez un rapport NUANS officiel pour pré-vérifier un nom de société canadienne avant la constitution. Dès 39,99 $ + TVH par nom. Livré en quelques heures.";
+      "Commandez un rapport NUANS officiel pour une constitution en Ontario, en Alberta ou au fédéral. 39,99 $ + TVH par nom, livré par courriel en quelques heures.";
     return {
       title,
       description,
+      alternates: buildAlternates("fr", "/nuans", true),
       ...socialMeta({ title, description, url: nuansUrl("fr"), locale: locale as Locale }),
     };
   }
   if (isEs) {
-    const title = "Informe NUANS Canadá | Búsqueda preliminar de nombre corporativo | Korporex";
+    const title = "Informe NUANS en línea | Ontario y Canadá | Korporex";
     const description =
-      "Solicite un informe NUANS oficial para verificar un nombre de sociedad canadiense antes de constituir. Desde $39.99 + HST por nombre. Entrega en pocas horas.";
+      "Pida un informe NUANS oficial para constituirse en Ontario, Alberta o a nivel federal. 39,99 $ + HST por nombre, entregado por correo en pocas horas.";
     return {
       title,
       description,
+      alternates: buildAlternates("es", "/nuans", true),
       ...socialMeta({ title, description, url: nuansUrl("es"), locale: locale as Locale }),
     };
   }
   const title = "Order a NUANS Report Online | Ontario & Canada | Korporex";
   const description =
-    "Order an official NUANS preliminary name-search report before you incorporate in Canada. From $39.99 + HST per name, federal and provincial. Delivered in hours.";
+    "Order an official NUANS report for an Ontario, Alberta or federal filing. $39.99 + HST per name, run by our team and emailed to you within hours.";
   return {
     title,
     description,
-    alternates: {
-      canonical: nuansUrl("en"),
-    },
+    alternates: buildAlternates("en", "/nuans", true),
     ...socialMeta({ title, description, url: nuansUrl("en"), locale: "en" }),
   };
 }

@@ -325,11 +325,11 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "Korporex can order NUANS preliminary name-search reports for one or several candidate names on a single order, and can then file your federal or Ontario incorporation once a name clears. Korporex is not a law firm and does not advise on whether a particular name will be granted.",
+        "text": "Korporex can order NUANS name search reports for one or several candidate names on a single order, and can then file your federal or Ontario incorporation once a name clears. Korporex is not a law firm and does not advise on whether a particular name will be granted.",
         "parts": [
           "Korporex can ",
           {
-            "text": "order NUANS preliminary name-search reports",
+            "text": "order NUANS name search reports",
             "href": "/nuans"
           },
           " for one or several candidate names on a single order, and can then ",
@@ -711,11 +711,11 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "Korporex peut commander des rapports de recherche préliminaire NUANS pour un ou plusieurs noms candidats dans une seule commande, puis déposer votre constitution fédérale ou ontarienne une fois le nom dégagé. Korporex n'est pas un cabinet d'avocats et ne donne pas d'avis sur l'acceptation d'un nom en particulier.",
+        "text": "Korporex peut commander des rapports de recherche NUANS pour un ou plusieurs noms candidats dans une seule commande, puis déposer votre constitution fédérale ou ontarienne une fois le nom dégagé. Korporex n'est pas un cabinet d'avocats et ne donne pas d'avis sur l'acceptation d'un nom en particulier.",
         "parts": [
           "Korporex peut ",
           {
-            "text": "commander des rapports de recherche préliminaire NUANS",
+            "text": "commander des rapports de recherche NUANS",
             "href": "/nuans"
           },
           " pour un ou plusieurs noms candidats dans une seule commande, puis ",
@@ -1097,11 +1097,11 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "Korporex puede encargar informes de búsqueda preliminar NUANS para uno o varios nombres candidatos en un solo pedido y, una vez aprobado el nombre, presentar su constitución federal o de Ontario. Korporex no es un despacho de abogados y no opina sobre si un nombre concreto será concedido.",
+        "text": "Korporex puede encargar informes de búsqueda NUANS para uno o varios nombres candidatos en un solo pedido y, una vez aprobado el nombre, presentar su constitución federal o de Ontario. Korporex no es un despacho de abogados y no opina sobre si un nombre concreto será concedido.",
         "parts": [
           "Korporex puede ",
           {
-            "text": "encargar informes de búsqueda preliminar NUANS",
+            "text": "encargar informes de búsqueda NUANS",
             "href": "/nuans"
           },
           " para uno o varios nombres candidatos en un solo pedido y, una vez aprobado el nombre, ",

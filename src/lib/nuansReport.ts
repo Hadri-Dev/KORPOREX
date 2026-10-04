@@ -1,4 +1,4 @@
-// Standalone NUANS preliminary name-search report. Customers fill a table of
+// Standalone NUANS name search report (official, fileable; run by Korporex). Customers fill a table of
 // one or more proposed corporate names (with the distinctive element and
 // target jurisdiction) and pay a flat order fee — every name in the list is
 // searched and consolidated into a single emailed PDF.
@@ -11,12 +11,12 @@ import { addressSchema, billingSchema, contactSchema } from "./amendmentSchemas"
 
 export { addressSchema, billingSchema };
 
-// Jurisdictions accepted by the NUANS preliminary-search system. "Federal"
+// Jurisdictions a NUANS report can be weighted for. "Federal"
 // covers CBCA names. The other entries are provincial / territorial registries
 // that also reference the federal NUANS database during name approval.
 // (Korporex deliberately omits the "Federal — with Pre-Approval" variant
-// surfaced by some third-party portals; Korporex always orders the standard
-// preliminary search.)
+// surfaced by some third-party portals; Korporex always runs the standard
+// NUANS report.)
 export const NUANS_JURISDICTIONS = [
   { value: "federal", label: "Federal" },
   { value: "alberta", label: "Alberta" },
@@ -97,7 +97,7 @@ export type NuansReportRequest = z.infer<typeof nuansReportRequestSchema>;
 export const NUANS_REPORT = {
   slug: "nuans-report" as const,
   label: "NUANS Report",
-  longLabel: "NUANS Preliminary Name-Search Report",
+  longLabel: "NUANS Name Search Report",
   path: "/nuans",
   /** Base fee covering the first proposed name in the order. */
   basePrice: 39.99,
@@ -106,7 +106,7 @@ export const NUANS_REPORT = {
    *  pass-through cost from the search house. */
   additionalPrice: 39.99,
   tagline:
-    "Pre-screen one or more proposed Canadian corporation names against the NUANS database before you file.",
+    "Official NUANS report for one or more proposed Canadian corporation names, weighted for your filing jurisdiction.",
 };
 
 export type NuansReportMeta = typeof NUANS_REPORT;

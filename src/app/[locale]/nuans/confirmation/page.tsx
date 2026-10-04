@@ -22,7 +22,7 @@ const nextSteps = [
   {
     icon: FileSearch,
     title: "Search in Progress",
-    body: "Our team runs the NUANS preliminary search against each proposed name in your order. Results are reviewed before the report is finalized.",
+    body: "Our team runs an official NUANS search on each proposed name in your order, weighted for the jurisdiction you chose, and reviews every report before it is sent.",
   },
   {
     icon: Mail,
@@ -32,7 +32,7 @@ const nextSteps = [
   {
     icon: Clock,
     title: "90-Day Validity",
-    body: "A NUANS preliminary search is valid for 90 days from the date it is generated. File your incorporation within that window to avoid having to re-run the search.",
+    body: "A NUANS report is valid for 90 days from the date printed on it. File your incorporation within that window, or you will need a new report.",
   },
 ];
 

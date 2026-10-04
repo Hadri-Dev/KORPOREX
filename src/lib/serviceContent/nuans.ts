@@ -12,7 +12,7 @@ export const content: ServiceContentByLocale = {
       {
         type: "p",
         parts: [
-          "A NUANS report compares a proposed corporate name against registered Canadian business names, corporate names and trademarks, and lists the closest existing matches. Korporex orders a NUANS preliminary name-search report for each name you list, in the jurisdiction you choose, and emails you all the results together in a single PDF. To understand each part of the report once you have it, read our guide on ",
+          "A NUANS report compares a proposed corporate name against registered Canadian business names, corporate names and trademarks, and lists the closest existing matches. Korporex runs an official NUANS report for each name you list, weighted for the jurisdiction you choose (an Ontario-biased report for Ontario, an Alberta report for Alberta), and emails all the reports to you together in a single PDF. Each report carries its own reference number, ready to use on your filing. To understand each part of the report once you have it, read our guide on ",
           { text: "how to read a NUANS report", href: "/guides/how-to-read-a-nuans-report" },
           ".",
         ],
@@ -48,7 +48,7 @@ export const content: ServiceContentByLocale = {
       {
         type: "p",
         parts: [
-          "A NUANS report is a search result, not a name approval or a reservation of the name. The registry examiner decides whether the name is accepted. For which jurisdictions actually ask for a report, see ",
+          "A NUANS report is a search result, not a name approval or a reservation of the name. Federally, a Corporations Canada examiner decides whether the name is granted. Ontario does not review names for similarity at all, so in Ontario it is up to you to check the report for conflicts before you file. For which jurisdictions actually ask for a report, see ",
           { text: "which provinces require a NUANS report", href: "/guides/which-provinces-require-nuans" },
           ". If you are ready to incorporate, the Standard and Premium ",
           { text: "incorporation packages", href: "/incorporate" },
@@ -60,6 +60,10 @@ export const content: ServiceContentByLocale = {
     disclaimer: "Korporex is not a law firm and does not provide legal advice. This page is general information about NUANS name-search reports; Korporex does not advise on whether a particular name will be approved. For advice on your specific situation, consult a lawyer.",
     faq: [
       {
+        q: "Can I file the report with my Ontario or Alberta incorporation?",
+        a: "Yes. Each report is an official NUANS report, run for the jurisdiction you select and carrying its own reference number. In Ontario you enter the reference number, the name searched and the report date on the Ontario Business Registry; in Alberta the complete report goes in with your filing through a registry agent. File within 90 days of the report date.",
+      },
+      {
         q: "Do I need a NUANS report to incorporate federally?",
         a: "Not to incorporate. Corporations Canada has built the name search into its online incorporation filing, so no separate NUANS report is required for a new federal corporation. A NUANS report is still required for some federal filings, including the revival or amalgamation of a business corporation. Some founders order a federal report anyway, to see the closest existing names first.",
       },
@@ -69,7 +73,7 @@ export const content: ServiceContentByLocale = {
       },
       {
         q: "Does a clean NUANS report mean my name is approved?",
-        a: "No. The report lists existing names and trademarks that resemble yours, but it does not approve or reserve the name. The registry examiner reviews the name against the naming rules and the existing names, and can still reject it. Final approval rests with the government.",
+        a: "No. The report lists existing names and trademarks that resemble yours, but it does not approve or reserve the name. Federally, a Corporations Canada examiner reviews the name and can still reject it. Ontario does not review names for similarity, so a conflicting name can be challenged after filing, and in Alberta another corporation can object to the Registrar of Corporations. Read the report before you file.",
       },
       {
         q: "Can I search several names in one order?",
@@ -87,7 +91,7 @@ export const content: ServiceContentByLocale = {
       {
         type: "p",
         parts: [
-          "Un rapport NUANS compare une dénomination sociale proposée aux noms d'entreprises, dénominations sociales et marques de commerce enregistrés au Canada, et énumère les correspondances existantes les plus proches. Korporex commande un rapport de recherche préliminaire NUANS pour chaque dénomination que vous indiquez, dans le territoire de votre choix, et vous envoie tous les résultats par courriel dans un seul PDF. Pour comprendre chaque partie du rapport une fois reçu, lisez notre guide sur ",
+          "Un rapport NUANS compare une dénomination sociale proposée aux noms d'entreprises, dénominations sociales et marques de commerce enregistrés au Canada, et énumère les correspondances existantes les plus proches. Korporex produit un rapport NUANS officiel pour chaque dénomination que vous indiquez, pondéré pour le territoire de votre choix (un rapport à pondération ontarienne pour l'Ontario, un rapport albertain pour l'Alberta), et vous envoie tous les rapports par courriel dans un seul PDF. Chaque rapport porte son propre numéro de référence, prêt à être utilisé pour votre dépôt. Pour comprendre chaque partie du rapport une fois reçu, lisez notre guide sur ",
           { text: "la lecture d'un rapport NUANS", href: "/guides/comment-lire-un-rapport-nuans" },
           ".",
         ],
@@ -123,7 +127,7 @@ export const content: ServiceContentByLocale = {
       {
         type: "p",
         parts: [
-          "Un rapport NUANS est un résultat de recherche, et non une approbation ni une réservation de la dénomination. C'est l'examinateur du registre qui décide si la dénomination est acceptée. Pour savoir quels territoires exigent réellement un rapport, consultez ",
+          "Un rapport NUANS est un résultat de recherche, et non une approbation ni une réservation de la dénomination. Au fédéral, un examinateur de Corporations Canada décide si la dénomination est accordée. L'Ontario n'examine pas du tout la similitude des dénominations; en Ontario, c'est donc à vous de vérifier le rapport avant le dépôt. Pour savoir quels territoires exigent réellement un rapport, consultez ",
           { text: "quelles provinces exigent un rapport NUANS", href: "/guides/quelles-provinces-exigent-un-rapport-nuans" },
           ". Si vous êtes prêt à vous constituer, les ",
           { text: "forfaits de constitution", href: "/incorporate" },
@@ -135,6 +139,10 @@ export const content: ServiceContentByLocale = {
     disclaimer: "Korporex n'est pas un cabinet d'avocats et ne fournit pas de conseils juridiques. Cette page présente de l'information générale sur les rapports de recherche NUANS; Korporex ne se prononce pas sur l'approbation d'une dénomination donnée. Pour des conseils adaptés à votre situation, consultez un avocat.",
     faq: [
       {
+        q: "Puis-je utiliser le rapport pour ma constitution en Ontario ou en Alberta?",
+        a: "Oui. Chaque rapport est un rapport NUANS officiel, produit pour le territoire choisi et muni de son propre numéro de référence. En Ontario, vous inscrivez le numéro de référence, le nom recherché et la date du rapport au Registre des entreprises de l'Ontario; en Alberta, le rapport complet accompagne votre dépôt auprès d'un agent d'enregistrement. Déposez dans les 90 jours suivant la date du rapport.",
+      },
+      {
         q: "Faut-il un rapport NUANS pour se constituer au fédéral?",
         a: "Pas pour se constituer. Corporations Canada a intégré la recherche de dénomination à son dépôt en ligne, de sorte qu'aucun rapport NUANS distinct n'est exigé pour une nouvelle société fédérale. Un rapport NUANS demeure exigé pour certains dépôts fédéraux, notamment la reconstitution ou la fusion d'une société par actions. Certains fondateurs en commandent un quand même, pour voir d'abord les noms existants les plus proches.",
       },
@@ -144,7 +152,7 @@ export const content: ServiceContentByLocale = {
       },
       {
         q: "Un rapport NUANS sans conflit signifie-t-il que ma dénomination est approuvée?",
-        a: "Non. Le rapport énumère les noms et marques existants qui ressemblent au vôtre, mais il n'approuve ni ne réserve la dénomination. L'examinateur du registre évalue la dénomination au regard des règles de dénomination et des noms existants, et peut encore la refuser. L'approbation finale revient au gouvernement.",
+        a: "Non. Le rapport énumère les noms et marques existants qui ressemblent au vôtre, mais il n'approuve ni ne réserve la dénomination. Au fédéral, un examinateur de Corporations Canada évalue la dénomination et peut encore la refuser. L'Ontario n'examine pas la similitude des dénominations, de sorte qu'un nom conflictuel peut être contesté après le dépôt, et en Alberta une autre société peut s'y opposer auprès du registraire. Lisez le rapport avant de déposer.",
       },
       {
         q: "Puis-je rechercher plusieurs dénominations dans une seule commande?",
@@ -162,7 +170,7 @@ export const content: ServiceContentByLocale = {
       {
         type: "p",
         parts: [
-          "Un informe NUANS compara un nombre de sociedad propuesto con los nombres comerciales, nombres de sociedades y marcas registrados en Canadá, y enumera las coincidencias existentes más cercanas. Korporex solicita un informe de búsqueda preliminar NUANS para cada nombre que usted indique, en la jurisdicción que elija, y le envía todos los resultados por correo electrónico en un solo PDF. Para entender cada parte del informe una vez que lo reciba, lea nuestra guía sobre ",
+          "Un informe NUANS compara un nombre de sociedad propuesto con los nombres comerciales, nombres de sociedades y marcas registrados en Canadá, y enumera las coincidencias existentes más cercanas. Korporex genera un informe NUANS oficial para cada nombre que usted indique, ponderado para la jurisdicción que elija (un informe con ponderación ontariana para Ontario, un informe de Alberta para Alberta), y le envía todos los informes por correo electrónico en un solo PDF. Cada informe lleva su propio número de referencia, listo para usar en su trámite. Para entender cada parte del informe una vez que lo reciba, lea nuestra guía sobre ",
           { text: "cómo leer un informe NUANS", href: "/guides/como-leer-un-informe-nuans" },
           ".",
         ],
@@ -198,7 +206,7 @@ export const content: ServiceContentByLocale = {
       {
         type: "p",
         parts: [
-          "Un informe NUANS es un resultado de búsqueda, no una aprobación ni una reserva del nombre. El examinador del registro decide si el nombre se acepta. Para saber qué jurisdicciones realmente piden un informe, consulte ",
+          "Un informe NUANS es un resultado de búsqueda, no una aprobación ni una reserva del nombre. A nivel federal, un examinador de Corporations Canada decide si se concede el nombre. Ontario no revisa en absoluto la similitud de los nombres, así que en Ontario le corresponde a usted revisar el informe antes de presentar. Para saber qué jurisdicciones realmente piden un informe, consulte ",
           { text: "qué provincias exigen un informe NUANS", href: "/guides/que-provincias-exigen-un-informe-nuans" },
           ". Si está listo para constituirse, los ",
           { text: "paquetes de constitución", href: "/incorporate" },
@@ -210,6 +218,10 @@ export const content: ServiceContentByLocale = {
     disclaimer: "Korporex no es un bufete de abogados y no brinda asesoría legal. Esta página ofrece información general sobre los informes de búsqueda NUANS; Korporex no se pronuncia sobre si un nombre determinado será aprobado. Para asesoría sobre su situación particular, consulte a un abogado.",
     faq: [
       {
+        q: "¿Puedo usar el informe para constituirme en Ontario o Alberta?",
+        a: "Sí. Cada informe es un informe NUANS oficial, generado para la jurisdicción que elija y con su propio número de referencia. En Ontario se ingresa el número de referencia, el nombre buscado y la fecha del informe en el Ontario Business Registry; en Alberta el informe completo acompaña su trámite ante un agente de registro. Presente dentro de los 90 días siguientes a la fecha del informe.",
+      },
+      {
         q: "¿Necesito un informe NUANS para constituirme a nivel federal?",
         a: "No para constituirse. Corporations Canada integró la búsqueda de nombre en su presentación de constitución en línea, por lo que no se exige un informe NUANS aparte para una nueva sociedad federal. Todavía se exige un informe NUANS para algunas presentaciones federales, como la reactivación o la fusión de una sociedad por acciones. Algunos fundadores igual solicitan uno, para ver primero los nombres existentes más cercanos.",
       },
@@ -219,7 +231,7 @@ export const content: ServiceContentByLocale = {
       },
       {
         q: "¿Un informe NUANS sin conflictos significa que mi nombre está aprobado?",
-        a: "No. El informe enumera los nombres y marcas existentes que se parecen al suyo, pero no aprueba ni reserva el nombre. El examinador del registro revisa el nombre según las reglas de denominación y los nombres existentes, y todavía puede rechazarlo. La aprobación final corresponde al gobierno.",
+        a: "No. El informe enumera los nombres y marcas existentes que se parecen al suyo, pero no aprueba ni reserva el nombre. A nivel federal, un examinador de Corporations Canada revisa el nombre y todavía puede rechazarlo. Ontario no revisa la similitud de los nombres, por lo que un nombre en conflicto puede impugnarse después de presentar, y en Alberta otra sociedad puede oponerse ante el Registrar of Corporations. Lea el informe antes de presentar.",
       },
       {
         q: "¿Puedo buscar varios nombres en un solo pedido?",
