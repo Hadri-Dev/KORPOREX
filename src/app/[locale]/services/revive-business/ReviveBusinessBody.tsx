@@ -84,6 +84,8 @@ export default function ReviveBusinessPage() {
   const dissolutionReason = watch("dissolutionReason");
   const requestorRelationship = watch("requestorRelationship");
   const wasDefault = dissolutionReason === "default_failure_to_file";
+  const ontarioNotRevivable =
+    jurisdiction === "ontario" && (dissolutionReason === "voluntary" || dissolutionReason === "court_order");
 
   async function gotoStep(next: number) {
     const fieldsByStep: Record<number, Array<keyof RevivalSubmission | string>> = {
@@ -98,6 +100,8 @@ export default function ReviveBusinessPage() {
       3: ["revivedRegisteredOffice", "directors", "officers"],
       4: ["contact"],
     };
+    // Not revivable in Ontario (OBCA s.241(9)); the notice under the select explains why.
+    if (step === 1 && ontarioNotRevivable) return;
     const fields = fieldsByStep[step];
     if (fields) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -170,6 +174,15 @@ export default function ReviveBusinessPage() {
                     <option value="other">Other</option>
                   </select>
                 </Field>
+                {ontarioNotRevivable && (
+                  <div className="border border-amber-300 bg-amber-50 rounded-lg p-4 text-sm text-gray-700 leading-relaxed">
+                    Under the Ontario Business Corporations Act (s.241(9)), Articles of Revival are only available
+                    for a corporation dissolved by the Director, for example for unfiled annual returns. A voluntary
+                    or court-ordered Ontario dissolution cannot be reversed by filing Articles of Revival, so
+                    Korporex cannot file this request. Korporex does not provide legal advice; a lawyer can tell
+                    you whether any other option applies to your situation.
+                  </div>
+                )}
                 {dissolutionReason === "other" && (
                   <Field label="Describe the reason *" error={errors.dissolutionReasonOther?.message}>
                     <input type="text" {...register("dissolutionReasonOther")} className={iCls} />
@@ -187,7 +200,7 @@ export default function ReviveBusinessPage() {
               <p className="text-gray-500 text-sm mb-6">
                 {jurisdiction === "federal"
                   ? "Articles of Revival are filed under CBCA s.209 (Form 15)."
-                  : "Articles of Revival are filed under OBCA s.241."}
+                  : "Articles of Revival are filed under OBCA s.241(9)."}
               </p>
 
               <form onSubmit={(e) => { e.preventDefault(); gotoStep(3); }} className="space-y-5">

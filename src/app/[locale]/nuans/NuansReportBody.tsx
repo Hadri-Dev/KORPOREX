@@ -93,7 +93,7 @@ export default function NuansReportBody() {
             Order a NUANS Preliminary Name-Search Report
           </h1>
           <p className="text-lg text-gray-300 leading-relaxed max-w-3xl">
-            A NUANS report cross-references your proposed Canadian corporate name against millions of registered business names, corporate names, and trademarks across the country. It is the standard pre-incorporation name check required by Corporations Canada for federal filings and by most provincial registries for named corporations.
+            A NUANS report cross-references your proposed Canadian corporate name against millions of registered business names, corporate names, and trademarks across the country. Ontario, Alberta and New Brunswick require one to incorporate a named corporation, and Corporations Canada requires one for federal revivals and amalgamations. For a new federal incorporation the name search is built into the online application, so a report there is an optional check before you commit to a name.
           </p>
           <div className="mt-8 flex items-baseline gap-3">
             <span className="font-serif text-3xl md:text-4xl font-bold text-gold-500">

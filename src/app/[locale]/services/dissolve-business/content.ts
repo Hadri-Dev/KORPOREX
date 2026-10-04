@@ -16,6 +16,7 @@ export type DissolveContent = {
     | { type: "list"; items: string[] }
   )[];
   faqTitle: string;
+  disclaimer: string;
   faq: { q: string; a: string }[];
 };
 
@@ -59,13 +60,14 @@ export const DISSOLVE_CONTENT: Record<Locale, DissolveContent> = {
       {
         type: "p",
         parts: [
-          "Think carefully before filing: a federal corporation can later be revived, but an Ontario corporation that dissolves voluntarily generally cannot be revived under the OBCA. In Ontario, ",
+          "On revival: a dissolved federal corporation can be revived under the CBCA, but under the OBCA an Ontario corporation that was dissolved voluntarily is not eligible for revival by filing. In Ontario, ",
           { text: "Articles of Revival", href: "/services/revive-business" },
           " are for corporations the registry dissolved for default, such as unfiled annual returns.",
         ],
       },
     ],
     faqTitle: "Dissolving a corporation: common questions",
+    disclaimer: "Korporex is not a law firm and does not provide legal advice. This page is general information about the dissolution filing; for advice on your specific situation, consult a lawyer or accountant.",
     faq: [
       {
         q: "Is it enough to just stop using the corporation?",
@@ -81,7 +83,7 @@ export const DISSOLVE_CONTENT: Record<Locale, DissolveContent> = {
       },
       {
         q: "Can a dissolved corporation be brought back?",
-        a: "It depends. A federal corporation can be revived under the CBCA. In Ontario, Articles of Revival are available to corporations the registry dissolved for default, such as missed annual returns, but a voluntary dissolution generally cannot be undone that way. Treat an Ontario voluntary dissolution as permanent.",
+        a: "It depends. A federal corporation can be revived under the CBCA. In Ontario, Articles of Revival are available to corporations the registry dissolved for default, such as missed annual returns, but a voluntary dissolution generally cannot be undone that way.",
       },
     ],
   },
@@ -124,13 +126,14 @@ export const DISSOLVE_CONTENT: Record<Locale, DissolveContent> = {
       {
         type: "p",
         parts: [
-          "Réfléchissez bien avant de déposer : une société fédérale peut être reconstituée plus tard, mais une société ontarienne dissoute volontairement ne peut généralement pas être reconstituée en vertu de la LSAO. En Ontario, les ",
+          "Quant à la reconstitution : une société fédérale dissoute peut être reconstituée en vertu de la LCSA, mais en vertu de la LSAO, une société ontarienne dissoute volontairement n'est pas admissible à la reconstitution par dépôt. En Ontario, les ",
           { text: "statuts de reconstitution", href: "/services/revive-business" },
           " visent les sociétés dissoutes par le registre pour défaut, par exemple pour des rapports annuels non déposés.",
         ],
       },
     ],
     faqTitle: "Dissoudre une société : questions fréquentes",
+    disclaimer: "Korporex n'est pas un cabinet d'avocats et ne fournit pas de conseils juridiques. Cette page présente de l'information générale sur le dépôt de dissolution; pour des conseils adaptés à votre situation, consultez un avocat ou un comptable.",
     faq: [
       {
         q: "Suffit-il de cesser d'utiliser la société?",
@@ -146,7 +149,7 @@ export const DISSOLVE_CONTENT: Record<Locale, DissolveContent> = {
       },
       {
         q: "Une société dissoute peut-elle être reconstituée?",
-        a: "Cela dépend. Une société fédérale peut être reconstituée en vertu de la LCSA. En Ontario, les statuts de reconstitution s'offrent aux sociétés dissoutes par le registre pour défaut, par exemple pour des rapports annuels non déposés, mais une dissolution volontaire ne peut généralement pas être annulée de cette façon. Considérez une dissolution volontaire en Ontario comme définitive.",
+        a: "Cela dépend. Une société fédérale peut être reconstituée en vertu de la LCSA. En Ontario, les statuts de reconstitution s'offrent aux sociétés dissoutes par le registre pour défaut, par exemple pour des rapports annuels non déposés, mais une dissolution volontaire ne peut généralement pas être annulée de cette façon.",
       },
     ],
   },
@@ -189,13 +192,14 @@ export const DISSOLVE_CONTENT: Record<Locale, DissolveContent> = {
       {
         type: "p",
         parts: [
-          "Piénselo bien antes de presentar: una sociedad federal puede reactivarse más adelante, pero una sociedad de Ontario disuelta voluntariamente por lo general no puede reactivarse en virtud de la OBCA. En Ontario, los ",
+          "Sobre la reactivación: una sociedad federal disuelta puede reactivarse en virtud de la CBCA, pero según la OBCA una sociedad de Ontario disuelta voluntariamente no puede reactivarse mediante una presentación. En Ontario, los ",
           { text: "artículos de reactivación", href: "/services/revive-business" },
           " son para sociedades que el registro disolvió por incumplimiento, por ejemplo por no presentar las declaraciones anuales.",
         ],
       },
     ],
     faqTitle: "Disolver una sociedad: preguntas frecuentes",
+    disclaimer: "Korporex no es un bufete de abogados y no brinda asesoría legal. Esta página ofrece información general sobre la presentación de disolución; para asesoría sobre su situación particular, consulte a un abogado o contador.",
     faq: [
       {
         q: "¿Basta con dejar de usar la sociedad?",
@@ -211,7 +215,7 @@ export const DISSOLVE_CONTENT: Record<Locale, DissolveContent> = {
       },
       {
         q: "¿Se puede recuperar una sociedad disuelta?",
-        a: "Depende. Una sociedad federal puede reactivarse en virtud de la CBCA. En Ontario, los artículos de reactivación están disponibles para sociedades que el registro disolvió por incumplimiento, por ejemplo por no presentar las declaraciones anuales, pero una disolución voluntaria por lo general no puede revertirse de esa forma. Considere definitiva una disolución voluntaria en Ontario.",
+        a: "Depende. Una sociedad federal puede reactivarse en virtud de la CBCA. En Ontario, los artículos de reactivación están disponibles para sociedades que el registro disolvió por incumplimiento, por ejemplo por no presentar las declaraciones anuales, pero una disolución voluntaria por lo general no puede revertirse de esa forma.",
       },
     ],
   },

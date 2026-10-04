@@ -71,6 +71,7 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
               </details>
             ))}
           </div>
+          <p className="mt-8 text-xs text-gray-500 leading-relaxed">{c.disclaimer}</p>
         </div>
       </section>
 

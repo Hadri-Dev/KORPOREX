@@ -292,7 +292,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "callout",
-        "text": "A NUANS report does not grant a trademark. If your name is central to your brand, you should also consider a trademark registration through the Canadian Intellectual Property Office. That is a separate process from incorporation."
+        "text": "A NUANS report does not grant a trademark. Trademark registration through the Canadian Intellectual Property Office is something some owners pursue when a name is central to their brand. That is a separate process from incorporation."
       },
       {
         "type": "heading",
@@ -666,7 +666,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "callout",
-        "text": "Un rapport NUANS n'accorde pas de marque de commerce. Si votre nom est au cœur de votre marque, vous devriez aussi envisager l'enregistrement d'une marque de commerce auprès de l'Office de la propriété intellectuelle du Canada. C'est un processus distinct de la constitution en société."
+        "text": "Un rapport NUANS n'accorde pas de marque de commerce. L'enregistrement d'une marque de commerce, que certains propriétaires entreprennent lorsque le nom est au cœur de leur marque, se fait auprès de l'Office de la propriété intellectuelle du Canada. C'est un processus distinct de la constitution en société."
       },
       {
         "type": "heading",
@@ -1040,7 +1040,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "callout",
-        "text": "Un informe NUANS no otorga una marca registrada. Si su nombre es central para su marca, también debería considerar registrar una marca ante la Oficina de Propiedad Intelectual de Canadá. Ese es un proceso distinto de la constitución en sociedad."
+        "text": "Un informe NUANS no otorga una marca registrada. El registro de una marca, que algunos propietarios solicitan cuando el nombre es central para su marca, se tramita ante la Oficina de Propiedad Intelectual de Canadá. Ese es un proceso distinto de la constitución en sociedad."
       },
       {
         "type": "heading",

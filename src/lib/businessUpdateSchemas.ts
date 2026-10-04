@@ -160,6 +160,21 @@ export const revivalSchema = z
         message: "Please describe the reason",
       });
     }
+    // OBCA s.241(9) lets the Director revive only a corporation dissolved under
+    // s.241(4) (dissolution by the Director, e.g. for unfiled returns). A
+    // voluntary or court-ordered Ontario dissolution cannot be revived by
+    // filing Articles of Revival, so it is not a filing Korporex can make.
+    if (
+      data.corporation.jurisdiction === "ontario" &&
+      (data.dissolutionReason === "voluntary" || data.dissolutionReason === "court_order")
+    ) {
+      ctx.addIssue({
+        path: ["dissolutionReason"],
+        code: z.ZodIssueCode.custom,
+        message:
+          "Ontario Articles of Revival are only available for corporations dissolved by the Director (for example, for unfiled returns)",
+      });
+    }
     if (data.requestorRelationship === "other" && !data.requestorRelationshipOther) {
       ctx.addIssue({
         path: ["requestorRelationshipOther"],

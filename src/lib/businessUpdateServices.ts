@@ -44,7 +44,7 @@ export const BUSINESS_UPDATE_SERVICES: Record<BusinessUpdateServiceSlug, Busines
     price: 249,
     tagline: "Bring a dissolved corporation back into existence.",
     description:
-      "File Articles of Revival to restore a corporation that was dissolved (voluntarily or by the registrar for default) back to active status. Revival restores the corporation's legal personality and the right to carry on business.",
+      "File Articles of Revival to restore a dissolved corporation to active status. A federal corporation can be revived whether it was dissolved voluntarily or by the registrar; an Ontario corporation can be revived only if the Director dissolved it, for example for unfiled annual returns. Revival restores the corporation's legal personality and the right to carry on business.",
     path: "/services/revive-business",
   },
   "amalgamation": {
