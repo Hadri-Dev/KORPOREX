@@ -1,5 +1,10 @@
 import type { Locale } from "@/i18n/routing";
 import { expanded as annualReturns } from "./content/annual-returns";
+import { expanded as articlesOfIncorporation } from "./content/articles-of-incorporation";
+import { expanded as craBusinessNumber } from "./content/cra-business-number";
+import { expanded as namedVsNumbered } from "./content/named-vs-numbered";
+import { expanded as professionalCorporations } from "./content/professional-corporations";
+import { expanded as shareholderAgreements } from "./content/shareholder-agreements";
 import { expanded as corporateTaxRate } from "./content/corporate-tax-rate";
 import { expanded as costToIncorporateOntario } from "./content/cost-to-incorporate-ontario";
 import { expanded as dissolveCorporationOntario } from "./content/dissolve-corporation-ontario";
@@ -3771,6 +3776,11 @@ type ExpandedArticle = Pick<Article, "readTime" | "content"> & {
   faq: NonNullable<Article["faq"]>;
 };
 const EXPANDED: Record<string, { updated: string; byLocale: Record<Locale, ExpandedArticle> }> = {
+  "articles-of-incorporation": { updated: "2026-10-04", byLocale: articlesOfIncorporation },
+  "cra-business-number": { updated: "2026-10-04", byLocale: craBusinessNumber },
+  "named-vs-numbered": { updated: "2026-10-04", byLocale: namedVsNumbered },
+  "professional-corporations": { updated: "2026-10-04", byLocale: professionalCorporations },
+  "shareholder-agreements": { updated: "2026-10-04", byLocale: shareholderAgreements },
   "annual-returns": { updated: "2026-10-04", byLocale: annualReturns },
   "corporate-tax-rate": { updated: "2026-10-04", byLocale: corporateTaxRate },
   "cost-to-incorporate-ontario": { updated: "2026-10-04", byLocale: costToIncorporateOntario },
