@@ -3,6 +3,7 @@ import { expanded as annualReturns } from "./content/annual-returns";
 import { expanded as costToIncorporateOntario } from "./content/cost-to-incorporate-ontario";
 import { expanded as dissolveCorporationOntario } from "./content/dissolve-corporation-ontario";
 import { expanded as nuansNameSearch } from "./content/nuans-name-search";
+import { nuansReportAlberta } from "./content/nuans-report-alberta";
 import { nuansReportOntario } from "./content/nuans-report-ontario";
 import { expanded as registerBusinessOntario } from "./content/register-business-ontario";
 
@@ -1217,7 +1218,7 @@ export const articles: Article[] = [
       "Articles of incorporation are the founding document that creates your corporation. Here is what they contain, why the share structure matters, and how they are filed.",
     metaTitle: "What Are Articles of Incorporation? | Korporex",
     metaDescription:
-      "What articles of incorporation are: the founding document that creates your corporation, what they contain, federal vs Ontario, and why share structure matters.",
+      "What articles of incorporation are: the document that creates your corporation, what they contain, federal vs Ontario, and why share structure counts.",
     readTime: "5 min read",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1567,7 +1568,7 @@ export const articles: Article[] = [
       "Los estatutos de constitución son el documento fundacional que crea su sociedad. Aquí está qué contienen, por qué importa la estructura de acciones y cómo se presentan.",
     metaTitle: "¿Qué son los estatutos de constitución? | Korporex",
     metaDescription:
-      "Qué son los estatutos de constitución: el documento que crea su sociedad, qué contienen, federal frente a Ontario, y por qué importa la estructura de acciones.",
+      "Qué son los estatutos de constitución: el documento que crea su sociedad, qué contienen, federal u Ontario, y por qué importa la estructura accionarial.",
     readTime: "5 min de lectura",
     updated: "2026-06-04",
     publishedAt: "2026-06-04T11:00:00-04:00",
@@ -1830,7 +1831,7 @@ export const articles: Article[] = [
       "Ontario y otras provincias exigen un informe NUANS antes de constituir una sociedad con nombre, y a nivel federal la búsqueda está integrada en la presentación. Vea qué es, cómo funciona y qué hacer si su primera opción de nombre no está disponible.",
     metaTitle: "¿Qué es una búsqueda de nombre NUANS? | Korporex",
     metaDescription:
-      "Una búsqueda de nombre NUANS coteja el nombre propuesto de su sociedad con los registrados en Canadá. Cuándo es obligatoria, cómo funciona y qué hacer si falla.",
+      "La búsqueda de nombre NUANS coteja el nombre de su sociedad con los registrados en Canadá. Cuándo es obligatoria, cómo funciona y qué hacer si falla.",
     readTime: "4 min de lectura",
     updated: "2026-04-21",
     content: [
@@ -2438,7 +2439,7 @@ export const articles: Article[] = [
       "Une société avec un nom et une société à matricule sont juridiquement identiques. La différence tient à l'image de marque, à la vitesse et au coût. Voici comment décider.",
     metaTitle: "Société avec nom ou à matricule | Korporex",
     metaDescription:
-      "Société avec nom ou société à matricule au Canada : ce qu'est chacune, pourquoi elles sont juridiquement identiques, les compromis de coût, et comment choisir.",
+      "Société avec nom ou société à matricule au Canada : ce qu'est chacune, pourquoi elles sont identiques en droit, les coûts, et comment choisir.",
     readTime: "5 min de lecture",
     updated: "2026-07-01",
     publishedAt: "2026-07-23T13:20:00-04:00",
@@ -3000,7 +3001,7 @@ export const articles: Article[] = [
       "Si una sociedad tiene más de un propietario, el convenio de accionistas es el documento que evita los conflictos que nadie planea. Aquí está qué cubre y por qué importa.",
     metaTitle: "El convenio de accionistas en Canadá | Korporex",
     metaDescription:
-      "Qué es un convenio de accionistas en Canadá, qué cubre, por qué las sociedades con más de un propietario lo necesitan, y en qué se diferencia de los estatutos.",
+      "Qué es un convenio de accionistas en Canadá, qué cubre, por qué lo necesitan las sociedades con varios propietarios, y en qué se diferencia de los estatutos.",
     readTime: "5 min de lectura",
     updated: "2026-07-01",
     publishedAt: "2026-08-25T14:05:00-04:00",
@@ -3224,7 +3225,7 @@ export const articles: Article[] = [
       "A clean NUANS report and a refused name are not a contradiction. Here are the four grounds examiners actually refuse on, and the five routes back, including the one most people never consider.",
     metaTitle: "Corporate Name Refused in Canada: What to Do Next | Korporex",
     metaDescription:
-      "Why Corporations Canada or a provincial registry refuses a corporate name even after a clean NUANS report, and the five practical routes to getting a name approved.",
+      "Why Corporations Canada or a provincial registry rejects a corporate name despite a clean NUANS report, and five practical routes to getting a name approved.",
     readTime: "8 min read",
     updated: "2026-09-20",
     publishedAt: "2026-10-08T11:00:00-04:00",
@@ -3272,7 +3273,7 @@ export const articles: Article[] = [
       "Corporate search pricing has moved sharply against Canadian law firms since 2022. This is a practical look at what a name search should cost a firm, how to order one without a search-house membership, and how to handle the disbursement.",
     metaTitle: "NUANS Reports for Law Firms and Law Clerks | Korporex",
     metaDescription:
-      "A procurement guide to NUANS name searches for Canadian law firms: what they should cost, ordering without a search-house account, bulk orders and disbursements.",
+      "A procurement guide to NUANS name searches for Canadian law firms: expected cost, ordering without a search-house account, bulk orders and disbursements.",
     readTime: "10 min read",
     updated: "2026-09-20",
     publishedAt: "2026-10-14T10:00:00-04:00",
@@ -3328,7 +3329,7 @@ export const articles: Article[] = [
       "La plupart des articles en citent sept ou huit. La vraie réponse, selon Innovation, Sciences et Développement économique Canada, est trois provinces, et une constitution fédérale n'en exige plus. Voici le détail province par province.",
     metaTitle: "Quelles provinces exigent un rapport NUANS ? | Korporex",
     metaDescription:
-      "Seuls l'Ontario, l'Alberta et le Nouveau-Brunswick exigent un rapport NUANS pour se constituer. Au fédéral, la recherche est intégrée au dépôt. Le tableau complet.",
+      "Seuls l'Ontario, l'Alberta et le Nouveau-Brunswick exigent un rapport NUANS pour se constituer. Au fédéral, la recherche est intégrée au dépôt.",
     readTime: "8 min de lecture",
     updated: "2026-10-04",
     publishedAt: "2026-09-22T10:00:00-04:00",
@@ -3382,7 +3383,7 @@ export const articles: Article[] = [
       "Un rapport NUANS est une liste de noms avec des codes à côté et aucun verdict à la fin. Voici ce que signifie chaque partie, comment un examinateur le lit, et comment distinguer un conflit fatal du bruit de fond.",
     metaTitle: "Comment lire un rapport NUANS, ligne par ligne | Korporex",
     metaDescription:
-      "Ce que signifie chaque section d'un rapport NUANS : numéro de référence, liste classée de noms, codes de source, et comment distinguer un vrai conflit du bruit.",
+      "Ce que signifie chaque section d'un rapport NUANS : numéro de référence, noms classés, codes de source, et comment distinguer un conflit réel du bruit.",
     readTime: "9 min de lecture",
     updated: "2026-09-20",
     publishedAt: "2026-09-30T10:00:00-04:00",
@@ -3442,7 +3443,7 @@ export const articles: Article[] = [
       "Un rapport NUANS propre et un nom refusé ne sont pas contradictoires. Voici les quatre motifs sur lesquels les examinateurs refusent réellement, et les cinq voies de sortie, dont celle à laquelle presque personne ne pense.",
     metaTitle: "Dénomination sociale refusée au Canada : que faire | Korporex",
     metaDescription:
-      "Pourquoi Corporations Canada ou un registre provincial refuse une dénomination sociale malgré un rapport NUANS propre, et les cinq voies pratiques pour faire approuver un nom.",
+      "Pourquoi Corporations Canada ou un registre provincial refuse une dénomination malgré un rapport NUANS propre, et cinq voies pour la faire approuver.",
     readTime: "8 min de lecture",
     updated: "2026-09-20",
     publishedAt: "2026-10-08T11:00:00-04:00",
@@ -3490,7 +3491,7 @@ export const articles: Article[] = [
       "Le prix des recherches corporatives a nettement augmenté pour les cabinets canadiens depuis 2022. Voici ce qu'une recherche de nom devrait coûter à un cabinet, comment en commander une sans adhésion à une maison de recherche, et comment traiter le débours.",
     metaTitle: "Rapports NUANS pour cabinets d'avocats | Korporex",
     metaDescription:
-      "Guide d'approvisionnement des recherches de nom NUANS pour les cabinets canadiens : coût réel, commande sans compte de maison de recherche, commandes groupées et débours.",
+      "Guide d'achat des recherches de nom NUANS pour les cabinets canadiens : coût réel, commande sans compte de maison de recherche, commandes groupées, débours.",
     readTime: "10 min de lecture",
     updated: "2026-09-20",
     publishedAt: "2026-10-14T10:00:00-04:00",
@@ -3546,7 +3547,7 @@ export const articles: Article[] = [
       "La mayoría de los artículos mencionan siete u ocho provincias. La respuesta real, según Innovación, Ciencia y Desarrollo Económico de Canadá, es tres provincias, y una constitución federal ya no lo exige. Aquí está el desglose jurisdicción por jurisdicción.",
     metaTitle: "¿Qué provincias exigen un informe NUANS? (2026) | Korporex",
     metaDescription:
-      "Solo Ontario, Alberta y Nuevo Brunswick exigen un informe NUANS para constituirse. A nivel federal, la búsqueda está integrada en la presentación. Vea la tabla.",
+      "Solo Ontario, Alberta y Nuevo Brunswick exigen un informe NUANS para constituirse. A nivel federal, la búsqueda va integrada en la presentación. Vea la tabla.",
     readTime: "8 min de lectura",
     updated: "2026-10-04",
     publishedAt: "2026-09-22T10:00:00-04:00",
@@ -3600,7 +3601,7 @@ export const articles: Article[] = [
       "Un informe NUANS es una lista de nombres con códigos al lado y ningún veredicto al final. Esto es lo que significa cada parte, cómo lo lee un examinador y cómo distinguir un conflicto fatal del ruido de fondo.",
     metaTitle: "Cómo leer un informe NUANS, línea por línea | Korporex",
     metaDescription:
-      "Qué significa cada sección de un informe NUANS: número de referencia, lista ordenada de nombres, códigos de origen y cómo distinguir un conflicto real del ruido.",
+      "Qué significa cada sección de un informe NUANS: número de referencia, nombres ordenados, códigos de origen y cómo distinguir un conflicto real del ruido.",
     readTime: "9 min de lectura",
     updated: "2026-09-20",
     publishedAt: "2026-09-30T10:00:00-04:00",
@@ -3660,7 +3661,7 @@ export const articles: Article[] = [
       "Un informe NUANS limpio y un nombre rechazado no son contradictorios. Estos son los cuatro motivos por los que los examinadores rechazan de verdad, y las cinco vías de salida, incluida la que casi nadie considera.",
     metaTitle: "Denominación social rechazada en Canadá: qué hacer | Korporex",
     metaDescription:
-      "Por qué Corporations Canada o un registro provincial rechaza una denominación social pese a un informe NUANS limpio, y las cinco vías prácticas para aprobar un nombre.",
+      "Por qué Corporations Canada o un registro provincial rechaza una denominación social pese a un informe NUANS limpio, y las cinco vías para aprobar un nombre.",
     readTime: "8 min de lectura",
     updated: "2026-09-20",
     publishedAt: "2026-10-08T11:00:00-04:00",
@@ -3708,7 +3709,7 @@ export const articles: Article[] = [
       "El precio de las búsquedas corporativas se ha vuelto claramente en contra de los despachos canadienses desde 2022. Esto es lo que debería costarle a un despacho una búsqueda de nombre, cómo pedirla sin membresía, y cómo tratar el desembolso.",
     metaTitle: "Informes NUANS para despachos de abogados | Korporex",
     metaDescription:
-      "Guía de compra de búsquedas de nombre NUANS para despachos canadienses: coste real, pedidos sin cuenta de proveedor, pedidos múltiples y tratamiento del desembolso.",
+      "Guía de compra de búsquedas de nombre NUANS para despachos canadienses: coste real, pedidos sin cuenta de proveedor, pedidos múltiples y trato del desembolso.",
     readTime: "10 min de lectura",
     updated: "2026-09-20",
     publishedAt: "2026-10-14T10:00:00-04:00",
@@ -3755,6 +3756,7 @@ export const articles: Article[] = [
     ],
   },
   ...nuansReportOntario,
+  ...nuansReportAlberta,
 ];
 
 // Long-form rewrites kept in ./content/<group>.ts (one file per article group,

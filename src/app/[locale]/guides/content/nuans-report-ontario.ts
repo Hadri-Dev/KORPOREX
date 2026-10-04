@@ -192,7 +192,9 @@ const en: Article = {
       { text: "federal and provincial incorporation", href: "/guides/federal-vs-provincial-incorporation" },
       " first, and see ",
       { text: "which provinces require NUANS", href: "/guides/which-provinces-require-nuans" },
-      " if you are filing outside Ontario.",
+      " if you are filing outside Ontario, or our ",
+      { text: "Alberta NUANS report guide", href: "/guides/nuans-report-alberta" },
+      " for Alberta.",
     ),
     { type: "heading", id: "law-firms", text: "For law firms and law clerks" },
     p(
@@ -421,7 +423,9 @@ const fr: Article = {
       { text: "la constitution au Canada", href: "/guides/comment-se-constituer-societe-canada" },
       ", et voyez ",
       { text: "quelles provinces exigent un rapport NUANS", href: "/guides/quelles-provinces-exigent-un-rapport-nuans" },
-      " si vous déposez hors de l'Ontario.",
+      " si vous déposez hors de l'Ontario, ou notre ",
+      { text: "guide du rapport NUANS en Alberta", href: "/guides/rapport-nuans-alberta" },
+      " pour l'Alberta.",
     ),
     { type: "heading", id: "cabinets", text: "Pour les cabinets d'avocats et les techniciens juridiques" },
     p(
@@ -650,7 +654,9 @@ const es: Article = {
       { text: "cómo constituirse en Canadá", href: "/guides/como-constituirse-sociedad-canada" },
       ", y vea ",
       { text: "qué provincias exigen un informe NUANS", href: "/guides/que-provincias-exigen-un-informe-nuans" },
-      " si presenta fuera de Ontario.",
+      " si presenta fuera de Ontario, o nuestra ",
+      { text: "guía del informe NUANS en Alberta", href: "/guides/informe-nuans-alberta" },
+      " para Alberta.",
     ),
     { type: "heading", id: "despachos", text: "Para despachos de abogados y asistentes jurídicos" },
     p(
