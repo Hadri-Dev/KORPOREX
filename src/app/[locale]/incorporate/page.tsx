@@ -6,6 +6,8 @@ import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { buildSeoMetadata } from "@/lib/seoMeta";
 import IncorporateBody from "./IncorporateBody";
+import JsonLd from "@/components/JsonLd";
+import { incorporationServiceSchema } from "@/lib/structuredData";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -23,6 +25,7 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
           exactly one in the markup without touching the wizard's design.
           English-only, like the rest of this page: /incorporate is not in
           BODY_TRANSLATED_PATHS, so /fr and /es render the same English body. */}
+      <JsonLd data={incorporationServiceSchema()} />
       <h1 className="sr-only">Incorporate a Business in Canada</h1>
       <IncorporateBody />
       <ServiceContentSection locale={locale} path="/incorporate" content={content} />

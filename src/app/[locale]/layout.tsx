@@ -8,6 +8,8 @@ import SiteChrome from "@/components/layout/SiteChrome";
 import { routing, type Locale } from "@/i18n/routing";
 import { SITE_URL } from "@/app/[locale]/guides/articles";
 import { localizedUrl, socialMeta } from "@/lib/seoMeta";
+import JsonLd from "@/components/JsonLd";
+import { organizationSchema } from "@/lib/structuredData";
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
@@ -70,6 +72,9 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={`${playfairDisplay.variable} ${inter.variable}`}>
       <body className="bg-white text-gray-900 font-sans">
+        {/* Organization node on every page: Service/Offer nodes across the site
+            reference it as provider via "#organization". */}
+        <JsonLd data={organizationSchema()} />
         <NextIntlClientProvider>
           <SiteChrome>{children}</SiteChrome>
         </NextIntlClientProvider>

@@ -33,10 +33,10 @@ export default function PricingPage() {
       <section className="bg-navy-900 text-white py-8 px-6 text-center">
         <div className="max-w-3xl mx-auto">
           <h1 className="font-serif text-5xl md:text-6xl font-bold mb-6">
-            Simple, Transparent Pricing
+            Incorporation Packages &amp; Pricing
           </h1>
           <p className="text-lg text-gray-300 max-w-xl mx-auto">
-            All prices are in Canadian dollars and include government filing fees.
+            Simple, transparent pricing for federal and Ontario incorporation. All prices are in Canadian dollars and include government filing fees.
             Standard and Premium include one NUANS name search; additional searches are
             ${EXTRA_NAME_SEARCH_FEE.toFixed(2)} + HST each. Applicable taxes are shown separately at checkout.
           </p>

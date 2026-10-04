@@ -183,7 +183,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "The government does not make the final decision based solely on the report. A corporate examiner (federal or provincial) reviews the report and the proposed name, weighs distinctiveness and potential confusion with existing names, and either approves the name or asks for changes. Federally, if the examiner needs more, you receive a Notice of action required with instructions to resubmit."
+        "text": "The government does not make the final decision based solely on the report. Federally, a Corporations Canada examiner reviews the report and the proposed name, weighs distinctiveness and potential confusion with existing names, and either approves the name or asks for changes. If the federal examiner needs more, you receive a Notice of action required with instructions to resubmit. Ontario works differently: it does not review proposed names for similarity at all. The incorporators are responsible for checking the report, and a conflicting name can later be challenged at a names hearing or in court."
       },
       {
         "type": "heading",
@@ -569,7 +569,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "Le gouvernement ne prend pas la décision finale uniquement à partir du rapport. Un examinateur des sociétés (fédéral ou provincial) examine le rapport et le nom proposé, soupèse le caractère distinctif et le risque de confusion avec des noms existants, puis approuve le nom ou demande des modifications. Au fédéral, si l'examinateur a besoin de renseignements supplémentaires, vous recevez un avis de mesure requise accompagné d'instructions pour présenter de nouveau la demande."
+        "text": "Le gouvernement ne prend pas la décision finale uniquement à partir du rapport. Au fédéral, un examinateur de Corporations Canada examine le rapport et le nom proposé, soupèse le caractère distinctif et le risque de confusion avec des noms existants, puis approuve le nom ou demande des modifications. Si l'examinateur fédéral a besoin de renseignements supplémentaires, vous recevez un avis de mesure requise accompagné d'instructions pour présenter de nouveau la demande. L'Ontario fonctionne autrement : il n'examine pas du tout la similitude des noms proposés. Il incombe aux fondateurs de vérifier le rapport, et un nom conflictuel peut être contesté plus tard lors d'une audience sur les dénominations ou devant les tribunaux."
       },
       {
         "type": "heading",
@@ -955,7 +955,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "El gobierno no toma la decisión final basándose únicamente en el informe. Un examinador de sociedades (federal o provincial) revisa el informe y el nombre propuesto, sopesa el carácter distintivo y el posible riesgo de confusión con nombres existentes, y aprueba el nombre o pide cambios. A nivel federal, si el examinador necesita más información, usted recibe un aviso de acción requerida (Notice of action required) con instrucciones para volver a presentar la solicitud."
+        "text": "El gobierno no toma la decisión final basándose únicamente en el informe. A nivel federal, un examinador de Corporations Canada revisa el informe y el nombre propuesto, sopesa el carácter distintivo y el posible riesgo de confusión con nombres existentes, y aprueba el nombre o pide cambios. Si el examinador federal necesita más información, usted recibe un aviso de acción requerida (Notice of action required) con instrucciones para volver a presentar la solicitud. Ontario funciona de otra manera: no revisa en absoluto la similitud de los nombres propuestos. Corresponde a los fundadores revisar el informe, y un nombre en conflicto puede impugnarse después en una audiencia sobre nombres o ante los tribunales."
       },
       {
         "type": "heading",

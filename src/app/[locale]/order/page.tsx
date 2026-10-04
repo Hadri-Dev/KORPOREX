@@ -3,7 +3,7 @@ import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { buildSeoMetadata } from "@/lib/seoMeta";
 import JsonLd from "@/components/JsonLd";
-import { organizationSchema, incorporationServiceSchema } from "@/lib/structuredData";
+import { incorporationServiceSchema } from "@/lib/structuredData";
 import OrderBody from "./OrderBody";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
@@ -16,9 +16,9 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
   setRequestLocale(locale);
   return (
     <>
-      {/* Service + AggregateOffer for the incorporation packages. Organization is
-          emitted alongside so the offer's provider @id resolves on this page. */}
-      <JsonLd data={[organizationSchema(), incorporationServiceSchema()]} />
+      {/* Service + AggregateOffer for the incorporation packages. The provider
+          @id resolves to the site-wide Organization node in the layout. */}
+      <JsonLd data={incorporationServiceSchema()} />
       <OrderBody />
     </>
   );
