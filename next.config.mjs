@@ -31,6 +31,13 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // www.korporex.ca -> korporex.ca (one canonical host; keeps the path).
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.korporex.ca" }],
+        destination: "https://korporex.ca/:path*",
+        permanent: true,
+      },
       // Routes renamed 2026-05-27 — preserve any external links / bookmarks.
       // /nuans-report -> /nuans
       { source: "/nuans-report", destination: "/nuans", permanent: true },
