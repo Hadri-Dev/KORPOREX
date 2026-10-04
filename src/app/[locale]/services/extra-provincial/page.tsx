@@ -1,3 +1,4 @@
+import ServiceRelatedGuides from "@/components/ServiceRelatedGuides";
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
@@ -12,5 +13,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 export default async function Page({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <ExtraProvincialBody />;
+  return (
+    <>
+      <ExtraProvincialBody />
+      <ServiceRelatedGuides locale={locale} path="/services/extra-provincial" />
+    </>
+  );
 }

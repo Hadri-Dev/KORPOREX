@@ -79,7 +79,11 @@ export default async function GuidesPage({ params, searchParams }: Params) {
   setRequestLocale(locale);
   const t = await getTranslations("guides");
 
-  const allArticles = getArticlesByLocale(locale);
+  // Newest first, so recently published guides sit on page 1 instead of being
+  // pushed to the last paginated page (where crawlers reach them 3+ clicks deep).
+  const allArticles = [...getArticlesByLocale(locale)].sort((a, b) =>
+    (b.publishedAt ?? b.updated).localeCompare(a.publishedAt ?? a.updated),
+  );
   const totalPages = Math.max(1, Math.ceil(allArticles.length / PAGE_SIZE));
 
   // Clamp the requested page into the valid range.
@@ -229,6 +233,42 @@ export default async function GuidesPage({ params, searchParams }: Params) {
               )}
             </nav>
           ) : null}
+
+          {/* Every published guide, grouped by topic: keeps each one a single
+              click from /guides regardless of pagination. */}
+          <div className="mt-16 pt-12 border-t border-gray-100">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-2">
+              {t("browseByTopicEyebrow")}
+            </p>
+            <h2 className="font-serif text-3xl font-bold text-navy-900 mb-8">
+              {t("browseByTopicTitle")}
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {CATEGORY_CARDS.map(({ key }) => {
+                const inTopic = allArticles.filter((a) => CATEGORY_KEY[a.category] === key);
+                if (inTopic.length === 0) return null;
+                return (
+                  <div key={key}>
+                    <h3 className="font-serif text-lg font-bold text-navy-900 mb-3">
+                      {t(`categories.${key}.label`)}
+                    </h3>
+                    <ul className="space-y-2 text-sm">
+                      {inTopic.map((a) => (
+                        <li key={a.slug}>
+                          <Link
+                            href={`/guides/${a.slug}`}
+                            className="text-gray-700 hover:text-navy-900 underline-offset-2 hover:underline leading-snug"
+                          >
+                            {a.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
           <div className="mt-12 border border-dashed border-gray-200 rounded-lg p-8 text-center">
             <p className="font-serif text-lg font-bold text-navy-900 mb-2">{t("moreComingTitle")}</p>

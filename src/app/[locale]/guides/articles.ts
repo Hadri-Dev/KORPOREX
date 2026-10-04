@@ -1,4 +1,9 @@
 import type { Locale } from "@/i18n/routing";
+import { expanded as annualReturns } from "./content/annual-returns";
+import { expanded as costToIncorporateOntario } from "./content/cost-to-incorporate-ontario";
+import { expanded as dissolveCorporationOntario } from "./content/dissolve-corporation-ontario";
+import { expanded as nuansNameSearch } from "./content/nuans-name-search";
+import { expanded as registerBusinessOntario } from "./content/register-business-ontario";
 
 export type { Locale };
 
@@ -47,6 +52,8 @@ export type Article = {
   // articles that are live immediately.
   publishedAt?: string;
   content: ArticleSection[];
+  // Optional FAQ rendered after the body and emitted as FAQPage structured data.
+  faq?: { q: string; a: string }[];
 };
 
 // Absolute origin for building hreflang/canonical URLs.
@@ -187,7 +194,7 @@ export const articles: Article[] = [
     category: "Incorporation Guides",
     title: "What Is a NUANS Name Search, and Do You Need One?",
     excerpt:
-      "If you're incorporating federally or in certain provinces, a NUANS search is mandatory. Learn what it is, how it works, and what happens if your first-choice name is unavailable.",
+      "Ontario and some other provinces require a NUANS report before you incorporate a named corporation, and federally the search is built into the filing. Learn what it is, how it works, and what happens if your first-choice name is unavailable.",
     metaTitle: "What Is a NUANS Name Search, and Do You Need One? | Korporex",
     metaDescription:
       "A NUANS name search checks your proposed corporate name against names across Canada. Learn when it's required, how it works, and what if your choice is taken.",
@@ -1676,7 +1683,7 @@ export const articles: Article[] = [
     category: "Incorporation Guides",
     title: "Qu'est-ce qu'une recherche de nom NUANS, et en avez-vous besoin ?",
     excerpt:
-      "Si vous vous constituez en société au fédéral ou dans certaines provinces, une recherche NUANS est obligatoire. Voici ce que c'est, comment ça fonctionne, et que faire si votre premier choix de nom n'est pas disponible.",
+      "L'Ontario et d'autres provinces exigent un rapport NUANS avant de constituer une société à dénomination, et au fédéral la recherche est intégrée au dépôt. Voici ce que c'est, comment ça fonctionne, et que faire si votre premier choix de nom n'est pas disponible.",
     metaTitle: "Qu'est-ce qu'une recherche de nom NUANS ? | Korporex",
     metaDescription:
       "Une recherche de nom NUANS compare le nom proposé de votre société aux noms enregistrés au Canada. Quand elle est requise, comment elle fonctionne, que faire.",
@@ -1819,7 +1826,7 @@ export const articles: Article[] = [
     category: "Incorporation Guides",
     title: "¿Qué es una búsqueda de nombre NUANS y la necesita?",
     excerpt:
-      "Si se constituye en sociedad a nivel federal o en ciertas provincias, una búsqueda NUANS es obligatoria. Vea qué es, cómo funciona y qué hacer si su primera opción de nombre no está disponible.",
+      "Ontario y otras provincias exigen un informe NUANS antes de constituir una sociedad con nombre, y a nivel federal la búsqueda está integrada en la presentación. Vea qué es, cómo funciona y qué hacer si su primera opción de nombre no está disponible.",
     metaTitle: "¿Qué es una búsqueda de nombre NUANS? | Korporex",
     metaDescription:
       "Una búsqueda de nombre NUANS coteja el nombre propuesto de su sociedad con los registrados en Canadá. Cuándo es obligatoria, cómo funciona y qué hacer si falla.",
@@ -3747,6 +3754,29 @@ export const articles: Article[] = [
     ],
   },
 ];
+
+// Long-form rewrites kept in ./content/<group>.ts (one file per article group,
+// all three locales) so this file stays navigable. They replace the body,
+// read time and FAQ of the matching language versions above.
+type ExpandedArticle = Pick<Article, "readTime" | "content"> & {
+  faq: NonNullable<Article["faq"]>;
+};
+const EXPANDED: Record<string, { updated: string; byLocale: Record<Locale, ExpandedArticle> }> = {
+  "annual-returns": { updated: "2026-10-04", byLocale: annualReturns },
+  "cost-to-incorporate-ontario": { updated: "2026-10-04", byLocale: costToIncorporateOntario },
+  "dissolve-corporation-ontario": { updated: "2026-10-04", byLocale: dissolveCorporationOntario },
+  "nuans-name-search": { updated: "2026-10-04", byLocale: nuansNameSearch },
+  "register-business-ontario": { updated: "2026-10-04", byLocale: registerBusinessOntario },
+};
+for (const a of articles) {
+  const e = EXPANDED[a.group];
+  const v = e?.byLocale[a.locale];
+  if (!e || !v) continue;
+  a.content = v.content;
+  a.readTime = v.readTime;
+  a.faq = v.faq;
+  a.updated = e.updated;
+}
 
 // Guard for inline links inside article bodies. A guide can link to another
 // guide that is scheduled to publish later, which is normal while a cluster is

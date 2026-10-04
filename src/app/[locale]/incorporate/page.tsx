@@ -1,3 +1,4 @@
+import ServiceRelatedGuides from "@/components/ServiceRelatedGuides";
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
@@ -22,6 +23,7 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
           BODY_TRANSLATED_PATHS, so /fr and /es render the same English body. */}
       <h1 className="sr-only">Incorporate a Business in Canada</h1>
       <IncorporateBody />
+      <ServiceRelatedGuides locale={locale} path="/incorporate" />
     </>
   );
 }

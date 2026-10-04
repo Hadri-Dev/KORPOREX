@@ -18,7 +18,7 @@ import {
   type Locale,
 } from "../articles";
 import { socialMeta } from "@/lib/seoMeta";
-import { articleSchema, breadcrumbSchema, ORG_SHORT } from "@/lib/structuredData";
+import { articleSchema, breadcrumbSchema, faqPageSchema, ORG_SHORT } from "@/lib/structuredData";
 import JsonLd from "@/components/JsonLd";
 
 type Params = { params: { locale: Locale; slug: string } };
@@ -238,7 +238,13 @@ export default async function ArticlePage({ params }: Params) {
 
   return (
     <>
-      <JsonLd data={[article_ld, breadcrumb_ld]} />
+      <JsonLd
+        data={
+          article.faq?.length
+            ? [article_ld, breadcrumb_ld, faqPageSchema(article.faq)]
+            : [article_ld, breadcrumb_ld]
+        }
+      />
       {/* Hero */}
       <section className="bg-cream-50 py-12 px-6 border-b border-gray-100">
         <div className="max-w-4xl mx-auto">
@@ -273,6 +279,30 @@ export default async function ArticlePage({ params }: Params) {
         <div className="max-w-6xl mx-auto grid lg:grid-cols-[1fr_240px] gap-12">
           <article className="min-w-0">
             {article.content.map((section, i) => renderSection(section, i, locale))}
+
+            {/* FAQ: visible copy mirroring the FAQPage structured data above. */}
+            {article.faq?.length ? (
+              <>
+                <h2
+                  id="faq"
+                  className="font-serif text-2xl md:text-3xl font-bold text-navy-900 mt-12 mb-4 scroll-mt-24"
+                >
+                  {t("faqTitle")}
+                </h2>
+                <div className="space-y-3">
+                  {article.faq.map(({ q, a }) => (
+                    <details key={q} className="group bg-cream-50 border border-gray-200 rounded-lg px-5 py-1">
+                      <summary className="cursor-pointer list-none py-4 flex items-center justify-between gap-4 font-semibold text-navy-900 text-[15px]">
+                        {q}
+                        <span className="text-gold-600 text-xl leading-none group-open:hidden">+</span>
+                        <span className="text-gold-600 text-xl leading-none hidden group-open:inline">–</span>
+                      </summary>
+                      <p className="text-sm text-gray-700 leading-relaxed pb-4">{a}</p>
+                    </details>
+                  ))}
+                </div>
+              </>
+            ) : null}
 
             <div className="mt-16 pt-8 border-t border-gray-100 text-xs text-gray-500 leading-relaxed">
               {t("disclaimer")}

@@ -363,7 +363,12 @@
     },
     "previous": "Anterior",
     "next": "Siguiente",
-    "paginationLabel": "Paginación de guías"
+    "paginationLabel": "Paginación de guías",
+    "serviceGuidesEyebrow": "Infórmese antes de presentar",
+    "serviceGuidesTitle": "Guías relacionadas",
+    "faqTitle": "Preguntas frecuentes",
+    "browseByTopicEyebrow": "Todas las guías",
+    "browseByTopicTitle": "Explorar guías por tema"
   },
   "contact": {
     "metaTitle": "Contactar a Korporex | Soporte de constitución en línea",

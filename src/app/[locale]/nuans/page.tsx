@@ -1,3 +1,4 @@
+import ServiceRelatedGuides from "@/components/ServiceRelatedGuides";
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { socialMeta } from "@/lib/seoMeta";
@@ -51,5 +52,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function NuansReportPage({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <NuansReportBody />;
+  return (
+    <>
+      <NuansReportBody />
+      <ServiceRelatedGuides locale={locale as Locale} path="/nuans" />
+    </>
+  );
 }

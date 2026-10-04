@@ -363,7 +363,12 @@
     },
     "previous": "Previous",
     "next": "Next",
-    "paginationLabel": "Guides pagination"
+    "paginationLabel": "Guides pagination",
+    "serviceGuidesEyebrow": "Learn before you file",
+    "serviceGuidesTitle": "Related guides",
+    "faqTitle": "Frequently asked questions",
+    "browseByTopicEyebrow": "Every guide",
+    "browseByTopicTitle": "Browse guides by topic"
   },
   "contact": {
     "metaTitle": "Contact Korporex | Online Incorporation Support",
