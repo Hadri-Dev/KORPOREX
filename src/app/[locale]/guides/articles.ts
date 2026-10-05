@@ -19,6 +19,7 @@ import { expanded as salaryVsDividends } from "./content/salary-vs-dividends";
 import { expanded as confirmGstHstNumber } from "./content/confirm-gst-hst-number";
 import { expanded as businessBankAccount } from "./content/business-bank-account";
 import { expanded as llcInCanada } from "./content/llc-in-canada";
+import { expanded as incorporateYourself } from "./content/incorporate-yourself";
 
 export type { Locale };
 
@@ -3778,7 +3779,7 @@ export const articles: Article[] = [
 type ExpandedArticle = Pick<Article, "readTime" | "content"> & {
   faq: NonNullable<Article["faq"]>;
 };
-const EXPANDED: Record<string, { updated: string; byLocale: Record<Locale, ExpandedArticle> }> = {
+const EXPANDED: Record<string, { updated: string; liveFrom?: string; byLocale: Record<Locale, ExpandedArticle> }> = {
   "articles-of-incorporation": { updated: "2026-10-04", byLocale: articlesOfIncorporation },
   "cra-business-number": { updated: "2026-10-04", byLocale: craBusinessNumber },
   "named-vs-numbered": { updated: "2026-10-04", byLocale: namedVsNumbered },
@@ -3795,17 +3796,32 @@ const EXPANDED: Record<string, { updated: string; byLocale: Record<Locale, Expan
   "register-business-ontario": { updated: "2026-10-04", byLocale: registerBusinessOntario },
   "salary-vs-dividends": { updated: "2026-10-04", byLocale: salaryVsDividends },
   "confirm-gst-hst-number": { updated: "2026-10-04", byLocale: confirmGstHstNumber },
-  "business-bank-account": { updated: "2026-10-04", byLocale: businessBankAccount },
-  "llc-in-canada": { updated: "2026-10-04", byLocale: llcInCanada },
+  "business-bank-account": { updated: "2026-10-05", liveFrom: "2026-10-05T10:00:00-04:00", byLocale: businessBankAccount },
+  "llc-in-canada": { updated: "2026-10-06", liveFrom: "2026-10-06T10:00:00-04:00", byLocale: llcInCanada },
+  "incorporate-yourself": { updated: "2026-10-07", liveFrom: "2026-10-07T10:00:00-04:00", byLocale: incorporateYourself },
 };
 for (const a of articles) {
   const e = EXPANDED[a.group];
   const v = e?.byLocale[a.locale];
   if (!e || !v) continue;
-  a.content = v.content;
-  a.readTime = v.readTime;
-  a.faq = v.faq;
-  a.updated = e.updated;
+  if (!e.liveFrom) {
+    a.content = v.content;
+    a.readTime = v.readTime;
+    a.faq = v.faq;
+    a.updated = e.updated;
+    continue;
+  }
+  // Scheduled rewrite: the article keeps its current short version until
+  // liveFrom, then serves the long one. Getters (not a one-time swap) because
+  // a warm serverless instance can load this module before liveFrom and then
+  // regenerate the ISR page after it.
+  const live = new Date(e.liveFrom).getTime();
+  const old = { content: a.content, readTime: a.readTime, faq: a.faq, updated: a.updated };
+  const pick = <K extends keyof typeof old>(k: K) =>
+    Date.now() >= live ? ({ ...v, updated: e.updated } as typeof old)[k] : old[k];
+  for (const k of ["content", "readTime", "faq", "updated"] as const) {
+    Object.defineProperty(a, k, { get: () => pick(k), enumerable: true, configurable: true });
+  }
 }
 
 // Guard for inline links inside article bodies. A guide can link to another
