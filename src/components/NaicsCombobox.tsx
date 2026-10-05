@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, Search, X } from "lucide-react";
+import { useLocale } from "next-intl";
 import { NAICS_CODES, searchNaics, type NaicsCode } from "@/lib/naics";
 
 type Props = {
@@ -11,7 +12,35 @@ type Props = {
   error?: string;
 };
 
+// Display-only UI strings. English output is unchanged. The NAICS code titles
+// and sectors themselves come from lib/naics and are English-only data.
+const COPY = {
+  en: {
+    clear: "Clear selection",
+    search: "Search by code, keyword, or sector…",
+    noMatches: "No matches. Try a different keyword.",
+    footer: "Canadian NAICS 2022",
+    common: "common codes",
+  },
+  fr: {
+    clear: "Effacer la sélection",
+    search: "Recherchez par code, mot-clé ou secteur…",
+    noMatches: "Aucun résultat. Essayez un autre mot-clé.",
+    footer: "SCIAN Canada 2022",
+    common: "codes courants",
+  },
+  es: {
+    clear: "Borrar la selección",
+    search: "Busque por código, palabra clave o sector…",
+    noMatches: "No hay resultados. Pruebe con otra palabra clave.",
+    footer: "NAICS Canadá 2022",
+    common: "códigos comunes",
+  },
+} as const;
+
 export default function NaicsCombobox({ value, onChange, placeholder, error }: Props) {
+  const locale = useLocale();
+  const t = COPY[locale === "fr" || locale === "es" ? locale : "en"];
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [activeIdx, setActiveIdx] = useState(0);
@@ -103,7 +132,7 @@ export default function NaicsCombobox({ value, onChange, placeholder, error }: P
                 clear();
               }}
               className="text-gray-400 hover:text-gray-700 shrink-0"
-              aria-label="Clear selection"
+              aria-label={t.clear}
             >
               <X size={14} />
             </button>
@@ -119,7 +148,7 @@ export default function NaicsCombobox({ value, onChange, placeholder, error }: P
               placeholder={
                 selected
                   ? `${selected.code} - ${selected.title}`
-                  : placeholder ?? "Search by code, keyword, or sector…"
+                  : placeholder ?? t.search
               }
               className="flex-1 py-2.5 text-sm text-gray-900 bg-transparent focus:outline-none placeholder:text-gray-400"
             />
@@ -134,7 +163,7 @@ export default function NaicsCombobox({ value, onChange, placeholder, error }: P
       {open && (
         <div className="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-72 overflow-y-auto">
           {results.length === 0 ? (
-            <p className="px-4 py-3 text-sm text-gray-500">No matches. Try a different keyword.</p>
+            <p className="px-4 py-3 text-sm text-gray-500">{t.noMatches}</p>
           ) : (
             <ul role="listbox" className="py-1">
               {results.map((c, idx) => {
@@ -169,7 +198,7 @@ export default function NaicsCombobox({ value, onChange, placeholder, error }: P
             </ul>
           )}
           <p className="px-4 py-2 text-[11px] text-gray-400 border-t border-gray-100 bg-cream-50">
-            Canadian NAICS 2022 · {NAICS_CODES.length} common codes
+            {t.footer} · {NAICS_CODES.length} {t.common}
           </p>
         </div>
       )}

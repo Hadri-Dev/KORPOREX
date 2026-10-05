@@ -2,6 +2,35 @@
 
 import { Check, ChevronLeft } from "lucide-react";
 import type { ReactNode } from "react";
+import { useLocale } from "next-intl";
+
+type UiLang = "en" | "fr" | "es";
+
+function useUiLang(): UiLang {
+  const locale = useLocale();
+  return locale === "fr" || locale === "es" ? locale : "en";
+}
+
+// Shared validation messages (registrationSchemas) translated for display only.
+// English output is unchanged; unknown messages fall through as-is.
+const ERROR_TEXT: Record<Exclude<UiLang, "en">, Record<string, string>> = {
+  fr: {
+    Required: "Obligatoire",
+    "Valid email required": "Une adresse courriel valide est requise",
+    "Please describe the business activity": "Veuillez décrire l'activité de l'entreprise",
+  },
+  es: {
+    Required: "Obligatorio",
+    "Valid email required": "Se requiere un correo electrónico válido",
+    "Please describe the business activity": "Describa la actividad de la empresa",
+  },
+};
+
+const UI_TEXT = {
+  en: { back: "Back", continue: "Continue" },
+  fr: { back: "Retour", continue: "Continuer" },
+  es: { back: "Atrás", continue: "Continuar" },
+} as const;
 
 export const iCls =
   "w-full border-2 border-gold-200 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors";
@@ -20,6 +49,8 @@ export function Field({
   hint?: string;
   children: ReactNode;
 }) {
+  const lang = useUiLang();
+  const errorText = error && lang !== "en" ? (ERROR_TEXT[lang][error] ?? error) : error;
   const required = label.endsWith(" *");
   const baseLabel = required ? label.slice(0, -2) : label;
   return (
@@ -29,38 +60,40 @@ export function Field({
         {required && <span className="text-red-500 ml-0.5">*</span>}
       </label>
       {children}
-      {hint && !error && <p className="text-xs text-gray-500 mt-1">{hint}</p>}
-      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+      {hint && !errorText && <p className="text-xs text-gray-500 mt-1">{hint}</p>}
+      {errorText && <p className="text-xs text-red-500 mt-1">{errorText}</p>}
     </div>
   );
 }
 
 export function BackBtn({ onClick }: { onClick: () => void }) {
+  const lang = useUiLang();
   return (
     <button
       type="button"
       onClick={onClick}
       className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-navy-900 mb-8 transition-colors"
     >
-      <ChevronLeft size={16} /> Back
+      <ChevronLeft size={16} /> {UI_TEXT[lang].back}
     </button>
   );
 }
 
 export function NextBtn({
-  label = "Continue",
+  label,
   disabled = false,
 }: {
   label?: string;
   disabled?: boolean;
 }) {
+  const lang = useUiLang();
   return (
     <button
       type="submit"
       disabled={disabled}
       className="w-full bg-navy-900 text-white font-medium py-3.5 text-sm tracking-wide hover:bg-navy-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed mt-6"
     >
-      {label}
+      {label ?? UI_TEXT[lang].continue}
     </button>
   );
 }

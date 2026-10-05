@@ -1,6 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
+import { useLocale } from "next-intl";
 import AddressAutocomplete, { type ParsedAddress } from "@/components/AddressAutocomplete";
 import { isCanadaCountry } from "@/lib/pricing";
 import { Field, iCls, sCls } from "./WizardUI";
@@ -23,6 +24,64 @@ const CA_PROVINCES: Array<{ code: string; name: string }> = [
   { code: "SK", name: "Saskatchewan" },
   { code: "YT", name: "Yukon" },
 ];
+
+// Display-only translations. English output is unchanged; values sent to the
+// form (province codes, country) are the same in every locale.
+type Lang = "en" | "fr" | "es";
+
+const PROVINCE_NAMES: Record<Exclude<Lang, "en">, Record<string, string>> = {
+  fr: {
+    BC: "Colombie-Britannique",
+    NB: "Nouveau-Brunswick",
+    NL: "Terre-Neuve-et-Labrador",
+    NS: "Nouvelle-Écosse",
+    NT: "Territoires du Nord-Ouest",
+    PE: "Île-du-Prince-Édouard",
+    QC: "Québec",
+  },
+  es: {
+    BC: "Columbia Británica",
+    NB: "Nuevo Brunswick",
+    NL: "Terranova y Labrador",
+    NS: "Nueva Escocia",
+    NT: "Territorios del Noroeste",
+    PE: "Isla del Príncipe Eduardo",
+    QC: "Quebec",
+  },
+};
+
+const COPY = {
+  en: {
+    street: "Street address *",
+    city: "City *",
+    province: "Province *",
+    provinceState: "Province / State *",
+    select: "Select…",
+    postal: "Postal code *",
+    country: "Country *",
+    streetPlaceholder: undefined as string | undefined,
+  },
+  fr: {
+    street: "Adresse municipale *",
+    city: "Ville *",
+    province: "Province *",
+    provinceState: "Province / État *",
+    select: "Sélectionner…",
+    postal: "Code postal *",
+    country: "Pays *",
+    streetPlaceholder: "Commencez à saisir une adresse…" as string | undefined,
+  },
+  es: {
+    street: "Dirección *",
+    city: "Ciudad *",
+    province: "Provincia *",
+    provinceState: "Provincia / Estado *",
+    select: "Seleccione…",
+    postal: "Código postal *",
+    country: "País *",
+    streetPlaceholder: "Empiece a escribir una dirección…" as string | undefined,
+  },
+};
 
 // Accept either a plain string-keyed map or the RHF nested error shape
 // (`{ field: { message: string } }`). The helper inside the component
@@ -52,6 +111,11 @@ function msg(e: FieldErr): string | undefined {
  */
 export default function AddressFields({ name, errors, canadaOnly = true }: Props) {
   const { register, setValue, watch } = useFormContext();
+  const locale = useLocale();
+  const lang: Lang = locale === "fr" || locale === "es" ? locale : "en";
+  const t = COPY[lang];
+  const provinceName = (code: string, name: string) =>
+    lang === "en" ? name : (PROVINCE_NAMES[lang][code] ?? name);
   const streetValue: string = watch(`${name}.street`) ?? "";
   const countryValue: string = watch(`${name}.country`) ?? "";
   // Province dropdown whenever the address is Canadian, including in
@@ -73,8 +137,9 @@ export default function AddressFields({ name, errors, canadaOnly = true }: Props
 
   return (
     <div className="space-y-3">
-      <Field label="Street address *" error={msg(e.street)}>
+      <Field label={t.street} error={msg(e.street)}>
         <AddressAutocomplete
+          placeholder={t.streetPlaceholder}
           value={streetValue}
           onChange={(v) => setValue(`${name}.street`, v, { shouldValidate: true })}
           onAddressSelected={applyParsed}
@@ -83,16 +148,16 @@ export default function AddressFields({ name, errors, canadaOnly = true }: Props
         />
       </Field>
       <div className="grid grid-cols-2 gap-3">
-        <Field label="City *" error={msg(e.city)}>
+        <Field label={t.city} error={msg(e.city)}>
           <input type="text" {...register(`${name}.city`)} className={iCls} placeholder="Toronto" />
         </Field>
-        <Field label={canadianRegion ? "Province *" : "Province / State *"} error={msg(e.region)}>
+        <Field label={canadianRegion ? t.province : t.provinceState} error={msg(e.region)}>
           {canadianRegion ? (
             <select {...register(`${name}.region`)} className={sCls}>
-              <option value="">Select…</option>
+              <option value="">{t.select}</option>
               {CA_PROVINCES.map((p) => (
                 <option key={p.code} value={p.code}>
-                  {p.name}
+                  {provinceName(p.code, p.name)}
                 </option>
               ))}
             </select>
@@ -107,7 +172,7 @@ export default function AddressFields({ name, errors, canadaOnly = true }: Props
         </Field>
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <Field label="Postal code *" error={msg(e.postalCode)}>
+        <Field label={t.postal} error={msg(e.postalCode)}>
           <input
             type="text"
             {...register(`${name}.postalCode`)}
@@ -115,7 +180,7 @@ export default function AddressFields({ name, errors, canadaOnly = true }: Props
             placeholder="M5V 3A8"
           />
         </Field>
-        <Field label="Country *" error={msg(e.country)}>
+        <Field label={t.country} error={msg(e.country)}>
           <input
             type="text"
             {...countryReg}
