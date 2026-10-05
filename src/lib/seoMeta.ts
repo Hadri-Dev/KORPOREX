@@ -77,6 +77,7 @@ const BODY_TRANSLATED_PATHS = new Set<string>([
   "/faq",
   "/nuans", // order form + service copy are localized (NuansReportBody, serviceContent/nuans)
   "/services/sole-proprietorship", // order wizard + service copy are localized (SoleProprietorshipBody, serviceContent/sole-proprietorship)
+  "/services/business-name", // order wizard + service copy are localized (BusinessNameBody, serviceContent/business-name)
   "/guides", // guides index (individual articles are handled per-locale in sitemap.ts)
 ]);
 
