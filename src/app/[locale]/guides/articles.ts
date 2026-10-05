@@ -3806,6 +3806,10 @@ for (const a of articles) {
   const e = EXPANDED[a.group];
   const v = e?.byLocale[a.locale];
   if (!e || !v) continue;
+  // Keep the original date as the publish date, so index cards, sort order and
+  // datePublished don't all show the rewrite day; the rewrite only moves
+  // `updated` (dateModified and the "Updated" line on the article page).
+  a.publishedAt ??= a.updated;
   if (!e.liveFrom) {
     a.content = v.content;
     a.readTime = v.readTime;
