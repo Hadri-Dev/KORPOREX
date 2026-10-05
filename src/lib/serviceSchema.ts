@@ -17,20 +17,29 @@ const BY_PATH: Record<string, ServiceMeta> = Object.fromEntries(
   ].map((s) => [s.path, s]),
 );
 
+// Localized name/description/URL for a fr/es page whose body is translated
+// (see BODY_TRANSLATED_PATHS), so its structured data matches its own canonical.
+export type ServiceJsonLdLocalized = { url: string; name: string; description: string; crumbs: { name: string; url: string }[] };
+
 // Service + BreadcrumbList structured data for a service page, or [] when the
-// path is not a registry service. URLs use the English path, matching the
-// canonical of these (English-bodied) pages.
-export function serviceJsonLd(path: string): object[] {
+// path is not a registry service. Without `localized`, names and URLs are the
+// English ones, matching the English canonical of untranslated pages.
+export function serviceJsonLd(path: string, localized?: ServiceJsonLdLocalized): object[] {
   const s = BY_PATH[path];
   if (!s) return [];
-  const url = `${SITE_URL}${s.path}`;
+  const url = localized?.url ?? `${SITE_URL}${s.path}`;
+  const name = localized?.name ?? s.longLabel;
+  const crumbs = localized?.crumbs ?? [
+    { name: "Home", url: SITE_URL },
+    { name: "Services", url: `${SITE_URL}/services` },
+  ];
   return [
     {
       "@context": "https://schema.org",
       "@type": "Service",
-      name: s.longLabel,
-      serviceType: s.longLabel,
-      description: s.description,
+      name,
+      serviceType: name,
+      description: localized?.description ?? s.description,
       url,
       provider: { "@id": `${SITE_URL}/#organization` },
       areaServed: "CA",
@@ -42,9 +51,8 @@ export function serviceJsonLd(path: string): object[] {
       },
     },
     breadcrumbSchema([
-      { name: "Home", url: SITE_URL },
-      { name: "Services", url: `${SITE_URL}/services` },
-      { name: s.longLabel, url },
+      ...crumbs,
+      { name, url },
     ]),
   ];
 }

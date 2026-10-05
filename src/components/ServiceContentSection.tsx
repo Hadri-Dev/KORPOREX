@@ -3,7 +3,14 @@ import type { Locale } from "@/i18n/routing";
 import JsonLd from "@/components/JsonLd";
 import { faqPageSchema } from "@/lib/structuredData";
 import { serviceJsonLd } from "@/lib/serviceSchema";
+import { isBodyTranslated, localizedUrl } from "@/lib/seoMeta";
 import type { ServiceContentByLocale } from "@/lib/serviceContent/types";
+
+const CRUMBS: Record<Locale, [string, string]> = {
+  en: ["Home", "Services"],
+  fr: ["Accueil", "Services"],
+  es: ["Inicio", "Servicios"],
+};
 
 // Crawlable service copy + FAQ rendered under an order form, in the visitor's
 // locale. The visible FAQ mirrors the FAQPage structured data it emits; the
@@ -18,10 +25,27 @@ export default function ServiceContentSection({
   content: ServiceContentByLocale;
 }) {
   const c = content[locale] ?? content.en;
+  // A translated fr/es page is its own canonical, so its Service and
+  // breadcrumb nodes use the localized URL and names instead of English.
+  const firstPara = c.blocks.find((b) => b.type === "p");
+  const localized =
+    locale !== "en" && isBodyTranslated(path) && content[locale]
+      ? {
+          url: localizedUrl(locale, path),
+          name: c.title,
+          description: firstPara && firstPara.type === "p"
+            ? firstPara.parts.map((x) => (typeof x === "string" ? x : x.text)).join("")
+            : c.title,
+          crumbs: [
+            { name: CRUMBS[locale][0], url: localizedUrl(locale, "/") },
+            { name: CRUMBS[locale][1], url: localizedUrl(locale, "/services") },
+          ],
+        }
+      : undefined;
 
   return (
     <section className="bg-white py-12 px-6 border-t border-gray-100">
-      <JsonLd data={[faqPageSchema(c.faq), ...serviceJsonLd(path)]} />
+      <JsonLd data={[faqPageSchema(c.faq), ...serviceJsonLd(path, localized)]} />
       <div className="max-w-2xl mx-auto">
         <h2 className="font-serif text-2xl md:text-3xl font-bold text-navy-900 mb-6">{c.title}</h2>
         {c.blocks.map((b, i) =>
