@@ -17,6 +17,7 @@ import { nuansReportOntario } from "./content/nuans-report-ontario";
 import { expanded as registerBusinessOntario } from "./content/register-business-ontario";
 import { expanded as salaryVsDividends } from "./content/salary-vs-dividends";
 import { expanded as confirmGstHstNumber } from "./content/confirm-gst-hst-number";
+import { expanded as businessBankAccount } from "./content/business-bank-account";
 
 export type { Locale };
 
@@ -3793,6 +3794,7 @@ const EXPANDED: Record<string, { updated: string; byLocale: Record<Locale, Expan
   "register-business-ontario": { updated: "2026-10-04", byLocale: registerBusinessOntario },
   "salary-vs-dividends": { updated: "2026-10-04", byLocale: salaryVsDividends },
   "confirm-gst-hst-number": { updated: "2026-10-04", byLocale: confirmGstHstNumber },
+  "business-bank-account": { updated: "2026-10-04", byLocale: businessBankAccount },
 };
 for (const a of articles) {
   const e = EXPANDED[a.group];
