@@ -20,6 +20,7 @@ import { expanded as confirmGstHstNumber } from "./content/confirm-gst-hst-numbe
 import { expanded as businessBankAccount } from "./content/business-bank-account";
 import { expanded as llcInCanada } from "./content/llc-in-canada";
 import { expanded as incorporateYourself } from "./content/incorporate-yourself";
+import { expanded as registerSoleProprietorshipOntario } from "./content/register-sole-proprietorship-ontario";
 
 export type { Locale };
 
@@ -3799,6 +3800,7 @@ const EXPANDED: Record<string, { updated: string; liveFrom?: string; byLocale: R
   "business-bank-account": { updated: "2026-10-05", liveFrom: "2026-10-05T10:00:00-04:00", byLocale: businessBankAccount },
   "llc-in-canada": { updated: "2026-10-06", liveFrom: "2026-10-06T10:00:00-04:00", byLocale: llcInCanada },
   "incorporate-yourself": { updated: "2026-10-07", liveFrom: "2026-10-07T10:00:00-04:00", byLocale: incorporateYourself },
+  "register-sole-proprietorship-ontario": { updated: "2026-10-09", liveFrom: "2026-10-09T10:00:00-04:00", byLocale: registerSoleProprietorshipOntario },
 };
 for (const a of articles) {
   const e = EXPANDED[a.group];
