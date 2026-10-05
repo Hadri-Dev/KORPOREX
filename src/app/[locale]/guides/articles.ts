@@ -18,6 +18,7 @@ import { expanded as registerBusinessOntario } from "./content/register-business
 import { expanded as salaryVsDividends } from "./content/salary-vs-dividends";
 import { expanded as confirmGstHstNumber } from "./content/confirm-gst-hst-number";
 import { expanded as businessBankAccount } from "./content/business-bank-account";
+import { expanded as llcInCanada } from "./content/llc-in-canada";
 
 export type { Locale };
 
@@ -3795,6 +3796,7 @@ const EXPANDED: Record<string, { updated: string; byLocale: Record<Locale, Expan
   "salary-vs-dividends": { updated: "2026-10-04", byLocale: salaryVsDividends },
   "confirm-gst-hst-number": { updated: "2026-10-04", byLocale: confirmGstHstNumber },
   "business-bank-account": { updated: "2026-10-04", byLocale: businessBankAccount },
+  "llc-in-canada": { updated: "2026-10-04", byLocale: llcInCanada },
 };
 for (const a of articles) {
   const e = EXPANDED[a.group];
