@@ -45,6 +45,8 @@ import {
   type DirectorCountType,
 } from "@/lib/incorporateOptions";
 import { loadDraft, saveDraft, clearDraft } from "@/lib/incorporateDraft";
+import { POSITION_LABELS } from "@/components/wizard/CurrentPeopleSection";
+import { useCopy, localizeError } from "./incorporateCopy";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -54,8 +56,8 @@ type CorpNameType = "named" | "numbered";
 // resident in Canada (with some prescribed-class exceptions) or a permanent
 // resident ordinarily resident in Canada (with one-year-after-citizenship-
 // eligibility caveat). We split the data into two orthogonal fields:
-//  - `citizenshipStatus` — what the director IS (citizen / PR / other)
-//  - `isCanadianResident` — whether the director qualifies as a CBCA
+//  - `citizenshipStatus`, what the director IS (citizen / PR / other)
+//  - `isCanadianResident`, whether the director qualifies as a CBCA
 //    "resident Canadian" ("yes" / "no"). Empty string is the unset state
 //    used by the federal radio group at first render so customers must
 //    consciously pick. Non-federal jurisdictions seed it to "no" so the
@@ -150,7 +152,7 @@ type SnapshotRef = { current: (() => Record<string, unknown>) | null };
 // imported above; kept inline references below read from those.
 
 // Package names, descriptions and feature lists come from `@/lib/packages`, the
-// same source the /order pricing page renders — a customer who picked a package
+// same source the /order pricing page renders, a customer who picked a package
 // on /order must see that identical package here.
 
 const CA_PROVINCES = [
@@ -200,7 +202,7 @@ const MONTHS = [
 
 // Share-class options offered as a structured picker on Standard and Premium.
 // Standard gets A/B/C; Premium gets all five. Descriptions are strictly
-// factual: they state the rights attached to each class and nothing else —
+// factual: they state the rights attached to each class and nothing else -
 // no recommendations on who should hold them or when to use them. Korporex
 // does not provide legal or tax advice; the customer chooses which classes
 // to include in their corporation's Articles of Incorporation.
@@ -268,7 +270,7 @@ const JURISDICTION_INFO = [
 ];
 
 // Google Places location-bias rectangles per jurisdiction. Tuple format is
-// [south, west, north, east]. Bias only — international addresses are still
+// [south, west, north, east]. Bias only, international addresses are still
 // selectable (international directors / billing-abroad supported), but
 // addresses inside the rectangle rank higher in the suggestion list.
 //   - federal: rough bounding box of Canada
@@ -450,7 +452,9 @@ const s8 = z.object({
 const iCls = "w-full border-2 border-gold-200 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-navy-900 transition-colors";
 const sCls = "w-full border-2 border-gold-200 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-navy-900 bg-white transition-colors appearance-none";
 
-function Field({ label, error, hint, children }: { label: string; error?: string; hint?: string; children: React.ReactNode }) {
+function Field({ label, error: rawError, hint, children }: { label: string; error?: string; hint?: string; children: React.ReactNode }) {
+  const { lang } = useCopy();
+  const error = localizeError(lang, rawError);
   const required = label.endsWith(" *");
   const baseLabel = required ? label.slice(0, -2) : label;
   return (
@@ -467,12 +471,13 @@ function Field({ label, error, hint, children }: { label: string; error?: string
 }
 
 function BackBtn({ onClick }: { onClick: () => void }) {
+  const { t } = useCopy();
   return (
     <button
       onClick={onClick}
       className="inline-flex items-center gap-1.5 text-sm font-semibold text-navy-900 border border-navy-900 px-4 py-2 mb-8 hover:bg-navy-900 hover:text-white transition-colors"
     >
-      <ChevronLeft size={16} strokeWidth={2.5} /> Back
+      <ChevronLeft size={16} strokeWidth={2.5} /> {t.back}
     </button>
   );
 }
@@ -484,13 +489,13 @@ function BackBtn({ onClick }: { onClick: () => void }) {
 // This is the backstop: it always appears, and it scrolls the first inline
 // error into view.
 function InvalidNotice({ show }: { show: boolean }) {
+  const { t } = useCopy();
   if (!show) return null;
   return (
     <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2.5" role="alert">
-      Some required information is missing or needs correcting. Please review the fields marked in
-      red above. If everything looks filled in, email us at{" "}
-      <a href="mailto:contact@korporex.ca" className="underline underline-offset-2">contact@korporex.ca</a>{" "}
-      and we&rsquo;ll finish the order for you.
+      {t.invalidPre}
+      <a href="mailto:contact@korporex.ca" className="underline underline-offset-2">contact@korporex.ca</a>
+      {t.invalidPost}
     </p>
   );
 }
@@ -501,11 +506,12 @@ function scrollToFirstError() {
   el?.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
-function NextBtn({ label = "Continue", disabled = false }: { label?: string; disabled?: boolean }) {
+function NextBtn({ label, disabled = false }: { label?: string; disabled?: boolean }) {
+  const { t } = useCopy();
   return (
     <button type="submit" disabled={disabled}
       className="w-full bg-navy-900 text-white font-medium py-3.5 text-sm tracking-wide hover:bg-navy-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed mt-6">
-      {label}
+      {label ?? t.continue}
     </button>
   );
 }
@@ -523,7 +529,7 @@ type AddressFieldsProps = {
   regionLock?: string;
   regionAllow?: string[];
   labelPrefix?: string;
-  // Optional Google Places bias rectangle [south, west, north, east] — used by
+  // Optional Google Places bias rectangle [south, west, north, east], used by
   // the wizard to prefer Canadian addresses (Federal) or Ontario addresses
   // (Ontario) without restricting outright.
   locationBias?: [number, number, number, number];
@@ -535,10 +541,12 @@ type AddressFieldsProps = {
 function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPrefix, locationBias }: AddressFieldsProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { register, watch, setValue, formState: { errors } } = useFormContext<any>();
+  const { lang, t } = useCopy();
+  const provName = (code: string, name: string) => (lang === "en" ? name : t.provinces[code] ?? name);
+  const countryName = (code: string, name: string) => (lang === "en" ? name : t.countries[code] ?? name);
   const country: string = countryLock ?? watch(`${prefix}.country`) ?? "CA";
   const region: string = watch(`${prefix}.region`) ?? "";
   const street: string = watch(`${prefix}.street`) ?? "";
-  const L = labelPrefix ? `${labelPrefix} ` : "";
 
   function applyParsed(p: ParsedAddress) {
     if (p.street) setValue(`${prefix}.street`, p.street, { shouldValidate: true });
@@ -573,14 +581,14 @@ function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPref
       : CA_PROVINCES;
     regionInput = (
       <select {...register(`${prefix}.region`)} className={sCls}>
-        <option value="">Select province…</option>
-        {allowed.map((p) => <option key={p.code} value={p.code}>{p.code} - {p.name}</option>)}
+        <option value="">{t.selectProvince}</option>
+        {allowed.map((p) => <option key={p.code} value={p.code}>{p.code} - {provName(p.code, p.name)}</option>)}
       </select>
     );
   } else if (country === "US") {
     regionInput = (
       <select {...register(`${prefix}.region`)} className={sCls}>
-        <option value="">Select state…</option>
+        <option value="">{t.selectState}</option>
         {US_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
       </select>
     );
@@ -588,7 +596,7 @@ function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPref
     regionInput = (
       <input
         {...register(`${prefix}.region`)}
-        placeholder="State / province / region"
+        placeholder={t.regionPh}
         className={iCls}
       />
     );
@@ -598,11 +606,11 @@ function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPref
     country === "CA" ? "M5V 3A8" :
     country === "US" ? "94103" :
     country === "GB" ? "SW1A 1AA" :
-    "Postal / ZIP code";
+    t.postalPh;
 
   return (
     <div className="space-y-4">
-      <Field label={`${L}Street Address *`} error={getErr(errors, `${prefix}.street`)}>
+      <Field label={`${t.withPrefix(labelPrefix ?? "", t.street)} *`} error={getErr(errors, `${prefix}.street`)}>
         <AddressAutocomplete
           value={street}
           onChange={(v) => setValue(`${prefix}.street`, v, { shouldValidate: true })}
@@ -614,11 +622,11 @@ function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPref
       </Field>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label={`${L}City *`} error={getErr(errors, `${prefix}.city`)}>
+        <Field label={`${t.withPrefix(labelPrefix ?? "", t.city)} *`} error={getErr(errors, `${prefix}.city`)}>
           <input {...register(`${prefix}.city`)} className={iCls} />
         </Field>
         <Field
-          label={`${L}${country === "US" ? "State" : country === "CA" ? "Province" : "Region"} *`}
+          label={`${t.withPrefix(labelPrefix ?? "", country === "US" ? t.state : country === "CA" ? t.province : t.region)} *`}
           error={getErr(errors, `${prefix}.region`)}
         >
           {regionInput}
@@ -626,15 +634,15 @@ function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPref
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label={`${L}Postal / ZIP *`} error={getErr(errors, `${prefix}.postalCode`)}>
+        <Field label={`${t.withPrefix(labelPrefix ?? "", t.postal)} *`} error={getErr(errors, `${prefix}.postalCode`)}>
           <input {...register(`${prefix}.postalCode`)} placeholder={postalPlaceholder} className={iCls} />
         </Field>
-        <Field label={`${L}Country *`} error={getErr(errors, `${prefix}.country`)}>
+        <Field label={`${t.withPrefix(labelPrefix ?? "", t.country)} *`} error={getErr(errors, `${prefix}.country`)}>
           {countryLock ? (
             <>
               <input type="hidden" {...register(`${prefix}.country`)} value={countryLock} />
               <input
-                value={COUNTRIES.find((c) => c.code === countryLock)?.name ?? countryLock}
+                value={countryName(countryLock, COUNTRIES.find((c) => c.code === countryLock)?.name ?? countryLock)}
                 disabled
                 className={`${iCls} bg-gray-50 text-gray-500`}
               />
@@ -649,7 +657,7 @@ function AddressFields({ prefix, countryLock, regionLock, regionAllow, labelPref
                 }
               }}
             >
-              {COUNTRIES.map((c) => <option key={c.code} value={c.code}>{c.name}</option>)}
+              {COUNTRIES.map((c) => <option key={c.code} value={c.code}>{countryName(c.code, c.name)}</option>)}
             </select>
           )}
         </Field>
@@ -669,21 +677,23 @@ function ProgressBar({ current, maxReached, onJump }: {
   maxReached: number;
   onJump: (step: number) => void;
 }) {
-  const total = STEP_LABELS.length;
+  const { t } = useCopy();
+  const labels = t.steps;
+  const total = labels.length;
   return (
     <div className="bg-navy-900 border-b border-white/10 px-6 py-6 sticky top-[72px] z-40">
       <div className="max-w-5xl mx-auto">
         {/* mobile */}
         <div className="flex md:hidden items-center justify-between mb-2">
-          <span className="text-sm font-medium text-white">Step {current} of {total}</span>
-          <span className="text-sm text-white/70 font-medium">{STEP_LABELS[current - 1]}</span>
+          <span className="text-sm font-medium text-white">{t.stepOf(current, total)}</span>
+          <span className="text-sm text-white/70 font-medium">{labels[current - 1]}</span>
         </div>
         <div className="md:hidden w-full bg-white/15 h-1.5 rounded-full">
           <div className="bg-gold-500 h-1.5 rounded-full transition-all" style={{ width: `${(current / total) * 100}%` }} />
         </div>
         {/* mobile: tappable step numbers */}
         <div className="md:hidden flex items-center gap-1.5 mt-3 overflow-x-auto">
-          {STEP_LABELS.map((label, idx) => {
+          {labels.map((label, idx) => {
             const num = idx + 1;
             const reachable = num <= maxReached;
             const active = num === current;
@@ -693,7 +703,7 @@ function ProgressBar({ current, maxReached, onJump }: {
                 type="button"
                 onClick={() => reachable && onJump(num)}
                 disabled={!reachable}
-                aria-label={`Step ${num}: ${label}`}
+                aria-label={t.stepAria(num, label)}
                 aria-current={active ? "step" : undefined}
                 className={`w-8 h-8 shrink-0 rounded-full text-xs font-bold transition-all
                   ${active
@@ -709,7 +719,7 @@ function ProgressBar({ current, maxReached, onJump }: {
         </div>
         {/* desktop */}
         <div className="hidden md:flex items-start">
-          {STEP_LABELS.map((label, idx) => {
+          {labels.map((label, idx) => {
             const num = idx + 1;
             const done = num < current;
             const active = num === current;
@@ -721,7 +731,7 @@ function ProgressBar({ current, maxReached, onJump }: {
                   onClick={() => reachable && onJump(num)}
                   disabled={!reachable}
                   aria-current={active ? "step" : undefined}
-                  title={reachable ? `Go to step ${num}: ${label}` : `Complete the earlier steps to reach ${label}`}
+                  title={reachable ? t.goTo(num, label) : t.locked(label)}
                   className={`flex flex-col items-center shrink-0 w-24 group rounded-md
                     ${reachable ? "cursor-pointer" : "cursor-not-allowed"}
                     focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900`}
@@ -741,7 +751,7 @@ function ProgressBar({ current, maxReached, onJump }: {
                     {label}
                   </span>
                 </button>
-                {idx < STEP_LABELS.length - 1 && (
+                {idx < labels.length - 1 && (
                   <div className={`flex-1 h-0.5 mx-1 mt-5 rounded-full transition-colors
                     ${done ? "bg-gold-500" : "bg-white/20"}`} />
                 )}
@@ -754,18 +764,16 @@ function ProgressBar({ current, maxReached, onJump }: {
   );
 }
 
-// ─── Step 1 — Jurisdiction ────────────────────────────────────────────────────
+// ─── Step 1, Jurisdiction ────────────────────────────────────────────────────
 
 function Step1({ value, onChange, onNext }: { value: Jurisdiction; onChange: (v: Jurisdiction) => void; onNext: () => void }) {
+  const { t } = useCopy();
   return (
     <div className="max-w-xl mx-auto px-6 py-12">
-      <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Choose Your Jurisdiction</h2>
-      <p className="text-gray-500 text-sm mb-8">
-        Each of the three Canadian jurisdictions we support is a valid incorporation route. The right
-        choice depends on where you plan to operate, the name-protection scope you need, and your budget.
-      </p>
+      <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">{t.s1H2}</h2>
+      <p className="text-gray-500 text-sm mb-8">{t.s1Intro}</p>
       <div className="space-y-3 mb-6">
-        {JURISDICTION_INFO.map(({ id, label, sub, desc }) => (
+        {JURISDICTION_INFO.map(({ id }) => { const { label, sub, desc } = t.jurisdictions[id]; return (
           <button key={id} onClick={() => onChange(id)}
             className={`w-full text-left border-2 px-5 py-4 transition-colors ${value === id ? "border-navy-900 bg-navy-50" : "border-gold-200 hover:border-navy-900"}`}>
             <div className="flex items-start gap-3">
@@ -779,34 +787,35 @@ function Step1({ value, onChange, onNext }: { value: Jurisdiction; onChange: (v:
               </div>
             </div>
           </button>
-        ))}
+        ); })}
       </div>
       <p className="text-xs text-gray-500 mb-5">
-        Still weighing the options?{" "}
-        <Link href="/faq" className="underline underline-offset-2 text-navy-900" target="_blank">Read our FAQ</Link>
+        {t.faqPrompt}{" "}
+        <Link href="/faq" className="underline underline-offset-2 text-navy-900" target="_blank">{t.faqLink}</Link>
       </p>
       <button onClick={onNext}
         className="w-full bg-navy-900 text-white font-medium py-3.5 text-sm tracking-wide hover:bg-navy-800 transition-colors">
-        Continue
+        {t.continue}
       </button>
     </div>
   );
 }
 
-// ─── Step 2 — Package ─────────────────────────────────────────────────────────
+// ─── Step 2, Package ─────────────────────────────────────────────────────────
 
 function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
   jurisdiction: Jurisdiction; value: Pkg;
   onChange: (v: Pkg) => void; onNext: () => void; onBack: () => void;
 }) {
+  const { t } = useCopy();
   return (
     <div className="max-w-xl mx-auto px-6 py-12">
       <BackBtn onClick={onBack} />
-      <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Choose Your Package</h2>
-      <p className="text-gray-500 text-sm mb-8">All prices include government filing fees. Prices in CAD.</p>
+      <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">{t.s2H2}</h2>
+      <p className="text-gray-500 text-sm mb-8">{t.s2Intro}</p>
       <div className="space-y-3 mb-6">
         {PACKAGE_ORDER.map((id) => {
-          const { name, description, features } = PACKAGE_COPY[id];
+          const { name, description, features } = t.packages[id] ?? PACKAGE_COPY[id];
           const price = PRICES[jurisdiction][id];
           return (
             <button key={id} onClick={() => onChange(id)}
@@ -823,7 +832,7 @@ function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
                     </p>
                   </div>
                 </div>
-                <span className="font-serif text-2xl font-bold text-navy-900 shrink-0">${price}</span>
+                <span className="font-serif text-2xl font-bold text-navy-900 shrink-0">{t.money(price)}</span>
               </div>
               <ul className="ml-7 space-y-1.5">
                 {features.map((f) => (
@@ -838,13 +847,13 @@ function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
       </div>
       <button onClick={onNext}
         className="w-full bg-navy-900 text-white font-medium py-3.5 text-sm tracking-wide hover:bg-navy-800 transition-colors">
-        Continue
+        {t.continue}
       </button>
     </div>
   );
 }
 
-// ─── Step 3 — Business Info ───────────────────────────────────────────────────
+// ─── Step 3, Business Info ───────────────────────────────────────────────────
 
 type S3 = z.infer<typeof s3>;
 
@@ -856,10 +865,11 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack, snapshot }: {
   onBack: () => void;
   snapshot: SnapshotRef;
 }) {
-  // Basic package is numbered-only — Named requires Standard or Premium.
+  // Basic package is numbered-only, Named requires Standard or Premium.
   // Force corpNameType to "numbered" regardless of what `def` carries over
   // from a prior visit at a different package tier.
   const basicLocked = pkg === "basic";
+  const { lang, t } = useCopy();
   const form = useForm<S3>({
     resolver: zodResolver(s3),
     defaultValues: {
@@ -896,15 +906,14 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack, snapshot }: {
     return Array.from({ length: rec.days }, (_, i) => i + 1);
   }, [month]);
 
-  const nameSearchLabel =
-    jurisdiction === "federal" ? "NUANS name search" : "Ontario name search";
+  const isFed = jurisdiction === "federal";
 
   return (
     <FormProvider {...form}>
       <div className="max-w-xl mx-auto px-6 py-12">
         <BackBtn onClick={onBack} />
-        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Business Details</h2>
-        <p className="text-gray-500 text-sm mb-8">Tell us about the business you&apos;re incorporating.</p>
+        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">{t.s3H2}</h2>
+        <p className="text-gray-500 text-sm mb-8">{t.s3Intro}</p>
         <form
           onSubmit={handleSubmit(
             (d) => { setInvalid(false); onNext(d); },
@@ -928,10 +937,10 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack, snapshot }: {
             basicLocked={basicLocked}
             jurisdiction={jurisdiction}
             errors={{
-              corpNameType: errors.corpNameType?.message,
-              businessName: errors.businessName?.message,
-              nameConfirmation: errors.nameConfirmation?.message,
-              legalEnding: errors.legalEnding?.message,
+              corpNameType: localizeError(lang, errors.corpNameType?.message),
+              businessName: localizeError(lang, errors.businessName?.message),
+              nameConfirmation: localizeError(lang, errors.nameConfirmation?.message),
+              legalEnding: localizeError(lang, errors.legalEnding?.message),
             }}
           />
           <input type="hidden" {...register("corpNameType")} />
@@ -943,15 +952,12 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack, snapshot }: {
             <div className="bg-cream-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700 leading-relaxed">
               {pkg === "basic" ? (
                 <>
-                  <strong className="text-gray-800">{nameSearchLabel} required.</strong> A ${getNuansFee(jurisdiction)} report fee
-                  applies and is shown separately at checkout. Choose a numbered corporation above to skip this fee.
+                  <strong className="text-gray-800">{t.basicNameStrong(isFed)}</strong>{t.basicNameBody(t.money(getNuansFee(jurisdiction)))}
                 </>
               ) : (
                 <>
-                  <strong className="text-gray-800">One {nameSearchLabel} included.</strong> Your {pkg === "standard" ? "Standard" : "Premium"} package
-                  covers one {nameSearchLabel} report for the name above, with no separate fee at checkout.
-                  If that name isn&apos;t available and you want to try another, each additional search is{" "}
-                  <strong className="text-gray-800">${EXTRA_NAME_SEARCH_FEE.toFixed(2)} + HST</strong>, ordered at{" "}
+                  <strong className="text-gray-800">{t.inclStrong(isFed)}</strong>{t.inclBody(t.packages[pkg].name, isFed)}
+                  <strong className="text-gray-800">{t.inclFee(lang === "fr" ? EXTRA_NAME_SEARCH_FEE.toFixed(2).replace(".", ",") : EXTRA_NAME_SEARCH_FEE.toFixed(2))}</strong>{t.inclOrderedAt}
                   <a href={EXTRA_NAME_SEARCH_PATH} className="text-navy-900 underline underline-offset-2 hover:text-navy-700">
                     korporex.ca/nuans
                   </a>.
@@ -962,42 +968,42 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack, snapshot }: {
 
           {/* NAICS */}
           <Field
-            label="Primary Activity (NAICS Code) *"
+            label={t.naicsLabel}
             error={errors.naicsCode?.message}
-            hint="Search by code, activity, or sector."
+            hint={t.naicsHint}
           >
             <NaicsCombobox
               value={naicsCode}
               onChange={(code) => setValue("naicsCode", code, { shouldValidate: true })}
-              error={errors.naicsCode?.message}
+              error={localizeError(lang, errors.naicsCode?.message)}
             />
           </Field>
 
           {/* Business activity description */}
-          <Field label="Business Activity Description *" error={errors.businessActivity?.message} hint="A brief description of what your corporation will do.">
+          <Field label={t.activityLabel} error={errors.businessActivity?.message} hint={t.activityHint}>
             <textarea {...register("businessActivity")} rows={3}
-              placeholder="e.g. Software development and IT consulting for small businesses."
+              placeholder={t.activityPh}
               className={`${iCls} resize-none`} />
           </Field>
 
-          {/* Official email — corporation's primary contact email for government and Korporex correspondence. */}
+          {/* Official email, corporation's primary contact email for government and Korporex correspondence. */}
           <Field
-            label="Official Email Address *"
+            label={t.officialEmailLabel}
             error={errors.officialEmail?.message}
-            hint="The corporation's primary contact email for government notices and correspondence."
+            hint={t.officialEmailHint}
           >
             <input
               type="email"
               autoComplete="email"
               {...register("officialEmail")}
-              placeholder="e.g. contact@yourcompany.com"
+              placeholder={t.officialEmailPh}
               className={iCls}
             />
           </Field>
 
           {/* Fiscal year end: month + day */}
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Fiscal Year End - Month *" error={errors.fiscalYearEndMonth?.message}>
+            <Field label={t.fyeMonth} error={errors.fiscalYearEndMonth?.message}>
               <select {...register("fiscalYearEndMonth")} className={sCls}
                 onChange={(e) => {
                   setValue("fiscalYearEndMonth", e.target.value, { shouldValidate: true });
@@ -1009,13 +1015,13 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack, snapshot }: {
                   }
                 }}
               >
-                <option value="">Month…</option>
-                {MONTHS.map((m) => <option key={m.name} value={m.name}>{m.name}</option>)}
+                <option value="">{t.monthPh}</option>
+                {MONTHS.map((m, mi) => <option key={m.name} value={m.name}>{t.months[mi]}</option>)}
               </select>
             </Field>
-            <Field label="Fiscal Year End - Day *" error={errors.fiscalYearEndDay?.message}>
+            <Field label={t.fyeDay} error={errors.fiscalYearEndDay?.message}>
               <select {...register("fiscalYearEndDay")} className={sCls} disabled={!month}>
-                <option value="">{month ? "Day…" : "Select month first"}</option>
+                <option value="">{month ? t.dayPh : t.selectMonthFirst}</option>
                 {dayOptions.map((d) => <option key={d} value={String(d)}>{d}</option>)}
               </select>
             </Field>
@@ -1029,7 +1035,7 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack, snapshot }: {
   );
 }
 
-// ─── Step 4 — Directors ───────────────────────────────────────────────────────
+// ─── Step 4, Directors ───────────────────────────────────────────────────────
 
 // The Ontario variant is the permissive one (it allows "" for the
 // federal-only resident-Canadian field), so it is what the form type is
@@ -1053,6 +1059,7 @@ const emptyDir: Director = {
 
 function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Partial<S4>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S4) => void; onBack: () => void; snapshot: SnapshotRef }) {
   const isFederal = jurisdiction === "federal";
+  const { lang, t } = useCopy();
   // Federal customers must consciously pick "yes" or "no", so the radio group
   // renders with neither option selected. Ontario shows no control at all and
   // the schema leaves the field optional there, so the same unset seed works
@@ -1102,8 +1109,8 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
     <FormProvider {...form}>
       <div className="max-w-2xl mx-auto px-6 py-12">
         <BackBtn onClick={onBack} />
-        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Directors</h2>
-        <p className="text-gray-500 text-sm mb-8">At least one director is required. Directors must be 18 or older. International directors are supported; residency requirements vary by jurisdiction.</p>
+        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">{t.s4H2}</h2>
+        <p className="text-gray-500 text-sm mb-8">{t.s4Intro}</p>
         <form
           onSubmit={handleSubmit(
             (d) => { setInvalid(false); onNext(d); },
@@ -1116,18 +1123,11 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
               must match whichever the customer chooses. */}
           <div className="border border-gray-200 rounded-lg p-6 bg-cream-50">
             <p className="font-serif font-bold text-navy-900 text-base mb-1">
-              Please specify the Number of Directors for your Corporation
+              {t.countTitle}
             </p>
             <div className="text-sm text-gray-600 leading-relaxed space-y-2 mb-5">
-              <p>
-                The number of directors can be a fixed number of directors (e.g. 3) or a
-                minimum/maximum number (e.g. minimum 3, maximum 5).
-              </p>
-              <p>
-                If you indicated 3 as the fixed number, you must provide the director information for
-                3 directors. If you indicated 3 as a minimum and 5 as a maximum, you must provide the
-                information for either 3, 4, or 5 directors.
-              </p>
+              <p>{t.countP1}</p>
+              <p>{t.countP2}</p>
             </div>
 
             {basicLocked ? (
@@ -1137,37 +1137,36 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
                 <input type="hidden" {...register("directorCountMin")} />
                 <input type="hidden" {...register("directorCountMax")} />
                 <p className="text-sm text-navy-900 bg-white border-2 border-navy-900 px-4 py-3">
-                  Your Basic package includes one director, so the Articles will fix the number of
-                  directors at <strong>1</strong>. Choose Standard or Premium if you need more.
+                  {t.basicCountPre}<strong>1</strong>{t.basicCountPost}
                 </p>
               </>
             ) : (
               <>
-                <Field label="Number of Directors *" error={errors.directorCountType?.message}>
+                <Field label={t.countLabel} error={errors.directorCountType?.message}>
                   <div className="grid grid-cols-2 gap-3">
                     <label className="flex items-center gap-2 border-2 border-gold-200 bg-white px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium">
                       <input type="radio" value="fixed" {...register("directorCountType")} className="accent-navy-900" />
-                      Fixed Number
+                      {t.fixedOpt}
                     </label>
                     <label className="flex items-center gap-2 border-2 border-gold-200 bg-white px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium">
                       <input type="radio" value="range" {...register("directorCountType")} className="accent-navy-900" />
-                      Minimum / Maximum
+                      {t.rangeOpt}
                     </label>
                   </div>
                 </Field>
 
                 {countType === "fixed" ? (
                   <div className="mt-4 max-w-[12rem]">
-                    <Field label="Fixed Number of Directors *" error={errors.directorCountFixed?.message}>
+                    <Field label={t.fixedLabel} error={errors.directorCountFixed?.message}>
                       <input type="number" min="1" step="1" {...register("directorCountFixed")} className={iCls} />
                     </Field>
                   </div>
                 ) : (
                   <div className="mt-4 grid grid-cols-2 gap-4">
-                    <Field label="Minimum Number of Directors *" error={errors.directorCountMin?.message}>
+                    <Field label={t.minLabel} error={errors.directorCountMin?.message}>
                       <input type="number" min="1" step="1" {...register("directorCountMin")} className={iCls} />
                     </Field>
-                    <Field label="Maximum Number of Directors *" error={errors.directorCountMax?.message}>
+                    <Field label={t.maxLabel} error={errors.directorCountMax?.message}>
                       <input type="number" min="1" step="1" {...register("directorCountMax")} className={iCls} />
                     </Field>
                   </div>
@@ -1179,44 +1178,44 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
           {fields.map((field, i) => (
             <div key={field.id} className="border border-gray-200 rounded-lg p-6">
               <div className="flex items-center justify-between mb-5">
-                <p className="font-serif font-bold text-navy-900 text-base">Director {i + 1}</p>
+                <p className="font-serif font-bold text-navy-900 text-base">{t.directorN(i + 1)}</p>
                 {fields.length > 1 && (
                   <button type="button" onClick={() => remove(i)} className="text-xs text-red-500 flex items-center gap-1 hover:text-red-600">
-                    <Trash2 size={13} /> Remove
+                    <Trash2 size={13} /> {t.remove}
                   </button>
                 )}
               </div>
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <Field label="First Name *" error={de[i]?.firstName?.message}><input {...register(`directors.${i}.firstName`)} className={iCls} /></Field>
-                <Field label="Last Name *" error={de[i]?.lastName?.message}><input {...register(`directors.${i}.lastName`)} className={iCls} /></Field>
-                <Field label="Email Address *" error={de[i]?.email?.message}><input type="email" {...register(`directors.${i}.email`)} className={iCls} /></Field>
-                <Field label="Date of Birth *" error={de[i]?.dateOfBirth?.message}><input type="date" {...register(`directors.${i}.dateOfBirth`)} className={iCls} /></Field>
+                <Field label={t.firstName} error={de[i]?.firstName?.message}><input {...register(`directors.${i}.firstName`)} className={iCls} /></Field>
+                <Field label={t.lastName} error={de[i]?.lastName?.message}><input {...register(`directors.${i}.lastName`)} className={iCls} /></Field>
+                <Field label={t.emailAddr} error={de[i]?.email?.message}><input type="email" {...register(`directors.${i}.email`)} className={iCls} /></Field>
+                <Field label={t.dob} error={de[i]?.dateOfBirth?.message}><input type="date" {...register(`directors.${i}.dateOfBirth`)} className={iCls} /></Field>
               </div>
               <AddressFields prefix={`directors.${i}.address`} locationBias={ADDRESS_BIAS[jurisdiction]} />
-              {/* Tax residency — separate from the address country and from
+              {/* Tax residency, separate from the address country and from
                   the Canadian-resident checkbox below (which captures
                   residency for Canadian corporate-law purposes). */}
               <div className="mt-4">
                 <Field
-                  label="Country of Tax Residency *"
+                  label={t.taxResidency}
                   error={de[i]?.taxResidencyCountry?.message}
                 >
                   <select {...register(`directors.${i}.taxResidencyCountry`)} className={sCls}>
-                    <option value="">-- Select a country --</option>
+                    <option value="">{t.selectCountry}</option>
                     {ALL_COUNTRIES.map((c) => (
                       <option key={c.code} value={c.code}>{c.name}</option>
                     ))}
                   </select>
                 </Field>
               </div>
-              {/* Citizenship status — required radio group. Mutually
+              {/* Citizenship status, required radio group. Mutually
                   exclusive: Canadian citizen / Permanent resident / Other.
                   Native radio inputs (semantic) styled to look like the
                   other selectable cards in the wizard via the `has-[:checked]`
                   Tailwind variant. */}
               <div className="mt-4">
                 <Field
-                  label="Residency Status *"
+                  label={t.residencyStatus}
                   error={de[i]?.citizenshipStatus?.message}
                 >
                   <div className="grid grid-cols-3 gap-3">
@@ -1231,44 +1230,42 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
                           {...register(`directors.${i}.citizenshipStatus`)}
                           className="accent-navy-900"
                         />
-                        {opt.label}
+                        {lang === "en" ? opt.label : t.citizenship[opt.value]}
                       </label>
                     ))}
                   </div>
                 </Field>
               </div>
               {isFederal ? (
-                // Federal — mandatory two-radio choice. Customer must pick
+                // Federal, mandatory two-radio choice. Customer must pick
                 // "yes" or "no" (Zod rejects ""). Statutory text quoted from
                 // CBCA s.2(1) verbatim so the customer sees the legal
                 // definition they're acknowledging when they select Yes.
                 <div className="mt-4">
                   <Field
-                    label="Resident Canadian *"
+                    label={t.residentCanadian}
                     error={de[i]?.isCanadianResident?.message}
                   >
                     <div className="grid grid-cols-2 gap-3">
                       <label className="flex items-center gap-2 border-2 border-gold-200 px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium">
                         <input type="radio" value="yes" {...register(`directors.${i}.isCanadianResident`)} className="accent-navy-900" />
-                        I am a resident Canadian
+                        {t.iAmResident}
                       </label>
                       <label className="flex items-center gap-2 border-2 border-gold-200 px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium">
                         <input type="radio" value="no" {...register(`directors.${i}.isCanadianResident`)} className="accent-navy-900" />
-                        I am not a resident Canadian
+                        {t.iAmNotResident}
                       </label>
                     </div>
                   </Field>
                   <div className="text-xs text-gray-500 mt-2 leading-relaxed space-y-2">
-                    <p>
-                      Per s.&nbsp;2(1) of the Canada Business Corporations Act, resident Canadian means an individual who is
-                    </p>
-                    <p>(a) a Canadian citizen ordinarily resident in Canada,</p>
-                    <p>(b) a Canadian citizen not ordinarily resident in Canada who is a member of a prescribed class of persons, or</p>
-                    <p>(c) a permanent resident within the meaning of subsection 2(1) of the Immigration and Refugee Protection Act and ordinarily resident in Canada, except a permanent resident who has been ordinarily resident in Canada for more than one year after the time at which he or she first became eligible to apply for Canadian citizenship; (résident canadien)</p>
+                    <p>{t.cbcaIntro}</p>
+                    <p>{t.cbcaA}</p>
+                    <p>{t.cbcaB}</p>
+                    <p>{t.cbcaC}</p>
                   </div>
                 </div>
               ) : (
-                // Ontario — residency block intentionally omitted. OBCA dropped
+                // Ontario, residency block intentionally omitted. OBCA dropped
                 // the Canadian-resident director requirement (Bill 213, in
                 // force 2021-07-05), so surfacing a CBCA-style residency
                 // checkbox would be misleading. The underlying field defaults
@@ -1280,12 +1277,12 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
           {!basicLocked && (
             <button type="button" onClick={() => append(seedDir)} disabled={atCap}
               className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent">
-              <Plus size={14} /> Add Another Director
+              <Plus size={14} /> {t.addDirector}
             </button>
           )}
           {countMismatch && (
             <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2.5" role="alert">
-              {countMismatch}
+              {localizeError(lang, countMismatch)}
             </p>
           )}
           <InvalidNotice show={invalid && !countMismatch} />
@@ -1296,7 +1293,7 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
   );
 }
 
-// ─── Step 5 — Shareholders ────────────────────────────────────────────────────
+// ─── Step 5, Shareholders ────────────────────────────────────────────────────
 
 type S5 = z.infer<typeof s5>;
 const emptySH: Shareholder = {
@@ -1312,6 +1309,13 @@ const emptySH: Shareholder = {
 function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Partial<S5>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S5) => void; onBack: () => void; snapshot: SnapshotRef }) {
   const basicLocked = pkg === "basic";
   const useStructuredPicker = pkg === "standard" || pkg === "premium";
+  const { lang, t } = useCopy();
+  const classDisplay = (label: string) => {
+    if (lang === "en") return label;
+    if (label === "Common Shares") return t.commonShares;
+    const code = SHARE_CLASS_OPTIONS.find((c) => c.label === label)?.code;
+    return (code && t.shareClasses[code]?.label) || label;
+  };
   const initialSh = def.shareholders?.length ? def.shareholders : [emptySH];
   const form = useForm<S5>({
     resolver: zodResolver(s5),
@@ -1329,7 +1333,7 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
 
   useEffect(() => { snapshot.current = () => getValues(); return () => { snapshot.current = null; }; }, [snapshot, getValues]);
 
-  // Classes offered for this package — Standard sees the first three,
+  // Classes offered for this package, Standard sees the first three,
   // Premium sees all five.
   const availableClasses = pkg === "premium"
     ? SHARE_CLASS_OPTIONS
@@ -1360,8 +1364,8 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
     <FormProvider {...form}>
       <div className="max-w-2xl mx-auto px-6 py-12">
         <BackBtn onClick={onBack} />
-        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Shareholders</h2>
-        <p className="text-gray-500 text-sm mb-8">List all initial shareholders of the corporation. International shareholders are supported.</p>
+        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">{t.s5H2}</h2>
+        <p className="text-gray-500 text-sm mb-8">{t.s5Intro}</p>
         <form
           onSubmit={handleSubmit(
             (d) => {
@@ -1377,18 +1381,15 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
             <div className="border border-gray-200 rounded-lg p-6 bg-cream-50">
               <div className="mb-5">
                 <p className="font-serif font-bold text-navy-900 text-base mb-1">
-                  Share Classes for Your Corporation
+                  {t.classesTitle}
                 </p>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  Your {pkg === "premium" ? "Premium" : "Standard"} package allows up to{" "}
-                  {pkg === "premium" ? "five" : "three"} share classes in the Articles of
-                  Incorporation. Select the class(es) you want the corporation to be authorized to
-                  issue. Each shareholder below can then be assigned to one of the classes you
-                  select.
+                  {t.classesIntro(pkg === "premium")}
                 </p>
               </div>
               <div className="space-y-3">
-                {availableClasses.map((c) => {
+                {availableClasses.map((c0) => {
+                  const c = lang === "en" ? c0 : { ...c0, ...t.shareClasses[c0.code] };
                   const checked = selectedClasses.includes(c.code);
                   return (
                     <label
@@ -1422,16 +1423,13 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
               </div>
               {noClassesSelected && (
                 <p className="text-sm text-red-600 mt-3">
-                  Select at least one share class for the corporation.
+                  {t.selectClassError}
                 </p>
               )}
               <p className="text-xs text-gray-500 italic leading-relaxed mt-4 pt-4 border-t border-gray-200">
-                The selected classes are what Korporex will declare in the Articles of
-                Incorporation. Each shareholder below picks which of these classes they will hold.
-                Korporex does not provide legal or tax advice on share structure. If you&rsquo;re
-                unsure,{" "}
+                {t.classesNotePre}
                 <Link href="/legal-consultation" className="text-navy-900 underline underline-offset-2">
-                  speak with a corporate lawyer
+                  {t.lawyerLink}
                 </Link>
                 .
               </p>
@@ -1441,35 +1439,35 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
           {fields.map((field, i) => (
             <div key={field.id} className="border border-gray-200 rounded-lg p-6">
               <div className="flex items-center justify-between mb-5">
-                <p className="font-serif font-bold text-navy-900 text-base">Shareholder {i + 1}</p>
+                <p className="font-serif font-bold text-navy-900 text-base">{t.shareholderN(i + 1)}</p>
                 {fields.length > 1 && (
                   <button type="button" onClick={() => remove(i)} className="text-xs text-red-500 flex items-center gap-1 hover:text-red-600">
-                    <Trash2 size={13} /> Remove
+                    <Trash2 size={13} /> {t.remove}
                   </button>
                 )}
               </div>
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <Field label="First Name *" error={se[i]?.firstName?.message}><input {...register(`shareholders.${i}.firstName`)} className={iCls} /></Field>
-                <Field label="Last Name *" error={se[i]?.lastName?.message}><input {...register(`shareholders.${i}.lastName`)} className={iCls} /></Field>
-                <Field label="Share Class *" error={se[i]?.shareClass?.message}>
+                <Field label={t.firstName} error={se[i]?.firstName?.message}><input {...register(`shareholders.${i}.firstName`)} className={iCls} /></Field>
+                <Field label={t.lastName} error={se[i]?.lastName?.message}><input {...register(`shareholders.${i}.lastName`)} className={iCls} /></Field>
+                <Field label={t.shareClassLabel} error={se[i]?.shareClass?.message}>
                   <select {...register(`shareholders.${i}.shareClass`)} className={sCls}>
                     {dropdownOptions.length === 0 && (
-                      <option value="">— select a share class above first —</option>
+                      <option value="">{t.selectClassFirst}</option>
                     )}
                     {dropdownOptions.map((c) => (
                       <option key={c} value={c}>
-                        {c}
+                        {classDisplay(c)}
                       </option>
                     ))}
                   </select>
                 </Field>
-                <Field label="Number of Shares *" error={se[i]?.numberOfShares?.message}>
+                <Field label={t.numShares} error={se[i]?.numberOfShares?.message}>
                   <input type="number" min="1" {...register(`shareholders.${i}.numberOfShares`)} className={iCls} />
                 </Field>
-                <Field label="Price per Share (CAD) *" error={se[i]?.pricePerShare?.message}>
+                <Field label={t.pricePerShare} error={se[i]?.pricePerShare?.message}>
                   {/* Currency-prefixed input. The `$` is a presentational
                       adornment; the underlying value is the numeric string
-                      RHF registers — so the API still receives just the
+                      RHF registers, so the API still receives just the
                       number. `pl-8` leaves room for the prefix. */}
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-500 pointer-events-none">$</span>
@@ -1486,9 +1484,9 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
                 {/* Citizenship of the shareholder. Separate from the address
                     country below. A shareholder can live in one country and
                     hold citizenship of another. */}
-                <Field label="Citizenship *" error={se[i]?.citizenship?.message}>
+                <Field label={t.citizenshipLabel} error={se[i]?.citizenship?.message}>
                   <select {...register(`shareholders.${i}.citizenship`)} className={sCls}>
-                    <option value="">-- Select a country --</option>
+                    <option value="">{t.selectCountry}</option>
                     {ALL_COUNTRIES.map((c) => (
                       <option key={c.code} value={c.code}>{c.name}</option>
                     ))}
@@ -1496,16 +1494,14 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
                 </Field>
               </div>
               {/* Informational note. Deliberately definitional / illustrative
-                  — describes what the field *is*, with arithmetic example.
+                 , describes what the field *is*, with arithmetic example.
                   Does NOT cite typical or common practice and is NOT advice. */}
               <p className="text-xs text-gray-500 mb-4 leading-relaxed">
-                Enter any positive dollar amount per share. The price can be{" "}
-                <span className="font-medium text-gray-700">$1.00</span>. The total subscription amount equals
-                price per share × number of shares (for example,{" "}
-                <span className="font-medium text-gray-700">100 shares × $1.00 = $100.00 total</span>). This is a numeric
-                example only. Korporex does not provide legal or tax advice on share pricing. If you&rsquo;re unsure,{" "}
+                {t.priceNoteA}
+                <span className="font-medium text-gray-700">{t.priceEx1}</span>{t.priceNoteB}
+                <span className="font-medium text-gray-700">{t.priceEx2}</span>{t.priceNoteC}
                 <Link href="/legal-consultation" className="text-navy-900 underline underline-offset-2">
-                  speak with a corporate lawyer
+                  {t.lawyerLink}
                 </Link>.
               </p>
               <AddressFields prefix={`shareholders.${i}.address`} locationBias={ADDRESS_BIAS[jurisdiction]} />
@@ -1514,7 +1510,7 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
           {!basicLocked && (
             <button type="button" onClick={() => append(emptySH)}
               className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
-              <Plus size={14} /> Add Another Shareholder
+              <Plus size={14} /> {t.addShareholder}
             </button>
           )}
           <InvalidNotice show={invalid && !noClassesSelected} />
@@ -1525,7 +1521,7 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
   );
 }
 
-// ─── Step 6 — Officers ────────────────────────────────────────────────────────
+// ─── Step 6, Officers ────────────────────────────────────────────────────────
 
 type S6 = z.infer<typeof s6>;
 const emptyOfficer: Officer = {
@@ -1537,6 +1533,7 @@ const emptyOfficer: Officer = {
 
 function Step6({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Partial<S6>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S6) => void; onBack: () => void; snapshot: SnapshotRef }) {
   const basicLocked = pkg === "basic";
+  const { lang, t } = useCopy();
   const initialOfc = def.officers?.length ? def.officers : [emptyOfficer];
   const form = useForm<S6>({
     resolver: zodResolver(s6),
@@ -1562,8 +1559,8 @@ function Step6({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
     <FormProvider {...form}>
       <div className="max-w-2xl mx-auto px-6 py-12">
         <BackBtn onClick={onBack} />
-        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Officers</h2>
-        <p className="text-gray-500 text-sm mb-8">List the corporation&rsquo;s officers and their positions. At least one officer is required.</p>
+        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">{t.s6H2}</h2>
+        <p className="text-gray-500 text-sm mb-8">{t.s6Intro}</p>
         <form
           onSubmit={handleSubmit(
             (d) => { setInvalid(false); onNext(d); },
@@ -1574,25 +1571,25 @@ function Step6({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
           {fields.map((field, i) => (
             <div key={field.id} className="border border-gray-200 rounded-lg p-6">
               <div className="flex items-center justify-between mb-5">
-                <p className="font-serif font-bold text-navy-900 text-base">Officer {i + 1}</p>
+                <p className="font-serif font-bold text-navy-900 text-base">{t.officerN(i + 1)}</p>
                 {fields.length > 1 && (
                   <button type="button" onClick={() => remove(i)} className="text-xs text-red-500 flex items-center gap-1 hover:text-red-600">
-                    <Trash2 size={13} /> Remove
+                    <Trash2 size={13} /> {t.remove}
                   </button>
                 )}
               </div>
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <Field label="First Name *" error={oe[i]?.firstName?.message}><input {...register(`officers.${i}.firstName`)} className={iCls} /></Field>
-                <Field label="Last Name *" error={oe[i]?.lastName?.message}><input {...register(`officers.${i}.lastName`)} className={iCls} /></Field>
-                <Field label="Position *" error={oe[i]?.position?.message}>
+                <Field label={t.firstName} error={oe[i]?.firstName?.message}><input {...register(`officers.${i}.firstName`)} className={iCls} /></Field>
+                <Field label={t.lastName} error={oe[i]?.lastName?.message}><input {...register(`officers.${i}.lastName`)} className={iCls} /></Field>
+                <Field label={t.position} error={oe[i]?.position?.message}>
                   <select {...register(`officers.${i}.position`)} className={sCls}>
-                    <option value="">-- Please Select --</option>
+                    <option value="">{t.pleaseSelect}</option>
                     {OFFICER_POSITIONS.map((p) => (
-                      <option key={p} value={p}>{p}</option>
+                      <option key={p} value={p}>{lang === "en" ? p : POSITION_LABELS[lang][p]}</option>
                     ))}
                   </select>
                 </Field>
-                <Field label="Email Address *" error={oe[i]?.email?.message}>
+                <Field label={t.emailAddr} error={oe[i]?.email?.message}>
                   <input type="email" {...register(`officers.${i}.email`)} className={iCls} />
                 </Field>
               </div>
@@ -1602,7 +1599,7 @@ function Step6({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
           {!basicLocked && (
             <button type="button" onClick={() => append(emptyOfficer)}
               className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">
-              <Plus size={14} /> Add Another Officer
+              <Plus size={14} /> {t.addOfficer}
             </button>
           )}
 
@@ -1611,13 +1608,12 @@ function Step6({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
           <div className="border border-gray-200 rounded-lg p-6 bg-cream-50 space-y-6">
             <div>
               <p className="font-serif font-bold text-navy-900 text-base mb-1">
-                Authorized Signing Officers
+                {t.signTitle}
               </p>
               <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                Who may sign contracts, instruments and other documents on behalf of the
-                corporation?
+                {t.signQ}
               </p>
-              <Field label="Authorized Signing Officers *" error={errors.signingAuthority?.message}>
+              <Field label={t.signLabel} error={errors.signingAuthority?.message}>
                 <div className="space-y-2.5">
                   {SIGNING_AUTHORITY_OPTIONS.map((opt) => (
                     <label
@@ -1625,7 +1621,7 @@ function Step6({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
                       className="flex items-center gap-2.5 border-2 border-gold-200 bg-white px-4 py-3 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium"
                     >
                       <input type="radio" value={opt.value} {...register("signingAuthority")} className="accent-navy-900" />
-                      {opt.label}
+                      {lang === "en" ? opt.label : t.authority[opt.value]}
                     </label>
                   ))}
                 </div>
@@ -1634,13 +1630,12 @@ function Step6({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
 
             <div className="pt-6 border-t border-gray-200">
               <p className="font-serif font-bold text-navy-900 text-base mb-1">
-                Banking Signing Authority
+                {t.bankTitle}
               </p>
               <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                Who may sign cheques and operate the corporation&rsquo;s bank accounts? Your bank
-                will ask for this when you open the business account.
+                {t.bankQ}
               </p>
-              <Field label="Banking Signing Authority *" error={errors.bankingAuthority?.message}>
+              <Field label={t.bankLabel} error={errors.bankingAuthority?.message}>
                 <div className="space-y-2.5">
                   {BANKING_AUTHORITY_OPTIONS.map((opt) => (
                     <label
@@ -1648,16 +1643,15 @@ function Step6({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
                       className="flex items-center gap-2.5 border-2 border-gold-200 bg-white px-4 py-3 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium"
                     >
                       <input type="radio" value={opt.value} {...register("bankingAuthority")} className="accent-navy-900" />
-                      {opt.label}
+                      {lang === "en" ? opt.label : t.authority[opt.value]}
                     </label>
                   ))}
                 </div>
               </Field>
               <p className="text-xs text-gray-500 italic leading-relaxed mt-4">
-                Make sure the officers you listed above cover the choices here. Korporex does not
-                provide legal advice on signing authority. If you&rsquo;re unsure,{" "}
+                {t.bankNotePre}
                 <Link href="/legal-consultation" className="text-navy-900 underline underline-offset-2">
-                  speak with a corporate lawyer
+                  {t.lawyerLink}
                 </Link>
                 .
               </p>
@@ -1672,7 +1666,7 @@ function Step6({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
   );
 }
 
-// ─── Step 7 — Registered Office ───────────────────────────────────────────────
+// ─── Step 7, Registered Office ───────────────────────────────────────────────
 
 type S7 = z.infer<typeof s7>;
 function Step7({ jurisdiction, def, onNext, onBack, snapshot }: {
@@ -1685,6 +1679,11 @@ function Step7({ jurisdiction, def, onNext, onBack, snapshot }: {
   const regionLock = jurisdiction === "ontario" ? "ON" : undefined;
   const regionAllow = jurisdiction === "federal" ? CA_PROVINCES.map((p) => p.code) : undefined;
   const addonEligible = regOfficeAddonAvailable(jurisdiction);
+  const { lang, t } = useCopy();
+  const isFed = jurisdiction === "federal";
+  const loc = (a: RegOfficeAddon) => (lang === "en" || a === "none" ? (a === "none" ? "" : REG_OFFICE_OPTIONS[a].locationLabel) : t.locationLabels[a] ?? REG_OFFICE_OPTIONS[a].locationLabel);
+  const officeLabel = (a: Exclude<RegOfficeAddon, "none">) => (lang === "en" ? REG_OFFICE_OPTIONS[a].label : t.regOfficeLabel);
+  const amt = (n: number) => (lang === "fr" ? n.toFixed(2).replace(".", ",") : n.toFixed(2));
 
   const form = useForm<S7>({
     resolver: zodResolver(s7),
@@ -1726,14 +1725,13 @@ function Step7({ jurisdiction, def, onNext, onBack, snapshot }: {
     setValue("regOffice.country", a.country, { shouldValidate: true });
   };
 
-  const jurisLabel = jurisdiction === "federal" ? "any Canadian province or territory" : "Ontario";
 
   return (
     <FormProvider {...form}>
       <div className="max-w-xl mx-auto px-6 py-12">
         <BackBtn onClick={onBack} />
-        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">Registered Office</h2>
-        <p className="text-gray-500 text-sm mb-8">Must be a physical address in {jurisLabel}, not a P.O. Box.</p>
+        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">{t.s7H2}</h2>
+        <p className="text-gray-500 text-sm mb-8">{t.s7Intro(isFed)}</p>
         <form
           onSubmit={handleSubmit(
             (d) => { setInvalid(false); onNext(d); },
@@ -1744,32 +1742,32 @@ function Step7({ jurisdiction, def, onNext, onBack, snapshot }: {
           {addonEligible && (
             <div className="space-y-3">
               <p className="text-xs font-semibold tracking-[0.1em] uppercase text-gray-500">
-                How will you provide an address?
+                {t.howProvide}
               </p>
               <AddonOption
                 value="none"
                 selected={selectedAddon === "none"}
                 onSelect={() => { setValue("regOfficeAddon", "none"); applyAddonAddress("none"); }}
-                title="I'll provide my own registered office address"
-                subtitle="Enter an address you control in the fields below."
+                title={t.ownTitle}
+                subtitle={t.ownSub}
               />
               <AddonOption
                 value="korporex"
                 selected={selectedAddon === "korporex"}
                 onSelect={() => { setValue("regOfficeAddon", "korporex"); applyAddonAddress("korporex"); }}
-                title="Korporex office — Toronto"
-                subtitle="Downtown Toronto address chosen by Korporex. Monthly mail scans emailed to you."
-                price={`$${REG_OFFICE_OPTIONS.korporex.monthly.toFixed(2)}/mo`}
-                priceSub={`billed annually in advance at $${REG_OFFICE_OPTIONS.korporex.annual.toFixed(2)} + HST`}
+                title={t.torontoTitle}
+                subtitle={t.torontoSub}
+                price={t.perMonth(amt(REG_OFFICE_OPTIONS.korporex.monthly))}
+                priceSub={t.billedAnnually(amt(REG_OFFICE_OPTIONS.korporex.annual))}
               />
               <AddonOption
                 value="burlington"
                 selected={selectedAddon === "burlington"}
                 onSelect={() => { setValue("regOfficeAddon", "burlington"); applyAddonAddress("burlington"); }}
-                title="Korporex office — Burlington"
-                subtitle="Burlington, Ontario address chosen by Korporex. Monthly mail scans emailed to you."
-                price={`$${REG_OFFICE_OPTIONS.burlington.monthly.toFixed(2)}/mo`}
-                priceSub={`billed annually in advance at $${REG_OFFICE_OPTIONS.burlington.annual.toFixed(2)} + HST`}
+                title={t.burlTitle}
+                subtitle={t.burlSub}
+                price={t.perMonth(amt(REG_OFFICE_OPTIONS.burlington.monthly))}
+                priceSub={t.billedAnnually(amt(REG_OFFICE_OPTIONS.burlington.annual))}
               />
             </div>
           )}
@@ -1786,19 +1784,18 @@ function Step7({ jurisdiction, def, onNext, onBack, snapshot }: {
           {selectedAddon !== "none" && (
             <div className="bg-navy-50 border border-navy-900 rounded-lg p-4 text-sm text-navy-900 leading-relaxed">
               <p className="font-semibold mb-1">
-                {REG_OFFICE_OPTIONS[selectedAddon].label} - {REG_OFFICE_OPTIONS[selectedAddon].locationLabel}
+                {officeLabel(selectedAddon)} - {loc(selectedAddon)}
               </p>
               <p className="text-gray-700">
                 {REG_OFFICE_OPTIONS[selectedAddon].addressAssignedAtFiling
-                  ? "Korporex selects and assigns the registered office address in downtown Toronto, at our discretion before your Articles of Incorporation are filed. The street address is not disclosed in advance."
-                  : `Korporex provides a registered office address in ${REG_OFFICE_OPTIONS[selectedAddon].locationLabel}, Ontario, chosen by Korporex. The specific street address is not disclosed in advance.`}
+                  ? t.assignedToronto
+                  : t.assignedOther(loc(selectedAddon))}
               </p>
               <ul className="text-xs text-gray-700 mt-3 space-y-1.5 list-disc pl-5">
-                <li>Monthly scanned copy of mail received at the address, emailed to you.</li>
-                <li>The Korporex registered office address appears on your Articles of Incorporation and the public corporate registry.</li>
+                <li>{t.bullet1}</li>
+                <li>{t.bullet2}</li>
                 <li>
-                  ${REG_OFFICE_OPTIONS[selectedAddon].annual.toFixed(2)} CAD billed annually in advance, plus HST. <strong>Non-refundable</strong>,
-                  including if you obtain your own registered office address before the term ends.
+                  {t.bullet3Pre(amt(REG_OFFICE_OPTIONS[selectedAddon].annual))}<strong>{t.nonRefundable}</strong>{t.bullet3Post}
                 </li>
               </ul>
             </div>
@@ -1806,12 +1803,12 @@ function Step7({ jurisdiction, def, onNext, onBack, snapshot }: {
 
           {addonEligible && selectedAddon === "none" && (
             <div className="bg-cream-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-600 leading-relaxed">
-              Don&rsquo;t have a physical address in {jurisLabel}? Use the Korporex registered office option above instead.
+              {t.noAddress(isFed)}
             </div>
           )}
 
           <InvalidNotice show={invalid} />
-          <NextBtn label="Continue to Review" />
+          <NextBtn label={t.continueToReview} />
         </form>
       </div>
     </FormProvider>
@@ -1853,7 +1850,7 @@ function AddonOption({ selected, onSelect, title, subtitle, price, priceSub }: {
   );
 }
 
-// ─── Step 8 — Review & Pay ────────────────────────────────────────────────────
+// ─── Step 8, Review & Pay ────────────────────────────────────────────────────
 
 type S8 = z.infer<typeof s8>;
 function Step8({ data, onBack, onPay, snapshot }: {
@@ -1879,6 +1876,10 @@ function Step8({ data, onBack, onPay, snapshot }: {
   useEffect(() => { snapshot.current = () => getValues(); return () => { snapshot.current = null; }; }, [snapshot, getValues]);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const { lang, t } = useCopy();
+  const locLabel = (a: Exclude<RegOfficeAddon, "none">) => (lang === "en" ? REG_OFFICE_OPTIONS[a].locationLabel : t.locationLabels[a] ?? REG_OFFICE_OPTIONS[a].locationLabel);
+  const officeLabel = (a: Exclude<RegOfficeAddon, "none">) => (lang === "en" ? REG_OFFICE_OPTIONS[a].label : t.regOfficeLabel);
+  const money = (n: number) => t.money(lang === "fr" ? n.toFixed(2).replace(".", ",") : n.toFixed(2));
 
   const country = watch("billingAddress.country") || "CA";
   const region = watch("billingAddress.region") || "";
@@ -1895,15 +1896,15 @@ function Step8({ data, onBack, onPay, snapshot }: {
   const addonApplies = regOfficeFee > 0 && data.regOfficeAddon !== "none";
   const addonLabel =
     regOfficeFee > 0 && data.regOfficeAddon !== "none"
-      ? `Registered office - ${REG_OFFICE_OPTIONS[data.regOfficeAddon].locationLabel} (12 mo)`
+      ? t.addonLine(locLabel(data.regOfficeAddon))
       : "";
 
-  const jurisLabel = JURISDICTION_LABELS[data.jurisdiction];
-  const pkgLabel = PKG_LABELS[data.pkg];
+  const jurisLabel = lang === "en" ? JURISDICTION_LABELS[data.jurisdiction] : t.jurisLabels[data.jurisdiction];
+  const pkgLabel = lang === "en" ? PKG_LABELS[data.pkg] : t.packages[data.pkg].name;
   const endingLabel = data.legalEnding || "";
   const corpName =
     data.corpNameType === "numbered"
-      ? `Numbered corporation (${jurisLabel})${endingLabel ? ` - ${endingLabel}` : ""}`
+      ? `${t.numberedCorp(jurisLabel)}${endingLabel ? ` - ${endingLabel}` : ""}`
       : data.businessName
         ? `${data.businessName}${endingLabel ? ` ${endingLabel}` : ""}`
         : "-";
@@ -1917,7 +1918,7 @@ function Step8({ data, onBack, onPay, snapshot }: {
       setSubmitError(
         err instanceof Error && err.message
           ? err.message
-          : "Something went wrong. Please try again or email us at contact@korporex.ca."
+          : t.genericError
       );
       setSubmitting(false);
     }
@@ -1927,32 +1928,32 @@ function Step8({ data, onBack, onPay, snapshot }: {
     <FormProvider {...form}>
       <div className="max-w-2xl mx-auto px-6 py-12">
         <BackBtn onClick={onBack} />
-        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-8">Review &amp; Pay</h2>
+        <h2 className="font-serif text-3xl font-bold text-navy-900 mb-8">{t.s8H2}</h2>
 
         {/* Order Summary */}
         <div className="bg-cream-50 border border-gray-200 rounded-lg p-6 mb-8">
-          <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-4">Order Summary</p>
+          <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-4">{t.orderSummary}</p>
           <div className="space-y-2.5 text-sm">
             {[
-              ["Jurisdiction", jurisLabel],
-              ["Package", pkgLabel],
-              ["Corporation", corpName],
-              ["Official Email", data.officialEmail || "-"],
+              [t.rowJurisdiction, jurisLabel],
+              [t.rowPackage, pkgLabel],
+              [t.rowCorporation, corpName],
+              [t.rowOfficialEmail, data.officialEmail || "-"],
               [
-                "Number of Directors",
+                t.rowNumDirectors,
                 data.directorCountType === "fixed"
-                  ? `Fixed at ${data.directorCountFixed}`
-                  : `Minimum ${data.directorCountMin}, maximum ${data.directorCountMax}`,
+                  ? t.fixedAt(data.directorCountFixed)
+                  : t.minMax(data.directorCountMin, data.directorCountMax),
               ],
-              ["Directors", String(data.directors.length)],
-              ["Shareholders", String(data.shareholders.length)],
-              ["Officers", String(data.officers.length)],
-              ["Signing Officers", data.signingAuthority ? signingAuthorityLabel(data.signingAuthority) : "-"],
-              ["Banking Authority", data.bankingAuthority ? bankingAuthorityLabel(data.bankingAuthority) : "-"],
+              [t.rowDirectors, String(data.directors.length)],
+              [t.rowShareholders, String(data.shareholders.length)],
+              [t.rowOfficers, String(data.officers.length)],
+              [t.rowSigning, data.signingAuthority ? (lang === "en" ? signingAuthorityLabel(data.signingAuthority) : t.authority[data.signingAuthority]) : "-"],
+              [t.rowBanking, data.bankingAuthority ? (lang === "en" ? bankingAuthorityLabel(data.bankingAuthority) : t.authority[data.bankingAuthority]) : "-"],
               [
-                "Registered Office",
+                t.rowRegOffice,
                 data.regOfficeAddon !== "none"
-                  ? `${REG_OFFICE_OPTIONS[data.regOfficeAddon].label} - ${REG_OFFICE_OPTIONS[data.regOfficeAddon].locationLabel}`
+                  ? `${officeLabel(data.regOfficeAddon)} - ${locLabel(data.regOfficeAddon)}`
                   : data.regOffice.city ? `${data.regOffice.city}, ${data.regOffice.region}` : "-",
               ],
             ].map(([k, v]) => (
@@ -1965,58 +1966,56 @@ function Step8({ data, onBack, onPay, snapshot }: {
 
           <div className="border-t border-gray-300 mt-4 pt-3 space-y-1.5 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">{pkgLabel} package ({jurisLabel})</span>
-              <span className="text-gray-800">${price.toFixed(2)}</span>
+              <span className="text-gray-600">{t.pkgLine(pkgLabel, jurisLabel)}</span>
+              <span className="text-gray-800">{money(price)}</span>
             </div>
             {nameSearchApplies && (
               <div className="flex justify-between">
-                <span className="text-gray-600">NUANS name-search report</span>
-                <span className="text-gray-800">${nuansFee.toFixed(2)}</span>
+                <span className="text-gray-600">{t.nuansLine}</span>
+                <span className="text-gray-800">{money(nuansFee)}</span>
               </div>
             )}
             {addonApplies && (
               <div className="flex justify-between">
                 <span className="text-gray-600">{addonLabel}</span>
-                <span className="text-gray-800">${regOfficeFee.toFixed(2)}</span>
+                <span className="text-gray-800">{money(regOfficeFee)}</span>
               </div>
             )}
             <div className="flex justify-between text-gray-600 pt-1 border-t border-dashed border-gray-200">
-              <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>{t.subtotal}</span>
+              <span>{money(subtotal)}</span>
             </div>
             <div className="flex justify-between text-gray-600">
               <span>
                 {country === "CA"
                   ? region
-                    ? `Tax (${(taxRate * 100).toFixed(taxRate === 0.14975 ? 3 : 0)}%, ${region})`
-                    : "Tax (select region below)"
-                  : "Tax (international, $0)"}
+                    ? `${t.tax} (${(taxRate * 100).toFixed(taxRate === 0.14975 ? 3 : 0)}%, ${region})`
+                    : t.taxSelectRegion
+                  : t.taxIntl}
               </span>
-              <span>${tax.toFixed(2)}</span>
+              <span>{money(tax)}</span>
             </div>
             <div className="flex justify-between items-baseline pt-2 border-t border-gray-300">
-              <span className="font-semibold text-gray-800">Total (CAD)</span>
-              <span className="font-serif text-3xl font-bold text-navy-900">${total.toFixed(2)}</span>
+              <span className="font-semibold text-gray-800">{t.total}</span>
+              <span className="font-serif text-3xl font-bold text-navy-900">{money(total)}</span>
             </div>
             <p className="text-xs text-gray-500 pt-1">
-              Government filing fees are included in the package price. Taxes update live based on your
-              billing address below.
+              {t.filingNote}
             </p>
           </div>
         </div>
 
         {/* Billing */}
         <div className="border border-gray-200 rounded-lg p-6">
-          <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-5">Billing Details</p>
+          <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-5">{t.billingDetails}</p>
           <form onSubmit={submit} className="space-y-4">
-            <Field label="Billing Name *" error={errors.billingName?.message}>
-              <input {...register("billingName")} placeholder="Jane Smith or Acme Ltd." className={iCls} />
+            <Field label={t.billingName} error={errors.billingName?.message}>
+              <input {...register("billingName")} placeholder={t.billingPh} className={iCls} />
             </Field>
-            <AddressFields prefix="billingAddress" labelPrefix="Billing" locationBias={ADDRESS_BIAS[data.jurisdiction]} />
+            <AddressFields prefix="billingAddress" labelPrefix={t.billingPrefix} locationBias={ADDRESS_BIAS[data.jurisdiction]} />
 
             <p className="text-xs text-gray-500 bg-cream-50 border border-gray-200 rounded-md px-3 py-2.5 mt-2 leading-relaxed">
-              You&apos;ll be redirected to <span className="font-semibold">Stripe</span> to complete payment securely.
-              Card details are entered on stripe.com, never on Korporex.
+              {t.stripePre}<span className="font-semibold">Stripe</span>{t.stripePost}
             </p>
             {submitError && (
               <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2" role="alert">
@@ -2026,13 +2025,13 @@ function Step8({ data, onBack, onPay, snapshot }: {
             <button type="submit"
               disabled={submitting}
               className="w-full bg-gold-500 text-white font-medium py-4 text-sm tracking-wide hover:bg-gold-600 transition-colors mt-2 disabled:opacity-60 disabled:cursor-not-allowed">
-              {submitting ? "Redirecting to Stripe…" : `Continue to Payment: $${total.toFixed(2)}`}
+              {submitting ? t.submitting : t.submit(lang === "fr" ? total.toFixed(2).replace(".", ",") : total.toFixed(2))}
             </button>
           </form>
           <p className="text-xs text-gray-400 text-center mt-4">
-            By continuing you agree to our{" "}
-            <Link href="/terms-of-service" className="underline underline-offset-2">Terms of Service</Link> and{" "}
-            <Link href="/privacy-policy" className="underline underline-offset-2">Privacy Policy</Link>.
+            {t.agreePre}
+            <Link href="/terms-of-service" className="underline underline-offset-2">{t.terms}</Link>{t.and}
+            <Link href="/privacy-policy" className="underline underline-offset-2">{t.privacy}</Link>.
           </p>
         </div>
       </div>
@@ -2082,10 +2081,11 @@ function parsePackageParam(raw: string | null): Pkg | null {
 function IncorporateWizard() {
   // Hero panel and homepage jurisdiction cards deep-link with
   // `?jurisdiction=federal|ontario`. When present and valid, pre-select it and
-  // skip the redundant Step 1 (jurisdiction) — landing the customer straight on
+  // skip the redundant Step 1 (jurisdiction), landing the customer straight on
   // Step 2 (Package). Read once on mount; later in-wizard Back navigation is
   // free to return to Step 1 normally.
   const searchParams = useSearchParams();
+  const { t } = useCopy();
   const presetJurisdiction = parseJurisdictionParam(searchParams.get("jurisdiction"));
   const presetPkg = parsePackageParam(searchParams.get("package"));
 
@@ -2201,14 +2201,14 @@ function IncorporateWizard() {
         <div className="bg-cream-50 border-b border-gold-200">
           <div className="max-w-5xl mx-auto px-6 py-3 flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm text-gray-700">
-              We restored the details you entered last time. Nothing has been submitted or charged yet.
+              {t.restored}
             </p>
             <button
               type="button"
               onClick={startOver}
               className="text-sm font-semibold text-navy-900 underline underline-offset-2 hover:text-navy-700"
             >
-              Start over
+              {t.startOver}
             </button>
           </div>
         </div>
@@ -2298,10 +2298,10 @@ function IncorporateWizard() {
             });
             if (!res.ok) {
               const body = await res.json().catch(() => ({}));
-              throw new Error(body?.error || "Submission failed");
+              throw new Error(body?.error || t.submissionFailed);
             }
             const { url } = (await res.json()) as { url?: string };
-            if (!url) throw new Error("Checkout session did not return a URL");
+            if (!url) throw new Error(t.noUrl);
             // Full-page redirect to Stripe Checkout. After payment, Stripe
             // redirects back to /incorporate/confirmation with session_id.
             window.location.href = url;
@@ -2311,7 +2311,7 @@ function IncorporateWizard() {
             step's primary form so customers can opt out of self-serve at
             any time without losing what they've entered (the link
             navigates to /legal-consultation; closing the wizard tab
-            preserves nothing — that's an existing trade-off, not a
+            preserves nothing, that's an existing trade-off, not a
             regression introduced here). */}
         <div className="border-t border-gray-100 mt-4">
           <div className="max-w-2xl mx-auto px-6 py-6 text-center">
@@ -2319,7 +2319,7 @@ function IncorporateWizard() {
               href="/legal-consultation"
               className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-navy-900 transition-colors"
             >
-              Not sure? <span className="underline underline-offset-2">Speak with a lawyer</span>
+              {t.notSure} <span className="underline underline-offset-2">{t.speakLawyer}</span>
             </Link>
           </div>
         </div>

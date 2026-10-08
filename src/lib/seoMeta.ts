@@ -99,6 +99,7 @@ const BODY_TRANSLATED_PATHS = new Set<string>([
   "/services/initial-minute-book", // order wizard + service copy are localized
   "/services", // services index is localized (COPY in services/page.tsx)
   "/legal-consultation", // form is localized (LegalConsultationBody)
+  "/incorporate", // order wizard + service copy are localized (IncorporateBody, incorporateCopy, CorporationNameSection, serviceContent/incorporate)
   "/guides", // guides index (individual articles are handled per-locale in sitemap.ts)
 ]);
 
