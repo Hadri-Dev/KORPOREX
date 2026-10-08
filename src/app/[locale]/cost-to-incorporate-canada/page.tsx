@@ -7,7 +7,7 @@ import JsonLd from "@/components/JsonLd";
 import CostCalculatorBody from "./CostCalculatorBody";
 import { costFaq, type CostLang } from "./costCopy";
 
-const PATH = "/tools/incorporation-cost";
+const PATH = "/cost-to-incorporate-canada";
 
 const CRUMBS: Record<CostLang, { home: string; page: string }> = {
   en: { home: "Home", page: "Cost to Incorporate in Canada" },

@@ -664,7 +664,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
                       .
                     </p>
                     <p className="text-xs text-gray-600 mt-2">
-                      <Link href="/tools/incorporation-cost" className="font-semibold text-navy-900 underline underline-offset-2 hover:text-gold-600">
+                      <Link href="/cost-to-incorporate-canada" className="font-semibold text-navy-900 underline underline-offset-2 hover:text-gold-600">
                         {lang === "fr" ? "Voir le détail des droits gouvernementaux" : lang === "es" ? "Ver el desglose de las tasas gubernamentales" : "See the full government fee breakdown"}
                       </Link>
                     </p>

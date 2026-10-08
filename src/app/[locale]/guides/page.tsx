@@ -23,7 +23,7 @@ export const revalidate = 300;
 
 // Fixed category list for the overview cards. Titles/descriptions are pulled
 // from the `guides` translation namespace so they localize per locale.
-// Highlighted link to the incorporation cost calculator (a /tools page, not a guide).
+// Highlighted link to the incorporation cost calculator (a standalone page, not a guide).
 const CALC_CARD: Record<Locale, { eyebrow: string; title: string; body: string; cta: string }> = {
   en: { eyebrow: "Free tool", title: "Cost to Incorporate in Canada calculator", body: "Federal and Ontario government fees, line by line, with official sources.", cta: "Calculate your cost" },
   fr: { eyebrow: "Outil gratuit", title: "Calculateur du coût de constitution au Canada", body: "Droits gouvernementaux fédéraux et ontariens, poste par poste, avec sources officielles.", cta: "Calculer votre coût" },
@@ -123,7 +123,7 @@ export default async function GuidesPage({ params, searchParams }: Params) {
       <section className="bg-white pt-8 px-6">
         <div className="max-w-6xl mx-auto">
           <Link
-            href="/tools/incorporation-cost"
+            href="/cost-to-incorporate-canada"
             className="flex flex-wrap items-center justify-between gap-4 p-6 bg-navy-50 border border-navy-100 rounded-lg hover:border-navy-900 transition-colors"
           >
             <div>

@@ -1,4 +1,4 @@
-// Copy for the /tools/incorporation-cost calculator, in every site locale.
+// Copy for the /cost-to-incorporate-canada calculator, in every site locale.
 // Amounts are never typed here: they come from govFees.ts (government fees)
 // and pricing.ts (Korporex prices) so the page, its FAQ and its JSON-LD can
 // never disagree with each other.
@@ -34,9 +34,9 @@ function fmtDate(lang: CostLang, iso: string) {
 }
 
 const PAGE_URL: Record<CostLang, string> = {
-  en: "https://korporex.ca/tools/incorporation-cost",
-  fr: "https://korporex.ca/fr/tools/incorporation-cost",
-  es: "https://korporex.ca/es/tools/incorporation-cost",
+  en: "https://korporex.ca/cost-to-incorporate-canada",
+  fr: "https://korporex.ca/fr/cost-to-incorporate-canada",
+  es: "https://korporex.ca/es/cost-to-incorporate-canada",
 };
 
 export function costFaq(lang: CostLang): { q: string; a: string }[] {

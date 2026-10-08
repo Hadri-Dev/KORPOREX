@@ -56,6 +56,9 @@ const nextConfig = {
         destination: "https://korporex.ca/:path*",
         permanent: true,
       },
+      // Cost calculator moved 2026-10-07 (launch day) to a keyword URL.
+      { source: "/tools/incorporation-cost", destination: "/cost-to-incorporate-canada", permanent: true },
+      { source: "/:locale(fr|es)/tools/incorporation-cost", destination: "/:locale/cost-to-incorporate-canada", permanent: true },
       // Routes renamed 2026-05-27 — preserve any external links / bookmarks.
       // /nuans-report -> /nuans
       { source: "/nuans-report", destination: "/nuans", permanent: true },

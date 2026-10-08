@@ -52,7 +52,7 @@ const SOCIALS: { label: string; href: string; icon: React.ReactNode }[] = [
 const COMPANY_LINKS_COL1 = [
   { href: "/faq", labelKey: "faq" },
   { href: "/guides", labelKey: "resources" },
-  { href: "/tools/incorporation-cost", labelKey: "costCalculator" },
+  { href: "/cost-to-incorporate-canada", labelKey: "costCalculator" },
   { href: "/contact", labelKey: "contact" },
 ] as const;
 

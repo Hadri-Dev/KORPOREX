@@ -1,5 +1,5 @@
 // Government filing fees for Canadian incorporation, used by the
-// /tools/incorporation-cost calculator.
+// /cost-to-incorporate-canada calculator.
 //
 // This file is the point of the calculator. Korporex's own prices live in
 // pricing.ts and nobody links to a vendor's price list — what other sites cite

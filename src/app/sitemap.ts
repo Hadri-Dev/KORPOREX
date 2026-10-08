@@ -26,7 +26,7 @@ const STATIC_PATHS = [
   "/nuans",
   "/legal-consultation",
   "/guides",
-  "/tools/incorporation-cost",
+  "/cost-to-incorporate-canada",
   "/faq",
   "/contact",
   "/terms-of-service",
