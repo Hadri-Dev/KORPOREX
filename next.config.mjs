@@ -29,6 +29,24 @@ const nextConfig = {
       ],
     };
   },
+  async headers() {
+    // Non-HTML URLs can't carry a <link rel="canonical">, so Google reports
+    // byte-identical ones as "Duplicate without user-selected canonical".
+    // Fix them with HTTP headers instead.
+    const llmsCanonical = [{ key: "Link", value: '<https://korporex.ca/llms.txt>; rel="canonical"' }];
+    return [
+      // /llms.txt and its .well-known alias serve the same body; both declare
+      // the root file canonical (still fetchable by AI crawlers).
+      { source: "/llms.txt", headers: llmsCanonical },
+      { source: "/.well-known/llms.txt", headers: llmsCanonical },
+      // Search Console verification files must stay reachable but should never
+      // be indexed (they are near-identical one-liners).
+      {
+        source: "/:file(google[0-9a-f]+\\.html)",
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
+    ];
+  },
   async redirects() {
     return [
       // www.korporex.ca -> korporex.ca (one canonical host; keeps the path).
