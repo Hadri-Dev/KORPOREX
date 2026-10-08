@@ -81,6 +81,8 @@ const BODY_TRANSLATED_PATHS = new Set<string>([
   "/services/registered-office", // order wizard + service copy are localized (RegisteredOfficeBody, CorporationIdSection, serviceContent/registered-office)
   "/services/annual-return-on", // order wizard + service copy are localized (AnnualReturnOnBody, CurrentPeopleSection, serviceContent/annual-return-on)
   "/services/annual-return-federal", // order wizard + service copy are localized (AnnualReturnFederalBody, CurrentPeopleSection, serviceContent/annual-return-federal)
+  "/services/annual-resolution-on", // order wizard + service copy are localized (AnnualResolutionWizard, serviceContent/annual-resolution-on)
+  "/services/annual-resolution-federal", // order wizard + service copy are localized (AnnualResolutionWizard, serviceContent/annual-resolution-federal)
   "/guides", // guides index (individual articles are handled per-locale in sitemap.ts)
 ]);
 

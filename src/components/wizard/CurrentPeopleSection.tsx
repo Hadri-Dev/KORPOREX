@@ -81,7 +81,7 @@ const COPY = {
 
 // Display labels for the registry officer positions. The option value stays
 // the English registry name.
-const POSITION_LABELS: Record<Exclude<Lang, "en">, Record<OfficerPosition, string>> = {
+export const POSITION_LABELS: Record<Exclude<Lang, "en">, Record<OfficerPosition, string>> = {
   fr: {
     "Assistant Secretary": "Secrétaire adjoint",
     "Authorized Signing Officer": "Signataire autorisé",

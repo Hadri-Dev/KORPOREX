@@ -75,7 +75,7 @@ export const COMPLIANCE_SERVICES: Record<ComplianceServiceSlug, ComplianceServic
     price: 199.99,
     tagline: "Annual director and shareholder resolutions for your Ontario corporation's minute book.",
     description:
-      "Ontario corporations must hold an annual meeting of shareholders within 15 months of the last one (OBCA s.94), or pass written resolutions signed by all shareholders in its place (OBCA s.104). Korporex prepares the annual director and shareholder resolutions approving the financial statements, electing directors, appointing officers, and dispensing with or appointing an auditor — ready to sign and file in your minute book.",
+      "Ontario corporations must hold an annual meeting of shareholders within 15 months of the last one (OBCA s.94), or pass written resolutions signed by all shareholders in its place (OBCA s.104). Korporex prepares the annual director and shareholder resolutions approving the financial statements, electing directors, appointing officers, and dispensing with or appointing an auditor, ready to sign and file in your minute book.",
     path: "/services/annual-resolution-on",
   },
   "annual-resolution-federal": {
@@ -86,7 +86,7 @@ export const COMPLIANCE_SERVICES: Record<ComplianceServiceSlug, ComplianceServic
     price: 199.99,
     tagline: "Annual director and shareholder resolutions for your CBCA corporation's minute book.",
     description:
-      "CBCA corporations must call an annual meeting of shareholders no later than 15 months after the last one and within 6 months of the financial year-end (CBCA s.133), or pass written resolutions signed by all shareholders in its place (CBCA s.142). Korporex prepares the annual director and shareholder resolutions approving the financial statements, electing directors, appointing officers, and dispensing with or appointing an auditor — ready to sign and file in your minute book.",
+      "CBCA corporations must call an annual meeting of shareholders no later than 15 months after the last one and within 6 months of the financial year-end (CBCA s.133), or pass written resolutions signed by all shareholders in its place (CBCA s.142). Korporex prepares the annual director and shareholder resolutions approving the financial statements, electing directors, appointing officers, and dispensing with or appointing an auditor, ready to sign and file in your minute book.",
     path: "/services/annual-resolution-federal",
   },
   "notice-of-change": {
