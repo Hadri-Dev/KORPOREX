@@ -86,6 +86,17 @@ const BODY_TRANSLATED_PATHS = new Set<string>([
   "/services/notice-of-change", // order wizard + service copy are localized (NoticeOfChangeBody, serviceContent/notice-of-change)
   "/services/initial-return-on", // order wizard + service copy are localized (InitialReturnOnBody, serviceContent/initial-return-on)
   "/services/change-address", // order wizard + service copy are localized (ChangeAddressBody, serviceContent/change-address)
+  "/services/change-director", // order wizard + service copy are localized
+  "/services/change-shareholder", // order wizard + service copy are localized
+  "/services/articles-amendment", // order wizard + service copy are localized
+  "/services/change-name", // order wizard + service copy are localized
+  "/services/business-number", // order wizard + service copy are localized
+  "/services/amalgamation", // order wizard + service copy are localized
+  "/services/continuance", // order wizard + service copy are localized
+  "/services/dissolve-business", // order wizard + service copy are localized
+  "/services/extra-provincial", // order wizard + service copy are localized
+  "/services/revive-business", // order wizard + service copy are localized
+  "/services/initial-minute-book", // order wizard + service copy are localized
   "/guides", // guides index (individual articles are handled per-locale in sitemap.ts)
 ]);
 
