@@ -71,6 +71,14 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className={`${playfairDisplay.variable} ${inter.variable}`}>
+      <head>
+        {/* Ahrefs Web Analytics (also used for Ahrefs site verification). */}
+        <script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="dPbJep57EiefIL2mDaWt5A"
+          async
+        />
+      </head>
       <body className="bg-white text-gray-900 font-sans">
         {/* Organization node on every page: Service/Offer nodes across the site
             reference it as provider via "#organization". */}
