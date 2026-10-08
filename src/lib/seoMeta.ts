@@ -97,6 +97,8 @@ const BODY_TRANSLATED_PATHS = new Set<string>([
   "/services/extra-provincial", // order wizard + service copy are localized
   "/services/revive-business", // order wizard + service copy are localized
   "/services/initial-minute-book", // order wizard + service copy are localized
+  "/services", // services index is localized (COPY in services/page.tsx)
+  "/legal-consultation", // form is localized (LegalConsultationBody)
   "/guides", // guides index (individual articles are handled per-locale in sitemap.ts)
 ]);
 
