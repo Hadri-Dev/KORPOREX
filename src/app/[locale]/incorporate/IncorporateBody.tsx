@@ -812,7 +812,7 @@ function Step2({ jurisdiction, value, onChange, onNext, onBack }: {
     <div className="max-w-xl mx-auto px-6 py-12">
       <BackBtn onClick={onBack} />
       <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">{t.s2H2}</h2>
-      <p className="text-gray-500 text-sm mb-8">{t.s2Intro}</p>
+      <p className="text-gray-500 text-sm mb-8">{t.s2Intro}{" "}<Link href="/tools/incorporation-cost" className="underline underline-offset-2 text-navy-900 hover:text-gold-600">{t.s2FeesLink}</Link></p>
       <div className="space-y-3 mb-6">
         {PACKAGE_ORDER.map((id) => {
           const { name, description, features } = t.packages[id] ?? PACKAGE_COPY[id];
@@ -952,7 +952,7 @@ function Step3({ jurisdiction, pkg, def, onNext, onBack, snapshot }: {
             <div className="bg-cream-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700 leading-relaxed">
               {pkg === "basic" ? (
                 <>
-                  <strong className="text-gray-800">{t.basicNameStrong(isFed)}</strong>{t.basicNameBody(t.money(getNuansFee(jurisdiction)))}
+                  <strong className="text-gray-800">{t.basicNameStrong(isFed)}</strong>{t.basicNameBody(t.money(lang === "fr" ? getNuansFee(jurisdiction).toFixed(2).replace(".", ",") : getNuansFee(jurisdiction).toFixed(2)))}
                 </>
               ) : (
                 <>

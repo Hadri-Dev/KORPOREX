@@ -58,7 +58,8 @@
       "about": "Acerca de",
       "faq": "Preguntas frecuentes",
       "resources": "Guías",
-      "contact": "Contacto"
+      "contact": "Contacto",
+      "costCalculator": "Calculadora del costo de constitución"
     },
     "links": {
       "federalIncorporation": "Constitución federal",
@@ -698,6 +699,10 @@
     "registeredOffice": {
       "title": "Domicilio Social en Toronto o Burlington | Korporex",
       "description": "Usa una oficina de Korporex en el centro de Toronto o en Burlington como domicilio social. Presentamos el cambio y escaneamos tu correo cada mes."
+    },
+    "incorporationCost": {
+      "title": "Costo de constituir una sociedad en Canadá | Korporex",
+      "description": "Tasas gubernamentales para constituir una sociedad federal ($200) o de Ontario ($300), partida por partida con fuentes oficiales. Calculadora gratuita."
     }
   }
 }

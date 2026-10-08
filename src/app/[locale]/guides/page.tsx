@@ -23,6 +23,13 @@ export const revalidate = 300;
 
 // Fixed category list for the overview cards. Titles/descriptions are pulled
 // from the `guides` translation namespace so they localize per locale.
+// Highlighted link to the incorporation cost calculator (a /tools page, not a guide).
+const CALC_CARD: Record<Locale, { eyebrow: string; title: string; body: string; cta: string }> = {
+  en: { eyebrow: "Free tool", title: "Cost to Incorporate in Canada calculator", body: "Federal and Ontario government fees, line by line, with official sources.", cta: "Calculate your cost" },
+  fr: { eyebrow: "Outil gratuit", title: "Calculateur du coût de constitution au Canada", body: "Droits gouvernementaux fédéraux et ontariens, poste par poste, avec sources officielles.", cta: "Calculer votre coût" },
+  es: { eyebrow: "Herramienta gratuita", title: "Calculadora del costo de constituir en Canadá", body: "Tasas gubernamentales federales y de Ontario, partida por partida, con fuentes oficiales.", cta: "Calcular su costo" },
+};
+
 const CATEGORY_CARDS: { key: string; icon: React.ElementType }[] = [
   { key: "incorporation", icon: BookOpen },
   { key: "compliance", icon: FileText },
@@ -109,6 +116,25 @@ export default async function GuidesPage({ params, searchParams }: Params) {
           <p className="text-lg text-gray-300 max-w-xl leading-relaxed">
             {t("heroSubtitle")}
           </p>
+        </div>
+      </section>
+
+      {/* Cost calculator: the sourced government-fee tool */}
+      <section className="bg-white pt-8 px-6">
+        <div className="max-w-6xl mx-auto">
+          <Link
+            href="/tools/incorporation-cost"
+            className="flex flex-wrap items-center justify-between gap-4 p-6 bg-navy-50 border border-navy-100 rounded-lg hover:border-navy-900 transition-colors"
+          >
+            <div>
+              <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-600 mb-1">{CALC_CARD[locale].eyebrow}</p>
+              <p className="font-serif text-xl font-bold text-navy-900">{CALC_CARD[locale].title}</p>
+              <p className="text-sm text-gray-600 mt-1">{CALC_CARD[locale].body}</p>
+            </div>
+            <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-navy-900">
+              {CALC_CARD[locale].cta} <ArrowRight size={14} />
+            </span>
+          </Link>
         </div>
       </section>
 

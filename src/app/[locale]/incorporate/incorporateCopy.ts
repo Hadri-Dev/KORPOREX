@@ -70,6 +70,7 @@ const en = {
   // Step 2
   s2H2: "Choose Your Package",
   s2Intro: "All prices include government filing fees. Prices in CAD.",
+  s2FeesLink: "See the government fee breakdown",
   money: (amt: string | number) => `$${amt}`,
   packages: { basic: pick("basic"), standard: pick("standard"), premium: pick("premium") } as Record<Pkg, PkgText>,
 
@@ -321,6 +322,7 @@ const fr: Copy = {
 
   s2H2: "Choisissez votre forfait",
   s2Intro: "Tous les prix comprennent les frais de dépôt gouvernementaux. Prix en dollars canadiens.",
+  s2FeesLink: "Voir le détail des droits gouvernementaux",
   money: (amt) => `${amt} $`,
   packages: {
     basic: {
@@ -637,6 +639,7 @@ const es: Copy = {
 
   s2H2: "Elija su paquete",
   s2Intro: "Todos los precios incluyen las tasas gubernamentales de presentación. Precios en CAD.",
+  s2FeesLink: "Ver el desglose de las tasas gubernamentales",
   money: (amt) => `$${amt}`,
   packages: {
     basic: {

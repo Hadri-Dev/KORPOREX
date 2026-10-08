@@ -123,13 +123,11 @@ export function getLegalConsultPricing(): LegalConsultPricing {
   return { fee, tax, total };
 }
 
-// Name-search pass-through fees. Federal uses Corporations Canada's NUANS
-// preliminary search; Ontario uses an Ontario-Biz-style name search. The two
-// are billed at different rates reflecting the different government pass-
-// through and handling costs.
+// NUANS name-search report fee, charged when a Basic order picks a named
+// corporation. Same price as the standalone NUANS report ($39.99 + HST).
 export const NUANS_FEES: Record<Jurisdiction, number> = {
-  federal: 20,
-  ontario: 60,
+  federal: 39.99,
+  ontario: 39.99,
 };
 
 export function getNuansFee(jurisdiction: Jurisdiction): number {

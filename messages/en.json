@@ -58,7 +58,8 @@
       "about": "About Us",
       "faq": "FAQ",
       "resources": "Guides",
-      "contact": "Contact"
+      "contact": "Contact",
+      "costCalculator": "Incorporation Cost Calculator"
     },
     "links": {
       "federalIncorporation": "Federal Incorporation",
@@ -698,6 +699,10 @@
     "registeredOffice": {
       "title": "Registered Office in Toronto or Burlington | Korporex",
       "description": "Use a Korporex office in Downtown Toronto or Burlington as your corporation's registered office. We file the change and email you monthly mail scans."
+    },
+    "incorporationCost": {
+      "title": "Cost to Incorporate in Canada (Federal & Ontario) | Korporex",
+      "description": "Government fees to incorporate federally ($200) or in Ontario ($300), line by line with official sources. Free calculator, verified fees, NUANS and annual costs."
     }
   }
 }

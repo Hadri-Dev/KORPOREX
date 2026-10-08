@@ -56,7 +56,7 @@ export const GOV_FEES: Record<JurisdictionCode, GovJurisdiction> = {
     registry: "Corporations Canada",
     sourceUrl:
       "https://ised-isde.canada.ca/site/corporations-canada/en/services-fees-and-processing-times",
-    sourceLabel: "Corporations Canada — Services, fees and processing times",
+    sourceLabel: "Corporations Canada: Services, fees and processing times",
     lastVerified: "2026-08-02",
     incorporation: {
       label: "Articles of Incorporation",
@@ -71,7 +71,7 @@ export const GOV_FEES: Record<JurisdictionCode, GovJurisdiction> = {
     nameSearch: {
       label: "Name search (NUANS)",
       amount: null,
-      note: "No separate NUANS report is required to incorporate online with a word name — the corporate name search is now part of the federal incorporation process.",
+      note: "No separate NUANS report is required to incorporate online with a word name. The corporate name search is now part of the federal incorporation process.",
     },
     annualReturn: {
       label: "Annual return",
@@ -92,7 +92,7 @@ export const GOV_FEES: Record<JurisdictionCode, GovJurisdiction> = {
     registry: "Ontario Business Registry",
     sourceUrl:
       "https://www.ontario.ca/page/cost-time-required-to-register-change-search-for-business-name-corporation-not-for-profit",
-    sourceLabel: "Ontario.ca — Cost and time required to register, change or search",
+    sourceLabel: "Ontario.ca: Cost and time required to register, change or search",
     lastVerified: "2026-08-02",
     incorporation: {
       label: "Articles of Incorporation",
@@ -101,13 +101,13 @@ export const GOV_FEES: Record<JurisdictionCode, GovJurisdiction> = {
     },
     nameSearch: {
       label: "Ontario name search (NUANS)",
-      amount: 60,
-      note: "Required for a named corporation. ServiceOntario does not sell the report itself — it comes from a private search house, which is why the fee is not on the government fee schedule. $60 is what Korporex charges for it.",
+      amount: 39.99,
+      note: "Required for a named corporation. ServiceOntario does not sell the report itself: it comes from a private search house, which is why it is not on the government fee schedule. Korporex charges $39.99 + HST for it.",
     },
     annualReturn: {
       label: "Annual return (Corporations Information Act)",
       amount: null,
-      note: "No government fee. Still mandatory — a corporation can be dissolved for failing to file.",
+      note: "No government fee. Still mandatory: a corporation can be dissolved for failing to file.",
     },
     initialReturn: {
       label: "Initial Return",

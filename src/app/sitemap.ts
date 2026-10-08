@@ -26,6 +26,7 @@ const STATIC_PATHS = [
   "/nuans",
   "/legal-consultation",
   "/guides",
+  "/tools/incorporation-cost",
   "/faq",
   "/contact",
   "/terms-of-service",

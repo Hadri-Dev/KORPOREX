@@ -58,7 +58,8 @@
       "about": "À propos",
       "faq": "FAQ",
       "resources": "Guides",
-      "contact": "Contact"
+      "contact": "Contact",
+      "costCalculator": "Calculateur du coût de constitution"
     },
     "links": {
       "federalIncorporation": "Constitution fédérale",
@@ -698,6 +699,10 @@
     "registeredOffice": {
       "title": "Adresse de siège social à Toronto ou Burlington | Korporex",
       "description": "Utilisez un bureau Korporex au centre-ville de Toronto ou à Burlington comme siège social. Nous déposons le changement et numérisons votre courrier chaque mois."
+    },
+    "incorporationCost": {
+      "title": "Coût de constitution au Canada (fédéral et Ontario) | Korporex",
+      "description": "Droits gouvernementaux pour constituer une société fédérale (200 $) ou ontarienne (300 $), poste par poste avec sources officielles. Calculateur gratuit."
     }
   }
 }
