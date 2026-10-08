@@ -42,7 +42,7 @@ export const COMPLIANCE_SERVICES: Record<ComplianceServiceSlug, ComplianceServic
     price: 99,
     tagline: "File the mandatory Initial Return within 60 days of incorporation.",
     description:
-      "All Ontario corporations must file an Initial Return with the Ministry of Public and Business Service Delivery within 60 days of incorporation, under the Corporations Information Act. Korporex prepares and files the return on your behalf.",
+      "All Ontario corporations must file an Initial Return through the Ontario Business Registry within 60 days of incorporation, under the Corporations Information Act. Korporex prepares and files the return on your behalf.",
     path: "/services/initial-return-on",
   },
   "annual-return-on": {
