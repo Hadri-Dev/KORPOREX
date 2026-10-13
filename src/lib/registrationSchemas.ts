@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isKnownTaxRegion } from "./pricing";
 
 // Shared sub-schemas
 export const addressSchema = z.object({
@@ -9,9 +10,14 @@ export const addressSchema = z.object({
   country: z.string().trim().min(2, "Required").max(60),
 });
 
+export const billingAddressSchema = addressSchema.refine(
+  (a) => isKnownTaxRegion(a.country, a.region),
+  { message: "Select a Canadian province or territory", path: ["region"] }
+);
+
 export const billingSchema = z.object({
   billingName: z.string().trim().min(1, "Required").max(200),
-  billingAddress: addressSchema,
+  billingAddress: billingAddressSchema,
 });
 
 // ── Sole Proprietorship Registration (Ontario) ──────────────────────────────

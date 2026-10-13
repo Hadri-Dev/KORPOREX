@@ -210,6 +210,14 @@ export function isCanadaCountry(country: string): boolean {
   return c === "CA" || c === "CAN" || c === "CANADA";
 }
 
+// A Canadian billing address whose region matches no province or territory
+// would otherwise fall through getTaxRate as 0% tax. The billing schemas use
+// this to reject such submissions instead of charging no tax.
+export function isKnownTaxRegion(country: string, region: string): boolean {
+  if (!isCanadaCountry(country)) return true;
+  return normalizeCaRegion(region) in CA_TAX_RATES;
+}
+
 export function getTaxRate(country: string, region: string): number {
   if (!isCanadaCountry(country)) return 0;
   return CA_TAX_RATES[normalizeCaRegion(region)] ?? 0;

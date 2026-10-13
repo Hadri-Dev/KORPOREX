@@ -5,6 +5,7 @@ import {
   PKG_LABELS,
   REG_OFFICE_OPTIONS,
   computePricing,
+  isKnownTaxRegion,
   type Jurisdiction,
   type Pkg,
 } from "@/lib/pricing";
@@ -111,7 +112,10 @@ const schema = z.object({
   regOffice: addressSchema,
   regOfficeAddon: z.enum(["none", "korporex", "burlington"]).default("none"),
   billingName: z.string().trim().min(1).max(200),
-  billingAddress: addressSchema,
+  billingAddress: addressSchema.refine(
+    (a) => isKnownTaxRegion(a.country, a.region),
+    { message: "Select a Canadian province or territory", path: ["region"] }
+  ),
 }).superRefine((v, ctx) => {
   // Mirror of the client-side rules, re-checked here because the client is not
   // a trust boundary.
