@@ -15,6 +15,7 @@ import { expanded as nuansNameSearch } from "./content/nuans-name-search";
 import { nuansReportAlberta } from "./content/nuans-report-alberta";
 import { nuansReportOntario } from "./content/nuans-report-ontario";
 import { initialReturnOntario } from "./content/initial-return-ontario";
+import { articlesAmendmentOntario } from "./content/articles-amendment-ontario";
 import { expanded as registerBusinessOntario } from "./content/register-business-ontario";
 import { expanded as salaryVsDividends } from "./content/salary-vs-dividends";
 import { expanded as confirmGstHstNumber } from "./content/confirm-gst-hst-number";
@@ -3774,6 +3775,7 @@ export const articles: Article[] = [
   ...nuansReportOntario,
   ...nuansReportAlberta,
   ...initialReturnOntario,
+  ...articlesAmendmentOntario,
 ];
 
 // Long-form rewrites kept in ./content/<group>.ts (one file per article group,
