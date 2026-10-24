@@ -138,7 +138,9 @@ const en: Article = {
     },
     { type: "heading", id: "outside-ontario", text: "Ontario corporations expanding to other provinces" },
     p(
-      "The rules above are Ontario's. An Ontario corporation that starts carrying on business in Quebec, British Columbia, Alberta or any other province registers under that province's legislation, which sets its own forms, fees, deadlines and agent for service requirements. For the difference between incorporating federally and provincially in the first place, see ",
+      "The rules above are Ontario's. An Ontario corporation that starts carrying on business in Quebec, British Columbia, Alberta or any other province registers under that province's legislation, which sets its own forms, fees, deadlines and agent for service requirements. For Alberta, see our guide to ",
+      { text: "Alberta extra-provincial registration", href: "/guides/extra-provincial-registration-alberta" },
+      ". For the difference between incorporating federally and provincially in the first place, see ",
       { text: "federal vs provincial incorporation", href: "/guides/federal-vs-provincial-incorporation" },
       "."
     ),
@@ -291,7 +293,9 @@ const fr: Article = {
     },
     { type: "heading", id: "outside-ontario", text: "Les sociétés ontariennes qui s'étendent dans d'autres provinces" },
     p(
-      "Les règles ci-dessus sont celles de l'Ontario. Une société ontarienne qui commence à exercer ses activités au Québec, en Colombie-Britannique, en Alberta ou dans toute autre province s'enregistre en vertu de la législation de cette province, qui fixe ses propres formulaires, droits, délais et exigences relatives au mandataire aux fins de signification. Pour comparer la constitution fédérale et la constitution provinciale, consultez notre guide sur ",
+      "Les règles ci-dessus sont celles de l'Ontario. Une société ontarienne qui commence à exercer ses activités au Québec, en Colombie-Britannique, en Alberta ou dans toute autre province s'enregistre en vertu de la législation de cette province, qui fixe ses propres formulaires, droits, délais et exigences relatives au mandataire aux fins de signification. Pour l'Alberta, consultez notre guide sur l'",
+      { text: "enregistrement extraprovincial en Alberta", href: "/guides/enregistrement-extraprovincial-alberta" },
+      ". Pour comparer la constitution fédérale et la constitution provinciale, consultez notre guide sur ",
       { text: "comment se constituer en société au Canada", href: "/guides/comment-se-constituer-societe-canada" },
       "."
     ),
@@ -444,7 +448,9 @@ const es: Article = {
     },
     { type: "heading", id: "outside-ontario", text: "Sociedades de Ontario que se expanden a otras provincias" },
     p(
-      "Las reglas anteriores son las de Ontario. Una sociedad de Ontario que comienza a operar en Quebec, Columbia Británica, Alberta o cualquier otra provincia se registra conforme a la legislación de esa provincia, que fija sus propios formularios, tasas, plazos y requisitos sobre el agente para notificaciones. Para comparar la constitución federal y la provincial, consulte nuestra guía sobre ",
+      "Las reglas anteriores son las de Ontario. Una sociedad de Ontario que comienza a operar en Quebec, Columbia Británica, Alberta o cualquier otra provincia se registra conforme a la legislación de esa provincia, que fija sus propios formularios, tasas, plazos y requisitos sobre el agente para notificaciones. Para Alberta, consulte nuestra guía sobre el ",
+      { text: "registro extraprovincial en Alberta", href: "/guides/registro-extraprovincial-alberta" },
+      ". Para comparar la constitución federal y la provincial, consulte nuestra guía sobre ",
       { text: "cómo constituirse en sociedad en Canadá", href: "/guides/como-constituirse-sociedad-canada" },
       "."
     ),

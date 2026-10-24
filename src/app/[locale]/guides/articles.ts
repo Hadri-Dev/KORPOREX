@@ -16,6 +16,7 @@ import { nuansReportAlberta } from "./content/nuans-report-alberta";
 import { nuansReportOntario } from "./content/nuans-report-ontario";
 import { initialReturnOntario } from "./content/initial-return-ontario";
 import { extraProvincialOntario } from "./content/extra-provincial-ontario";
+import { extraProvincialAlberta } from "./content/extra-provincial-alberta";
 import { articlesAmendmentOntario } from "./content/articles-amendment-ontario";
 import { expanded as registerBusinessOntario } from "./content/register-business-ontario";
 import { expanded as salaryVsDividends } from "./content/salary-vs-dividends";
@@ -3777,6 +3778,7 @@ export const articles: Article[] = [
   ...nuansReportAlberta,
   ...initialReturnOntario,
   ...extraProvincialOntario,
+  ...extraProvincialAlberta,
   ...articlesAmendmentOntario,
 ];
 
