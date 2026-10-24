@@ -5,8 +5,8 @@ import {
   NUANS_REPORT,
   nuansSubtotal,
   getJurisdictionLabel,
+  nuansTax,
 } from "@/lib/nuansReport";
-import { getTaxRate } from "@/lib/pricing";
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
 import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
@@ -19,6 +19,7 @@ type Pricing = {
   additionalTotal: number;
   subtotal: number;
   taxRate: number;
+  taxRegion: string;
   tax: number;
   total: number;
 };
@@ -33,10 +34,10 @@ function computePricing(
   const additionalCount = safeCount - 1;
   const additionalTotal = NUANS_REPORT.additionalPrice * additionalCount;
   const subtotal = nuansSubtotal(safeCount);
-  const taxRate = getTaxRate(billingCountry, billingRegion);
+  const { rate: taxRate, region: taxRegion } = nuansTax(billingCountry, billingRegion);
   const tax = Math.round(subtotal * taxRate * 100) / 100;
   const total = Math.round((subtotal + tax) * 100) / 100;
-  return { baseFee, additionalCount, additionalTotal, subtotal, taxRate, tax, total };
+  return { baseFee, additionalCount, additionalTotal, subtotal, taxRate, taxRegion, tax, total };
 }
 
 export async function POST(req: Request) {
@@ -108,7 +109,7 @@ export async function POST(req: Request) {
       price_data: {
         currency: "cad",
         product_data: {
-          name: `Tax (${taxPct}%, ${billing.region})`,
+          name: `Tax (${taxPct}%, ${pricing.taxRegion})`,
           description: "GST/HST as applicable to billing province",
         },
         unit_amount: Math.round(pricing.tax * 100),
@@ -256,7 +257,7 @@ function buildHtmlBody(args: {
 
   const taxLabel =
     pricing.taxRate > 0
-      ? `Tax (${(pricing.taxRate * 100).toFixed(pricing.taxRate === 0.14975 ? 3 : 0)}% in ${payload.billingAddress.region})`
+      ? `Tax (${(pricing.taxRate * 100).toFixed(pricing.taxRate === 0.14975 ? 3 : 0)}% in ${pricing.taxRegion})`
       : "Tax";
   const pricingRows = [
     row(`${NUANS_REPORT.longLabel} (first name)`, `$${pricing.baseFee.toFixed(2)}`),

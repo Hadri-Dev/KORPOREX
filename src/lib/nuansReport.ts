@@ -8,6 +8,7 @@
 
 import { z } from "zod";
 import { addressSchema, billingSchema, contactSchema } from "./amendmentSchemas";
+import { CA_TAX_RATES, getTaxRate, isCanadaCountry } from "./pricing";
 
 export { addressSchema, billingSchema };
 
@@ -115,4 +116,14 @@ export type NuansReportMeta = typeof NUANS_REPORT;
 export function nuansSubtotal(rowCount: number): number {
   const safeCount = Math.max(1, rowCount);
   return NUANS_REPORT.basePrice + NUANS_REPORT.additionalPrice * (safeCount - 1);
+}
+
+// NUANS orders always carry tax. Canadian billing addresses use their
+// province's rate; any billing address outside Canada is charged Ontario HST
+// (13%) rather than being zero-rated.
+export const NUANS_FOREIGN_TAX_REGION = "ON";
+
+export function nuansTax(country: string, region: string): { rate: number; region: string } {
+  if (isCanadaCountry(country)) return { rate: getTaxRate(country, region), region };
+  return { rate: CA_TAX_RATES[NUANS_FOREIGN_TAX_REGION], region: NUANS_FOREIGN_TAX_REGION };
 }

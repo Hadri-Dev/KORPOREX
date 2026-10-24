@@ -12,10 +12,10 @@ import {
   NUANS_JURISDICTIONS,
   NUANS_REPORT,
   nuansSubtotal,
+  nuansTax,
 } from "@/lib/nuansReport";
 import { Field, iCls, sCls } from "@/components/wizard/WizardUI";
 import AddressFields from "@/components/wizard/AddressFields";
-import { getTaxRate } from "@/lib/pricing";
 
 const emptyAddress = { street: "", city: "", region: "", postalCode: "", country: "CA" };
 
@@ -312,7 +312,7 @@ export default function NuansReportBody() {
 
   const region = watch("billingAddress.region") || "";
   const country = watch("billingAddress.country") || "CA";
-  const taxRate = getTaxRate(country, region);
+  const { rate: taxRate, region: taxRegion } = nuansTax(country, region);
   const rowCount = fields.length;
   const additionalCount = Math.max(0, rowCount - 1);
   const additionalTotal = NUANS_REPORT.additionalPrice * additionalCount;
@@ -581,7 +581,7 @@ export default function NuansReportBody() {
                   {tax > 0 && (
                     <div className="flex justify-between text-gray-500 text-xs">
                       <span>
-                        {t.tax} ({(taxRate * 100).toFixed(taxRate === 0.14975 ? 3 : 0)}% · {region || t.yourProvince})
+                        {t.tax} ({(taxRate * 100).toFixed(taxRate === 0.14975 ? 3 : 0)}% · {taxRegion || t.yourProvince})
                       </span>
                       <span>${tax.toFixed(2)}</span>
                     </div>
