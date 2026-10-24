@@ -35,6 +35,8 @@ Copy `.env.local.example` to `.env.local` (gitignored) and fill in. For Vercel, 
 | `ADMIN_USERNAME` | Yes for `/admin` | Single-owner username for the `/admin` login form. Compared case-insensitively. Without it, `/api/auth/login` returns 503. |
 | `ADMIN_PASSWORD` | Yes for `/admin` | Plaintext password for the single-owner login. Without it, `/api/auth/login` returns 503. Rotate by changing this value (+ Vercel) and redeploying. |
 | `ADMIN_SESSION_SECRET` | Yes for `/admin` | 32+ byte hex string used to sign the session JWT (HS256). Generate with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`. Rotating it invalidates every active session immediately. |
+| `CRON_SECRET` | Yes for office renewals | Vercel sends it as `Authorization: Bearer ...` to the daily cron `/api/cron/office-renewals` (see `vercel.json`). Without it the cron returns 503 and no renewal reminders go out. |
+| `OFFICE_RENEWAL_SECRET` | No | Signs the private client links in renewal emails. Falls back to a derivation of `ADMIN_SESSION_SECRET`; rotating either invalidates links already emailed. |
 
 ## Payments — Stripe Checkout
 

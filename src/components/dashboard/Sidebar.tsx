@@ -10,6 +10,7 @@ import {
   LogOut,
   ChevronDown,
   TrendingUp,
+  Building2,
   type LucideIcon,
 } from "lucide-react";
 
@@ -32,6 +33,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Pending / Abandoned", href: "/dashboard/orders?status=open" },
     ],
   },
+  { label: "Office Renewals", href: "/dashboard/office-renewals", icon: Building2 },
   {
     label: "SEO Dashboard",
     href: "/dashboard/seo",

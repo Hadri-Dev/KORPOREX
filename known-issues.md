@@ -2,6 +2,11 @@
 
 ## Open
 
+### [Severity: low] Office renewal emails are English only
+- **Where**: [src/lib/officeRenewalEmails.ts](src/lib/officeRenewalEmails.ts). The client page (/office-renewal) is translated en/fr/es and follows the client's `locale` column, but the reminder, receipt and moving-acknowledgement emails are English.
+- **Why not fixed yet**: client language is not captured at purchase (Stripe sessions carry no locale), so every imported client defaults to `en`; the owner can set the language per client in the edit form. Translate the templates once FR/ES clients exist.
+- **Logged**: 2026-10-24
+
 ### [Severity: low] First-name NUANS price ($40) is below Ontario pass-through cost
 - **Where**: [src/lib/nuansReport.ts](src/lib/nuansReport.ts) `basePrice: 40` (first name), `additionalPrice: 40` (each extra name). Pass-through reference in [src/lib/pricing.ts](src/lib/pricing.ts) `NUANS_FEES` (federal $20, Ontario $60).
 - **Symptom**: A single-name Ontario-jurisdiction NUANS order pays $40 + tax while the search-house pass-through cost is approximately $60. Korporex loses ~$20 on a 1-name Ontario order. Federal 1-name orders net ~$20 margin. Additional names are now also $40 each (was $45), so multi-name Ontario orders carry the same per-name loss-leader margin.

@@ -18,6 +18,7 @@ export type Mailable = {
   subject: string;
   html: string;
   to: Recipient[];
+  bcc?: Recipient[];
   replyTo?: Recipient;
   attachments?: EmailAttachment[];
 };
@@ -66,6 +67,7 @@ export async function sendMail(
   await tx.sendMail({
     from: formatRecipient({ email: CONTACT_ADDRESS, name: "Korporex" }),
     to: m.to.map(formatRecipient),
+    bcc: m.bcc?.length ? m.bcc.map(formatRecipient) : undefined,
     replyTo: m.replyTo ? formatRecipient(m.replyTo) : undefined,
     subject: m.subject,
     html: m.html,

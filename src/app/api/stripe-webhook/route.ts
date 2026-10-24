@@ -4,6 +4,7 @@ import { stripe } from "@/lib/stripe";
 import { JURISDICTION_LABELS, PKG_LABELS, REG_OFFICE_OPTIONS, type Jurisdiction, type Pkg, type RegOfficeAddon } from "@/lib/pricing";
 import { LEGAL_CONSULT_RECIPIENTS } from "@/lib/legalConsult";
 import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
+import { applyRenewalPayment, importOfficeClientFromSession } from "@/lib/officeRenewals";
 
 export const runtime = "nodejs";
 // Webhooks must always run fresh — never cache.
@@ -81,6 +82,16 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   }
 
   const productType = session.metadata?.productType ?? "incorporation";
+  if (productType === "office-renewal") {
+    await handleOfficeRenewalPaid(session);
+    return;
+  }
+  // Registered Office buyers (incorporation add-on or the standalone service)
+  // go onto /dashboard/office-renewals. Never fails the webhook: the daily
+  // cron re-syncs the last 3 days of sessions and catches anything missed.
+  await importOfficeClientFromSession(session).catch((err) =>
+    console.error("[stripe-webhook] office client import failed:", session.id, err),
+  );
   if (productType === "legal-consult") {
     await handleLegalConsultPaid(session);
     return;
@@ -159,6 +170,28 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   await sendNotification(subject, html, customerEmail, customerName);
 }
 
+// ─── Registered Office renewal (from /office-renewal) ───────────────────────
+
+async function handleOfficeRenewalPaid(session: Stripe.Checkout.Session) {
+  const clientId = session.metadata?.clientId;
+  const termEndsOn = session.metadata?.termEndsOn;
+  if (!clientId || !termEndsOn) {
+    console.error("[stripe-webhook] office-renewal session missing metadata:", session.id);
+    return;
+  }
+  const amount = ((session.amount_total ?? 0) / 100).toFixed(2);
+  const currency = (session.currency ?? "cad").toUpperCase();
+  // Throws on a database failure so Stripe retries; a repeat delivery of the
+  // same session is a no-op (office_events.stripe_session_id is unique).
+  await applyRenewalPayment({
+    clientId,
+    termEndsOn,
+    amountLabel: `$${amount} ${currency}`,
+    method: "stripe",
+    stripeSessionId: session.id,
+  });
+}
+
 async function handleCheckoutFailed(session: Stripe.Checkout.Session) {
   const productType = session.metadata?.productType ?? "incorporation";
   if (productType === "legal-consult") {
@@ -183,6 +216,13 @@ async function handleCheckoutFailed(session: Stripe.Checkout.Session) {
   }
   if (productType === "nuans") {
     await handleNuansFailed(session);
+    return;
+  }
+  if (productType === "office-renewal") {
+    await sendNotification(
+      `[PAYMENT FAILED] Office renewal: ${session.metadata?.businessName ?? "(unknown)"}`,
+      `<p>Async payment for a Registered Office renewal failed. The renewal date was not changed and reminders continue.</p><p>Stripe session: ${escapeHtml(session.id)}</p>`,
+    );
     return;
   }
 
