@@ -95,3 +95,6 @@ drop trigger if exists office_clients_touch_updated_at on public.office_clients;
 create trigger office_clients_touch_updated_at
   before update on public.office_clients
   for each row execute function public.office_clients_touch_updated_at();
+
+-- Make the new tables visible to the API immediately.
+notify pgrst, 'reload schema';
