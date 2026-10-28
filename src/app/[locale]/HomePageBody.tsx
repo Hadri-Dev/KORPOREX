@@ -12,10 +12,11 @@ const JURISDICTIONS = [
 ] as const;
 
 const OTHER_SERVICES = [
-  { key: "registrations", icon: FileText },
-  { key: "amendments", icon: Edit3 },
-  { key: "compliance", icon: ClipboardCheck },
-  { key: "businessUpdates", icon: RefreshCw },
+  // anchor = the matching category card id on /services
+  { key: "registrations", icon: FileText, anchor: "registrations" },
+  { key: "amendments", icon: Edit3, anchor: "changes" },
+  { key: "compliance", icon: ClipboardCheck, anchor: "compliance" },
+  { key: "businessUpdates", icon: RefreshCw, anchor: "updates" },
 ] as const;
 
 const STEPS = ["1", "2", "3"] as const;
@@ -164,7 +165,7 @@ export default function HomePageBody() {
             <p className="text-gray-600 mt-4 max-w-2xl mx-auto">{t("otherServices.lead")}</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {OTHER_SERVICES.map(({ key, icon: Icon }) => (
+            {OTHER_SERVICES.map(({ key, icon: Icon, anchor }) => (
               <div
                 key={key}
                 className="group flex flex-col bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm transition-shadow hover:shadow-md"
@@ -196,9 +197,12 @@ export default function HomePageBody() {
                     <p className="text-xs font-semibold text-gray-500">
                       {t(`otherServices.items.${key}.from`)}
                     </p>
-                    <span className="text-xs font-bold text-navy-900">
+                    <Link
+                      href={`/services#${anchor}`}
+                      className="text-xs font-bold text-navy-900 hover:text-gold-600 transition-colors"
+                    >
                       {t("learnMoreArrow")}
-                    </span>
+                    </Link>
                   </div>
                 </div>
               </div>

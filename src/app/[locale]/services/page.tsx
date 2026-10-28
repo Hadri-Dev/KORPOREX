@@ -14,6 +14,7 @@ type Lang = "en" | "fr" | "es";
 
 type Service = { name: string; from: string; href: string; varies?: boolean };
 type Category = {
+  id: string;
   icon: React.ElementType;
   title: string;
   description: string;
@@ -515,6 +516,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
   const t = COPY[lang];
 
   const categories: Category[] = categoryStructure.map(({ id, icon, services }) => ({
+    id,
     icon,
     title: t.categories[id].title,
     description: t.categories[id].description,
@@ -686,10 +688,11 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
 
           {/* Service categories: green header band + service list (Version 2) */}
           <div className="grid md:grid-cols-2 gap-6">
-            {categories.map(({ icon: Icon, title, description, services }) => (
+            {categories.map(({ id, icon: Icon, title, description, services }) => (
               <div
                 key={title}
-                className="flex flex-col bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm"
+                id={id}
+                className="scroll-mt-24 flex flex-col bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm"
               >
                 {/* Green header band with inset gold underline */}
                 <div className="relative flex items-start gap-4 bg-navy-900 text-white px-6 py-5">
