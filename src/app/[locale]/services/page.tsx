@@ -61,7 +61,7 @@ const categoryStructure = [
     id: "compliance",
     icon: ClipboardCheck,
     services: [
-      { from: "$25", href: "/services/corporation-profile-report" },
+      { from: "$19.99", href: "/services/corporation-profile-report" },
       { from: "$99", href: "/services/initial-return-on" },
       { from: "$49.99", href: "/services/annual-return-on" },
       { from: "$49.99", href: "/services/annual-return-federal" },

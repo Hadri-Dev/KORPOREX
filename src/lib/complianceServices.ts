@@ -110,7 +110,7 @@ export const COMPLIANCE_SERVICES: Record<ComplianceServiceSlug, ComplianceServic
     label: "Corporation Profile Report",
     h1: "Order a Corporation Profile Report",
     longLabel: "Corporation Profile Report (Ontario Business Registry)",
-    price: 25,
+    price: 19.99,
     tagline: "The official Ontario Business Registry record of a corporation, emailed to you as a PDF.",
     description:
       "A Corporation Profile Report is the official record the Ontario Business Registry holds for a corporation: its name, number, status, incorporation date, registered office and mailing addresses and, for Ontario corporations, the directors and officers on file. Banks, lenders, landlords and buyers often ask for one. Korporex orders the report and emails it to you.",

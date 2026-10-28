@@ -12,7 +12,7 @@ export const content: ServiceContentByLocale = {
       {
         type: "p",
         parts: [
-          "Korporex orders the Corporation Profile Report for an Ontario (OBCA) corporation, or for a federal (CBCA) corporation active in Ontario, and emails it to you as a PDF. You give us the corporation's name, and its number if you have it. The price is a flat $25 with the government fee included and no tax added.",
+          "Korporex orders the Corporation Profile Report for an Ontario (OBCA) corporation, or for a federal (CBCA) corporation active in Ontario, and emails it to you as a PDF. You give us the corporation's name, and its number if you have it. The price is a flat $19.99 with the government fee included and no tax added.",
         ],
       },
       { type: "h3", text: "What the report shows" },
@@ -78,7 +78,7 @@ export const content: ServiceContentByLocale = {
       {
         type: "p",
         parts: [
-          "Korporex commande le rapport de profil d'une société ontarienne (LSAO), ou d'une société fédérale (LCSA) active en Ontario, et vous l'envoie par courriel en format PDF. Vous nous indiquez la dénomination de la société, et son numéro si vous l'avez. Le prix est de 25 $ forfaitaire, droits gouvernementaux inclus et sans taxe ajoutée.",
+          "Korporex commande le rapport de profil d'une société ontarienne (LSAO), ou d'une société fédérale (LCSA) active en Ontario, et vous l'envoie par courriel en format PDF. Vous nous indiquez la dénomination de la société, et son numéro si vous l'avez. Le prix est de 19,99 $ forfaitaire, droits gouvernementaux inclus et sans taxe ajoutée.",
         ],
       },
       { type: "h3", text: "Ce que contient le rapport" },
@@ -144,7 +144,7 @@ export const content: ServiceContentByLocale = {
       {
         type: "p",
         parts: [
-          "Korporex solicita el informe de perfil (Corporation Profile Report) de una corporación de Ontario (OBCA), o de una corporación federal (CBCA) activa en Ontario, y se lo envía por correo electrónico en PDF. Usted nos indica el nombre de la corporación y su número, si lo tiene. El precio es una tarifa fija de 25 $, con la tasa gubernamental incluida y sin impuestos añadidos.",
+          "Korporex solicita el informe de perfil (Corporation Profile Report) de una corporación de Ontario (OBCA), o de una corporación federal (CBCA) activa en Ontario, y se lo envía por correo electrónico en PDF. Usted nos indica el nombre de la corporación y su número, si lo tiene. El precio es una tarifa fija de 19,99 $, con la tasa gubernamental incluida y sin impuestos añadidos.",
         ],
       },
       { type: "h3", text: "Qué muestra el informe" },
