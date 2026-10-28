@@ -51,7 +51,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "A separately ordered federal NUANS report is still required for some other federal transactions, including revivals and amalgamations under the CBCA. Some applicants also choose to run a preliminary search on their candidate names before they file, because the examiner will compare the name against the same records, and it is better to find a close conflict before the application than after it."
+        "text": "A separately ordered federal NUANS report is still required for some other federal transactions, including revivals and amalgamations under the CBCA. Some applicants also choose to run a preliminary search on their candidate names before they file, because the examiner will compare the name against the same records, and a close conflict then surfaces before the application rather than after it."
       },
       {
         "type": "paragraph",
@@ -183,7 +183,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "The government does not make the final decision based solely on the report. Federally, a Corporations Canada examiner reviews the report and the proposed name, weighs distinctiveness and potential confusion with existing names, and either approves the name or asks for changes. If the federal examiner needs more, you receive a Notice of action required with instructions to resubmit. Ontario works differently: it does not review proposed names for similarity at all. The incorporators are responsible for checking the report, and a conflicting name can later be challenged at a names hearing or in court."
+        "text": "The government does not make the final decision based solely on the search results. Federally, a Corporations Canada examiner reviews the proposed name against the search results, weighs distinctiveness and potential confusion with existing names, and either approves the name or asks for changes. If the federal examiner needs more, you receive a Notice of action required with instructions to resubmit. Ontario works differently: it does not review proposed names for similarity at all. The incorporators are responsible for checking the report, and a conflicting name can later be challenged at a names hearing or in court."
       },
       {
         "type": "heading",
@@ -196,7 +196,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "The practical lesson is timing. Order the search once the share structure, shareholders and directors are settled, not the day a name first comes up. A report that expires while the rest of the incorporation is still being negotiated is money spent twice."
+        "text": "Timing is what causes most re-orders. A report ordered before the share structure, shareholders and directors are settled can expire while the rest of the incorporation is still being negotiated, and a new report is then needed."
       },
       {
         "type": "heading",
@@ -300,11 +300,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "If the name is central to your brand, search the Canadian Trademarks Database, which CIPO maintains, and consider applying to register the name as a trademark under the Trademarks Act. That is a separate process with its own examination and timelines, and it is the step that protects a brand across Canada."
-      },
-      {
-        "type": "callout",
-        "text": "A NUANS report does not grant a trademark. Trademark registration through the Canadian Intellectual Property Office is something some owners pursue when a name is central to their brand. That is a separate process from incorporation."
+        "text": "The Canadian Trademarks Database, maintained by the Canadian Intellectual Property Office (CIPO), is free to search. Registering a name as a trademark under the Trademarks Act is a separate application with its own examination and timelines, and it is what protects a brand across Canada. Some owners pursue it when a name is central to their brand."
       },
       {
         "type": "heading",
@@ -373,7 +369,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "q": "How long is a NUANS report valid?",
-        "a": "90 days. Corporations Canada states that a NUANS search is valid for 90 days only, and Ontario will not accept a report dated more than 90 days before the articles are filed. If your filing is not accepted within that window, you need a new report, so it pays to order the search once the rest of the incorporation is ready."
+        "a": "90 days. Corporations Canada states that a NUANS search is valid for 90 days only, and Ontario will not accept a report dated more than 90 days before the articles are filed. If the filing is not accepted within that window, a new report is needed."
       },
       {
         "q": "Does a NUANS report mean my name is approved?",
@@ -381,11 +377,19 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "q": "Is a NUANS search the same as a trademark search?",
-        "a": "No. NUANS includes registered trademarks among the names it compares, but an approved corporate name gives you no trademark rights. If the name matters to your brand, search the Canadian Trademarks Database maintained by the Canadian Intellectual Property Office and consider registering a trademark, which is a separate application with its own examination."
+        "a": "No. NUANS includes registered trademarks among the names it compares, but an approved corporate name gives you no trademark rights. Trademark protection comes from registering under the Trademarks Act with the Canadian Intellectual Property Office, a separate application with its own examination. The Canadian Trademarks Database is free to search."
       },
       {
         "q": "Can I incorporate without a NUANS search?",
         "a": "Yes, by incorporating a numbered corporation. No Canadian jurisdiction requires a name search for a numbered company, because the registry assigns the name. You can carry on business under a brand by registering an operating name, and change the corporate name later by articles of amendment, which needs a name search where the jurisdiction requires one."
+      },
+      {
+        "q": "Is there a free NUANS search?",
+        "a": "There is no free NUANS report that can be filed. Free tools such as Canada's Business Registries search, the Ontario Business Registry and the Canadian Trademarks Database are useful for screening candidate names, but only a paid NUANS report carries the reference number that Ontario, Alberta and New Brunswick filings require. Federally, the name search runs inside Corporations Canada's Online Filing Centre as part of the incorporation."
+      },
+      {
+        "q": "How long does a NUANS search take?",
+        "a": "The report itself is generated as soon as the search runs. Federally, that happens inside the Online Filing Centre while you apply. For an Ontario, Alberta or New Brunswick filing, the report comes from a search provider: Korporex runs each order and emails the report, normally within hours."
       }
     ]
   },
@@ -437,7 +441,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "Un rapport NUANS fédéral commandé séparément reste requis pour certaines autres opérations fédérales, notamment les reconstitutions et les fusions en vertu de la LCSA. Certains demandeurs choisissent aussi d'effectuer une recherche préliminaire sur leurs noms candidats avant le dépôt, puisque l'examinateur comparera le nom aux mêmes dossiers, et qu'il vaut mieux découvrir un conflit proche avant la demande qu'après."
+        "text": "Un rapport NUANS fédéral commandé séparément reste requis pour certaines autres opérations fédérales, notamment les reconstitutions et les fusions en vertu de la LCSA. Certains demandeurs choisissent aussi d'effectuer une recherche préliminaire sur leurs noms candidats avant le dépôt, puisque l'examinateur comparera le nom aux mêmes dossiers : un conflit proche ressort ainsi avant la demande plutôt qu'après."
       },
       {
         "type": "paragraph",
@@ -569,7 +573,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "Le gouvernement ne prend pas la décision finale uniquement à partir du rapport. Au fédéral, un examinateur de Corporations Canada examine le rapport et le nom proposé, soupèse le caractère distinctif et le risque de confusion avec des noms existants, puis approuve le nom ou demande des modifications. Si l'examinateur fédéral a besoin de renseignements supplémentaires, vous recevez un avis de mesure requise accompagné d'instructions pour présenter de nouveau la demande. L'Ontario fonctionne autrement : il n'examine pas du tout la similitude des noms proposés. Il incombe aux fondateurs de vérifier le rapport, et un nom conflictuel peut être contesté plus tard lors d'une audience sur les dénominations ou devant les tribunaux."
+        "text": "Le gouvernement ne prend pas la décision finale uniquement à partir des résultats de la recherche. Au fédéral, un examinateur de Corporations Canada compare le nom proposé aux résultats de la recherche, soupèse le caractère distinctif et le risque de confusion avec des noms existants, puis approuve le nom ou demande des modifications. Si l'examinateur fédéral a besoin de renseignements supplémentaires, vous recevez un avis de mesure requise accompagné d'instructions pour présenter de nouveau la demande. L'Ontario fonctionne autrement : il n'examine pas du tout la similitude des noms proposés. Il incombe aux fondateurs de vérifier le rapport, et un nom conflictuel peut être contesté plus tard lors d'une audience sur les dénominations ou devant les tribunaux."
       },
       {
         "type": "heading",
@@ -582,7 +586,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "La leçon pratique tient au moment choisi. Commandez la recherche une fois que la structure du capital, les actionnaires et les administrateurs sont fixés, et non le jour où un nom est évoqué pour la première fois. Un rapport qui expire pendant que le reste de la constitution est encore en négociation, c'est de l'argent dépensé deux fois."
+        "text": "Le moment choisi est la cause la plus fréquente des nouvelles commandes. Un rapport commandé avant que la structure du capital, les actionnaires et les administrateurs soient fixés peut expirer pendant que le reste de la constitution est encore en négociation, et un nouveau rapport devient alors nécessaire."
       },
       {
         "type": "heading",
@@ -686,11 +690,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "Si le nom est au cœur de votre marque, consultez la Base de données sur les marques de commerce canadiennes, tenue par l'OPIC, et envisagez de demander l'enregistrement du nom comme marque de commerce en vertu de la Loi sur les marques de commerce. Il s'agit d'un processus distinct, avec son propre examen et ses propres délais, et c'est l'étape qui protège une marque partout au Canada."
-      },
-      {
-        "type": "callout",
-        "text": "Un rapport NUANS n'accorde pas de marque de commerce. L'enregistrement d'une marque de commerce, que certains propriétaires entreprennent lorsque le nom est au cœur de leur marque, se fait auprès de l'Office de la propriété intellectuelle du Canada. C'est un processus distinct de la constitution en société."
+        "text": "La Base de données sur les marques de commerce canadiennes, tenue par l'Office de la propriété intellectuelle du Canada (OPIC), peut être consultée gratuitement. L'enregistrement d'un nom comme marque de commerce en vertu de la Loi sur les marques de commerce est une demande distincte, avec son propre examen et ses propres délais, et c'est ce qui protège une marque partout au Canada. Certains propriétaires l'entreprennent lorsque le nom est au cœur de leur marque."
       },
       {
         "type": "heading",
@@ -759,7 +759,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "q": "Combien de temps un rapport NUANS est-il valide ?",
-        "a": "90 jours. Corporations Canada précise qu'une recherche NUANS n'est valide que 90 jours, et l'Ontario n'accepte pas un rapport daté de plus de 90 jours avant le dépôt des statuts. Si votre dépôt n'est pas accepté dans ce délai, il vous faut un nouveau rapport. Il vaut donc mieux commander la recherche lorsque le reste de la constitution est prêt."
+        "a": "90 jours. Corporations Canada précise qu'une recherche NUANS n'est valide que 90 jours, et l'Ontario n'accepte pas un rapport daté de plus de 90 jours avant le dépôt des statuts. Si le dépôt n'est pas accepté dans ce délai, un nouveau rapport est nécessaire."
       },
       {
         "q": "Un rapport NUANS signifie-t-il que mon nom est approuvé ?",
@@ -767,11 +767,19 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "q": "Une recherche NUANS équivaut-elle à une recherche de marque de commerce ?",
-        "a": "Non. NUANS inclut les marques de commerce enregistrées parmi les noms comparés, mais une dénomination sociale approuvée ne vous confère aucun droit de marque. Si le nom compte pour votre image de marque, consultez la Base de données sur les marques de commerce canadiennes de l'Office de la propriété intellectuelle du Canada et envisagez une demande d'enregistrement, qui suit son propre examen."
+        "a": "Non. NUANS inclut les marques de commerce enregistrées parmi les noms comparés, mais une dénomination sociale approuvée ne vous confère aucun droit de marque. La protection d'une marque découle de son enregistrement en vertu de la Loi sur les marques de commerce auprès de l'Office de la propriété intellectuelle du Canada, une demande distincte qui suit son propre examen. La Base de données sur les marques de commerce canadiennes peut être consultée gratuitement."
       },
       {
         "q": "Puis-je me constituer sans recherche NUANS ?",
         "a": "Oui, en constituant une société à matricule. Aucune administration canadienne n'exige de recherche de nom pour une société à matricule, puisque le registre attribue le nom. Vous pouvez exercer vos activités sous une marque en enregistrant un nom commercial, puis changer la dénomination plus tard par statuts de modification, ce qui exige une recherche de nom là où l'administration en impose une."
+      },
+      {
+        "q": "Existe-t-il une recherche NUANS gratuite ?",
+        "a": "Il n'existe pas de rapport NUANS gratuit qui puisse être déposé. Des outils gratuits comme la recherche dans les Registres des entreprises du Canada, le Registre des entreprises de l'Ontario et la Base de données sur les marques de commerce canadiennes sont utiles pour présélectionner des noms, mais seul un rapport NUANS payant porte le numéro de référence qu'exigent les dépôts en Ontario, en Alberta et au Nouveau-Brunswick. Au fédéral, la recherche de nom s'effectue dans le Centre de dépôt en ligne de Corporations Canada, dans le cadre de la constitution."
+      },
+      {
+        "q": "Combien de temps prend une recherche NUANS ?",
+        "a": "Le rapport lui-même est produit dès que la recherche est lancée. Au fédéral, cela se fait dans le Centre de dépôt en ligne pendant la demande. Pour un dépôt en Ontario, en Alberta ou au Nouveau-Brunswick, le rapport provient d'un fournisseur de recherche : Korporex traite chaque commande et envoie le rapport par courriel, normalement en quelques heures."
       }
     ]
   },
@@ -823,7 +831,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "Un informe NUANS federal encargado por separado sigue siendo obligatorio para otras operaciones federales, como las reactivaciones y las fusiones bajo la CBCA. Algunos solicitantes también optan por hacer una búsqueda preliminar de sus nombres candidatos antes de presentar la solicitud, ya que el examinador comparará el nombre con los mismos registros, y es mejor encontrar un conflicto cercano antes de la solicitud que después."
+        "text": "Un informe NUANS federal encargado por separado sigue siendo obligatorio para otras operaciones federales, como las reactivaciones y las fusiones bajo la CBCA. Algunos solicitantes también optan por hacer una búsqueda preliminar de sus nombres candidatos antes de presentar la solicitud, ya que el examinador comparará el nombre con los mismos registros: así, un conflicto cercano aparece antes de la solicitud y no después."
       },
       {
         "type": "paragraph",
@@ -955,7 +963,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "El gobierno no toma la decisión final basándose únicamente en el informe. A nivel federal, un examinador de Corporations Canada revisa el informe y el nombre propuesto, sopesa el carácter distintivo y el posible riesgo de confusión con nombres existentes, y aprueba el nombre o pide cambios. Si el examinador federal necesita más información, usted recibe un aviso de acción requerida (Notice of action required) con instrucciones para volver a presentar la solicitud. Ontario funciona de otra manera: no revisa en absoluto la similitud de los nombres propuestos. Corresponde a los fundadores revisar el informe, y un nombre en conflicto puede impugnarse después en una audiencia sobre nombres o ante los tribunales."
+        "text": "El gobierno no toma la decisión final basándose únicamente en los resultados de la búsqueda. A nivel federal, un examinador de Corporations Canada compara el nombre propuesto con los resultados de la búsqueda, sopesa el carácter distintivo y el posible riesgo de confusión con nombres existentes, y aprueba el nombre o pide cambios. Si el examinador federal necesita más información, usted recibe un aviso de acción requerida (Notice of action required) con instrucciones para volver a presentar la solicitud. Ontario funciona de otra manera: no revisa en absoluto la similitud de los nombres propuestos. Corresponde a los fundadores revisar el informe, y un nombre en conflicto puede impugnarse después en una audiencia sobre nombres o ante los tribunales."
       },
       {
         "type": "heading",
@@ -968,7 +976,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "La lección práctica es el momento. Encargue la búsqueda cuando la estructura de acciones, los accionistas y los administradores estén definidos, no el día en que surge un nombre por primera vez. Un informe que vence mientras el resto de la constitución todavía se negocia es dinero gastado dos veces."
+        "text": "El momento es lo que causa la mayoría de los nuevos encargos. Un informe encargado antes de que la estructura de acciones, los accionistas y los administradores estén definidos puede vencer mientras el resto de la constitución todavía se negocia, y entonces se necesita un informe nuevo."
       },
       {
         "type": "heading",
@@ -1072,11 +1080,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "type": "paragraph",
-        "text": "Si el nombre es central para su marca, consulte la Base de Datos de Marcas Canadienses (Canadian Trademarks Database), que mantiene la CIPO, y considere solicitar el registro del nombre como marca bajo la Ley de Marcas (Trademarks Act). Es un proceso distinto, con su propio examen y sus propios plazos, y es el paso que protege una marca en todo Canadá."
-      },
-      {
-        "type": "callout",
-        "text": "Un informe NUANS no otorga una marca registrada. El registro de una marca, que algunos propietarios solicitan cuando el nombre es central para su marca, se tramita ante la Oficina de Propiedad Intelectual de Canadá. Ese es un proceso distinto de la constitución en sociedad."
+        "text": "La Base de Datos de Marcas Canadienses (Canadian Trademarks Database), que mantiene la Oficina de Propiedad Intelectual de Canadá (CIPO), se puede consultar gratis. Registrar un nombre como marca bajo la Ley de Marcas (Trademarks Act) es una solicitud aparte, con su propio examen y sus propios plazos, y es lo que protege una marca en todo Canadá. Algunos propietarios lo hacen cuando el nombre es central para su marca."
       },
       {
         "type": "heading",
@@ -1145,7 +1149,7 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "q": "¿Cuánto tiempo es válido un informe NUANS?",
-        "a": "90 días. Corporations Canada indica que una búsqueda NUANS solo es válida por 90 días, y Ontario no acepta un informe con fecha de más de 90 días antes de la presentación de los estatutos. Si su presentación no se acepta dentro de ese plazo, necesitará un informe nuevo, así que conviene encargar la búsqueda cuando el resto de la constitución esté listo."
+        "a": "90 días. Corporations Canada indica que una búsqueda NUANS solo es válida por 90 días, y Ontario no acepta un informe con fecha de más de 90 días antes de la presentación de los estatutos. Si la presentación no se acepta dentro de ese plazo, se necesita un informe nuevo."
       },
       {
         "q": "¿Un informe NUANS significa que mi nombre está aprobado?",
@@ -1153,11 +1157,19 @@ export const expanded: Record<"en" | "fr" | "es", ExpandedArticle> = {
       },
       {
         "q": "¿Una búsqueda NUANS es lo mismo que una búsqueda de marcas?",
-        "a": "No. NUANS incluye las marcas registradas entre los nombres que compara, pero una denominación social aprobada no le da ningún derecho de marca. Si el nombre es importante para su marca, consulte la Base de Datos de Marcas Canadienses de la Oficina de Propiedad Intelectual de Canadá y considere registrar una marca, que es una solicitud aparte con su propio examen."
+        "a": "No. NUANS incluye las marcas registradas entre los nombres que compara, pero una denominación social aprobada no le da ningún derecho de marca. La protección de una marca proviene de su registro bajo la Ley de Marcas ante la Oficina de Propiedad Intelectual de Canadá, una solicitud aparte con su propio examen. La Base de Datos de Marcas Canadienses se puede consultar gratis."
       },
       {
         "q": "¿Puedo constituirme sin una búsqueda NUANS?",
         "a": "Sí, constituyendo una sociedad numérica. Ninguna jurisdicción canadiense exige búsqueda de nombre para una sociedad numérica, porque el registro asigna el nombre. Puede operar bajo una marca registrando un nombre comercial y cambiar la denominación más adelante mediante estatutos de modificación, lo que requiere una búsqueda de nombre donde la jurisdicción la exija."
+      },
+      {
+        "q": "¿Existe una búsqueda NUANS gratuita?",
+        "a": "No existe un informe NUANS gratuito que se pueda presentar. Herramientas gratuitas como la búsqueda en Canada's Business Registries, el Ontario Business Registry y la Base de Datos de Marcas Canadienses sirven para preseleccionar nombres, pero solo un informe NUANS de pago tiene el número de referencia que exigen las presentaciones en Ontario, Alberta y Nuevo Brunswick. A nivel federal, la búsqueda de nombre se realiza dentro del Centro de Presentación en Línea de Corporations Canada como parte de la constitución."
+      },
+      {
+        "q": "¿Cuánto tarda una búsqueda NUANS?",
+        "a": "El informe se genera en cuanto se ejecuta la búsqueda. A nivel federal, eso ocurre dentro del Centro de Presentación en Línea mientras presenta la solicitud. Para una presentación en Ontario, Alberta o Nuevo Brunswick, el informe lo proporciona un proveedor de búsquedas: Korporex procesa cada pedido y envía el informe por correo electrónico, normalmente en pocas horas."
       }
     ]
   }

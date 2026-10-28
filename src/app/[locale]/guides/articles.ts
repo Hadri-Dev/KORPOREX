@@ -3801,7 +3801,7 @@ const EXPANDED: Record<string, { updated: string; liveFrom?: string; byLocale: R
   "holding-company": { updated: "2026-10-04", byLocale: holdingCompany },
   "incorporating-ontario": { updated: "2026-10-04", byLocale: incorporatingOntario },
   "minute-book": { updated: "2026-10-04", byLocale: minuteBook },
-  "nuans-name-search": { updated: "2026-10-04", byLocale: nuansNameSearch },
+  "nuans-name-search": { updated: "2026-10-27", byLocale: nuansNameSearch },
   "register-business-ontario": { updated: "2026-10-04", byLocale: registerBusinessOntario },
   "salary-vs-dividends": { updated: "2026-10-04", byLocale: salaryVsDividends },
   "confirm-gst-hst-number": { updated: "2026-10-04", byLocale: confirmGstHstNumber },
