@@ -676,6 +676,10 @@
       "title": "File a Notice of Change | Korporex",
       "description": "Report changes to your corporation's directors or registered office. Korporex prepares and files the required Notice of Change with the registry."
     },
+    "corporationProfileReport": {
+      "title": "Order a Corporation Profile Report | Korporex",
+      "description": "Get the official Ontario Business Registry Corporation Profile Report for any Ontario or federal corporation, emailed to you as a PDF. $25 flat, no tax added."
+    },
     "dissolveBusiness": {
       "title": "Dissolve a Corporation in Canada | Korporex",
       "description": "Voluntarily wind up your corporation. Korporex prepares and files your Articles of Dissolution with the federal or Ontario registry."

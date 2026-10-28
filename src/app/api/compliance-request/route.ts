@@ -7,6 +7,7 @@ import {
   type AnnualReturnFederalSubmission,
   type AnnualResolutionSubmission,
   type NoticeOfChangeSubmission,
+  type CorporationProfileReportSubmission,
   type AmendmentJurisdiction,
 } from "@/lib/complianceSchemas";
 import { COMPLIANCE_SERVICES, type ComplianceServiceSlug } from "@/lib/complianceServices";
@@ -24,15 +25,17 @@ type CompliancePayload =
   | AnnualReturnOntarioSubmission
   | AnnualReturnFederalSubmission
   | AnnualResolutionSubmission
-  | NoticeOfChangeSubmission;
+  | NoticeOfChangeSubmission
+  | CorporationProfileReportSubmission;
 
 function computeCompliancePricing(
   service: ComplianceServiceSlug,
   billingCountry: string,
   billingRegion: string
 ): Pricing {
-  const subtotal = COMPLIANCE_SERVICES[service].price;
-  const taxRate = getTaxRate(billingCountry, billingRegion);
+  const meta = COMPLIANCE_SERVICES[service];
+  const subtotal = meta.price;
+  const taxRate = meta.taxExempt ? 0 : getTaxRate(billingCountry, billingRegion);
   const tax = Math.round(subtotal * taxRate * 100) / 100;
   const total = Math.round((subtotal + tax) * 100) / 100;
   return { subtotal, taxRate, tax, total };
@@ -130,7 +133,7 @@ export async function POST(req: Request) {
         serviceLabel: meta.longLabel,
         jurisdiction,
         corpName: payload.corporation.corpName,
-        corpNumber: payload.corporation.corpNumber,
+        corpNumber: payload.corporation.corpNumber ?? "",
       },
       payment_intent_data: {
         description: `Korporex - ${orderRef} - ${meta.longLabel}`,
@@ -253,7 +256,7 @@ function buildHtmlBody(args: {
   const corp = payload.corporation;
   const corpRows = [
     row("Corporation name", corp.corpName),
-    row("Corporation number", corp.corpNumber),
+    row("Corporation number", corp.corpNumber || "(not provided: search by name)"),
     ...(corp.businessNumber ? [row("Business number (CRA)", corp.businessNumber)] : []),
   ].join("");
 
@@ -467,6 +470,15 @@ function serviceDetailHtml(service: ComplianceServiceSlug, payload: CompliancePa
           .join("");
       }
       return parts;
+    }
+    case "corporation-profile-report": {
+      const p = payload as CorporationProfileReportSubmission;
+      const summaryRows = [
+        row("Product", "Ontario Business Registry Profile Report"),
+        row("Deliver to", p.contact.contactEmail),
+        ...(p.purpose ? [row("Purpose", p.purpose)] : []),
+      ].join("");
+      return `<table style="width:100%;border-collapse:collapse;">${summaryRows}</table>`;
     }
   }
 }

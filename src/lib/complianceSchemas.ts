@@ -19,6 +19,8 @@
 //   notice-of-change       → Federal: Form 3 (Reg. office), Form 6 (Directors).
 //                            Ontario: CIA Notice of Change. Single bundled
 //                            filing covering multiple change types.
+//   corporation-profile-report → Ontario Business Registry Profile Report
+//                            (a search product, not a filing)
 
 import { z } from "zod";
 import {
@@ -433,6 +435,31 @@ export const noticeOfChangeSchema = z
 
 export type NoticeOfChangeSubmission = z.infer<typeof noticeOfChangeSchema>;
 
+// ── 7. Corporation Profile Report ───────────────────────────────────────────
+//
+// Ontario Business Registry search product (Profile Report, $8 government fee,
+// included in our flat price). The registry is searched by name or number, so
+// the legal name is required and the number is optional but speeds the match.
+// Federal corporations active in Ontario also have an Ontario registry record,
+// but it holds only basic information (status shows "Refer to Jurisdiction" and
+// no directors/officers are listed), per ontario.ca/page/guide-corporation-profile-report.
+
+export const corporationProfileReportSchema = z
+  .object({
+    corporation: z.object({
+      jurisdiction: corporationIdSchema.shape.jurisdiction,
+      corpName: corporationIdSchema.shape.corpName,
+      corpNumber: z.string().trim().max(50).optional().or(z.literal("")),
+      businessNumber: corporationIdSchema.shape.businessNumber,
+    }),
+    /** Optional: what the report is for (bank, lender, due diligence...). */
+    purpose: z.string().trim().max(500).optional().or(z.literal("")),
+    contact: contactSchema,
+  })
+  .merge(billingSchema);
+
+export type CorporationProfileReportSubmission = z.infer<typeof corporationProfileReportSchema>;
+
 // ── Discriminated union for the API route ───────────────────────────────────
 
 export const complianceRequestSchema = z.discriminatedUnion("service", [
@@ -442,6 +469,7 @@ export const complianceRequestSchema = z.discriminatedUnion("service", [
   z.object({ service: z.literal("annual-resolution-on"), payload: annualResolutionOntarioSchema }),
   z.object({ service: z.literal("annual-resolution-federal"), payload: annualResolutionFederalSchema }),
   z.object({ service: z.literal("notice-of-change"), payload: noticeOfChangeSchema }),
+  z.object({ service: z.literal("corporation-profile-report"), payload: corporationProfileReportSchema }),
 ]);
 
 export type ComplianceRequest = z.infer<typeof complianceRequestSchema>;

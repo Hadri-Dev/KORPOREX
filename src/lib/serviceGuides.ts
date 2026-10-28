@@ -26,6 +26,7 @@ export const SERVICE_GUIDES: Record<string, string[]> = {
   "/services/change-name": ["nuans-report-ontario", "named-vs-numbered", "nuans-name-search", "name-rejected", "articles-amendment-ontario"],
   "/services/change-shareholder": ["shareholder-agreements", "minute-book", "holding-company"],
   "/services/continuance": ["incorporate-canada", "articles-of-incorporation", "minute-book"],
+  "/services/corporation-profile-report": ["annual-returns", "business-bank-account", "named-vs-numbered"],
   "/services/dissolve-business": ["dissolve-corporation-ontario", "annual-returns", "minute-book"],
   "/services/extra-provincial": ["extra-provincial-ontario", "extra-provincial-alberta", "incorporate-canada", "register-business-ontario", "nuans-by-province", "nuans-report-alberta"],
   "/services/initial-minute-book": ["minute-book", "articles-of-incorporation", "shareholder-agreements"],

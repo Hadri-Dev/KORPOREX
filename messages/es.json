@@ -676,6 +676,10 @@
       "title": "Presentar un Aviso de Cambio | Korporex",
       "description": "Reporta cambios en los directores o el domicilio social de tu sociedad. Korporex prepara y presenta el Aviso de Cambio requerido ante el registro."
     },
+    "corporationProfileReport": {
+      "title": "Solicite un informe de perfil corporativo | Korporex",
+      "description": "Obtenga el informe de perfil oficial del Registro de Empresas de Ontario de cualquier corporación de Ontario o federal, enviado en PDF por correo. 25 $ fijo, sin impuestos."
+    },
     "dissolveBusiness": {
       "title": "Disolver una Sociedad en Canadá | Korporex",
       "description": "Liquida voluntariamente tu sociedad. Korporex prepara y presenta tus estatutos de disolución ante el registro federal o de Ontario."

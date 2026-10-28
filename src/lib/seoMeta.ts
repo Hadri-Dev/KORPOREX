@@ -83,6 +83,7 @@ const BODY_TRANSLATED_PATHS = new Set<string>([
   "/services/annual-return-federal", // order wizard + service copy are localized (AnnualReturnFederalBody, CurrentPeopleSection, serviceContent/annual-return-federal)
   "/services/annual-resolution-on", // order wizard + service copy are localized (AnnualResolutionWizard, serviceContent/annual-resolution-on)
   "/services/annual-resolution-federal", // order wizard + service copy are localized (AnnualResolutionWizard, serviceContent/annual-resolution-federal)
+  "/services/corporation-profile-report", // order wizard + service copy are localized (CorporationProfileReportBody, serviceContent/corporation-profile-report)
   "/services/notice-of-change", // order wizard + service copy are localized (NoticeOfChangeBody, serviceContent/notice-of-change)
   "/services/initial-return-on", // order wizard + service copy are localized (InitialReturnOnBody, serviceContent/initial-return-on)
   "/services/change-address", // order wizard + service copy are localized (ChangeAddressBody, serviceContent/change-address)

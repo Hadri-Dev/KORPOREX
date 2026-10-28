@@ -16,7 +16,8 @@ export type ComplianceServiceSlug =
   | "annual-return-federal"
   | "annual-resolution-on"
   | "annual-resolution-federal"
-  | "notice-of-change";
+  | "notice-of-change"
+  | "corporation-profile-report";
 
 export type ComplianceService = {
   slug: ComplianceServiceSlug;
@@ -31,6 +32,8 @@ export type ComplianceService = {
   description: string;
   /** Path under /services/. */
   path: string;
+  /** Flat price with no GST/HST added at checkout, whatever the billing province. */
+  taxExempt?: boolean;
 };
 
 export const COMPLIANCE_SERVICES: Record<ComplianceServiceSlug, ComplianceService> = {
@@ -99,6 +102,20 @@ export const COMPLIANCE_SERVICES: Record<ComplianceServiceSlug, ComplianceServic
     description:
       "File a combined Notice of Change with the appropriate registry when you have several updates to report at once (e.g., a director change + an officer appointment + a new mailing address). Cheaper than filing each change separately.",
     path: "/services/notice-of-change",
+  },
+  // A registry search, not a filing. Listed here because customers order it to
+  // check their compliance status (or prove good standing) before a filing.
+  "corporation-profile-report": {
+    slug: "corporation-profile-report",
+    label: "Corporation Profile Report",
+    h1: "Order a Corporation Profile Report",
+    longLabel: "Corporation Profile Report (Ontario Business Registry)",
+    price: 25,
+    tagline: "The official Ontario Business Registry record of a corporation, emailed to you as a PDF.",
+    description:
+      "A Corporation Profile Report is the official record the Ontario Business Registry holds for a corporation: its name, number, status, incorporation date, registered office and mailing addresses and, for Ontario corporations, the directors and officers on file. Banks, lenders, landlords and buyers often ask for one. Korporex orders the report and emails it to you.",
+    path: "/services/corporation-profile-report",
+    taxExempt: true,
   },
 };
 
