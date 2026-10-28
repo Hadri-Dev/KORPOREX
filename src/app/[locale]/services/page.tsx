@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 
 type Lang = "en" | "fr" | "es";
 
-type Service = { name: string; from: string; href: string };
+type Service = { name: string; from: string; href: string; varies?: boolean };
 type Category = {
   icon: React.ElementType;
   title: string;
@@ -21,7 +21,8 @@ type Category = {
 };
 
 // Locale-independent structure: ids, prices and links. Visible text comes
-// from COPY below, keyed by the same ids / hrefs.
+// from COPY below, keyed by the same ids / hrefs. `varies` marks the services
+// whose price depends on options; only those show the "From" prefix.
 const jurisdictionOptions = [
   { id: "federal", from: "$749", href: "/incorporate?jurisdiction=federal" },
   { id: "ontario", from: "$599", href: "/incorporate?jurisdiction=ontario" },
@@ -48,7 +49,7 @@ const categoryStructure = [
     id: "changes",
     icon: Edit3,
     services: [
-      { from: "$399.99", href: "/services/change-name" },
+      { from: "$399.99", href: "/services/change-name", varies: true },
       { from: "$149", href: "/services/change-director" },
       { from: "$149", href: "/services/change-shareholder" },
       { from: "$99", href: "/services/change-address" },
@@ -72,12 +73,12 @@ const categoryStructure = [
     id: "updates",
     icon: RefreshCw,
     services: [
-      { from: "$399", href: "/services/initial-minute-book" },
+      { from: "$399", href: "/services/initial-minute-book", varies: true },
       { from: "$199", href: "/services/dissolve-business" },
       { from: "$249", href: "/services/revive-business" },
       { from: "$499", href: "/services/amalgamation" },
       { from: "$349", href: "/services/continuance" },
-      { from: "$599.88/yr", href: "/services/registered-office" },
+      { from: "$599.88/yr", href: "/services/registered-office", varies: true },
     ],
   },
 ] as const;
@@ -95,6 +96,7 @@ type Copy = {
   jurisdictions: Record<JurisdictionId, { name: string; statute: string; pitch: string }>;
   from: string;
   perYear: string;
+  taxNote: string;
   packagesH3: string;
   compare: string;
   mostPopular: string;
@@ -144,6 +146,7 @@ const COPY: Record<Lang, Copy> = {
     },
     from: "From",
     perYear: "/yr",
+    taxNote: "Prices in CAD. Applicable GST/HST is added at checkout, except on the Corporation Profile Report.",
     packagesH3: "Three packages, one transparent price",
     compare: "Compare full features",
     mostPopular: "Most Popular",
@@ -268,6 +271,7 @@ const COPY: Record<Lang, Copy> = {
     },
     from: "À partir de",
     perYear: "/an",
+    taxNote: "Prix en dollars canadiens. La TPS/TVH applicable est ajoutée au paiement, sauf pour le rapport de profil de société.",
     packagesH3: "Trois forfaits, un prix transparent",
     compare: "Comparer toutes les fonctionnalités",
     mostPopular: "Le plus populaire",
@@ -393,6 +397,7 @@ const COPY: Record<Lang, Copy> = {
     },
     from: "Desde",
     perYear: "/año",
+    taxNote: "Precios en CAD. El GST/HST aplicable se añade al pagar, excepto en el informe de perfil corporativo.",
     packagesH3: "Tres paquetes, un precio transparente",
     compare: "Comparar todas las funciones",
     mostPopular: "Más popular",
@@ -513,10 +518,11 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
     icon,
     title: t.categories[id].title,
     description: t.categories[id].description,
-    services: services.map(({ from, href }) => ({
+    services: services.map(({ from, href, ...rest }) => ({
       name: t.serviceNames[href] ?? COPY.en.serviceNames[href] ?? href,
       from: localizePrice(from, t),
       href,
+      varies: "varies" in rest && rest.varies,
     })),
   }));
 
@@ -699,7 +705,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
 
                 {/* Service list: each row fills solid green on hover */}
                 <div className="p-3 sm:p-4">
-                  {services.map(({ name, from, href }, i) => (
+                  {services.map(({ name, from, href, varies }, i) => (
                     <Link
                       key={href}
                       href={href}
@@ -712,7 +718,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
                       </span>
                       <span className="flex items-center gap-2.5 shrink-0">
                         <span className="text-xs font-semibold text-gray-500 group-hover:text-gold-500 whitespace-nowrap transition-colors">
-                          {t.from} {from}
+                          {varies ? `${t.from} ${from}` : from}
                         </span>
                         <ArrowRight
                           size={15}
@@ -725,6 +731,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
               </div>
             ))}
           </div>
+          <p className="mt-6 text-xs text-gray-500 text-center">{t.taxNote}</p>
         </div>
       </section>
 
