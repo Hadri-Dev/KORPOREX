@@ -93,12 +93,12 @@ export const articles: Article[] = [
     locale: "en",
     group: "incorporate-canada",
     category: "Jurisdiction Comparisons",
-    title: "How to Incorporate in Canada: Federal vs. Provincial",
+    title: "Federal vs Provincial Incorporation in Canada: Which to Choose",
     excerpt:
       "The first real decision when you incorporate in Canada is federal or provincial. We break down the differences, costs, and steps so you can incorporate with confidence.",
-    metaTitle: "Incorporate in Canada: Federal vs Provincial | Korporex",
+    metaTitle: "Federal vs Provincial Incorporation in Canada | Korporex",
     metaDescription:
-      "How to incorporate in Canada, step by step. Compare federal vs provincial incorporation, name protection, costs, and filings to choose the right route.",
+      "Federal vs provincial incorporation in Canada compared: name protection, costs, filings and where you can operate, so you can choose the right route.",
     readTime: "7 min read",
     updated: "2026-06-01",
     content: [
@@ -481,12 +481,12 @@ export const articles: Article[] = [
     locale: "en",
     group: "incorporating-ontario",
     category: "Jurisdiction Comparisons",
-    title: "Incorporating in Ontario: Everything You Need to Know",
+    title: "How to Incorporate a Business in Ontario: Step-by-Step Guide",
     excerpt:
       "Ontario is home to the majority of Canadian small businesses. This guide walks through the Ontario Business Corporations Act, costs, timelines, and what you'll receive after filing.",
-    metaTitle: "Incorporating in Ontario: What You Need to Know | Korporex",
+    metaTitle: "How to Incorporate a Business in Ontario | Korporex",
     metaDescription:
-      "A complete guide to incorporating in Ontario under the OBCA: requirements, costs, timelines, and what you receive after filing with the Ontario registry.",
+      "How to incorporate a business in Ontario, step by step: NUANS name search, OBCA filing, the $300 government fee, timelines and what you receive after.",
     readTime: "7 min read",
     updated: "2026-04-21",
     content: [
@@ -625,7 +625,7 @@ export const articles: Article[] = [
       { type: "callout", text: "The tax you collect is not your money. Set it aside as it comes in, or you will feel it at filing time." },
       { type: "heading", id: "getting-it-set-up", text: "Getting it set up at the right time" },
       { type: "paragraph", text: "Registration itself is administrative and you can do it yourself. The decisions around it are where it gets less obvious: whether to register voluntarily, how the timing lines up with incorporating, and how the tax flows once you have employees or sell across provinces. Those are worth a short conversation with a qualified accountant before you commit." },
-      { type: "paragraph", text: "If you are incorporating in Ontario, Korporex sets up your CRA business number and GST/HST registration as part of the online filing, so your tax accounts are in place from day one.", parts: ["If you are ", { text: "incorporating in Ontario", href: "/guides/how-to-register-a-business-in-ontario" }, ", Korporex sets up your CRA business number and GST/HST registration as part of the online filing, so your tax accounts are in place from day one."] },
+      { type: "paragraph", text: "If you are incorporating in Ontario, Korporex sets up your CRA business number and GST/HST registration as part of the online filing, so your tax accounts are in place from day one.", parts: ["If you are ", { text: "incorporating in Ontario", href: "/guides/incorporating-in-ontario" }, ", Korporex sets up your CRA business number and GST/HST registration as part of the online filing, so your tax accounts are in place from day one."] },
     ],
   },
   {
@@ -773,7 +773,7 @@ export const articles: Article[] = [
       { type: "callout", text: "La taxe que vous percevez n'est pas votre argent. Mettez-la de côté au fur et à mesure, sinon vous la ressentirez au moment de la déclaration." },
       { type: "heading", id: "bon-moment", text: "Bien choisir le moment" },
       { type: "paragraph", text: "L'inscription en soi est administrative et vous pouvez la faire vous-même. Là où cela devient moins évident, ce sont les décisions qui l'entourent : faut-il s'inscrire volontairement, comment le moment choisi s'arrime à la constitution en société, et comment la taxe circule une fois que vous avez des employés ou que vous vendez dans plusieurs provinces. Cela vaut une courte conversation avec un comptable qualifié avant de vous engager." },
-      { type: "paragraph", text: "Si vous constituez une société en Ontario, Korporex met en place votre numéro d'entreprise de l'ARC et votre inscription à la TPS/TVH dans le cadre du dépôt en ligne, pour que vos comptes fiscaux soient prêts dès le premier jour.", parts: ["Si vous ", { text: "constituez une société en Ontario", href: "/guides/comment-enregistrer-entreprise-ontario" }, ", Korporex met en place votre numéro d'entreprise de l'ARC et votre inscription à la TPS/TVH dans le cadre du dépôt en ligne, pour que vos comptes fiscaux soient prêts dès le premier jour."] },
+      { type: "paragraph", text: "Si vous constituez une société en Ontario, Korporex met en place votre numéro d'entreprise de l'ARC et votre inscription à la TPS/TVH dans le cadre du dépôt en ligne, pour que vos comptes fiscaux soient prêts dès le premier jour.", parts: ["Si vous ", { text: "constituez une société en Ontario", href: "/guides/se-constituer-en-societe-en-ontario" }, ", Korporex met en place votre numéro d'entreprise de l'ARC et votre inscription à la TPS/TVH dans le cadre du dépôt en ligne, pour que vos comptes fiscaux soient prêts dès le premier jour."] },
     ],
   },
   {
@@ -889,12 +889,12 @@ export const articles: Article[] = [
     locale: "fr",
     group: "incorporate-canada",
     category: "Jurisdiction Comparisons",
-    title: "Comment se constituer en société au Canada : fédéral ou provincial",
+    title: "Constitution fédérale ou provinciale au Canada : laquelle choisir",
     excerpt:
       "La première vraie bifurcation quand vous vous constituez en société au Canada, c'est fédéral ou provincial. Voici les différences, les coûts et les étapes.",
-    metaTitle: "Se constituer au Canada : fédéral ou provincial | Korporex",
+    metaTitle: "Constitution fédérale ou provinciale au Canada | Korporex",
     metaDescription:
-      "Comment se constituer en société au Canada, étape par étape : constitution fédérale ou provinciale, protection du nom, coûts et dépôts pour choisir.",
+      "Constitution fédérale ou provinciale au Canada : protection du nom, coûts, dépôts et lieux d'exploitation comparés pour choisir la bonne voie.",
     readTime: "7 min de lecture",
     updated: "2026-06-01",
     content: [
@@ -985,7 +985,7 @@ export const articles: Article[] = [
       { type: "callout", text: "El impuesto que cobra no es su dinero. Sepárelo a medida que entra, o lo sentirá al momento de declarar." },
       { type: "heading", id: "momento-adecuado", text: "Hacerlo en el momento adecuado" },
       { type: "paragraph", text: "El registro en sí es administrativo y puede hacerlo usted mismo. Donde se vuelve menos evidente es en las decisiones que lo rodean: si conviene registrarse de forma voluntaria, cómo se relaciona el momento con la constitución de una sociedad, y cómo fluye el impuesto una vez que tiene empleados o vende en varias provincias. Eso merece una breve conversación con un contador calificado antes de comprometerse." },
-      { type: "paragraph", text: "Si está constituyendo una sociedad en Ontario, Korporex configura su número de negocio de la CRA y su registro de GST/HST como parte del trámite en línea, para que sus cuentas fiscales estén listas desde el primer día.", parts: ["Si está ", { text: "constituyendo una sociedad en Ontario", href: "/guides/como-registrar-negocio-ontario" }, ", Korporex configura su número de negocio de la CRA y su registro de GST/HST como parte del trámite en línea, para que sus cuentas fiscales estén listas desde el primer día."] },
+      { type: "paragraph", text: "Si está constituyendo una sociedad en Ontario, Korporex configura su número de negocio de la CRA y su registro de GST/HST como parte del trámite en línea, para que sus cuentas fiscales estén listas desde el primer día.", parts: ["Si está ", { text: "constituyendo una sociedad en Ontario", href: "/guides/constituirse-en-sociedad-en-ontario" }, ", Korporex configura su número de negocio de la CRA y su registro de GST/HST como parte del trámite en línea, para que sus cuentas fiscales estén listas desde el primer día."] },
     ],
   },
   {
@@ -1101,12 +1101,12 @@ export const articles: Article[] = [
     locale: "es",
     group: "incorporate-canada",
     category: "Jurisdiction Comparisons",
-    title: "Cómo constituirse en sociedad en Canadá: federal o provincial",
+    title: "Constitución federal o provincial en Canadá: cuál elegir",
     excerpt:
       "La primera bifurcación real cuando se constituye en sociedad en Canadá es federal o provincial. Aquí están las diferencias, los costos y los pasos.",
-    metaTitle: "Constituirse en Canadá: federal o provincial | Korporex",
+    metaTitle: "Constitución federal o provincial en Canadá | Korporex",
     metaDescription:
-      "Cómo constituirse en sociedad en Canadá, paso a paso: constitución federal o provincial, protección del nombre, costos y trámites para elegir la vía.",
+      "Constitución federal o provincial en Canadá: protección del nombre, costos, trámites y dónde puede operar, comparados para elegir la vía correcta.",
     readTime: "7 min de lectura",
     updated: "2026-06-01",
     content: [
@@ -1783,12 +1783,12 @@ export const articles: Article[] = [
     locale: "fr",
     group: "incorporating-ontario",
     category: "Jurisdiction Comparisons",
-    title: "Se constituer en société en Ontario : tout ce qu'il faut savoir",
+    title: "Comment constituer une société en Ontario : guide étape par étape",
     excerpt:
       "L'Ontario abrite la majorité des petites entreprises canadiennes. Ce guide passe en revue la Loi sur les sociétés par actions de l'Ontario, les coûts, les délais et ce que vous recevez après le dépôt.",
-    metaTitle: "Se constituer en société en Ontario : le guide | Korporex",
+    metaTitle: "Comment constituer une société en Ontario | Korporex",
     metaDescription:
-      "Guide complet de la constitution en société en Ontario sous la LSAO : exigences, coûts, délais et ce que vous recevez après le dépôt au registre ontarien.",
+      "Comment constituer une société en Ontario, étape par étape : recherche NUANS, dépôt sous la LSAO, droits de 300 $, délais et documents reçus après le dépôt.",
     readTime: "7 min de lecture",
     updated: "2026-04-21",
     content: [
@@ -1926,12 +1926,12 @@ export const articles: Article[] = [
     locale: "es",
     group: "incorporating-ontario",
     category: "Jurisdiction Comparisons",
-    title: "Constituirse en sociedad en Ontario: todo lo que necesita saber",
+    title: "Cómo constituir una sociedad en Ontario: guía paso a paso",
     excerpt:
       "Ontario alberga a la mayoría de las pequeñas empresas canadienses. Esta guía recorre la Ley de Sociedades por Acciones de Ontario, los costos, los plazos y lo que recibe después de presentar.",
-    metaTitle: "Constituirse en sociedad en Ontario: la guía | Korporex",
+    metaTitle: "Cómo constituir una sociedad en Ontario | Korporex",
     metaDescription:
-      "Guía completa para constituirse en sociedad en Ontario bajo la OBCA: requisitos, costos, plazos y qué recibe tras presentar ante el Registro de Empresas.",
+      "Cómo constituir una sociedad en Ontario, paso a paso: búsqueda NUANS, presentación bajo la OBCA, tasa de 300 $, plazos y documentos que recibe.",
     readTime: "7 min de lectura",
     updated: "2026-04-21",
     content: [
@@ -3154,6 +3154,7 @@ export const articles: Article[] = [
         ["Northwest Territories", "No", "ISED lists no NUANS requirement, but NWT uses its own Application for Name Search and Reservation"],
         ["Nunavut", "No", "ISED lists no NUANS requirement, but Nunavut uses its own Name Reservation Request form"],
       ] },
+      { type: "paragraph", text: "For the province-specific steps, see our guides to the Ontario NUANS report and the Alberta NUANS report.", parts: ["For the province-specific steps, see our guides to the ", { text: "Ontario NUANS report", href: "/guides/nuans-report-ontario" }, " and the ", { text: "Alberta NUANS report", href: "/guides/nuans-report-alberta" }, "."] },
       { type: "heading", id: "not-the-same", text: "No NUANS required does not mean no name step" },
       { type: "paragraph", text: "This is the trap in the table above, and it is worth stating plainly before anyone books a filing date on the strength of it. Saskatchewan requires a name reservation and will not accept a NUANS report; you must obtain a Saskatchewan name-search report instead. Manitoba reserves names through the Companies Office on its own database. Newfoundland and Labrador requires a name reservation with its own fee and its own 90-day window. Both territories that ISED lists as requiring nothing, the Northwest Territories and Nunavut, publish their own name search and reservation forms. British Columbia requires a Name Request for any named company." },
       { type: "paragraph", text: "So the honest summary is narrower than the headline. Three provinces want a NUANS report from you. Nearly all of the rest want something, just not that. The practical question is never whether you need a NUANS report in the abstract; it is what this particular registry wants to see before it will accept a name." },
@@ -3301,7 +3302,7 @@ export const articles: Article[] = [
       { type: "paragraph", text: "That arrangement made sense when the price was trivial. It is worth revisiting now that it is not." },
       { type: "heading", id: "what-changed", text: "What changed in the corporate search market" },
       { type: "paragraph", text: "The supply side consolidated. Dye & Durham acquired OnCorp in 2017 and bought Cyberbahn from Thomson Reuters in 2019, leaving ESC Corporate Services as the main remaining competitor for firm-integrated corporate search in Ontario. Since 2022, as reported by The Globe and Mail, list prices across that portfolio have risen steeply: Ontario business-name registration list pricing up several hundred percent, corporate search costs multiplying, and per-report costs for corporate records close to doubling. The company has also faced a proposed class action concerning its pricing conduct." },
-      { type: "paragraph", text: "None of this changed the product. A NUANS report is a query against a single federal database administered under contract to Innovation, Science and Economic Development Canada. Every licensed member queries the same data and returns substantively the same report. What a firm pays is a function of its supply relationship, not of data quality." },
+      { type: "paragraph", text: "None of this changed the product. A NUANS report is a query against a single federal database administered under contract to Innovation, Science and Economic Development Canada. Every licensed member queries the same data and returns substantively the same report. What a firm pays is a function of its supply relationship, not of data quality.", parts: ["None of this changed the product. ", { text: "A NUANS report", href: "/guides/what-is-nuans-name-search" }, " is a query against a single federal database administered under contract to Innovation, Science and Economic Development Canada. Every licensed member queries the same data and returns substantively the same report. What a firm pays is a function of its supply relationship, not of data quality."] },
       { type: "callout", title: "The inversion worth noticing", text: "A sole proprietor ordering their own report online frequently pays less than the law firm incorporating a company for them. Same database, same report, different procurement channel." },
       { type: "heading", id: "three-routes", text: "Three ways a firm can obtain reports" },
       { type: "table", head: ["Route", "How it works", "Best suited to"], rows: [
@@ -3374,6 +3375,7 @@ export const articles: Article[] = [
         ["Territoires du Nord-Ouest", "Non", "ISDE n'inscrit aucune exigence NUANS, mais les T.N.-O. utilisent leur propre formulaire de recherche et de réservation"],
         ["Nunavut", "Non", "ISDE n'inscrit aucune exigence NUANS, mais le Nunavut utilise son propre formulaire de réservation de nom"],
       ] },
+      { type: "paragraph", text: "Pour les étapes propres à chaque province, consultez nos guides sur le rapport NUANS en Ontario et le rapport NUANS en Alberta.", parts: ["Pour les étapes propres à chaque province, consultez nos guides sur le ", { text: "rapport NUANS en Ontario", href: "/guides/rapport-nuans-ontario" }, " et le ", { text: "rapport NUANS en Alberta", href: "/guides/rapport-nuans-alberta" }, "."] },
       { type: "heading", id: "pas-pareil", text: "« Pas de NUANS requis » ne veut pas dire « pas d'étape de nom »" },
       { type: "paragraph", text: "C'est le piège du tableau ci-dessus, et il vaut mieux le dire clairement avant que quiconque fixe une date de dépôt sur cette base. La Saskatchewan exige une réservation de nom et n'acceptera pas un rapport NUANS ; il faut obtenir un rapport de recherche de la Saskatchewan. Le Manitoba réserve les noms par l'entremise du Companies Office, sur sa propre base de données. Terre-Neuve-et-Labrador exige une réservation de nom avec ses propres frais et son propre délai de 90 jours. Les deux territoires qu'ISDE présente comme n'exigeant rien, les Territoires du Nord-Ouest et le Nunavut, publient leurs propres formulaires de recherche et de réservation. La Colombie-Britannique exige une Name Request pour toute société avec un nom." },
       { type: "paragraph", text: "Le résumé honnête est donc plus étroit que le titre. Trois provinces veulent un rapport NUANS de votre part. Presque toutes les autres veulent quelque chose, mais pas celui-là. La vraie question n'est jamais « ai-je besoin d'un rapport NUANS » dans l'abstrait ; c'est « que veut voir ce registre précis avant d'accepter un nom »." },
@@ -3519,7 +3521,7 @@ export const articles: Article[] = [
       { type: "paragraph", text: "Cet arrangement se défendait quand le prix était négligeable. Il mérite d'être revu maintenant qu'il ne l'est plus." },
       { type: "heading", id: "ce-qui-a-change", text: "Ce qui a changé dans le marché de la recherche corporative" },
       { type: "paragraph", text: "L'offre s'est consolidée. Dye & Durham a acquis OnCorp en 2017 et acheté Cyberbahn de Thomson Reuters en 2019, laissant ESC Corporate Services comme principal concurrent restant pour la recherche corporative intégrée aux cabinets en Ontario. Depuis 2022, comme l'a rapporté The Globe and Mail, les prix affichés sur ce portefeuille ont fortement augmenté : enregistrement de noms commerciaux en Ontario en hausse de plusieurs centaines de pour cent, coûts de recherche corporative multipliés, et coûts par rapport pour les dossiers corporatifs près du double. L'entreprise fait aussi l'objet d'un projet de recours collectif visant ses pratiques tarifaires." },
-      { type: "paragraph", text: "Rien de tout cela n'a changé le produit. Un rapport NUANS est une interrogation d'une base de données fédérale unique administrée par contrat pour Innovation, Sciences et Développement économique Canada. Tous les membres autorisés interrogent les mêmes données et renvoient substantiellement le même rapport. Ce qu'un cabinet paie dépend de sa relation d'approvisionnement, pas de la qualité des données." },
+      { type: "paragraph", text: "Rien de tout cela n'a changé le produit. Un rapport NUANS est une interrogation d'une base de données fédérale unique administrée par contrat pour Innovation, Sciences et Développement économique Canada. Tous les membres autorisés interrogent les mêmes données et renvoient substantiellement le même rapport. Ce qu'un cabinet paie dépend de sa relation d'approvisionnement, pas de la qualité des données.", parts: ["Rien de tout cela n'a changé le produit. ", { text: "Un rapport NUANS", href: "/guides/recherche-de-nom-nuans" }, " est une interrogation d'une base de données fédérale unique administrée par contrat pour Innovation, Sciences et Développement économique Canada. Tous les membres autorisés interrogent les mêmes données et renvoient substantiellement le même rapport. Ce qu'un cabinet paie dépend de sa relation d'approvisionnement, pas de la qualité des données."] },
       { type: "callout", title: "L'inversion à remarquer", text: "Un travailleur autonome qui commande son propre rapport en ligne paie fréquemment moins cher que le cabinet d'avocats qui constitue la société pour lui. Même base de données, même rapport, canal d'approvisionnement différent." },
       { type: "heading", id: "trois-voies", text: "Trois façons pour un cabinet d'obtenir des rapports" },
       { type: "table", head: ["Voie", "Fonctionnement", "Convient le mieux à"], rows: [
@@ -3592,6 +3594,7 @@ export const articles: Article[] = [
         ["Territorios del Noroeste", "No", "ISED no registra exigencia de NUANS, pero los TNO usan su propio formulario de búsqueda y reserva"],
         ["Nunavut", "No", "ISED no registra exigencia de NUANS, pero Nunavut usa su propio formulario de reserva de nombre"],
       ] },
+      { type: "paragraph", text: "Para los pasos propios de cada provincia, consulte nuestras guías sobre el informe NUANS en Ontario y el informe NUANS en Alberta.", parts: ["Para los pasos propios de cada provincia, consulte nuestras guías sobre el ", { text: "informe NUANS en Ontario", href: "/guides/informe-nuans-ontario" }, " y el ", { text: "informe NUANS en Alberta", href: "/guides/informe-nuans-alberta" }, "."] },
       { type: "heading", id: "no-es-lo-mismo", text: "«Sin NUANS» no significa «sin paso de nombre»" },
       { type: "paragraph", text: "Esta es la trampa de la tabla anterior, y conviene decirlo con claridad antes de que alguien fije una fecha de presentación basándose en ella. Saskatchewan exige una reserva de nombre y no aceptará un informe NUANS; hay que obtener un informe de búsqueda de Saskatchewan. Manitoba reserva nombres a través del Companies Office, con su propia base de datos. Terranova y Labrador exige una reserva de nombre con su propia tarifa y su propio plazo de 90 días. Los dos territorios que ISED presenta como si no exigieran nada, los Territorios del Noroeste y Nunavut, publican sus propios formularios de búsqueda y reserva. Columbia Británica exige un Name Request para cualquier sociedad con nombre." },
       { type: "paragraph", text: "Así que el resumen honesto es más estrecho que el titular. Tres provincias quieren un informe NUANS de su parte. Casi todas las demás quieren algo, pero no ese. La pregunta práctica nunca es «¿necesito un informe NUANS?» en abstracto; es «¿qué quiere ver este registro concreto antes de aceptar un nombre?»." },
@@ -3737,7 +3740,7 @@ export const articles: Article[] = [
       { type: "paragraph", text: "Ese arreglo tenía sentido cuando el precio era trivial. Merece revisarse ahora que no lo es." },
       { type: "heading", id: "que-cambio", text: "Qué cambió en el mercado de búsquedas corporativas" },
       { type: "paragraph", text: "La oferta se concentró. Dye & Durham adquirió OnCorp en 2017 y compró Cyberbahn a Thomson Reuters en 2019, dejando a ESC Corporate Services como principal competidor restante para la búsqueda corporativa integrada en despachos de Ontario. Desde 2022, según informó The Globe and Mail, los precios de lista de esa cartera han subido con fuerza: el registro de nombres comerciales en Ontario varios cientos por ciento, los costes de búsqueda corporativa multiplicados, y el coste por informe de expedientes corporativos casi al doble. La empresa afronta además una demanda colectiva propuesta por su política de precios." },
-      { type: "paragraph", text: "Nada de eso cambió el producto. Un informe NUANS es una consulta a una única base de datos federal administrada por contrato para Innovación, Ciencia y Desarrollo Económico de Canadá. Todos los miembros autorizados consultan los mismos datos y devuelven sustancialmente el mismo informe. Lo que paga un despacho depende de su relación de suministro, no de la calidad del dato." },
+      { type: "paragraph", text: "Nada de eso cambió el producto. Un informe NUANS es una consulta a una única base de datos federal administrada por contrato para Innovación, Ciencia y Desarrollo Económico de Canadá. Todos los miembros autorizados consultan los mismos datos y devuelven sustancialmente el mismo informe. Lo que paga un despacho depende de su relación de suministro, no de la calidad del dato.", parts: ["Nada de eso cambió el producto. ", { text: "Un informe NUANS", href: "/guides/busqueda-de-nombre-nuans" }, " es una consulta a una única base de datos federal administrada por contrato para Innovación, Ciencia y Desarrollo Económico de Canadá. Todos los miembros autorizados consultan los mismos datos y devuelven sustancialmente el mismo informe. Lo que paga un despacho depende de su relación de suministro, no de la calidad del dato."] },
       { type: "callout", title: "La inversión que conviene notar", text: "Un autónomo que pide su propio informe por internet paga con frecuencia menos que el despacho de abogados que constituye la sociedad por él. Misma base de datos, mismo informe, canal de compra distinto." },
       { type: "heading", id: "tres-vias", text: "Tres formas de que un despacho obtenga informes" },
       { type: "table", head: ["Vía", "Cómo funciona", "Más adecuada para"], rows: [
