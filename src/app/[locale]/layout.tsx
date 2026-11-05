@@ -72,6 +72,8 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={`${playfairDisplay.variable} ${inter.variable}`}>
       <head>
+        {/* Pinterest website claim for the korporexsolutions profile. */}
+        <meta name="p:domain_verify" content="b8999a1af4504374c49ecd3680a550a8" />
         {/* Ahrefs Web Analytics (also used for Ahrefs site verification). */}
         <script
           src="https://analytics.ahrefs.com/analytics.js"
