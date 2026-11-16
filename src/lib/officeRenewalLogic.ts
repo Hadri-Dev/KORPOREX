@@ -15,7 +15,6 @@ export type ReminderSettings = {
   d7: boolean;
   finalNotice: boolean;
   bccOwner: boolean;
-  mondayDigest: boolean;
 };
 
 export const DEFAULT_SETTINGS: ReminderSettings = {
@@ -24,7 +23,6 @@ export const DEFAULT_SETTINGS: ReminderSettings = {
   d7: true,
   finalNotice: true,
   bccOwner: true,
-  mondayDigest: true,
 };
 
 const TZ = "America/Toronto";
@@ -37,10 +35,6 @@ export function torontoDate(at: Date = new Date()): string {
     month: "2-digit",
     day: "2-digit",
   }).format(at);
-}
-
-export function torontoWeekday(at: Date = new Date()): string {
-  return new Intl.DateTimeFormat("en-US", { timeZone: TZ, weekday: "long" }).format(at);
 }
 
 function parts(iso: string): [number, number, number] {

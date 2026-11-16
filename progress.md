@@ -1,6 +1,14 @@
 # Progress
 
 ## Log
+### 2026-11-16 - Office Renewals: removed the weekly owner digest; internal emails now say they are internal
+- Owner asked to stop the "[OFFICE] Weekly renewals" email that arrived every Monday even with nothing due. Deleted the feature outright (not just switched off): Monday block in the [cron](src/app/api/cron/office-renewals/route.ts), `buildDigestEmail` in [officeRenewalEmails.ts](src/lib/officeRenewalEmails.ts), `mondayDigest` setting + `torontoWeekday` in [officeRenewalLogic.ts](src/lib/officeRenewalLogic.ts), store/schema mapping, dashboard switch. The dashboard board is the overview now.
+- Root of the confusion: the digest carried the client footer ("You are receiving this because your corporation uses..."), so it read like a customer email. `shell()` now takes a required `audience`; the [OFFICE]/[PAID] owner alerts say "Internal Korporex notification. Clients do not receive this email."
+- Customer reminders unchanged and date-driven: 30 days before, then 7 days before and 7 days after only while unpaid. Owner said customers should get "a month before"; that is the 30-day email. The 7-day and final follow-ups were kept (pending owner decision), and the owner can switch them off in the dashboard "Reminder schedule".
+- New [0007_drop_office_monday_digest.sql](supabase/migrations/0007_drop_office_monday_digest.sql) drops the dead column. Optional: the code no longer touches it, so nothing breaks if it isn't run.
+- Verified: typecheck + lint clean; compiled the email/logic modules and asserted the footers by audience, that digest exports are gone, and that over a full cycle an unpaid active client gets exactly d30, d7, final (paused/moving: none).
+- Next: owner to confirm whether to keep the 7-day and final follow-ups and the "Copy me on reminders" BCC; run 0007 in Supabase SQL editor.
+
 ### 2026-10-24 - Office Renewals: automatic Registered Office renewal reminders (owner chose preview B "Autopilot" + the "moving" answer from C)
 - **Dashboard** [/dashboard/office-renewals](src/app/(private)/dashboard/office-renewals/page.tsx) (sidebar "Office Renewals"): board by renewal stage (Upcoming / Within 30 days / Final week / Overdue / Renewed / Moving-closed), stats, search, client drawer (send reminder now, copy client link, mark paid for e-transfer, pause/resume, close, edit, delete, activity log), add/edit form, reminder-schedule switches.
 - **Data**: [0006_office_renewals.sql](supabase/migrations/0006_office_renewals.sql) adds `office_clients`, `office_events` (activity log; partial unique index makes reminders idempotent; unique `stripe_session_id` makes payments idempotent) and `office_renewal_settings`. **Must be run in the Supabase SQL editor**; until then the page shows a setup banner.

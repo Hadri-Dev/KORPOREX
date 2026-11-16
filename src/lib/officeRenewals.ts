@@ -190,7 +190,6 @@ export async function getSettings(): Promise<ReminderSettings> {
     d7: data.d7,
     finalNotice: data.final_notice,
     bccOwner: data.bcc_owner,
-    mondayDigest: data.monday_digest,
   };
 }
 
@@ -266,7 +265,6 @@ export async function updateSettings(patch: Partial<ReminderSettings>): Promise<
   if (patch.d7 !== undefined) row.d7 = patch.d7;
   if (patch.finalNotice !== undefined) row.final_notice = patch.finalNotice;
   if (patch.bccOwner !== undefined) row.bcc_owner = patch.bccOwner;
-  if (patch.mondayDigest !== undefined) row.monday_digest = patch.mondayDigest;
   const { error } = await getSupabaseServiceClient()
     .from("office_renewal_settings")
     .upsert({ id: 1, ...row });

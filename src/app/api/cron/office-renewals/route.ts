@@ -1,20 +1,6 @@
 import { NextResponse } from "next/server";
-import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
-import { getSiteUrl } from "@/lib/stripe";
-import {
-  annualFee,
-  loadOfficeRenewals,
-  sendAutoReminder,
-  syncFromStripe,
-} from "@/lib/officeRenewals";
-import {
-  daysBetween,
-  dueReminder,
-  torontoDate,
-  torontoWeekday,
-  type ReminderKind,
-} from "@/lib/officeRenewalLogic";
-import { buildDigestEmail, type DigestLine } from "@/lib/officeRenewalEmails";
+import { loadOfficeRenewals, sendAutoReminder, syncFromStripe } from "@/lib/officeRenewals";
+import { daysBetween, dueReminder, torontoDate, type ReminderKind } from "@/lib/officeRenewalLogic";
 
 // Daily Registered Office renewal run, triggered by the Vercel cron in
 // vercel.json (13:00 UTC = 9 AM Toronto in summer, 8 AM in winter).
@@ -24,7 +10,11 @@ import { buildDigestEmail, type DigestLine } from "@/lib/officeRenewalEmails";
 //   2. For each active client, send the one reminder whose window they are in
 //      (see reminderWindow in officeRenewalLogic.ts), if not already sent for
 //      the current term.
-//   3. On Mondays, email the owner a digest.
+//
+// Emails go only to clients whose renewal date is near. There is deliberately
+// no recurring owner summary: the owner removed the Monday digest (2026-11-16)
+// because it arrived every week even with nothing due. The dashboard board is
+// the overview; per-event owner alerts (paid, moving) still fire.
 //
 // Vercel sends `Authorization: Bearer $CRON_SECRET`; anything else is refused.
 
@@ -76,37 +66,5 @@ export async function GET(req: Request): Promise<Response> {
     }
   }
 
-  let digest = false;
-  if (data.settings.mondayDigest && torontoWeekday() === "Monday") {
-    const line = (c: (typeof data.clients)[number]): DigestLine => ({
-      businessName: c.businessName,
-      email: c.email,
-      renewsOn: c.renewsOn,
-      daysLeft: daysBetween(today, c.renewsOn),
-      amount: annualFee(c.location),
-    });
-    const open = data.clients.filter((c) => c.status === "active" || c.status === "paused");
-    const email = buildDigestEmail({
-      dashboardUrl: `${getSiteUrl()}/dashboard/office-renewals`,
-      overdue: open.filter((c) => daysBetween(today, c.renewsOn) < 0).map(line),
-      dueSoon: open
-        .filter((c) => {
-          const n = daysBetween(today, c.renewsOn);
-          return n >= 0 && n <= 30;
-        })
-        .map(line),
-      leaving: data.clients.filter((c) => c.status === "moving").map(line),
-      paidThisWeek: data.clients
-        .filter((c) => c.lastPaidOn && daysBetween(c.lastPaidOn, today) <= 7)
-        .map(line),
-    });
-    try {
-      await sendMail({ ...email, to: [{ email: CONTACT_ADDRESS, name: "Korporex" }] }, "office-renewal-digest");
-      digest = true;
-    } catch (err) {
-      console.error("[cron/office-renewals] digest failed:", err);
-    }
-  }
-
-  return NextResponse.json({ today, synced, sent, failed, digest });
+  return NextResponse.json({ today, synced, sent, failed });
 }

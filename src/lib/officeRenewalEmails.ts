@@ -24,8 +24,17 @@ function money(n: number): string {
   return `$${n.toLocaleString("en-CA", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-function shell(heading: string, inner: string): string {
-  return `<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#FAFAF8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;"><div style="max-width:600px;margin:0 auto;background:#ffffff;padding:32px;border:1px solid #e5e7eb;"><p style="margin:0 0 20px;font-family:Georgia,'Times New Roman',serif;font-size:18px;font-weight:700;letter-spacing:0.04em;color:#1B4332;">KORPOREX<span style="color:#C5A35A;">.</span></p><div style="width:32px;height:2px;background:#C5A35A;margin-bottom:20px;"></div><h1 style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#1B4332;">${heading}</h1>${inner}<p style="margin:28px 0 0;color:#6b7280;font-size:12px;line-height:1.6;">Korporex Business Solutions Inc. · contact@korporex.ca<br>You are receiving this because your corporation uses a Korporex registered office address.</p></div></body></html>`;
+// Required so every template states who reads it: the owner once mistook an
+// internal email for a client email because both carried the client footer.
+type Audience = "client" | "owner";
+
+const FOOTER: Record<Audience, string> = {
+  client: "You are receiving this because your corporation uses a Korporex registered office address.",
+  owner: "Internal Korporex notification. Clients do not receive this email.",
+};
+
+function shell(audience: Audience, heading: string, inner: string): string {
+  return `<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#FAFAF8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;"><div style="max-width:600px;margin:0 auto;background:#ffffff;padding:32px;border:1px solid #e5e7eb;"><p style="margin:0 0 20px;font-family:Georgia,'Times New Roman',serif;font-size:18px;font-weight:700;letter-spacing:0.04em;color:#1B4332;">KORPOREX<span style="color:#C5A35A;">.</span></p><div style="width:32px;height:2px;background:#C5A35A;margin-bottom:20px;"></div><h1 style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#1B4332;">${heading}</h1>${inner}<p style="margin:28px 0 0;color:#6b7280;font-size:12px;line-height:1.6;">Korporex Business Solutions Inc. · contact@korporex.ca<br>${FOOTER[audience]}</p></div></body></html>`;
 }
 
 function p(text: string): string {
@@ -80,6 +89,7 @@ export function buildReminderEmail(
     return {
       subject: "Action needed: your Korporex registered office term has ended",
       html: shell(
+        "client",
         "Your registered office term has ended",
         p("Hello,") +
           p(`The Korporex registered office term for ${name} ended on <strong>${esc(date)}</strong> and we have not received a renewal.`) +
@@ -96,6 +106,7 @@ export function buildReminderEmail(
     return {
       subject: "7 days left: renew your Korporex registered office",
       html: shell(
+        "client",
         "One week until your renewal date",
         p("Hello,") +
           p(`A quick reminder: the Korporex registered office service for ${name} renews on <strong>${esc(date)}</strong>.`) +
@@ -115,6 +126,7 @@ export function buildReminderEmail(
   return {
     subject: `Your Korporex registered office renews on ${date}`,
     html: shell(
+      "client",
       "Your registered office renewal",
       p("Hello,") +
         p(intro) +
@@ -139,6 +151,7 @@ export function buildReceiptEmail(d: {
   return {
     subject: `Renewed: your Korporex registered office is set until ${end}`,
     html: shell(
+      "client",
       "Thank you, your renewal is complete",
       p("Hello,") +
         p(`We have received your payment of <strong>${esc(d.amountLabel)}</strong>.`) +
@@ -157,6 +170,7 @@ export function buildMovingAckEmail(d: { businessName: string; renewsOn: string 
   return {
     subject: "We received your registered office update",
     html: shell(
+      "client",
       "Thank you for letting us know",
       p("Hello,") +
         p(`We have noted that <strong>${esc(d.businessName)}</strong> is moving its registered office away from Korporex, and we have stopped the renewal reminders.`) +
@@ -176,6 +190,7 @@ export function buildOwnerMovingEmail(d: {
   return {
     subject: `[OFFICE] ${d.businessName} is moving its registered office`,
     html: shell(
+      "owner",
       "Client is leaving the registered office service",
       box([
         ["Business", d.businessName],
@@ -199,6 +214,7 @@ export function buildOwnerPaidEmail(d: {
   return {
     subject: `[PAID] Office renewal: ${d.businessName} (${d.amountLabel})`,
     html: shell(
+      "owner",
       "Registered office renewal paid",
       box([
         ["Business", d.businessName],
@@ -208,40 +224,6 @@ export function buildOwnerPaidEmail(d: {
         ["Now renews on", formatLongDate(d.newRenewsOn)],
         ["Stripe session", d.stripeSessionId],
       ]) + p("The renewal date was moved forward and the client was sent a confirmation."),
-    ),
-  };
-}
-
-export type DigestLine = { businessName: string; email: string; renewsOn: string; daysLeft: number; amount: number };
-
-export function buildDigestEmail(d: {
-  dashboardUrl: string;
-  overdue: DigestLine[];
-  dueSoon: DigestLine[];
-  leaving: DigestLine[];
-  paidThisWeek: DigestLine[];
-}): Built {
-  const section = (title: string, lines: DigestLine[], empty: string) =>
-    `<h2 style="margin:20px 0 8px;font-family:Georgia,serif;font-size:16px;color:#1B4332;">${esc(title)} (${lines.length})</h2>` +
-    (lines.length
-      ? `<table style="width:100%;border-collapse:collapse;">${lines
-          .map(
-            (l) =>
-              `<tr><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:14px;color:#111827;"><strong>${esc(l.businessName)}</strong><br><span style="color:#6b7280;font-size:12px;">${esc(l.email)}</span></td><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:13px;color:#4b5563;text-align:right;white-space:nowrap;">${esc(formatLongDate(l.renewsOn))}<br>${esc(money(l.amount))}</td></tr>`,
-          )
-          .join("")}</table>`
-      : `<p style="margin:0;color:#6b7280;font-size:13px;">${esc(empty)}</p>`);
-  const toCollect = [...d.overdue, ...d.dueSoon].reduce((s, l) => s + l.amount, 0);
-  return {
-    subject: `[OFFICE] Weekly renewals: ${d.dueSoon.length} due, ${d.overdue.length} overdue`,
-    html: shell(
-      "Registered office renewals this week",
-      p(`${esc(money(toCollect))} to collect from clients due in the next 30 days or overdue.`) +
-        section("Overdue", d.overdue, "Nobody is overdue.") +
-        section("Due in the next 30 days", d.dueSoon, "Nothing due in the next 30 days.") +
-        section("Moving away", d.leaving, "No clients are leaving.") +
-        section("Paid in the last 7 days", d.paidThisWeek, "No renewals paid this week.") +
-        `<p style="margin:24px 0 0;"><a href="${esc(d.dashboardUrl)}" style="color:#1B4332;font-weight:600;">Open Office Renewals</a></p>`,
     ),
   };
 }

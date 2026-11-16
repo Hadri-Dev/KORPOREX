@@ -35,5 +35,4 @@ export const SETTINGS_PATCH = z.object({
   d7: z.boolean().optional(),
   finalNotice: z.boolean().optional(),
   bccOwner: z.boolean().optional(),
-  mondayDigest: z.boolean().optional(),
 });

@@ -56,7 +56,6 @@ const SETTING_ROWS: { key: keyof ReminderSettings; title: string; hint: string }
   { key: "d7", title: "7 days before", hint: "Short nudge, only if still unpaid." },
   { key: "finalNotice", title: "7 days after", hint: "Final notice: renew or change the registered office." },
   { key: "bccOwner", title: "Copy me on reminders", hint: "BCC contact@korporex.ca." },
-  { key: "mondayDigest", title: "Monday digest", hint: "Weekly summary email to contact@korporex.ca." },
 ];
 
 function money(n: number): string {
