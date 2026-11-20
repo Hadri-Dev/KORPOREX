@@ -88,12 +88,28 @@ interface Director {
   taxResidencyCountry: string;
   address: Address;
 }
+type ShareholderPartyType = "individual" | "corporation";
+// One record shape for both kinds of shareholder. Fields that belong to the
+// other kind are kept as "" (see `cleanShareholder`), so the draft, the review
+// step and the API all read the same flat object.
 interface Shareholder {
+  partyType: ShareholderPartyType;
+  // Individual
   firstName: string; lastName: string;
-  shareClass: string; numberOfShares: string;
-  pricePerShare: string;
   /** ISO country code of the shareholder's citizenship (see ALL_COUNTRIES). */
   citizenship: string;
+  // Corporation
+  corpName: string;
+  /** Where the corporate shareholder was incorporated, as the customer states it. */
+  corpJurisdiction: string;
+  /** Optional: a newly formed holding company may not have its number yet. */
+  corpNumber: string;
+  /** The person who signs share documents on the corporate shareholder's behalf. */
+  signatoryName: string;
+  signatoryTitle: string;
+  // Both
+  shareClass: string; numberOfShares: string;
+  pricePerShare: string;
   address: Address;
 }
 interface Officer {
@@ -314,9 +330,20 @@ const makeDirectorSchema = (isFederal: boolean) =>
     address: addressSchema,
   });
 
+// Which fields are required depends on `partyType`, so the per-kind fields are
+// plain strings here and enforced in the refinement. Only the fields the
+// customer can see are ever validated (a hidden required field is a dead
+// Continue button, see the isCanadianResident note above).
 const shareholderSchema = z.object({
-  firstName: z.string().min(1, "Required"),
-  lastName: z.string().min(1, "Required"),
+  partyType: z.enum(["individual", "corporation"]),
+  firstName: z.string(),
+  lastName: z.string(),
+  citizenship: z.string(),
+  corpName: z.string(),
+  corpJurisdiction: z.string(),
+  corpNumber: z.string(),
+  signatoryName: z.string(),
+  signatoryTitle: z.string(),
   shareClass: z.string().min(1, "Required"),
   numberOfShares: z.string().min(1, "Required").refine(
     (v) => !isNaN(Number(v)) && Number(v) > 0,
@@ -326,8 +353,24 @@ const shareholderSchema = z.object({
     (v) => !isNaN(Number(v)) && Number(v) > 0,
     "Must be a positive amount"
   ),
-  citizenship: z.string().min(2, "Select a country"),
   address: addressSchema,
+}).superRefine((v, ctx) => {
+  const requireField = (
+    field: "firstName" | "lastName" | "citizenship" | "corpName" | "corpJurisdiction" | "signatoryName" | "signatoryTitle",
+    message = "Required"
+  ) => {
+    if (v[field].trim().length === 0) ctx.addIssue({ code: "custom", path: [field], message });
+  };
+  if (v.partyType === "individual") {
+    requireField("firstName");
+    requireField("lastName");
+    requireField("citizenship", "Select a country");
+  } else {
+    requireField("corpName");
+    requireField("corpJurisdiction");
+    requireField("signatoryName");
+    requireField("signatoryTitle");
+  }
 });
 
 const officerSchema = z.object({
@@ -1297,14 +1340,29 @@ function Step4({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
 
 type S5 = z.infer<typeof s5>;
 const emptySH: Shareholder = {
+  partyType: "individual",
   firstName: "", lastName: "",
+  // "" renders the "-- Select a country --" placeholder; Zod rejects it at
+  // submit so the customer has to choose.
+  citizenship: "",
+  corpName: "", corpJurisdiction: "", corpNumber: "",
+  signatoryName: "", signatoryTitle: "",
   shareClass: "Common", numberOfShares: "100",
   pricePerShare: "1.00",
-  // Cast: "" renders the "-- Select a country --" placeholder; Zod rejects it
-  // at submit so the customer has to choose.
-  citizenship: "",
   address: { ...emptyAddress },
 };
+
+// Switching a shareholder between Individual and Corporation leaves the other
+// kind's inputs filled in form state. Blank them before the record is stored
+// so an abandoned name never reaches the order.
+function cleanShareholder(sh: Shareholder): Shareholder {
+  return sh.partyType === "individual"
+    ? { ...sh, corpName: "", corpJurisdiction: "", corpNumber: "", signatoryName: "", signatoryTitle: "" }
+    : { ...sh, firstName: "", lastName: "", citizenship: "" };
+}
+
+const partyOptionCls =
+  "flex items-center gap-2 border-2 border-gold-200 bg-white px-3 py-2.5 text-sm text-gray-700 cursor-pointer hover:border-navy-900 transition-colors has-[:checked]:border-navy-900 has-[:checked]:bg-navy-50 has-[:checked]:text-navy-900 has-[:checked]:font-medium";
 
 function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Partial<S5>; jurisdiction: Jurisdiction; pkg: Pkg; onNext: (d: S5) => void; onBack: () => void; snapshot: SnapshotRef }) {
   const basicLocked = pkg === "basic";
@@ -1316,7 +1374,11 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
     const code = SHARE_CLASS_OPTIONS.find((c) => c.label === label)?.code;
     return (code && t.shareClasses[code]?.label) || label;
   };
-  const initialSh = def.shareholders?.length ? def.shareholders : [emptySH];
+  // Drafts saved before corporate shareholders existed have no `partyType` or
+  // corporation fields; filling from `emptySH` restores them as individuals.
+  const initialSh: Shareholder[] = def.shareholders?.length
+    ? def.shareholders.map((sh) => ({ ...emptySH, ...sh }))
+    : [emptySH];
   const form = useForm<S5>({
     resolver: zodResolver(s5),
     defaultValues: {
@@ -1371,7 +1433,7 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
             (d) => {
               if (noClassesSelected) { setInvalid(true); scrollToFirstError(); return; }
               setInvalid(false);
-              onNext(d);
+              onNext({ ...d, shareholders: d.shareholders.map(cleanShareholder) });
             },
             () => { setInvalid(true); scrollToFirstError(); }
           )}
@@ -1436,7 +1498,9 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
             </div>
           )}
 
-          {fields.map((field, i) => (
+          {fields.map((field, i) => {
+            const isCorp = watch(`shareholders.${i}.partyType`) === "corporation";
+            return (
             <div key={field.id} className="border border-gray-200 rounded-lg p-6">
               <div className="flex items-center justify-between mb-5">
                 <p className="font-serif font-bold text-navy-900 text-base">{t.shareholderN(i + 1)}</p>
@@ -1446,9 +1510,47 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
                   </button>
                 )}
               </div>
+              <div className="mb-4">
+                <Field label={t.shareholderTypeLabel} error={se[i]?.partyType?.message}>
+                  <div className="grid grid-cols-2 gap-3">
+                    <label className={partyOptionCls}>
+                      <input type="radio" value="individual" {...register(`shareholders.${i}.partyType`)} className="accent-navy-900" />
+                      {t.shareholderIndividual}
+                    </label>
+                    <label className={partyOptionCls}>
+                      <input type="radio" value="corporation" {...register(`shareholders.${i}.partyType`)} className="accent-navy-900" />
+                      {t.shareholderCorporation}
+                    </label>
+                  </div>
+                </Field>
+              </div>
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <Field label={t.firstName} error={se[i]?.firstName?.message}><input {...register(`shareholders.${i}.firstName`)} className={iCls} /></Field>
-                <Field label={t.lastName} error={se[i]?.lastName?.message}><input {...register(`shareholders.${i}.lastName`)} className={iCls} /></Field>
+                {isCorp ? (
+                  <>
+                    <div className="col-span-2">
+                      <Field label={t.corpNameLabel} error={se[i]?.corpName?.message} hint={t.corpNameHint}>
+                        <input {...register(`shareholders.${i}.corpName`)} className={iCls} />
+                      </Field>
+                    </div>
+                    <Field label={t.corpJurisdictionLabel} error={se[i]?.corpJurisdiction?.message} hint={t.corpJurisdictionHint}>
+                      <input {...register(`shareholders.${i}.corpJurisdiction`)} className={iCls} />
+                    </Field>
+                    <Field label={t.corpNumberLabel} error={se[i]?.corpNumber?.message} hint={t.corpNumberHint}>
+                      <input {...register(`shareholders.${i}.corpNumber`)} className={iCls} />
+                    </Field>
+                    <Field label={t.signatoryNameLabel} error={se[i]?.signatoryName?.message} hint={t.signatoryNameHint}>
+                      <input {...register(`shareholders.${i}.signatoryName`)} className={iCls} />
+                    </Field>
+                    <Field label={t.signatoryTitleLabel} error={se[i]?.signatoryTitle?.message} hint={t.signatoryTitleHint}>
+                      <input {...register(`shareholders.${i}.signatoryTitle`)} className={iCls} />
+                    </Field>
+                  </>
+                ) : (
+                  <>
+                    <Field label={t.firstName} error={se[i]?.firstName?.message}><input {...register(`shareholders.${i}.firstName`)} className={iCls} /></Field>
+                    <Field label={t.lastName} error={se[i]?.lastName?.message}><input {...register(`shareholders.${i}.lastName`)} className={iCls} /></Field>
+                  </>
+                )}
                 <Field label={t.shareClassLabel} error={se[i]?.shareClass?.message}>
                   <select {...register(`shareholders.${i}.shareClass`)} className={sCls}>
                     {dropdownOptions.length === 0 && (
@@ -1483,15 +1585,18 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
                 </Field>
                 {/* Citizenship of the shareholder. Separate from the address
                     country below. A shareholder can live in one country and
-                    hold citizenship of another. */}
-                <Field label={t.citizenshipLabel} error={se[i]?.citizenship?.message}>
-                  <select {...register(`shareholders.${i}.citizenship`)} className={sCls}>
-                    <option value="">{t.selectCountry}</option>
-                    {ALL_COUNTRIES.map((c) => (
-                      <option key={c.code} value={c.code}>{c.name}</option>
-                    ))}
-                  </select>
-                </Field>
+                    hold citizenship of another. Individuals only: a
+                    corporation states its jurisdiction of incorporation. */}
+                {!isCorp && (
+                  <Field label={t.citizenshipLabel} error={se[i]?.citizenship?.message}>
+                    <select {...register(`shareholders.${i}.citizenship`)} className={sCls}>
+                      <option value="">{t.selectCountry}</option>
+                      {ALL_COUNTRIES.map((c) => (
+                        <option key={c.code} value={c.code}>{c.name}</option>
+                      ))}
+                    </select>
+                  </Field>
+                )}
               </div>
               {/* Informational note. Deliberately definitional / illustrative
                  , describes what the field *is*, with arithmetic example.
@@ -1504,9 +1609,13 @@ function Step5({ def, jurisdiction, pkg, onNext, onBack, snapshot }: { def: Part
                   {t.lawyerLink}
                 </Link>.
               </p>
+              {isCorp && (
+                <p className="text-xs font-bold tracking-[0.1em] uppercase text-black mb-3">{t.corpAddressHeading}</p>
+              )}
               <AddressFields prefix={`shareholders.${i}.address`} locationBias={ADDRESS_BIAS[jurisdiction]} />
             </div>
-          ))}
+            );
+          })}
           {!basicLocked && (
             <button type="button" onClick={() => append(emptySH)}
               className="flex items-center gap-2 text-sm text-navy-900 border border-navy-900 px-4 py-2.5 hover:bg-navy-50 transition-colors">

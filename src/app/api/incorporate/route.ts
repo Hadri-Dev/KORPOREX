@@ -53,9 +53,20 @@ const directorSchema = z.object({
   address: addressSchema,
 });
 
+// A shareholder is an individual or a corporation. Each kind has its own
+// required fields, enforced in the refinement below; the other kind's fields
+// arrive as "". `partyType` defaults to "individual" so a wizard tab opened
+// before corporate shareholders shipped can still submit.
 const shareholderSchema = z.object({
-  firstName: z.string().trim().min(1).max(100),
-  lastName: z.string().trim().min(1).max(100),
+  partyType: z.enum(["individual", "corporation"]).default("individual"),
+  firstName: z.string().trim().max(100).default(""),
+  lastName: z.string().trim().max(100).default(""),
+  citizenship: z.string().trim().max(10).default(""),
+  corpName: z.string().trim().max(200).default(""),
+  corpJurisdiction: z.string().trim().max(100).default(""),
+  corpNumber: z.string().trim().max(50).default(""),
+  signatoryName: z.string().trim().max(200).default(""),
+  signatoryTitle: z.string().trim().max(100).default(""),
   shareClass: z.string().trim().min(1).max(60),
   numberOfShares: z
     .string()
@@ -69,8 +80,17 @@ const shareholderSchema = z.object({
     .min(1)
     .max(20)
     .refine((v) => !isNaN(Number(v)) && Number(v) > 0, "Positive amount required"),
-  citizenship: z.string().trim().min(2).max(10),
   address: addressSchema,
+}).superRefine((v, ctx) => {
+  const required =
+    v.partyType === "individual"
+      ? (["firstName", "lastName", "citizenship"] as const)
+      : (["corpName", "corpJurisdiction", "signatoryName", "signatoryTitle"] as const);
+  for (const field of required) {
+    if (v[field].length < (field === "citizenship" ? 2 : 1)) {
+      ctx.addIssue({ code: "custom", path: [field], message: "Required" });
+    }
+  }
 });
 
 const officerSchema = z.object({
@@ -509,14 +529,27 @@ function buildHtmlBody(
       const price = Number(x.pricePerShare);
       const subscription = isFinite(shares * price) ? (shares * price).toFixed(2) : "—";
       const cz = ALL_COUNTRIES.find((c) => c.code === x.citizenship);
+      const identity: Record<string, string> =
+        x.partyType === "corporation"
+          ? {
+              Type: "Corporation",
+              "Corporation name": x.corpName,
+              "Jurisdiction of incorporation": x.corpJurisdiction,
+              "Corporation number": x.corpNumber || "Not provided",
+              "Authorized signatory": `${x.signatoryName}, ${x.signatoryTitle}`,
+            }
+          : {
+              Type: "Individual",
+              Name: `${x.firstName} ${x.lastName}`,
+              Citizenship: cz ? `${cz.name} (${cz.code})` : x.citizenship || "—",
+            };
       return {
-        Name: `${x.firstName} ${x.lastName}`,
-        Citizenship: cz ? `${cz.name} (${cz.code})` : x.citizenship || "—",
+        ...identity,
         "Share class": x.shareClass,
         Shares: x.numberOfShares,
         "Price per share": `$${Number(x.pricePerShare).toFixed(2)} CAD`,
         "Subscription total": `$${subscription} CAD`,
-        Address: formatAddress(x.address),
+        [x.partyType === "corporation" ? "Registered office address" : "Address"]: formatAddress(x.address),
       };
     })
   );

@@ -2,6 +2,109 @@
 
 ## Open
 
+<!-- 2026-11-18 Stripe ↔ QuickBooks / GST-HST audit. Code facts were re-verified by a second reviewer; tax-law facts are cited to CRA / Justice Laws. Items marked "accountant decision" must not be changed in code until the owner's accountant confirms the treatment. -->
+
+### [Severity: high] GST/HST is sent to Stripe as an ordinary product line, so Stripe and QuickBooks cannot see the tax
+- **Where**: every checkout route (`src/app/api/{incorporate,nuans-report,legal-consult,office-renewal,service-request,compliance-request,change-name-request,amendment-request,business-update-request}/route.ts`). The tax line is a `price_data` item named `Tax (13%, ON)` (`HST (13%)` for legal-consult); no `tax_rates`.
+- **Symptom**: Stripe records $0 tax on every payment. Billing province, subtotal and tax amount are not in Session or PaymentIntent metadata (PI carries only `orderRef`/`productType`/`service`). The only record of the province is the tax line's name, and the only full record of the split is the pre-payment [PENDING] email. No Stripe Customer objects are created. The incorporation route sets no `productType`.
+- **Impact**: QuickBooks receives net payouts with no way to split service revenue, GST/HST by province, fees and refunds. Any Stripe→QBO sync app would book the "Tax" line as revenue. This is the main reason the books and HST do not reconcile.
+- **Why not fixed yet**: Fix at source = province-specific Stripe manual Tax Rates (free; QC as separate GST + QST rates) and province/subtotal/tax in `payment_intent_data.metadata`. That depends on the accountant decisions below. Historical orders need a reconciliation that walks payout → balance transaction → PaymentIntent → Checkout Session → line items.
+- **Logged**: 2026-11-18
+
+### [Severity: high] Nova Scotia is charged 15% HST; the rate has been 14% since 2025-04-01
+- **Where**: [src/lib/pricing.ts](src/lib/pricing.ts) `CA_TAX_RATES.NS = 0.15` (feeds every province-based route).
+- **Symptom**: Every NS-billed order since 2025-04-01 shows `Tax (15%, NS)`. CRA's rate table shows NS 14% on or after April 1, 2025 (CRA Notice 342 transition rule).
+- **Impact**: 1% over-collected on NS orders. The excess must be remitted, or refunded/credited to the customer with a credit note within 2 years of collection (ETA s.232(1), s.232(3)).
+- **Why not fixed yet**: One-line change to a live checkout. Waiting for owner go-ahead (raised 2026-11-18). Past NS orders need to be listed for the accountant.
+- **Logged**: 2026-11-18
+
+### [Severity: high] Quebec is charged 14.975% (GST + QST) in one line, while the code says no QST registration is held
+- **Where**: [src/lib/pricing.ts](src/lib/pricing.ts) `CA_TAX_RATES.QC = 0.14975` vs the comment above it ("GST/HST only — PST registrations not currently held").
+- **Symptom**: Quebec customers pay `Tax (14.975%, QC)` labelled "GST/HST".
+- **Impact**: If Korporex is not QST-registered, 9.975% is being collected with no QST account to remit it to. Amounts collected as tax must be remitted or refunded (ETA s.222/225 federally; Revenu Québec has parallel rules). Below the $30,000 specified-system threshold, only 5% GST applies. If Korporex is registered, the line must be split into GST (CRA) and QST (Revenu Québec) for two separate returns.
+- **Why not fixed yet**: Depends on QST registration status (owner/accountant decision).
+- **Logged**: 2026-11-18
+
+### [Severity: high] Government filing fees sit inside fully taxed prices, while the site tells customers they are not taxable
+- **Where**: incorporation packages ([pricing.ts](src/lib/pricing.ts) `PRICES` + `computePricing`), change-name ([changeNameSchema.ts](src/lib/changeNameSchema.ts), $150 ON / $200 federal included). Contradicted by [govFees.ts](src/lib/govFees.ts) header, the public cost guide `src/app/[locale]/cost-to-incorporate-canada/costCopy.ts` (EN/FR/ES: "Government filing fees are not subject to GST/HST"), and Terms s.5 ("remitted on your behalf", which is agency language). Sole proprietorship / business name ($60 ON fee) are ambiguous: the price could be read either way.
+- **Symptom**: HST is charged on the $200/$300 Articles fee ($26/$39 at 13%) on every incorporation, and on the change-name government fee.
+- **Impact**: CRA P-209R treats incorporation, registration and name fees paid as the client's agent as non-taxable disbursements, but an all-in bundled price is generally part of the taxable consideration. Today the pricing and the public copy contradict each other, so either the tax or the copy is wrong.
+- **Why not fixed yet**: Accountant decision: (a) split government fees into a separate untaxed disbursement line, or (b) keep bundling and correct the copy.
+- **Logged**: 2026-11-18
+
+### [Severity: high] Legal consultation: flat 13% HST for every province, no address collected, and unclear who the supplier is
+- **Where**: [pricing.ts](src/lib/pricing.ts) `LEGAL_CONSULT_TAX_RATE = 0.13` and its comment; [legalConsult.ts](src/lib/legalConsult.ts) (independent lawyer, "referral facilitation only"); [legal-consult/route.ts](src/app/api/legal-consult/route.ts).
+- **Symptom**: The code comment says "place-of-supply for legal services follows the lawyer's province". CRA disagrees: under the place-of-supply regulations (SOR/2010-117 s.13) and Memorandum 3-3-6-2 (Example 7), non-litigation advice is supplied where the client's address is. The questionnaire collects no address at all. Korporex's Stripe collects the full $150 + $19.50 with no split to the lawyer.
+- **Impact**: Wrong-rate tax for non-Ontario clients. If Korporex acts as agent, the fee and the HST belong on the lawyer's books, not as Korporex revenue and HST.
+- **Why not fixed yet**: Owner/accountant decision on principal vs agent. A billing-address field is needed either way.
+- **Logged**: 2026-11-18
+
+### [Severity: medium] Foreign customers are taxed inconsistently (0% vs 13%) depending on the product
+- **Where**: `getTaxRate` returns 0 for non-Canada (incorporation + 5 service routes); [nuansReport.ts](src/lib/nuansReport.ts) and [office-renewal/route.ts](src/app/api/office-renewal/route.ts) (`OUTSIDE_RATE`) charge 13% "ON"; legal-consult is always 13%.
+- **Symptom**: The same registered-office service is 0% at purchase and 13% at renewal for a foreign client. Foreign NUANS orders are labelled `Tax (13%, ON)`, so they look identical to Ontario orders.
+- **Impact**: Over- or under-collection on non-resident sales. Non-resident zero-rating was not researched in the audit.
+- **Why not fixed yet**: Accountant decision on non-resident treatment, then one rule in `pricing.ts`.
+- **Logged**: 2026-11-18
+
+### [Severity: medium] Website orders never produce an invoice, only a Stripe receipt
+- **Where**: all 9 `stripe.checkout.sessions.create` calls (`src/app/api/*/route.ts`); none sets `invoice_creation`.
+- **Symptom**: Customers who pay on the site get Stripe's generic receipt email. No invoice PDF, no invoice number, no order reference, no Korporex legal name or GST/HST number on the document unless the account tax ID is set in Stripe (Settings > Billing > Invoices > Invoice tax information, which also prints on email receipts).
+- **Impact**: Business customers paying $100+ need the supplier's GST/HST registration number on the document to claim input tax credits; the receipt looks generic next to a $599-$1,349 order.
+- **Why not fixed yet**: Owner declined for now on 2026-11-18 because of the per-invoice fee (on top of card processing). Customers keep the free Stripe receipt, which now carries the branding and GST/HST tax ID. Manual Dashboard invoices on request remain an option. Fix when wanted = one shared `invoice_creation` builder in `src/lib/stripe.ts` used by all 9 routes (order reference + service as custom fields, legal name in footer). Costs 0.4% per invoice, capped at US$2. Until the GST/HST-as-line-item issue above is fixed with Stripe Tax Rates, the tax prints as an ordinary line ("Tax (13%, ON)") instead of a tax row in the totals, so doing both together gives the clean result.
+- **Logged**: 2026-11-18
+
+### [Severity: medium] Seven services advertise government fees "billed separately", but no code ever collects them
+- **Where**: annual-return-federal, articles-amendment, amalgamation, continuance, dissolve-business, revive-business, extra-provincial (page copy) vs single-line checkouts in `amendment-request`, `business-update-request`, `compliance-request`, `service-request`.
+- **Symptom**: No Stripe invoice, payment link or follow-up charge exists anywhere in the code.
+- **Impact**: Either Korporex absorbs these fees (they should be booked as cost of sales), or they are collected by hand outside the order flow and appear in QuickBooks as unmatched deposits. The tax treatment of the separately billed amount is undefined.
+- **Why not fixed yet**: Owner to confirm how these fees are actually collected today.
+- **Logged**: 2026-11-18
+
+### [Severity: medium] Corporation Profile Report is charged with no tax in any province
+- **Where**: [complianceServices.ts](src/lib/complianceServices.ts) `taxExempt: true` (the only exempt flag in the code).
+- **Symptom**: $19.99 flat with no tax line. About $11.99 of that is Korporex's service fee on top of the $8 registry fee.
+- **Impact**: If the supply is taxable, the tax was never collected and is still owed (RC4022: the supplier is liable for tax it should have charged).
+- **Why not fixed yet**: Accountant decision.
+- **Logged**: 2026-11-18
+
+### [Severity: medium] Refunds, disputes and off-Stripe payments are not recorded anywhere
+- **Where**: [stripe-webhook/route.ts](src/app/api/stripe-webhook/route.ts) handles only checkout events. Admin `order_overrides` statuses (`money_received` etc.) and Office Renewals "mark paid" (manual) are independent of Stripe.
+- **Symptom**: A refund or chargeback issued in the Stripe Dashboard leaves no Korporex record and no tax split. Manual renewal payments log only "$X CAD + tax".
+- **Impact**: Each refund needs a hand-made QuickBooks credit memo reversing revenue and HST. Manual payments arrive as bank deposits with no Stripe counterpart.
+- **Why not fixed yet**: Part of the Stripe↔QuickBooks plan (sync app or webhook handlers).
+- **Logged**: 2026-11-18
+
+### [Severity: medium] Registered-office deferred revenue: the tracker dates the term from checkout, not from filing
+- **Where**: [officeRenewals.ts](src/lib/officeRenewals.ts) `importOfficeClientFromSession` sets `started_on` to the session creation date. The business-update operator note says the term "starts on filing". Taxing at the billing province (not the Ontario premises) is also a place-of-supply question for the accountant.
+- **Impact**: The $599.88/$1,199.88 annual fee should be deferred over 12 months (HST is still due in full when paid, ETA s.168(1)). Deferral schedules built from the tracker start on the wrong date.
+- **Why not fixed yet**: Needs the filing date captured, plus the accountant's deferral policy.
+- **Logged**: 2026-11-18
+
+### [Severity: medium] Dashboard revenue is not a usable control total
+- **Where**: [dashboardData.ts](src/lib/dashboardData.ts).
+- **Symptom**: "Paid revenue" sums `amount_total`, which includes the tax line, with no refunds or fees subtracted, over only the 100 most recent sessions of any status. `classifySource` returns "unknown" for legal-consult, NUANS, renewals and all service orders. Unverified: `getOrderDetail` expands `customer_details`/`total_details`, which may not be expandable Stripe fields. If Stripe rejects that, the order detail page silently shows nothing.
+- **Impact**: Will never match QuickBooks net sales, Stripe net volume or bank deposits.
+- **Why not fixed yet**: Logged during the audit; fix together with the metadata changes.
+- **Logged**: 2026-11-18
+
+### [Severity: low] A typo in the free-text billing country silently charges 0% tax
+- **Where**: `AddressFields` country `<input type="text">`; `isCanadaCountry` accepts only CA/CAN/CANADA; `isKnownTaxRegion` skips province validation for any other value ([pricing.ts](src/lib/pricing.ts)).
+- **Symptom**: "Canda" or "Ontario, Canada" passes validation and is charged no tax.
+- **Why not fixed yet**: Logged during the audit. Fix: make country a select list (or validate the postal-code format).
+- **Logged**: 2026-11-18
+
+### [Severity: low] Renewal checkout region check accepts prototype keys, which drops the tax line
+- **Where**: [office-renewal/route.ts](src/app/api/office-renewal/route.ts) validates with `r in CA_TAX_RATES`.
+- **Symptom**: A hand-crafted POST with `constructor`/`toString` as the region yields NaN tax, so the checkout is created with no tax line and the bogus region is saved to `office_clients.billing_region`. Requires the client's own valid token.
+- **Why not fixed yet**: Logged during the audit. Fix: `Object.hasOwn(CA_TAX_RATES, r)`.
+- **Logged**: 2026-11-18
+
+### [Severity: low] No GST/HST registration number on any customer receipt
+- **Where**: No `invoice_creation` on any session. The webhook relies on Stripe's automatic receipt, and the renewal receipt email shows only the gross amount.
+- **Impact**: Business customers may not have a document that supports an ITC claim. Manually raised QuickBooks invoices for these sales risk double-counting.
+- **Why not fixed yet**: Check the Stripe Dashboard receipt settings first.
+- **Logged**: 2026-11-18
+
 ### [Severity: low] Office renewal emails are English only
 - **Where**: [src/lib/officeRenewalEmails.ts](src/lib/officeRenewalEmails.ts). The client page (/office-renewal) is translated en/fr/es and follows the client's `locale` column, but the reminder, receipt and moving-acknowledgement emails are English.
 - **Why not fixed yet**: client language is not captured at purchase (Stripe sessions carry no locale), so every imported client defaults to `en`; the owner can set the language per client in the edit form. Translate the templates once FR/ES clients exist.
@@ -13,6 +116,7 @@
 - **Impact**: Per-order margin negative on 1-name Ontario orders only. Volume expected to be low (most NUANS orders are bundled with incorporation packages). Acceptable as a marketing loss-leader.
 - **Why not fixed yet**: Per user direction during 2026-05-26 builds — keep base price at $40 to match published marketing. Per-jurisdiction first-name pricing ($40 federal / $80 Ontario) is a one-line change in `NUANS_REPORT.basePrice` plus passing the first row's jurisdiction to `computePricing` in `/api/nuans-report/route.ts`.
 - **Logged**: 2026-05-26 (updated same day for the $45 / additional-row tier)
+- **Update 2026-11-18**: This entry is stale. The NUANS price is now $39.99 per name, and `NUANS_FEES` in `pricing.ts` holds 39.99/39.99 (the selling price, not the search-house cost). The ~$20 federal / ~$60 Ontario cost figures exist only in this entry. Re-confirm actual search-house costs during the QuickBooks reconciliation. Also, `govFees.ts` says federal online incorporation needs no separate NUANS report, so the search bundled into federal Standard/Premium may have no third-party cost.
 
 ### [Severity: high] French + Spanish translations only cover chrome + soon page + homepage; the rest of the site still renders English under /fr/ and /es/ URLs
 - **Where**: pages under `src/app/[locale]/` still with hardcoded English text in JSX: services (+ 20 service sub-pages; count updated 2026-08-11 to include the two annual-resolution pages added 2026-08-06 and the new `initial-minute-book` page), order (pricing), terms, privacy, the 8-step incorporation wizard, legal-consultation, both confirmation pages. **Done so far**: homepage, `/soon`, the full guides section, `/contact`, and **`/about` + `/faq` (translated 2026-06-02 — new `about` and `faq` namespaces; FAQ split into server entry + client body)**. Next batch planned: Services + Order, then the 20 service sub-pages, then the wizard, then Terms/Privacy as lawyer-review drafts.
@@ -61,7 +165,7 @@
 - **Logged**: 2026-04-23
 
 ### [Severity: low] Canadian sales-tax rates cover GST/HST only (no PST)
-- **Where**: `src/app/incorporate/page.tsx` — `CA_TAX_RATES` / `getTaxRate()`.
+- **Where**: [src/lib/pricing.ts](src/lib/pricing.ts) — `CA_TAX_RATES` / `getTaxRate()` (path corrected 2026-11-18). Note: QC is the exception. It charges 14.975% (GST + QST), which contradicts this entry; see the Quebec entry above.
 - **Symptom**: Tax is charged as 5% in BC / SK / MB (GST-only) instead of the province-specific combined rate, because Korporex isn't currently registered to collect PST in any province.
 - **Impact**: Under-collects tax in PST provinces *if* Korporex ever registers to collect there. Correct today while unregistered.
 - **Why not fixed yet**: Accurate today given registration status. Revisit when/if PST registrations are obtained.
