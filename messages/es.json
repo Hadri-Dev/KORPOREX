@@ -24,7 +24,6 @@
     "thankYou": "Gracias",
     "errorGeneric": "Algo salió mal. Vuelva a intentarlo o escríbanos a {email}.",
     "federalProvincialIncorporation": "Constitución federal y provincial",
-    "talkToLawyer": "Hable con un abogado corporativo",
     "contactEmail": "contact@korporex.ca"
   },
   "languageSwitcher": {
@@ -66,7 +65,6 @@
       "ontarioIncorporation": "Constitución en Ontario",
       "annualReturns": "Declaraciones anuales",
       "dissolveBusiness": "Disolver una empresa",
-      "talkToLawyer": "Hable con un abogado corporativo",
       "terms": "Términos del servicio",
       "privacy": "Política de privacidad"
     },
@@ -481,11 +479,11 @@
           },
           {
             "q": "¿Es Korporex un bufete de abogados?",
-            "a": "No. Korporex es una empresa de tecnología y un servicio de preparación y presentación de documentos. No somos un bufete de abogados y no brindamos asesoría legal. Si necesita asesoría legal específica para su situación, podemos ponerlo en contacto con un abogado independiente especializado en derecho corporativo de nuestra red de referencia de confianza. Consulte «¿Qué hago si necesito asesoría legal personalizada?» a continuación."
+            "a": "No. Korporex es una empresa de tecnología y un servicio de preparación y presentación de documentos. No somos un bufete de abogados y no brindamos asesoría legal. Si necesita asesoría legal específica para su situación, debe consultar a un abogado. Consulte «¿Qué hago si necesito asesoría legal personalizada?» a continuación."
           },
           {
             "q": "¿Qué hago si necesito asesoría legal personalizada?",
-            "a": "Podemos ponerlo en contacto con un abogado independiente y colegiado especializado en derecho corporativo, de nuestra red de referencia de confianza, para una consulta de 30 minutos ($150 + HST, facturada por adelantado). Complete un breve cuestionario que describa su situación, elija un horario en el Calendly del abogado y pague para confirmar. El abogado revisa su cuestionario y los documentos que cargue antes de la llamada. Korporex no es un bufete de abogados y no es parte de la consulta; no se crea ninguna relación abogado-cliente con Korporex. Visite /legal-consultation para reservar."
+            "a": "Korporex no brinda asesoría legal. Si no está seguro de cómo estructurar su empresa o desea asesoría legal antes de continuar, puede reservar una consulta opcional de 30 minutos con un abogado independiente y colegiado especializado en derecho corporativo ($150 + HST, facturada por adelantado). Complete un breve cuestionario que describa su situación, elija un horario en el Calendly del abogado y pague para confirmar. El abogado revisa su cuestionario y los documentos que cargue antes de la llamada. Korporex no es un bufete de abogados y no es parte de la consulta; no se crea ninguna relación abogado-cliente con Korporex. Una vez que tenga su asesoría, puede volver a Korporex para completar su constitución o trámite. Visite /legal-consultation para reservar."
           },
           {
             "q": "¿Está segura mi información personal?",

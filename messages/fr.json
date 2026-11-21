@@ -24,7 +24,6 @@
     "thankYou": "Merci",
     "errorGeneric": "Une erreur s'est produite. Veuillez réessayer ou nous écrire à {email}.",
     "federalProvincialIncorporation": "Constitution fédérale et provinciale",
-    "talkToLawyer": "Parler à un avocat en droit des sociétés",
     "contactEmail": "contact@korporex.ca"
   },
   "languageSwitcher": {
@@ -66,7 +65,6 @@
       "ontarioIncorporation": "Constitution ontarienne",
       "annualReturns": "Déclarations annuelles",
       "dissolveBusiness": "Dissoudre une entreprise",
-      "talkToLawyer": "Parler à un avocat en droit des sociétés",
       "terms": "Conditions d'utilisation",
       "privacy": "Politique de confidentialité"
     },
@@ -481,11 +479,11 @@
           },
           {
             "q": "Korporex est-elle un cabinet d'avocats?",
-            "a": "Non. Korporex est une entreprise technologique et un service de préparation et de dépôt de documents. Nous ne sommes pas un cabinet d'avocats et nous ne fournissons pas de conseils juridiques. Si vous avez besoin de conseils juridiques propres à votre situation, nous pouvons vous mettre en relation avec un avocat en droit des sociétés indépendant issu de notre réseau de référence de confiance. Voir « Que faire si j'ai besoin de conseils juridiques personnalisés? » ci-dessous."
+            "a": "Non. Korporex est une entreprise technologique et un service de préparation et de dépôt de documents. Nous ne sommes pas un cabinet d'avocats et nous ne fournissons pas de conseils juridiques. Si vous avez besoin de conseils juridiques propres à votre situation, vous devriez consulter un avocat. Voir « Que faire si j'ai besoin de conseils juridiques personnalisés? » ci-dessous."
           },
           {
             "q": "Que faire si j'ai besoin de conseils juridiques personnalisés?",
-            "a": "Nous pouvons vous mettre en relation avec un avocat en droit des sociétés indépendant et titulaire d'un permis, issu de notre réseau de référence de confiance, pour une consultation de 30 minutes (150 $ + TVH, facturée à l'avance). Remplissez un court questionnaire décrivant votre situation, choisissez une plage horaire dans le Calendly de l'avocat et payez pour confirmer. L'avocat examine votre questionnaire et tout document que vous téléversez avant l'appel. Korporex n'est pas un cabinet d'avocats et n'est pas partie à la consultation; aucune relation avocat-client n'est créée avec Korporex. Visitez /legal-consultation pour réserver."
+            "a": "Korporex ne fournit pas de conseils juridiques. Si vous hésitez sur la structure de votre entreprise ou souhaitez obtenir des conseils juridiques avant de poursuivre, vous pouvez réserver une consultation facultative de 30 minutes avec un avocat en droit des sociétés indépendant et titulaire d'un permis (150 $ + TVH, facturée à l'avance). Remplissez un court questionnaire décrivant votre situation, choisissez une plage horaire dans le Calendly de l'avocat et payez pour confirmer. L'avocat examine votre questionnaire et tout document que vous téléversez avant l'appel. Korporex n'est pas un cabinet d'avocats et n'est pas partie à la consultation; aucune relation avocat-client n'est créée avec Korporex. Une fois conseillé, vous pouvez revenir chez Korporex pour terminer votre constitution ou votre dépôt. Visitez /legal-consultation pour réserver."
           },
           {
             "q": "Mes renseignements personnels sont-ils sécurisés?",

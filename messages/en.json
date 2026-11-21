@@ -24,7 +24,6 @@
     "thankYou": "Thank You",
     "errorGeneric": "Something went wrong. Please try again or email us at {email}.",
     "federalProvincialIncorporation": "Federal & Provincial Incorporation",
-    "talkToLawyer": "Talk to a Corporate Lawyer",
     "contactEmail": "contact@korporex.ca"
   },
   "languageSwitcher": {
@@ -66,7 +65,6 @@
       "ontarioIncorporation": "Ontario Incorporation",
       "annualReturns": "Annual Returns",
       "dissolveBusiness": "Dissolve a Business",
-      "talkToLawyer": "Talk to a Corporate Lawyer",
       "terms": "Terms of Service",
       "privacy": "Privacy Policy"
     },
@@ -481,11 +479,11 @@
           },
           {
             "q": "Is Korporex a law firm?",
-            "a": "No. Korporex is a technology company and document preparation and filing service. We are not a law firm and do not provide legal advice. If you require legal advice specific to your situation, we can connect you with an independent corporate lawyer from our trusted referral network. See “What if I need personalized legal advice?” below."
+            "a": "No. Korporex is a technology company and document preparation and filing service. We are not a law firm and do not provide legal advice. If you require legal advice specific to your situation, you should speak with a lawyer. See “What if I need personalized legal advice?” below."
           },
           {
             "q": "What if I need personalized legal advice?",
-            "a": "We can connect you with an independent licensed corporate lawyer from our trusted referral network for a 30-minute consultation ($150 + HST, billed in advance). Fill out a short questionnaire describing your situation, pick a slot from the lawyer's Calendly, and pay to confirm. The lawyer reviews your questionnaire and any documents you upload before the call. Korporex is not a law firm and is not party to the consultation; no solicitor-client relationship is created with Korporex. Visit /legal-consultation to book."
+            "a": "Korporex does not give legal advice. If you are unsure how to structure your business, or want legal advice before you proceed, you can book an optional 30-minute consultation with an independent licensed corporate lawyer ($150 + HST, billed in advance). Fill out a short questionnaire describing your situation, pick a slot from the lawyer's Calendly, and pay to confirm. The lawyer reviews your questionnaire and any documents you upload before the call. Korporex is not a law firm and is not party to the consultation; no solicitor-client relationship is created with Korporex. Once you have your advice, you can return to Korporex to complete your incorporation or filing. Visit /legal-consultation to book."
           },
           {
             "q": "Is my personal information secure?",

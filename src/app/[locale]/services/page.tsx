@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
-import { ArrowRight, Building2, FileText, Edit3, ClipboardCheck, RefreshCw, ScaleIcon, Check, Star, ShieldCheck } from "lucide-react";
+import { ArrowRight, Building2, FileText, Edit3, ClipboardCheck, RefreshCw, Check, Star, ShieldCheck } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
 import { buildSeoMetadata } from "@/lib/seoMeta";
 import { EXTRA_NAME_SEARCH_FEE } from "@/lib/pricing";
@@ -113,11 +113,6 @@ type Copy = {
   nuansReport: string;
   categories: Record<CategoryId, { title: string; description: string }>;
   serviceNames: Record<string, string>;
-  lawyerEyebrow: string;
-  lawyerH2: string;
-  lawyerBody: string;
-  lawyerFee: string;
-  lawyerCta: string;
   ctaH2: string;
   ctaBody: string;
   ctaIncorporate: string;
@@ -238,12 +233,6 @@ const COPY: Record<Lang, Copy> = {
       "/services/continuance": "Continuance Between Jurisdictions",
       "/services/registered-office": "Registered Office",
     },
-    lawyerEyebrow: "Need Personalized Legal Advice?",
-    lawyerH2: "Talk to a Trusted Corporate Lawyer",
-    lawyerBody:
-      "Korporex isn’t a law firm, but if you need personalized legal advice on incorporation strategy, shareholder agreements, restructuring, or anything else corporate-law related, we can connect you with an independent corporate lawyer from our trusted referral network. Book a 30-minute consultation for ",
-    lawyerFee: "$150 + HST",
-    lawyerCta: "Book a Consultation",
     ctaH2: "Not Sure Where to Start?",
     ctaBody:
       "Most businesses start with a federal or provincial incorporation. If you're unsure which is right for you, check our FAQ or start the incorporation flow and we'll guide you.",
@@ -364,12 +353,6 @@ const COPY: Record<Lang, Copy> = {
       "/services/continuance": "Prorogation entre territoires",
       "/services/registered-office": "Siège social",
     },
-    lawyerEyebrow: "Besoin de conseils juridiques personnalisés?",
-    lawyerH2: "Parlez à un avocat en droit des sociétés de confiance",
-    lawyerBody:
-      "Korporex n'est pas un cabinet d'avocats, mais si vous avez besoin de conseils juridiques personnalisés sur la stratégie de constitution, les conventions entre actionnaires, la restructuration ou toute autre question de droit des sociétés, nous pouvons vous mettre en relation avec un avocat en droit des sociétés indépendant de notre réseau de référence de confiance. Réservez une consultation de 30 minutes pour ",
-    lawyerFee: "$150 + TVH",
-    lawyerCta: "Réserver une consultation",
     ctaH2: "Vous ne savez pas par où commencer?",
     ctaBody:
       "La plupart des entreprises commencent par une constitution fédérale ou provinciale. Si vous ne savez pas laquelle vous convient, consultez notre FAQ ou lancez le processus de constitution et nous vous guiderons.",
@@ -490,12 +473,6 @@ const COPY: Record<Lang, Copy> = {
       "/services/continuance": "Continuación entre jurisdicciones",
       "/services/registered-office": "Domicilio social",
     },
-    lawyerEyebrow: "¿Necesita asesoramiento legal personalizado?",
-    lawyerH2: "Hable con un abogado corporativo de confianza",
-    lawyerBody:
-      "Korporex no es un bufete de abogados, pero si necesita asesoramiento legal personalizado sobre estrategia de constitución, acuerdos de accionistas, reestructuración o cualquier otro asunto de derecho corporativo, podemos ponerle en contacto con un abogado corporativo independiente de nuestra red de referencias de confianza. Reserve una consulta de 30 minutos por ",
-    lawyerFee: "$150 + HST",
-    lawyerCta: "Reservar una consulta",
     ctaH2: "¿No sabe por dónde empezar?",
     ctaBody:
       "La mayoría de las empresas comienzan con una constitución federal o provincial. Si no está seguro de cuál le conviene, consulte nuestras preguntas frecuentes o inicie el proceso de constitución y le guiaremos.",
@@ -735,31 +712,6 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
             ))}
           </div>
           <p className="mt-6 text-xs text-gray-500 text-center">{t.taxNote}</p>
-        </div>
-      </section>
-
-      {/* Lawyer-referral callout */}
-      <section className="bg-cream-50 py-8 px-6 border-t border-gray-100">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white border border-gray-200 rounded-lg p-8 md:p-10 flex flex-col md:flex-row gap-8 items-start">
-            <div className="w-12 h-12 bg-navy-900 flex items-center justify-center shrink-0">
-              <ScaleIcon size={22} className="text-gold-500" />
-            </div>
-            <div className="flex-1">
-              <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold-500 mb-3">{t.lawyerEyebrow}</p>
-              <h2 className="font-serif text-2xl md:text-3xl font-bold text-navy-900 mb-3">{t.lawyerH2}</h2>
-              <p className="text-gray-600 leading-relaxed mb-5">
-                {t.lawyerBody}
-                <span className="font-semibold text-navy-900">{t.lawyerFee}</span>.
-              </p>
-              <Link
-                href="/legal-consultation"
-                className="inline-flex items-center gap-2 bg-navy-900 text-white font-medium px-6 py-3 text-sm tracking-wide hover:bg-navy-800 transition-colors"
-              >
-                {t.lawyerCta} <ArrowRight size={14} />
-              </Link>
-            </div>
-          </div>
         </div>
       </section>
 

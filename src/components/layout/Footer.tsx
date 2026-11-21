@@ -67,7 +67,6 @@ const SERVICE_LINKS = [
   { labelKey: "ontarioIncorporation", href: "/services" },
   { labelKey: "annualReturns", href: "/services" },
   { labelKey: "dissolveBusiness", href: "/services" },
-  { labelKey: "talkToLawyer", href: "/legal-consultation" },
 ] as const;
 
 export default function Footer() {

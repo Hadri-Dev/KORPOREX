@@ -43,14 +43,14 @@ const COPY = {
   en: {
     h1: "Need legal advice for your corporation?",
     intro:
-      "Book a 30-minute consultation with an independent licensed lawyer from our trusted referral network. Get personalized answers about incorporation strategy, shareholder agreements, compliance, restructuring, and more.",
+      "Book a 30-minute consultation with an independent licensed lawyer. Get personalized answers about incorporation strategy, shareholder agreements, compliance, restructuring, and more.",
     badgeDuration: "30-minute consultation",
     badgeLawyer: "Independent corporate lawyer",
     plusTax: "+ HST",
     cadTotal: "CAD total",
     disclaimerStrong: "Korporex is not a law firm and does not provide legal advice.",
     disclaimerBody:
-      "The consultation is provided by an independent licensed lawyer from our trusted referral network. Korporex’s role is limited to facilitating the introduction. No solicitor-client relationship is created with Korporex. The lawyer’s services are subject to their own engagement terms; the $150 fee covers the 30-minute consultation only.",
+      "The consultation is provided by an independent licensed lawyer. Korporex’s role is limited to facilitating the introduction. No solicitor-client relationship is created with Korporex. The lawyer’s services are subject to their own engagement terms; the $150 fee covers the 30-minute consultation only.",
     formH2: "Tell us about your situation",
     formIntro: "The lawyer reviews this before your call so they can come prepared.",
     fullName: "Full Name *",
@@ -117,19 +117,19 @@ const COPY = {
     footerOrCheck: "or check our",
     faq: "FAQ",
     footerFine:
-      "Korporex is not a law firm. Lawyers in our referral network are independent professionals; their fees beyond the consultation are between them and you.",
+      "Korporex is not a law firm. The lawyer is an independent professional; any fees beyond the consultation are between the lawyer and you.",
   },
   fr: {
     h1: "Besoin de conseils juridiques pour votre société?",
     intro:
-      "Réservez une consultation de 30 minutes avec un avocat autorisé indépendant de notre réseau de référence de confiance. Obtenez des réponses personnalisées sur la stratégie de constitution, les conventions entre actionnaires, la conformité, la restructuration et plus encore.",
+      "Réservez une consultation de 30 minutes avec un avocat autorisé indépendant. Obtenez des réponses personnalisées sur la stratégie de constitution, les conventions entre actionnaires, la conformité, la restructuration et plus encore.",
     badgeDuration: "Consultation de 30 minutes",
     badgeLawyer: "Avocat en droit des sociétés indépendant",
     plusTax: "+ TVH",
     cadTotal: "CAD au total",
     disclaimerStrong: "Korporex n'est pas un cabinet d'avocats et ne fournit pas de conseils juridiques.",
     disclaimerBody:
-      "La consultation est fournie par un avocat autorisé indépendant de notre réseau de référence de confiance. Le rôle de Korporex se limite à faciliter la mise en relation. Aucune relation avocat-client n'est créée avec Korporex. Les services de l'avocat sont assujettis à ses propres conditions de mandat; les frais de 150 $ couvrent uniquement la consultation de 30 minutes.",
+      "La consultation est fournie par un avocat autorisé indépendant. Le rôle de Korporex se limite à faciliter la mise en relation. Aucune relation avocat-client n'est créée avec Korporex. Les services de l'avocat sont assujettis à ses propres conditions de mandat; les frais de 150 $ couvrent uniquement la consultation de 30 minutes.",
     formH2: "Parlez-nous de votre situation",
     formIntro: "L'avocat examine ces renseignements avant votre appel afin d'être bien préparé.",
     fullName: "Nom complet *",
@@ -197,19 +197,19 @@ const COPY = {
     footerOrCheck: "ou consultez notre",
     faq: "FAQ",
     footerFine:
-      "Korporex n'est pas un cabinet d'avocats. Les avocats de notre réseau de référence sont des professionnels indépendants; leurs honoraires au-delà de la consultation sont convenus entre eux et vous.",
+      "Korporex n'est pas un cabinet d'avocats. L'avocat est un professionnel indépendant; ses honoraires au-delà de la consultation sont convenus entre lui et vous.",
   },
   es: {
     h1: "¿Necesita asesoramiento legal para su sociedad?",
     intro:
-      "Reserve una consulta de 30 minutos con un abogado autorizado independiente de nuestra red de referencias de confianza. Obtenga respuestas personalizadas sobre estrategia de constitución, acuerdos de accionistas, cumplimiento, reestructuración y más.",
+      "Reserve una consulta de 30 minutos con un abogado autorizado independiente. Obtenga respuestas personalizadas sobre estrategia de constitución, acuerdos de accionistas, cumplimiento, reestructuración y más.",
     badgeDuration: "Consulta de 30 minutos",
     badgeLawyer: "Abogado corporativo independiente",
     plusTax: "+ HST",
     cadTotal: "CAD en total",
     disclaimerStrong: "Korporex no es un bufete de abogados y no ofrece asesoramiento legal.",
     disclaimerBody:
-      "La consulta la presta un abogado autorizado independiente de nuestra red de referencias de confianza. La función de Korporex se limita a facilitar la presentación. No se crea ninguna relación abogado-cliente con Korporex. Los servicios del abogado están sujetos a sus propios términos de contratación; la tarifa de $150 cubre únicamente la consulta de 30 minutos.",
+      "La consulta la presta un abogado autorizado independiente. La función de Korporex se limita a facilitar la presentación. No se crea ninguna relación abogado-cliente con Korporex. Los servicios del abogado están sujetos a sus propios términos de contratación; la tarifa de $150 cubre únicamente la consulta de 30 minutos.",
     formH2: "Cuéntenos su situación",
     formIntro: "El abogado revisa esta información antes de su llamada para llegar preparado.",
     fullName: "Nombre completo *",
@@ -277,7 +277,7 @@ const COPY = {
     footerOrCheck: "o consulte nuestras",
     faq: "preguntas frecuentes",
     footerFine:
-      "Korporex no es un bufete de abogados. Los abogados de nuestra red de referencias son profesionales independientes; sus honorarios más allá de la consulta se acuerdan entre ellos y usted.",
+      "Korporex no es un bufete de abogados. El abogado es un profesional independiente; sus honorarios más allá de la consulta se acuerdan entre él y usted.",
   },
 };
 

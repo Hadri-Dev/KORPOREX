@@ -124,7 +124,7 @@ export async function POST(req: Request) {
             currency: "cad",
             product_data: {
               name: "Legal consultation - 30 minutes",
-              description: `Independent lawyer from Korporex's referral network. Booked slot: ${payload.calendlyStartTime}.`,
+              description: `Provided by an independent lawyer. Booked slot: ${payload.calendlyStartTime}.`,
             },
             unit_amount: Math.round(pricing.fee * 100),
           },
