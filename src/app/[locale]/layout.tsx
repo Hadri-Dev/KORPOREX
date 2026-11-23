@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import SiteChrome from "@/components/layout/SiteChrome";
+import AttributionCapture from "@/components/layout/AttributionCapture";
 import { routing, type Locale } from "@/i18n/routing";
 import { SITE_URL } from "@/app/[locale]/guides/articles";
 import { localizedUrl, socialMeta } from "@/lib/seoMeta";
@@ -85,6 +86,7 @@ export default async function LocaleLayout({
         {/* Organization node on every page: Service/Offer nodes across the site
             reference it as provider via "#organization". */}
         <JsonLd data={organizationSchema()} />
+        <AttributionCapture />
         <NextIntlClientProvider>
           <SiteChrome>{children}</SiteChrome>
         </NextIntlClientProvider>

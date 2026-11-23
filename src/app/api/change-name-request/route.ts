@@ -12,6 +12,7 @@ import { JURISDICTION_LABELS, type Jurisdiction } from "@/lib/pricing";
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
 import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
+import { attributionStripeMetadata, getAttributionFromCookies } from "@/lib/attribution";
 
 export const runtime = "nodejs";
 
@@ -126,6 +127,7 @@ export async function POST(req: Request) {
         productType: "amendment",
         service: SERVICE,
         orderRef,
+        ...attributionStripeMetadata(getAttributionFromCookies(req.headers.get("cookie"))),
         customerEmail,
         customerName,
         billingName: payload.billingName,

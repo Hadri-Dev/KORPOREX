@@ -12,6 +12,7 @@ import { getTaxRate } from "@/lib/pricing";
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
 import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
+import { attributionStripeMetadata, getAttributionFromCookies } from "@/lib/attribution";
 
 export const runtime = "nodejs";
 
@@ -115,6 +116,7 @@ export async function POST(req: Request) {
         productType: "registration",
         service,
         orderRef,
+        ...attributionStripeMetadata(getAttributionFromCookies(req.headers.get("cookie"))),
         customerEmail,
         customerName,
         billingName,

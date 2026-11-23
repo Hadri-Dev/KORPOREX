@@ -6,6 +6,7 @@ import { getSiteUrl, stripe } from "@/lib/stripe";
 import { annualFee, getClient, locationLabel, logEvent, updateClient, type OfficeClient } from "@/lib/officeRenewals";
 import { verifyRenewalToken } from "@/lib/officeRenewalToken";
 import { buildMovingAckEmail, buildOwnerMovingEmail } from "@/lib/officeRenewalEmails";
+import { attributionStripeMetadata, getAttributionFromCookies } from "@/lib/attribution";
 
 // Public endpoint behind the private link in each renewal email
 // (/office-renewal?t=<token>). The signed token is the only credential: it
@@ -138,6 +139,7 @@ export async function POST(req: Request): Promise<Response> {
         productType: "office-renewal",
         clientId: client.id,
         termEndsOn: client.renewsOn,
+        ...attributionStripeMetadata(getAttributionFromCookies(req.headers.get("cookie"))),
         businessName: client.businessName.slice(0, 450),
       },
       payment_intent_data: {

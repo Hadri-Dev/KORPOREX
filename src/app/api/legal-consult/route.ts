@@ -12,6 +12,7 @@ import {
 } from "@/lib/legalConsult";
 import { LEGAL_CONSULT_TAX_RATE, getLegalConsultPricing } from "@/lib/pricing";
 import { CONTACT_ADDRESS, sendMail, type EmailAttachment } from "@/lib/mailer";
+import { attributionStripeMetadata, getAttributionFromCookies } from "@/lib/attribution";
 
 export const runtime = "nodejs";
 
@@ -148,6 +149,7 @@ export async function POST(req: Request) {
         orderRef,
         productType: "legal-consult",
         customerName: payload.fullName,
+        ...attributionStripeMetadata(getAttributionFromCookies(req.headers.get("cookie"))),
         customerEmail: payload.email,
         customerPhone: payload.phone,
         calendlyStartTime: payload.calendlyStartTime,

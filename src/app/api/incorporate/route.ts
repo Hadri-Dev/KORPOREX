@@ -22,6 +22,7 @@ import { ALL_COUNTRIES } from "@/lib/countries";
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
 import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
+import { attributionStripeMetadata, getAttributionFromCookies } from "@/lib/attribution";
 
 export const runtime = "nodejs";
 
@@ -301,6 +302,7 @@ export async function POST(req: Request) {
         orderRef,
         jurisdiction: payload.jurisdiction,
         pkg: payload.pkg,
+        ...attributionStripeMetadata(getAttributionFromCookies(req.headers.get("cookie"))),
         corpNameType: payload.corpNameType,
         businessName: payload.businessName || "(numbered)",
         legalEnding: payload.legalEnding,
