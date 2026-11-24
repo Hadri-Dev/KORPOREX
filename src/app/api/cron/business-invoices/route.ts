@@ -9,22 +9,23 @@ import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
-// Monthly billing run for business (credit) accounts. Intended to be called
-// once a month (see .github/workflows/business-invoices.yml) with
-//   Authorization: Bearer <CRON_SECRET>
-// For every account with open (unbilled) orders, creates one Stripe invoice
-// covering all of them, finalizes it (which triggers the auto-charge, since
-// the invoice is collection_method: charge_automatically), and marks those
-// orders 'invoiced'. invoice.paid / invoice.payment_failed (stripe-webhook)
-// later flip them to 'paid' or flag the account 'past_due'.
-export async function POST(req: Request) {
+// Monthly billing run for business (credit) accounts, triggered by the
+// Vercel cron in vercel.json (same CRON_SECRET + Authorization: Bearer
+// convention as /api/cron/office-renewals — Vercel always calls crons via
+// GET). For every account with open (unbilled) orders, creates one Stripe
+// invoice covering all of them, finalizes it (which triggers the
+// auto-charge, since the invoice is collection_method:
+// charge_automatically), and marks those orders 'invoiced'. invoice.paid /
+// invoice.payment_failed (stripe-webhook) later flip them to 'paid' or flag
+// the account 'past_due'.
+export async function GET(req: Request) {
   const secret = process.env.CRON_SECRET;
   if (!secret) {
     return NextResponse.json({ error: "CRON_SECRET is not configured" }, { status: 500 });
   }
-  const auth = req.headers.get("authorization");
-  if (auth !== `Bearer ${secret}`) {
+  if (req.headers.get("authorization") !== `Bearer ${secret}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   if (!stripe) {
