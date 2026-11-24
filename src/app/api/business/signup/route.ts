@@ -7,7 +7,7 @@ export const runtime = "nodejs";
 
 const bodySchema = z.object({
   companyName: z.string().trim().min(1, "Company name is required").max(200),
-  contactName: z.string().trim().max(200).optional(),
+  contactName: z.string().trim().min(1, "Contact name is required").max(200),
   billingEmail: z.string().trim().email("Valid email required"),
   password: z.string().min(8, "Password must be at least 8 characters").max(200),
 });

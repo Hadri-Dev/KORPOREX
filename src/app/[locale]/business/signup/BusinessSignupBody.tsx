@@ -55,7 +55,7 @@ function SignupForm() {
     e.preventDefault();
     setError(null);
 
-    if (!companyName.trim() || !billingEmail.trim()) return;
+    if (!companyName.trim() || !contactName.trim() || !billingEmail.trim()) return;
     if (password.length < 8) {
       setError("Password must be at least 8 characters.");
       return;
@@ -75,7 +75,7 @@ function SignupForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           companyName: companyName.trim(),
-          contactName: contactName.trim() || undefined,
+          contactName: contactName.trim(),
           billingEmail: billingEmail.trim(),
           password,
         }),
@@ -172,13 +172,14 @@ function SignupForm() {
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-600 mb-1">
-              Contact name
+              Contact name *
             </label>
             <input
               className={iCls}
               value={contactName}
               onChange={(e) => setContactName(e.target.value)}
               placeholder="e.g. Jordan Smith"
+              required
             />
           </div>
           <div>
@@ -195,7 +196,7 @@ function SignupForm() {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">Password</label>
+            <label className="block text-xs font-semibold text-gray-600 mb-1">Password *</label>
             <input
               type="password"
               className={iCls}
@@ -207,7 +208,7 @@ function SignupForm() {
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-600 mb-1">
-              Confirm password
+              Confirm password *
             </label>
             <input
               type="password"
