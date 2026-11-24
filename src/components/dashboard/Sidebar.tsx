@@ -11,6 +11,7 @@ import {
   ChevronDown,
   TrendingUp,
   Building2,
+  Users,
   type LucideIcon,
 } from "lucide-react";
 
@@ -34,6 +35,7 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   { label: "Office Renewals", href: "/dashboard/office-renewals", icon: Building2 },
+  { label: "Business Accounts", href: "/dashboard/business-accounts", icon: Users },
   {
     label: "SEO Dashboard",
     href: "/dashboard/seo",

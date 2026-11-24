@@ -11,6 +11,8 @@ import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
 import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
 import { attributionStripeMetadata, getAttributionFromCookies } from "@/lib/attribution";
+import { BUSINESS_COOKIE_NAME, verifyBusinessSession } from "@/lib/businessAuth";
+import { getBusinessAccountById, recordBusinessOrder } from "@/lib/businessAccounts";
 
 export const runtime = "nodejs";
 
@@ -55,6 +57,45 @@ export async function POST(req: Request) {
   const orderRef = generateOrderRef();
   const customerEmail = parsed.contact.contactEmail;
   const customerName = `${parsed.contact.contactFirstName} ${parsed.contact.contactLastName}`.trim();
+
+  // A signed-in, active business account skips Checkout entirely — the
+  // order is recorded against the account and billed on its monthly
+  // invoice. past_due/suspended accounts fall through to the normal
+  // pay-now flow below, same as a guest.
+  const cookieHeader = req.headers.get("cookie");
+  const bizMatch = cookieHeader?.split("; ").find((c) => c.startsWith(`${BUSINESS_COOKIE_NAME}=`));
+  const bizToken = bizMatch?.slice(BUSINESS_COOKIE_NAME.length + 1);
+  const bizSession = await verifyBusinessSession(bizToken);
+  const businessAccount = bizSession ? await getBusinessAccountById(bizSession.accountId).catch(() => null) : null;
+
+  if (businessAccount && businessAccount.status === "active") {
+    await sendIntakeEmail({
+      payload: parsed,
+      pricing,
+      orderRef,
+      customerEmail,
+      customerName,
+      business: { companyName: businessAccount.companyName },
+    }).catch((err) => {
+      console.error("[nuans-report-api] business intake email failed:", err);
+    });
+
+    const namesSummary = parsed.rows
+      .map((r) => `${r.proposedName} [${getJurisdictionLabel(r.jurisdiction)}]`)
+      .join("; ");
+    await recordBusinessOrder({
+      businessAccountId: businessAccount.id,
+      orderRef,
+      productType: "nuans",
+      description: `${NUANS_REPORT.longLabel} (${parsed.rows.length}): ${namesSummary}`,
+      amountCents: Math.round(pricing.total * 100),
+    });
+
+    return NextResponse.json({
+      url: `${getSiteUrl()}/nuans/confirmation?ref=${orderRef}&business=1`,
+      orderRef,
+    });
+  }
 
   // 1. [PENDING PAYMENT] intake email
   await sendIntakeEmail({ payload: parsed, pricing, orderRef, customerEmail, customerName }).catch(
@@ -176,9 +217,11 @@ async function sendIntakeEmail(args: {
   orderRef: string;
   customerEmail: string;
   customerName: string;
+  business?: { companyName: string };
 }): Promise<void> {
-  const { pricing, orderRef, customerEmail, customerName } = args;
-  const subject = `[PENDING] ${orderRef} — ${NUANS_REPORT.longLabel} (${args.payload.rows.length}) — $${pricing.total.toFixed(2)} CAD`;
+  const { pricing, orderRef, customerEmail, customerName, business } = args;
+  const tag = business ? "BUSINESS ACCOUNT — BILL LATER" : "PENDING";
+  const subject = `[${tag}] ${orderRef} — ${NUANS_REPORT.longLabel} (${args.payload.rows.length}) — $${pricing.total.toFixed(2)} CAD`;
   const html = buildHtmlBody(args);
   await sendMail(
     {
@@ -222,8 +265,9 @@ function buildHtmlBody(args: {
   orderRef: string;
   customerEmail: string;
   customerName: string;
+  business?: { companyName: string };
 }): string {
-  const { payload, pricing, orderRef } = args;
+  const { payload, pricing, orderRef, business } = args;
 
   const orderRows = [
     row("Order reference", orderRef),
@@ -278,9 +322,15 @@ function buildHtmlBody(args: {
     row("Total (CAD)", `$${pricing.total.toFixed(2)}`),
   ].join("");
 
-  const note = `<p style="margin:24px 0 0;padding:12px 16px;background:#fef3c7;border-left:3px solid #C5A35A;color:#78350f;font-size:13px;line-height:1.6;"><strong>Status: PENDING PAYMENT.</strong> Wait for the [PAID] email before running the NUANS searches. Once paid, run a NUANS search on each row's distinctive term against the registry indicated, then consolidate the results into a single PDF and email it to the customer. If no "[PAID]" email arrives for <strong>${escapeHtml(
-    orderRef
-  )}</strong>, the customer did not finish checkout.</p>`;
+  const note = business
+    ? `<p style="margin:24px 0 0;padding:12px 16px;background:#dbeafe;border-left:3px solid #1d4ed8;color:#1e3a8a;font-size:13px;line-height:1.6;"><strong>Status: BUSINESS ACCOUNT — BILL LATER.</strong> ${escapeHtml(
+        business.companyName
+      )} is an approved business account — no payment to wait for. Run the NUANS search on each row's distinctive term against the registry indicated, then consolidate the results into a single PDF and email it to the customer now. This order bills to ${escapeHtml(
+        business.companyName
+      )}'s monthly invoice, charged automatically to the card on file.</p>`
+    : `<p style="margin:24px 0 0;padding:12px 16px;background:#fef3c7;border-left:3px solid #C5A35A;color:#78350f;font-size:13px;line-height:1.6;"><strong>Status: PENDING PAYMENT.</strong> Wait for the [PAID] email before running the NUANS searches. Once paid, run a NUANS search on each row's distinctive term against the registry indicated, then consolidate the results into a single PDF and email it to the customer. If no "[PAID]" email arrives for <strong>${escapeHtml(
+        orderRef
+      )}</strong>, the customer did not finish checkout.</p>`;
 
   return `<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#FAFAF8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;"><div style="max-width:680px;margin:0 auto;background:#ffffff;padding:32px;border:1px solid #e5e7eb;"><div style="width:32px;height:2px;background:#C5A35A;margin-bottom:20px;"></div><h1 style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#1B4332;">New NUANS report order — ${escapeHtml(
     orderRef

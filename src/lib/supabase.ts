@@ -23,6 +23,29 @@ export function getSupabaseBrowserClient(): SupabaseClient {
   return browserClient;
 }
 
+let serverAnonClient: SupabaseClient | null = null;
+
+/**
+ * Anon-key client for server-side auth operations that must go through
+ * Supabase Auth itself (signInWithPassword, resetPasswordForEmail) rather
+ * than the database directly — distinct from getSupabaseServiceClient(),
+ * which bypasses RLS and is for table reads/writes, and from
+ * getSupabaseBrowserClient(), which is browser-only.
+ */
+export function getSupabaseServerAnonClient(): SupabaseClient {
+  if (!isSupabaseConfigured()) {
+    throw new Error(
+      "Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.",
+    );
+  }
+  if (!serverAnonClient) {
+    serverAnonClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { persistSession: false },
+    });
+  }
+  return serverAnonClient;
+}
+
 export function getSupabaseServiceClient(): SupabaseClient {
   if (typeof window !== "undefined") {
     throw new Error(

@@ -1,0 +1,39 @@
+name: Business account monthly invoices
+
+# Calls /api/cron/business-invoices on korporex.ca once a month: it invoices
+# every business (credit) account's open orders in one Stripe Invoice,
+# auto-charged to the card on file. Requires the CRON_SECRET repo secret to
+# match the CRON_SECRET env var set on Vercel (Production).
+
+on:
+  schedule:
+    - cron: "0 9 1 * *" # 09:00 UTC on the 1st of every month
+  workflow_dispatch: {} # allow manual "Run workflow" from the Actions tab
+
+concurrency:
+  group: business-invoices
+  cancel-in-progress: false # never cancel a run already in flight (billing)
+
+jobs:
+  invoice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Trigger monthly business-account invoicing
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          if [ -z "$CRON_SECRET" ]; then
+            echo "::error::CRON_SECRET repo secret is not set — cannot authenticate to the cron endpoint."
+            exit 1
+          fi
+          code=$(curl -s -o /tmp/resp.txt -w '%{http_code}' --max-time 120 \
+            -X POST "https://korporex.ca/api/cron/business-invoices" \
+            -H "Authorization: Bearer $CRON_SECRET")
+          echo "HTTP $code"
+          cat /tmp/resp.txt
+          if [ "$code" != "200" ]; then
+            echo "::error::Monthly business invoicing run failed (HTTP $code)."
+            exit 1
+          fi

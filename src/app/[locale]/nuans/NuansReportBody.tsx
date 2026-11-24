@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useLocale } from "next-intl";
 import { useForm, useFieldArray, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Trash2, HelpCircle, ShieldCheck, Mail, Clock, FileCheck, ArrowDown } from "lucide-react";
+import { Plus, Trash2, HelpCircle, ShieldCheck, Mail, Clock, FileCheck, ArrowDown, Building2, LogOut } from "lucide-react";
 import {
   nuansReportRequestSchema,
   type NuansReportRequest,
@@ -266,6 +267,24 @@ export default function NuansReportBody() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  const [businessSession, setBusinessSession] = useState<{ companyName: string; status: string } | null>(
+    null,
+  );
+  useEffect(() => {
+    fetch("/api/business/me")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.signedIn) setBusinessSession({ companyName: data.companyName, status: data.status });
+      })
+      .catch(() => {});
+  }, []);
+  const canOrderOnAccount = businessSession?.status === "active";
+
+  async function switchToGuestCheckout() {
+    await fetch("/api/business/logout", { method: "POST" });
+    setBusinessSession(null);
+  }
+
   const form = useForm<NuansReportRequest>({
     resolver: zodResolver(nuansReportRequestSchema),
     mode: "onTouched",
@@ -335,6 +354,44 @@ export default function NuansReportBody() {
             <span className="text-sm text-gray-300">{t.perName}</span>
           </div>
           <p className="mt-2 text-sm text-gray-300">{t.noAccount}</p>
+
+          {businessSession ? (
+            <div className="mt-4 inline-flex flex-wrap items-center gap-3 rounded-md border border-gold-500/40 bg-white/5 px-4 py-2.5 text-sm">
+              <Building2 size={15} className="text-gold-500 shrink-0" />
+              {canOrderOnAccount ? (
+                <span>
+                  Signed in as <strong className="text-gold-500">{businessSession.companyName}</strong>
+                   — orders bill to this account monthly.
+                </span>
+              ) : (
+                <span>
+                  Signed in as <strong className="text-gold-500">{businessSession.companyName}</strong>
+                   — this account is {businessSession.status === "past_due" ? "past due" : "suspended"}{" "}
+                  from new credit orders. You can still order below as a paying guest.
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={switchToGuestCheckout}
+                className="inline-flex items-center gap-1 text-xs text-gray-300 underline hover:text-white"
+              >
+                <LogOut size={12} /> Sign out
+              </button>
+            </div>
+          ) : (
+            <p className="mt-4 text-sm text-gray-300">
+              Ordering regularly?{" "}
+              <Link href="/business/signup" className="text-gold-500 underline hover:text-gold-400">
+                Create a business account
+              </Link>{" "}
+              to skip checkout and get one invoice a month, or{" "}
+              <Link href="/business/login" className="text-gold-500 underline hover:text-gold-400">
+                sign in
+              </Link>
+              .
+            </p>
+          )}
+
           <a
             href="#order"
             className="mt-6 inline-flex items-center gap-2 bg-gold-500 text-navy-900 font-semibold py-3 px-6 text-sm tracking-wide hover:bg-gold-400 transition-colors"
@@ -604,9 +661,19 @@ export default function NuansReportBody() {
                 disabled={submitting}
                 className="w-full md:w-auto md:px-12 mt-6 inline-flex items-center justify-center gap-2 bg-navy-900 text-white font-medium py-3.5 px-8 text-sm tracking-wide hover:bg-navy-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {submitting ? t.submitting : t.submit}
+                {submitting
+                  ? canOrderOnAccount
+                    ? "Submitting…"
+                    : t.submitting
+                  : canOrderOnAccount
+                    ? `Submit order — bill ${businessSession?.companyName}`
+                    : t.submit}
               </button>
-              <p className="text-xs text-gray-500 mt-3 max-w-md">{t.stripe}</p>
+              <p className="text-xs text-gray-500 mt-3 max-w-md">
+                {canOrderOnAccount
+                  ? "This order skips checkout entirely and bills to your account's monthly invoice, charged to the card on file."
+                  : t.stripe}
+              </p>
               <p className="text-xs text-gray-500 mt-2 max-w-md">
                 <strong className="text-navy-900">{t.notAdviceLead}</strong> {t.notAdvice}
               </p>

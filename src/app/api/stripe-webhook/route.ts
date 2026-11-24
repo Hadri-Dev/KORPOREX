@@ -5,6 +5,11 @@ import { JURISDICTION_LABELS, PKG_LABELS, REG_OFFICE_OPTIONS, type Jurisdiction,
 import { LEGAL_CONSULT_RECIPIENTS } from "@/lib/legalConsult";
 import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
 import { applyRenewalPayment, importOfficeClientFromSession } from "@/lib/officeRenewals";
+import {
+  getBusinessAccountByStripeCustomerId,
+  markInvoiceOrdersPaid,
+  setBusinessAccountStatus,
+} from "@/lib/businessAccounts";
 
 export const runtime = "nodejs";
 // Webhooks must always run fresh — never cache.
@@ -54,6 +59,16 @@ export async function POST(req: Request) {
       case "checkout.session.async_payment_failed": {
         const session = event.data.object as Stripe.Checkout.Session;
         await handleCheckoutFailed(session);
+        break;
+      }
+      case "invoice.paid": {
+        const invoice = event.data.object as Stripe.Invoice;
+        await handleBusinessInvoicePaid(invoice);
+        break;
+      }
+      case "invoice.payment_failed": {
+        const invoice = event.data.object as Stripe.Invoice;
+        await handleBusinessInvoiceFailed(invoice);
         break;
       }
       default:
@@ -190,6 +205,49 @@ async function handleOfficeRenewalPaid(session: Stripe.Checkout.Session) {
     method: "stripe",
     stripeSessionId: session.id,
   });
+}
+
+// ─── Business account monthly invoices ──────────────────────────────────────
+
+function invoiceCustomerId(invoice: Stripe.Invoice): string | null {
+  return typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id ?? null;
+}
+
+async function handleBusinessInvoicePaid(invoice: Stripe.Invoice) {
+  const customerId = invoiceCustomerId(invoice);
+  if (!customerId) return;
+  const account = await getBusinessAccountByStripeCustomerId(customerId).catch(() => null);
+  if (!account) return; // not a business-account invoice
+
+  await markInvoiceOrdersPaid(invoice.id ?? "");
+  // A failed charge sets 'past_due'; a later successful payment (retry, or
+  // card update) clears it automatically. 'suspended' is a manual admin
+  // action and is never auto-cleared here.
+  if (account.status === "past_due") {
+    await setBusinessAccountStatus(account.id, "active");
+  }
+}
+
+async function handleBusinessInvoiceFailed(invoice: Stripe.Invoice) {
+  const customerId = invoiceCustomerId(invoice);
+  if (!customerId) return;
+  const account = await getBusinessAccountByStripeCustomerId(customerId).catch(() => null);
+  if (!account) return;
+
+  if (account.status !== "suspended") {
+    await setBusinessAccountStatus(account.id, "past_due");
+  }
+
+  const amount = ((invoice.amount_due ?? 0) / 100).toFixed(2);
+  const currency = (invoice.currency ?? "cad").toUpperCase();
+  await sendNotification(
+    `[BUSINESS INVOICE FAILED] ${account.companyName} — $${amount} ${currency}`,
+    `<p>The monthly auto-charge for <strong>${escapeHtml(account.companyName)}</strong> (${escapeHtml(
+      account.billingEmail,
+    )}) failed. The account is now blocked from placing new credit orders until the card is updated and the balance clears.</p><p>Stripe invoice: ${escapeHtml(
+      invoice.id ?? "(unknown)",
+    )}</p>`,
+  );
 }
 
 async function handleCheckoutFailed(session: Stripe.Checkout.Session) {

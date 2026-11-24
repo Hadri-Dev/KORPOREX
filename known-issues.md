@@ -2,6 +2,13 @@
 
 ## Open
 
+### [Severity: medium] Business accounts have no self-serve way to replace or remove their card
+- **Where**: new business-account feature (`src/lib/businessAccounts.ts`, `/api/business/*`). There is no "manage card" page or endpoint at all yet — a card is only ever set once, at signup.
+- **Symptom**: a business customer who wants to swap cards must contact support; there's no portal action for it.
+- **Impact**: low today (feature just shipped, no accounts yet), but matters as soon as real accounts exist. When built, it must follow the rule agreed with the owner 2026-11-23: never allow an account to end up with zero payment methods (replace-only, no bare delete), and if there's an unbilled balance at the moment of replacement, attempt an immediate invoice against the *old* card before switching (same suspend-on-failure rule as a missed monthly charge) — otherwise a customer could order a stack of reports, swap out their card, and leave Korporex with no way to collect for work already delivered.
+- **Why not fixed yet**: deliberately scoped out of the first build rather than rushed — this is real billing-edge-case logic (partial-period invoicing) that deserves its own careful pass, not something to bolt on under time pressure.
+- **Logged**: 2026-11-23
+
 <!-- 2026-11-18 Stripe ↔ QuickBooks / GST-HST audit. Code facts were re-verified by a second reviewer; tax-law facts are cited to CRA / Justice Laws. Items marked "accountant decision" must not be changed in code until the owner's accountant confirms the treatment. -->
 
 ### [Severity: high] GST/HST is sent to Stripe as an ordinary product line, so Stripe and QuickBooks cannot see the tax
