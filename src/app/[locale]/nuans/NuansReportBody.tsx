@@ -1,10 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useLocale } from "next-intl";
 import { useForm, useFieldArray, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Trash2, HelpCircle, ShieldCheck, Mail, Clock, FileCheck, ArrowDown } from "lucide-react";
+import { Plus, Trash2, HelpCircle, ShieldCheck, Mail, Clock, FileCheck, ArrowDown, Building2, LogOut } from "lucide-react";
+import {
+  clearDemoBusinessSession,
+  getDemoBusinessSession,
+  type DemoBusinessSession,
+} from "@/lib/demoBusinessAccount";
 import {
   nuansReportRequestSchema,
   type NuansReportRequest,
@@ -266,6 +272,16 @@ export default function NuansReportBody() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  // ⚠️ PREVIEW ONLY — demoBusiness reflects a fake localStorage session set by
+  // the /business/signup or /business/login mockups. It is not a real
+  // account; it exists only to preview the "signed-in business account"
+  // ordering experience before the real backend is built.
+  const [demoBusiness, setDemoBusiness] = useState<DemoBusinessSession | null>(null);
+  const [demoSubmitted, setDemoSubmitted] = useState(false);
+  useEffect(() => {
+    setDemoBusiness(getDemoBusinessSession());
+  }, []);
+
   const form = useForm<NuansReportRequest>({
     resolver: zodResolver(nuansReportRequestSchema),
     mode: "onTouched",
@@ -295,6 +311,16 @@ export default function NuansReportBody() {
   async function onSubmit(data: NuansReportRequest) {
     setSubmitting(true);
     setSubmitError(null);
+
+    // PREVIEW ONLY: a demo business session never calls the real API or
+    // Stripe — it just simulates the "billed to account, no checkout" result.
+    if (demoBusiness) {
+      await new Promise((resolve) => setTimeout(resolve, 600));
+      setSubmitting(false);
+      setDemoSubmitted(true);
+      return;
+    }
+
     try {
       const res = await fetch("/api/nuans-report", {
         method: "POST",
@@ -335,6 +361,40 @@ export default function NuansReportBody() {
             <span className="text-sm text-gray-300">{t.perName}</span>
           </div>
           <p className="mt-2 text-sm text-gray-300">{t.noAccount}</p>
+
+          {demoBusiness ? (
+            <div className="mt-4 inline-flex flex-wrap items-center gap-3 rounded-md border border-gold-500/40 bg-white/5 px-4 py-2.5 text-sm">
+              <Building2 size={15} className="text-gold-500 shrink-0" />
+              <span>
+                Signed in as <strong className="text-gold-500">{demoBusiness.companyName}</strong>
+                 — orders bill to this account monthly.
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  clearDemoBusinessSession();
+                  setDemoBusiness(null);
+                  setDemoSubmitted(false);
+                }}
+                className="inline-flex items-center gap-1 text-xs text-gray-300 underline hover:text-white"
+              >
+                <LogOut size={12} /> Switch to guest checkout
+              </button>
+            </div>
+          ) : (
+            <p className="mt-4 text-sm text-gray-300">
+              Ordering regularly?{" "}
+              <Link href="/business/signup" className="text-gold-500 underline hover:text-gold-400">
+                Create a business account
+              </Link>{" "}
+              to skip checkout and get one invoice a month, or{" "}
+              <Link href="/business/login" className="text-gold-500 underline hover:text-gold-400">
+                sign in
+              </Link>
+              .
+            </p>
+          )}
+
           <a
             href="#order"
             className="mt-6 inline-flex items-center gap-2 bg-gold-500 text-navy-900 font-semibold py-3 px-6 text-sm tracking-wide hover:bg-gold-400 transition-colors"
@@ -599,14 +659,37 @@ export default function NuansReportBody() {
                 </div>
               )}
 
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full md:w-auto md:px-12 mt-6 inline-flex items-center justify-center gap-2 bg-navy-900 text-white font-medium py-3.5 px-8 text-sm tracking-wide hover:bg-navy-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                {submitting ? t.submitting : t.submit}
-              </button>
-              <p className="text-xs text-gray-500 mt-3 max-w-md">{t.stripe}</p>
+              {demoSubmitted ? (
+                <div className="mt-6 border border-green-200 bg-green-50 text-green-900 text-sm rounded-md p-4">
+                  <strong>Order submitted (preview).</strong> No checkout, no payment page — this
+                  order is recorded against {demoBusiness?.companyName} and will appear on next
+                  month&apos;s invoice, charged automatically to the card on file. You (Korporex)
+                  would get the same intake email as always, tagged{" "}
+                  <code className="bg-white px-1 rounded">[BUSINESS ACCOUNT — BILL LATER]</code>{" "}
+                  instead of <code className="bg-white px-1 rounded">[PENDING PAYMENT]</code>, so
+                  you can run the NUANS search right away without waiting for a payment
+                  confirmation.
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full md:w-auto md:px-12 mt-6 inline-flex items-center justify-center gap-2 bg-navy-900 text-white font-medium py-3.5 px-8 text-sm tracking-wide hover:bg-navy-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {submitting
+                    ? demoBusiness
+                      ? "Submitting…"
+                      : t.submitting
+                    : demoBusiness
+                      ? `Submit order — bill ${demoBusiness.companyName}`
+                      : t.submit}
+                </button>
+              )}
+              <p className="text-xs text-gray-500 mt-3 max-w-md">
+                {demoBusiness
+                  ? "This order skips checkout entirely and bills to your account's monthly invoice, charged to the card on file. (Preview — nothing is actually submitted to Korporex yet.)"
+                  : t.stripe}
+              </p>
               <p className="text-xs text-gray-500 mt-2 max-w-md">
                 <strong className="text-navy-900">{t.notAdviceLead}</strong> {t.notAdvice}
               </p>
