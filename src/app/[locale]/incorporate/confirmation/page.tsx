@@ -43,7 +43,8 @@ function firstParam(v: string | string[] | undefined): string | undefined {
   return v;
 }
 
-export default async function ConfirmationPage({ searchParams }: PageProps) {
+export default async function ConfirmationPage(props: PageProps) {
+  const searchParams = await props.searchParams;
   const sessionId = firstParam(searchParams?.session_id);
   const refFromUrl = firstParam(searchParams?.ref);
   const isDev = firstParam(searchParams?.dev) === "1";

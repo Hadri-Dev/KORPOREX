@@ -11,8 +11,8 @@ import {
 import { socialMeta } from "@/lib/seoMeta";
 
 type Params = {
-  params: { locale: Locale };
-  searchParams: { page?: string };
+  params: Promise<{ locale: Locale }>;
+  searchParams: Promise<{ page?: string }>;
 };
 
 const PAGE_SIZE = 9;
@@ -60,7 +60,8 @@ function indexUrl(locale: Locale): string {
   return `${SITE_URL}${locale === "en" ? "" : `/${locale}`}/guides`;
 }
 
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
+export async function generateMetadata(props: Params): Promise<Metadata> {
+  const params = await props.params;
   const { locale } = params;
   const t = await getTranslations({ locale, namespace: "guides" });
   const title = t("metaTitle");
@@ -81,7 +82,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   };
 }
 
-export default async function GuidesPage({ params, searchParams }: Params) {
+export default async function GuidesPage(props: Params) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const { locale } = params;
   setRequestLocale(locale);
   const t = await getTranslations("guides");

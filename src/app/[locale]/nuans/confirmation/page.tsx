@@ -36,7 +36,8 @@ const nextSteps = [
   },
 ];
 
-export default async function NuansReportConfirmationPage({ searchParams }: PageProps) {
+export default async function NuansReportConfirmationPage(props: PageProps) {
+  const searchParams = await props.searchParams;
   const sessionId = firstParam(searchParams?.session_id);
   const refFromUrl = firstParam(searchParams?.ref);
   const isDev = firstParam(searchParams?.dev) === "1";

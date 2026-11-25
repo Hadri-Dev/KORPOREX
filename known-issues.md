@@ -2,6 +2,13 @@
 
 ## Open
 
+### [Severity: low] `next lint` fails with 30 pre-existing errors after the Next.js 16 / React 19 upgrade
+- **Where**: `eslint-config-next` 16.4.6 enables two new rules that flag existing code: `react-hooks/set-state-in-effect` (`src/components/NaicsCombobox.tsx:73`, `src/components/RotatingWords.tsx:38`, `src/components/dashboard/seo/SeoPageShell.tsx:47`, plus others reported by the full lint run) and the React Compiler's "incompatible library" check on `react-hook-form`'s `watch()` (`src/components/wizard/AnnualResolutionWizard.tsx:437`). Two more components use `window.location.href` for internal navigation (`src/components/dashboard/Sidebar.tsx:82`, `src/components/dashboard/TopBar.tsx:12`) — these are warnings, not errors.
+- **Symptom**: `npm run lint` exits non-zero (30 errors, 32 warnings). `npm run build` is unaffected — it compiles and type-checks cleanly.
+- **Impact**: None in production; this only blocks `next lint` / CI lint gates if one exists. The flagged `setState`-in-effect patterns are a real (if minor) anti-pattern — each causes one extra render on mount/update, not a correctness bug.
+- **Why not fixed yet**: Out of scope for the Next.js 16 security upgrade (2026-11-25) — fixing these means restructuring hook logic in several unrelated components, which deserves its own pass rather than being bundled into a CVE patch.
+- **Logged**: 2026-11-25
+
 ### [Severity: medium] Business accounts have no self-serve way to replace or remove their card
 - **Where**: new business-account feature (`src/lib/businessAccounts.ts`, `/api/business/*`). There is no "manage card" page or endpoint at all yet — a card is only ever set once, at signup.
 - **Symptom**: a business customer who wants to swap cards must contact support; there's no portal action for it.

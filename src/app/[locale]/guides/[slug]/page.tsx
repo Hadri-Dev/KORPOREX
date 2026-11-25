@@ -21,7 +21,7 @@ import { socialMeta } from "@/lib/seoMeta";
 import { articleSchema, breadcrumbSchema, faqPageSchema, ORG_SHORT } from "@/lib/structuredData";
 import JsonLd from "@/components/JsonLd";
 
-type Params = { params: { locale: Locale; slug: string } };
+type Params = { params: Promise<{ locale: Locale; slug: string }> };
 
 // Re-render periodically so a scheduled article (publishedAt in the future)
 // flips from 404 to live shortly after its publish time, without a redeploy.
@@ -36,14 +36,15 @@ export const revalidate = 3600;
 export function generateStaticParams({
   params,
 }: {
-  params: { locale: Locale };
+  params: { locale: string };
 }) {
-  return getArticlesByLocale(params.locale).map((article) => ({
+  return getArticlesByLocale(params.locale as Locale).map((article) => ({
     slug: article.slug,
   }));
 }
 
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
+export async function generateMetadata(props: Params): Promise<Metadata> {
+  const params = await props.params;
   const { locale, slug } = params;
   const article = getArticle(locale, slug);
   if (!article || !isPublished(article)) return { title: "Article not found | Korporex" };
@@ -186,7 +187,8 @@ function renderSection(section: ArticleSection, index: number, locale: Locale) {
   }
 }
 
-export default async function ArticlePage({ params }: Params) {
+export default async function ArticlePage(props: Params) {
+  const params = await props.params;
   const { locale, slug } = params;
   setRequestLocale(locale);
 

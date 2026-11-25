@@ -38,7 +38,7 @@ function isOwnerPath(pathname: string): boolean {
   );
 }
 
-export default async function middleware(req: NextRequest): Promise<NextResponse> {
+export default async function proxy(req: NextRequest): Promise<NextResponse> {
   const { pathname } = req.nextUrl;
 
   // 1. Owner gate. Non-localized; never goes through next-intl or the

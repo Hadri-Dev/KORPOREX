@@ -11,7 +11,7 @@ import { ADMIN_COOKIE_NAME, verifyAdminSession } from "./adminAuth";
 //   if (unauthorized) return unauthorized;
 //   // ... privileged work
 export async function requireAdminOrUnauthorized(): Promise<Response | null> {
-  const token = cookies().get(ADMIN_COOKIE_NAME)?.value;
+  const token = (await cookies()).get(ADMIN_COOKIE_NAME)?.value;
   const ok = await verifyAdminSession(token);
   if (!ok) {
     return Response.json({ error: "unauthorized" }, { status: 401 });
