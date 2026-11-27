@@ -1,6 +1,14 @@
 # Progress
 
 ## Log
+### 2026-11-27 - Every order now carries an explicit traffic source (no more blank attribution)
+- Owner opened paid NUANS order KPX-20261125-YEE7 and found no attribution fields. Cause: [lib/attribution.ts](src/lib/attribution.ts) only wrote the `kpx_attr` cookie when the first page load had a UTM tag or an outside referrer, so a direct visit (typed address, bookmark, untagged email or app link) left the order with nothing, indistinguishable from "tracking not working". Confirmed the capture code is live on korporex.ca and wired into the NUANS checkout, so it was this rule and not a deploy problem.
+- Fix: the cookie is now always written on first load (adds `firstSeen` date), and `attributionStripeMetadata` always emits a `trafficSource` line: `utm_source / utm_medium` if the link was tagged, else the referring site's hostname, else "direct (...)", else "unknown (no tracking cookie)". No route or dashboard changes needed; all 9 checkout routes already spread this helper and the order detail page renders every metadata key.
+- Verified: ran the helper against tagged / Google / direct / pre-change cookie / no cookie / corrupt cookie inputs; `npx tsc --noEmit` and eslint on the file clean. Not verified: a real paid order after deploy.
+- Orders placed before this deploy stay as they are; the source of KPX-20261125-YEE7 cannot be recovered.
+- Still open (offered to owner, not built): business-account NUANS orders skip Checkout and record no source; the orders list has no source column or by-source summary; outreach email links are not UTM-tagged, so they will show as "direct".
+- Next: owner checks the next paid order for `TRAFFICSOURCE`; tag outreach links before batch 5.
+
 ### 2026-11-25 - Next.js 14.2.35 → 16.4.6 security upgrade (also React 18→19)
 - User reported korporex.ca running a vulnerable Next.js version and asked for an upgrade to 16.4.x (fixes land in 16.4.5+). Repo was actually pinned to 14.2.35 — confirmed there's no real 16.2.4 release, but 16.x itself is real (post my training cutoff) and latest stable is 16.4.6, so proceeded with that as the target per user's "just give me the latest" direction.
 - Next 16 requires React 19 (drops React 18 support), so this was a two-major jump, not a patch bump. User explicitly accepted the 3rd-party-compat risk rather than stopping to vet every dependency first.
