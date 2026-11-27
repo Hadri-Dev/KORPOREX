@@ -1,6 +1,13 @@
 # Progress
 
 ## Log
+### 2026-11-27 (latest) - Extra-provincial form step 2: agent address no longer tied to Ontario, new accuracy confirmation
+- Owner asked for two changes to step 2 of [ExtraProvincialBody.tsx](src/app/[locale]/services/extra-provincial/ExtraProvincialBody.tsx).
+- Agent address: label is now "Agent address" (was "Agent address (in Ontario)") and the agent hint no longer says "resident in Ontario", in EN/FR/ES. The schema never required Ontario for the agent, so no validation changed. The address is still Canada-only (`AddressFields` default); the officer's address for service still must be in Ontario.
+- New required statement between the certification and the authorization: "I, NAME, confirm the accuracy of the information submitted." The form had no field for the person completing it, so the owner chose a new required "Full name of the person certifying" field above the statements; the sentence shows that name in capitals (a "[full name]" placeholder until typed). [registrationSchemas.ts](src/lib/registrationSchemas.ts) gains `certifierName` + `confirmedAccuracy` (enforced server-side too); the intake email in [api/service-request/route.ts](src/app/api/service-request/route.ts) shows "Certified by" and the new confirmation.
+- Verified: `npx tsc --noEmit` and eslint clean (only the existing react-hook-form `watch()` warning); ran the schema against sample submissions (Alberta agent passes; unchecked box and blank name are rejected). Not verified: the step rendered in a browser, or a real paid submission.
+- Next: owner checks step 2 on the live site.
+
 ### 2026-11-27 (later) - Incorporating documents upload now looks mandatory
 - Owner asked to make the upload mandatory. It already was (step 1 will not continue without a PDF, and the API rejects an order without one), but its title showed a grey asterisk on grey text, unlike every other required field. [FileUpload.tsx](src/components/wizard/FileUpload.tsx) now styles the title like `Field` labels and shows a red asterisk when the title ends in " *". The consultation upload ("optional") gets the same label style, no asterisk.
 - Verified: `npx tsc --noEmit` and eslint clean. Not verified: rendered in a browser after this styling change.
