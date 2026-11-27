@@ -7,11 +7,16 @@ import {
   type BusinessNumberSubmission,
   type ExtraProvincialSubmission,
 } from "@/lib/registrationSchemas";
-import { REGISTRATION_SERVICES, type RegistrationServiceSlug } from "@/lib/registrationServices";
+import {
+  EXTRA_PROVINCIAL_DOC_LIMITS,
+  REGISTRATION_SERVICES,
+  type RegistrationServiceSlug,
+} from "@/lib/registrationServices";
 import { getTaxRate } from "@/lib/pricing";
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
-import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
+import { CONTACT_ADDRESS, sendMail, type EmailAttachment } from "@/lib/mailer";
+import { readUploads } from "@/lib/uploads";
 import { attributionStripeMetadata, getAttributionFromCookies } from "@/lib/attribution";
 
 export const runtime = "nodejs";
@@ -31,16 +36,44 @@ function computeRegistrationPricing(
 }
 
 export async function POST(req: Request) {
+  // Wizards without uploads post JSON. The extra-provincial wizard posts
+  // multipart/form-data: the same { service, payload } pair (payload as a JSON
+  // string) plus the incorporating documents.
   let parsed: z.infer<typeof registrationRequestSchema>;
+  let form: FormData | null = null;
   try {
-    const body = await req.json();
-    parsed = registrationRequestSchema.parse(body);
+    if (req.headers.get("content-type")?.includes("multipart/form-data")) {
+      form = await req.formData();
+      parsed = registrationRequestSchema.parse({
+        service: form.get("service"),
+        payload: JSON.parse(String(form.get("payload") ?? "")),
+      });
+    } else {
+      parsed = registrationRequestSchema.parse(await req.json());
+    }
   } catch {
     return NextResponse.json({ error: "Invalid submission." }, { status: 400 });
   }
 
   const { service, payload } = parsed;
   const meta = REGISTRATION_SERVICES[service];
+
+  let attachments: EmailAttachment[] = [];
+  if (service === "extra-provincial") {
+    const uploads = form
+      ? await readUploads(form, "documents", EXTRA_PROVINCIAL_DOC_LIMITS)
+      : { ok: true as const, attachments: [] };
+    if (!uploads.ok) {
+      return NextResponse.json({ error: uploads.error }, { status: 400 });
+    }
+    if (uploads.attachments.length === 0) {
+      return NextResponse.json(
+        { error: "Please upload the corporation's incorporating documents as PDF." },
+        { status: 400 }
+      );
+    }
+    attachments = uploads.attachments;
+  }
 
   // All payload variants include billingAddress / billingName via the
   // billingSchema merge in registrationSchemas.ts. The discriminated union
@@ -61,6 +94,7 @@ export async function POST(req: Request) {
     orderRef,
     customerEmail,
     customerName,
+    attachments,
   }).catch((err) => {
     console.error("[service-request-api] intake email failed:", err);
   });
@@ -197,16 +231,25 @@ async function sendIntakeEmail(args: {
   orderRef: string;
   customerEmail: string;
   customerName: string;
+  attachments: EmailAttachment[];
 }): Promise<void> {
-  const { service, serviceLabel, payload, pricing, orderRef, customerEmail, customerName } = args;
+  const { service, serviceLabel, payload, pricing, orderRef, customerEmail, customerName, attachments } = args;
   const subject = `[PENDING] ${orderRef} — ${serviceLabel} — $${pricing.total.toFixed(2)} CAD`;
-  const html = buildHtmlBody({ service, serviceLabel, payload, pricing, orderRef, customerEmail, customerName });
+  const html = buildHtmlBody({
+    service,
+    serviceLabel,
+    payload,
+    pricing,
+    orderRef,
+    attachmentFilenames: attachments.map((a) => a.filename),
+  });
   await sendMail(
     {
       subject,
       html,
       to: [{ email: CONTACT_ADDRESS, name: "Korporex" }],
       replyTo: { email: customerEmail, name: customerName || customerEmail },
+      attachments: attachments.length ? attachments : undefined,
     },
     "service-request-api"
   );
@@ -247,14 +290,15 @@ function buildHtmlBody(args: {
     | ExtraProvincialSubmission;
   pricing: Pricing;
   orderRef: string;
-  customerEmail: string;
-  customerName: string;
+  attachmentFilenames: string[];
 }): string {
-  const { service, serviceLabel, payload, pricing, orderRef } = args;
+  const { service, serviceLabel, payload, pricing, orderRef, attachmentFilenames } = args;
 
   const orderRows = [row("Order reference", orderRef), row("Service", serviceLabel)].join("");
 
-  const detailRows = serviceDetailRows(service, payload);
+  const detailRows =
+    serviceDetailRows(service, payload) +
+    (attachmentFilenames.length ? row("Documents (attached)", attachmentFilenames.join(", ")) : "");
 
   const billingRows = [
     row("Billing name", payload.billingName),
@@ -370,35 +414,34 @@ function serviceDetailRows(
       const p = payload as ExtraProvincialSubmission;
       const homeLabel = {
         federal: "Federal (Canada)",
-        ontario: "Ontario",
         bc: "British Columbia",
         alberta: "Alberta",
         quebec: "Quebec",
         other: p.homeJurisdictionOther || "Other",
       }[p.homeJurisdiction];
-      const targetLabel = {
-        ontario: "Ontario",
-        quebec: "Quebec",
-        bc: "British Columbia",
-        alberta: "Alberta",
-        manitoba: "Manitoba",
-        saskatchewan: "Saskatchewan",
-        nb: "New Brunswick",
-        ns: "Nova Scotia",
-        pei: "Prince Edward Island",
-        nl: "Newfoundland and Labrador",
-      }[p.targetProvince];
+      const officerRows =
+        p.hasOntarioOfficer === "yes"
+          ? [
+              row("Chief officer / manager in Ontario", `${p.officerFirstName ?? ""} ${p.officerLastName ?? ""}`.trim()),
+              row("Officer address for service", formatAddress(p.officerAddress)),
+            ]
+          : [row("Chief officer / manager in Ontario", "No")];
       return [
         row("Home jurisdiction", homeLabel),
-        row("Target province", targetLabel),
+        row("Target province", "Ontario"),
         row("Effective date", p.effectiveDate),
         row("Corporation name", p.corpName),
         row("Corporation number", p.corpNumber),
+        row("Incorporation / amalgamation date", p.incorporationDate),
+        row("Primary activity (NAICS code)", p.naicsCode),
         row("Registered office", formatAddress(p.corpRegisteredOffice)),
         row("Agent for service (name)", p.agentName),
         row("Agent address", formatAddress(p.agentAddress)),
+        ...officerRows,
         row("Contact email", p.contactEmail),
         row("Contact phone", p.contactPhone),
+        row("Certified true, correct and complete", p.certifiedAccurate ? "Yes" : "No"),
+        row("Authorized Korporex to file", p.authorizedToFile ? "Yes" : "No"),
       ].join("");
     }
   }

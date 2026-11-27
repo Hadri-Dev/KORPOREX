@@ -127,26 +127,77 @@ export const businessNumberSchema = z
 export type BusinessNumberSubmission = z.infer<typeof businessNumberSchema>;
 
 // ── Extra-Provincial Registration ───────────────────────────────────────────
+// Ontario is the only target province offered, so an Ontario corporation is not
+// a valid home jurisdiction here.
+// Blank until answered. An empty string (not undefined) keeps the object-level
+// checks below running while the customer is still on an earlier wizard step:
+// Zod skips superRefine when a field fails with a type-level error.
+const yesNoSchema = z.enum(["yes", "no", ""]);
+
+// Validated in superRefine: only required when the corporation has an Ontario
+// chief officer or manager.
+const optionalAddressSchema = z.object({
+  street: z.string().trim().max(200),
+  city: z.string().trim().max(100),
+  region: z.string().trim().max(100),
+  postalCode: z.string().trim().max(12),
+  country: z.string().trim().max(60),
+});
+
 export const extraProvincialSchema = z
   .object({
-    homeJurisdiction: z.enum(["federal", "ontario", "bc", "alberta", "quebec", "other"], {
+    homeJurisdiction: z.enum(["federal", "bc", "alberta", "quebec", "other"], {
       message: "Select your home jurisdiction",
     }),
     homeJurisdictionOther: z.string().trim().max(100).optional().or(z.literal("")),
     corpName: z.string().trim().min(1, "Required").max(200),
     corpNumber: z.string().trim().min(1, "Required").max(50),
-    targetProvince: z.enum(
-      ["ontario", "quebec", "bc", "alberta", "manitoba", "saskatchewan", "nb", "ns", "pei", "nl"],
-      { message: "Select a target province" }
-    ),
+    incorporationDate: z.string().trim().min(8, "Required").max(20),
+    // The Ontario registry accepts a NAICS code at any level from sector
+    // (2 digits) to national industry (6 digits).
+    naicsCode: z.string().trim().regex(/^\d{2,6}$/, "Enter a NAICS code of 2 to 6 digits"),
+    targetProvince: z.literal("ontario"),
     effectiveDate: z.string().trim().min(8, "Required").max(20),
     corpRegisteredOffice: addressSchema,
     agentName: z.string().trim().min(1, "Required").max(200),
     agentAddress: addressSchema,
+    hasOntarioOfficer: yesNoSchema,
+    officerFirstName: z.string().trim().max(100).optional().or(z.literal("")),
+    officerLastName: z.string().trim().max(100).optional().or(z.literal("")),
+    officerAddress: optionalAddressSchema,
     contactEmail: z.string().trim().email("Valid email required").max(320),
     contactPhone: z.string().trim().min(7, "Required").max(30),
+    // Both must be true; enforced in superRefine so an unchecked box does not
+    // stop the other object-level checks from running.
+    certifiedAccurate: z.boolean(),
+    authorizedToFile: z.boolean(),
   })
-  .merge(billingSchema);
+  .merge(billingSchema)
+  .superRefine((data, ctx) => {
+    const require = (path: (string | number)[], message = "Required") =>
+      ctx.addIssue({ path, code: z.ZodIssueCode.custom, message });
+
+    if (data.homeJurisdiction === "other" && !data.homeJurisdictionOther) {
+      require(["homeJurisdictionOther"]);
+    }
+    // ISO dates compare correctly as strings.
+    if (data.incorporationDate > new Date().toISOString().slice(0, 10)) {
+      require(["incorporationDate"], "Date cannot be in the future");
+    }
+    if (data.hasOntarioOfficer === "") {
+      require(["hasOntarioOfficer"], "Select yes or no");
+    } else if (data.hasOntarioOfficer === "yes") {
+      if (!data.officerFirstName) require(["officerFirstName"]);
+      if (!data.officerLastName) require(["officerLastName"]);
+      const a = data.officerAddress;
+      if (!a.street) require(["officerAddress", "street"]);
+      if (!a.city) require(["officerAddress", "city"]);
+      if (a.region !== "ON") require(["officerAddress", "region"], "Address must be in Ontario");
+      if (a.postalCode.length < 3) require(["officerAddress", "postalCode"]);
+    }
+    if (!data.certifiedAccurate) require(["certifiedAccurate"]);
+    if (!data.authorizedToFile) require(["authorizedToFile"]);
+  });
 
 export type ExtraProvincialSubmission = z.infer<typeof extraProvincialSchema>;
 

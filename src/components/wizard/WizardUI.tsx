@@ -18,11 +18,13 @@ const ERROR_TEXT: Record<Exclude<UiLang, "en">, Record<string, string>> = {
     Required: "Obligatoire",
     "Valid email required": "Une adresse courriel valide est requise",
     "Please describe the business activity": "Veuillez décrire l'activité de l'entreprise",
+    "Address must be in Ontario": "L'adresse doit être en Ontario",
   },
   es: {
     Required: "Obligatorio",
     "Valid email required": "Se requiere un correo electrónico válido",
     "Please describe the business activity": "Describa la actividad de la empresa",
+    "Address must be in Ontario": "La dirección debe estar en Ontario",
   },
 };
 

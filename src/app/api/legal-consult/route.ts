@@ -12,6 +12,7 @@ import {
 } from "@/lib/legalConsult";
 import { LEGAL_CONSULT_TAX_RATE, getLegalConsultPricing } from "@/lib/pricing";
 import { CONTACT_ADDRESS, sendMail, type EmailAttachment } from "@/lib/mailer";
+import { readUploads } from "@/lib/uploads";
 import { attributionStripeMetadata, getAttributionFromCookies } from "@/lib/attribution";
 
 export const runtime = "nodejs";
@@ -57,37 +58,17 @@ export async function POST(req: Request) {
     );
   }
 
-  // Collect uploaded files. Cap count + total size + per-file MIME so an
-  // oversized upload doesn't trip Zoho's 25 MB email-size limit downstream.
-  const fileEntries = form.getAll("documents").filter((x): x is File => x instanceof File && x.size > 0);
-  if (fileEntries.length > LEGAL_CONSULT_MAX_FILES) {
-    return NextResponse.json(
-      { error: `Too many files. Limit is ${LEGAL_CONSULT_MAX_FILES}.` },
-      { status: 400 }
-    );
+  // Cap count + total size + MIME so an oversized upload doesn't trip Zoho's
+  // 25 MB email-size limit downstream.
+  const uploads = await readUploads(form, "documents", {
+    maxFiles: LEGAL_CONSULT_MAX_FILES,
+    maxTotalBytes: LEGAL_CONSULT_MAX_FILE_BYTES,
+    acceptedMimes: LEGAL_CONSULT_ACCEPTED_MIMES,
+  });
+  if (!uploads.ok) {
+    return NextResponse.json({ error: uploads.error }, { status: 400 });
   }
-  let totalBytes = 0;
-  for (const f of fileEntries) {
-    totalBytes += f.size;
-    if (totalBytes > LEGAL_CONSULT_MAX_FILE_BYTES) {
-      return NextResponse.json(
-        { error: `Total upload exceeds ${LEGAL_CONSULT_MAX_FILE_BYTES / 1024 / 1024} MB.` },
-        { status: 400 }
-      );
-    }
-    if (!(LEGAL_CONSULT_ACCEPTED_MIMES as readonly string[]).includes(f.type)) {
-      return NextResponse.json(
-        { error: `File ${f.name}: unsupported type. Allowed: PDF, JPG, PNG.` },
-        { status: 400 }
-      );
-    }
-  }
-
-  const attachments: EmailAttachment[] = [];
-  for (const f of fileEntries) {
-    const buf = Buffer.from(await f.arrayBuffer());
-    attachments.push({ filename: f.name, content: buf.toString("base64") });
-  }
+  const attachments = uploads.attachments;
 
   const orderRef = generateOrderRef();
   const pricing = getLegalConsultPricing();

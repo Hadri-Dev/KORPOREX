@@ -7,7 +7,8 @@ import Script from "next/script";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CalendarClock, ScaleIcon, ShieldAlert, FileText, ArrowRight, CheckCircle, Upload, X } from "lucide-react";
+import FileUpload from "@/components/wizard/FileUpload";
+import { CalendarClock, ScaleIcon, ShieldAlert, ArrowRight, CheckCircle } from "lucide-react";
 import {
   legalConsultSchema,
   LEGAL_CONSULT_TOPICS,
@@ -91,10 +92,6 @@ const COPY = {
     uploadTitle: "Upload Documents (optional)",
     uploadHint: (max: number, mb: number) =>
       `PDF, JPG, or PNG. Up to ${max} files, ${mb} MB total. Files are emailed directly to the lawyer with your questionnaire.`,
-    chooseFiles: "Choose Files",
-    remove: "Remove",
-    onlyTypes: "only PDF, JPG, PNG accepted.",
-    totalOver: (mb: number) => `Total upload over ${mb} MB.`,
     notes: "Anything else the lawyer should know? (optional)",
     continueBooking: "Continue to Booking",
     backToQuestionnaire: "← Back to questionnaire",
@@ -170,10 +167,6 @@ const COPY = {
     uploadTitle: "Téléverser des documents (facultatif)",
     uploadHint: (max: number, mb: number) =>
       `PDF, JPG ou PNG. Jusqu'à ${max} fichiers, ${mb} Mo au total. Les fichiers sont envoyés par courriel directement à l'avocat avec votre questionnaire.`,
-    chooseFiles: "Choisir des fichiers",
-    remove: "Retirer",
-    onlyTypes: "seuls les formats PDF, JPG et PNG sont acceptés.",
-    totalOver: (mb: number) => `Le téléversement total dépasse ${mb} Mo.`,
     notes: "Autre chose que l'avocat devrait savoir? (facultatif)",
     continueBooking: "Continuer vers la réservation",
     backToQuestionnaire: "← Retour au questionnaire",
@@ -250,10 +243,6 @@ const COPY = {
     uploadTitle: "Subir documentos (opcional)",
     uploadHint: (max: number, mb: number) =>
       `PDF, JPG o PNG. Hasta ${max} archivos, ${mb} MB en total. Los archivos se envían por correo electrónico directamente al abogado junto con su cuestionario.`,
-    chooseFiles: "Elegir archivos",
-    remove: "Quitar",
-    onlyTypes: "solo se aceptan PDF, JPG y PNG.",
-    totalOver: (mb: number) => `La carga total supera ${mb} MB.`,
     notes: "¿Algo más que el abogado deba saber? (opcional)",
     continueBooking: "Continuar con la reserva",
     backToQuestionnaire: "← Volver al cuestionario",
@@ -421,31 +410,6 @@ export default function LegalConsultationPage() {
     }, 100);
     return () => window.clearInterval(id);
   }, [stage, formData]);
-
-  function onFilesPicked(picked: FileList | null) {
-    if (!picked) return;
-    const next = [...files];
-    let total = files.reduce((sum, f) => sum + f.size, 0);
-    for (let i = 0; i < picked.length; i++) {
-      const f = picked[i];
-      if (next.length >= LEGAL_CONSULT_MAX_FILES) break;
-      if (!(LEGAL_CONSULT_ACCEPTED_MIMES as readonly string[]).includes(f.type)) {
-        setSubmitError(`${f.name}: ${t.onlyTypes}`);
-        continue;
-      }
-      if (total + f.size > LEGAL_CONSULT_MAX_FILE_BYTES) {
-        setSubmitError(t.totalOver(LEGAL_CONSULT_MAX_FILE_BYTES / 1024 / 1024));
-        break;
-      }
-      next.push(f);
-      total += f.size;
-    }
-    setFiles(next);
-  }
-
-  function removeFile(idx: number) {
-    setFiles(files.filter((_, i) => i !== idx));
-  }
 
   const onValid = (d: FormValues) => {
     setSubmitError(null);
@@ -643,50 +607,15 @@ export default function LegalConsultationPage() {
               </label>
 
               {willShareDocuments && (
-                <div className="border border-dashed border-gray-300 p-4 bg-cream-50">
-                  <p className="text-xs font-semibold tracking-[0.1em] uppercase text-gray-500 mb-3">
-                    {t.uploadTitle}
-                  </p>
-                  <p className="text-xs text-gray-500 mb-3 leading-relaxed">
-                    {t.uploadHint(LEGAL_CONSULT_MAX_FILES, LEGAL_CONSULT_MAX_FILE_BYTES / 1024 / 1024)}
-                  </p>
-                  <label className="inline-flex items-center gap-2 border border-navy-900 px-4 py-2.5 text-sm text-navy-900 cursor-pointer hover:bg-navy-50 transition-colors">
-                    <Upload size={14} /> {t.chooseFiles}
-                    <input
-                      type="file"
-                      multiple
-                      accept={LEGAL_CONSULT_ACCEPTED_MIMES.join(",")}
-                      onChange={(e) => onFilesPicked(e.target.files)}
-                      className="hidden"
-                    />
-                  </label>
-                  {files.length > 0 && (
-                    <ul className="mt-3 space-y-2">
-                      {files.map((f, i) => (
-                        <li
-                          key={`${f.name}-${i}`}
-                          className="flex items-center justify-between text-sm bg-white border border-gray-200 rounded-md px-3 py-2"
-                        >
-                          <span className="flex items-center gap-2 text-gray-700">
-                            <FileText size={14} className="text-navy-900" />
-                            {f.name}
-                            <span className="text-xs text-gray-500">
-                              · {(f.size / 1024).toFixed(0)} KB
-                            </span>
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => removeFile(i)}
-                            className="text-gray-400 hover:text-red-500"
-                            aria-label={`${t.remove} ${f.name}`}
-                          >
-                            <X size={14} />
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                <FileUpload
+                  files={files}
+                  onChange={setFiles}
+                  title={t.uploadTitle}
+                  hint={t.uploadHint(LEGAL_CONSULT_MAX_FILES, LEGAL_CONSULT_MAX_FILE_BYTES / 1024 / 1024)}
+                  maxFiles={LEGAL_CONSULT_MAX_FILES}
+                  maxTotalBytes={LEGAL_CONSULT_MAX_FILE_BYTES}
+                  acceptedMimes={LEGAL_CONSULT_ACCEPTED_MIMES}
+                />
               )}
 
               {/* Notes */}

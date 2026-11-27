@@ -71,6 +71,15 @@ export const REGISTRATION_SERVICES: Record<RegistrationServiceSlug, Registration
   },
 };
 
+// Incorporating documents uploaded with an extra-provincial order. They travel
+// in the same request as the form and are forwarded as email attachments, so
+// the total stays under Vercel's 4.5 MB request-body cap.
+export const EXTRA_PROVINCIAL_DOC_LIMITS = {
+  maxFiles: 5,
+  maxTotalBytes: 4 * 1024 * 1024,
+  acceptedMimes: ["application/pdf"],
+} as const;
+
 export const REGISTRATION_SLUGS = Object.keys(REGISTRATION_SERVICES) as RegistrationServiceSlug[];
 
 export function isRegistrationSlug(s: string): s is RegistrationServiceSlug {

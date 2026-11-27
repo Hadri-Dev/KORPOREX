@@ -2,6 +2,26 @@
 
 ## Open
 
+### [Severity: medium] Extra-provincial page copy still offers every province; the form is Ontario only
+- **Where**: [serviceContent/extra-provincial.ts](src/lib/serviceContent/extra-provincial.ts) (EN/FR/ES body + FAQ, e.g. "Ontario corporations expanding into another province, such as Quebec, British Columbia or Alberta"), the hero description and Stripe line description in [registrationServices.ts](src/lib/registrationServices.ts) ("another Canadian province"), the `seo.extraProvincial` title/description in `messages/*.json`, and the Alberta extra-provincial guide that links to this page.
+- **Symptom**: The page says Korporex registers a corporation in the province the customer chooses. Since 2026-11-27 the form only accepts Ontario as the target and no longer accepts an Ontario corporation.
+- **Impact**: An Ontario corporation wanting Quebec, BC or Alberta reads that the service fits, then finds it cannot order. Misleading copy and wasted SEO traffic.
+- **Why not fixed yet**: The owner asked for the form change only. Rewriting the page narrows what it ranks for, in three languages, so it needs the owner's decision (Ontario-only for good, or temporary).
+- **Logged**: 2026-11-27
+
+### [Severity: low] Extra-provincial form requires an agent for service for every corporation
+- **Where**: step 2 of [ExtraProvincialBody.tsx](src/app/[locale]/services/extra-provincial/ExtraProvincialBody.tsx).
+- **Symptom**: Agent name and Ontario address are mandatory. The page's own copy says federal and other-province corporations register in Ontario by Initial Return, and only corporations from outside Canada need a licence.
+- **Impact**: A customer with no Ontario agent may be blocked from ordering something the filing may not require.
+- **Why not fixed yet**: Not confirmed. Whether the agent is needed for Canadian corporations is the owner's call; it was not part of the 2026-11-27 request.
+- **Logged**: 2026-11-27
+
+### [Severity: low] Uploaded order documents exist only as email attachments
+- **Where**: [lib/uploads.ts](src/lib/uploads.ts), used by the extra-provincial order and the lawyer consultation.
+- **Symptom**: Uploads are forwarded on the [PENDING] intake email and stored nowhere else. If that email fails to send, the order still goes to checkout and the PDFs are lost; the customer must be asked to resend. Total size is capped at 4 MB (extra-provincial) because of Vercel's 4.5 MB request limit, so a large scan will not fit.
+- **Why not fixed yet**: Same design as the existing consultation uploads. Larger files or durable storage need a storage service, which is a separate decision.
+- **Logged**: 2026-11-27
+
 ### [Severity: low] `next lint` fails with 30 pre-existing errors after the Next.js 16 / React 19 upgrade
 - **Where**: `eslint-config-next` 16.4.6 enables two new rules that flag existing code: `react-hooks/set-state-in-effect` (`src/components/NaicsCombobox.tsx:73`, `src/components/RotatingWords.tsx:38`, `src/components/dashboard/seo/SeoPageShell.tsx:47`, plus others reported by the full lint run) and the React Compiler's "incompatible library" check on `react-hook-form`'s `watch()` (`src/components/wizard/AnnualResolutionWizard.tsx:437`). Two more components use `window.location.href` for internal navigation (`src/components/dashboard/Sidebar.tsx:82`, `src/components/dashboard/TopBar.tsx:12`) — these are warnings, not errors.
 - **Symptom**: `npm run lint` exits non-zero (30 errors, 32 warnings). `npm run build` is unaffected — it compiles and type-checks cleanly.

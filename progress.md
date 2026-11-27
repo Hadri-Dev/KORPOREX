@@ -1,6 +1,22 @@
 # Progress
 
 ## Log
+### 2026-11-27 - Extra-provincial form: Ontario only, plus the details the Ontario filing needs
+- Owner asked for five changes to [ExtraProvincialBody.tsx](src/app/[locale]/services/extra-provincial/ExtraProvincialBody.tsx), then a sixth mid-task:
+  1. Incorporation / amalgamation date (step 1, required, cannot be in the future).
+  2. Incorporating documents as PDF (step 1, required, 1 to 5 files, 4 MB total). The wizard now posts multipart to [/api/service-request](src/app/api/service-request/route.ts), which attaches the PDFs to the [PENDING] intake email. There is no file storage: the email is the only copy. The 4 MB cap keeps the request under Vercel's 4.5 MB body limit.
+  3. Primary activity: a NAICS code box (2 to 6 digits) with a link to the Statistics Canada list the owner supplied (French page for /fr). Deliberately a free-entry box and not `NaicsCombobox`, because that list is a curated 370 codes and the owner wants customers to look up their own.
+  4. "Does the corporation have a chief officer or manager in Ontario?" Yes/No (step 2, required). Yes reveals first name, last name and an Ontario address for service, all required.
+  5. Target province is fixed to Ontario (read-only field). Ontario was also removed as a home jurisdiction, and the default is now Federal: an Ontario corporation cannot be extra-provincial in Ontario.
+  6. Two mandatory checkboxes at the end of step 2: the owner's certification sentence verbatim, and "I authorize Korporex to file this registration on the corporation's behalf." Both are recorded in the intake email.
+- Schema ([registrationSchemas.ts](src/lib/registrationSchemas.ts)): `targetProvince` is now `z.literal("ontario")`; conditional rules live in one `superRefine`. "Specify jurisdiction" for home = Other was never actually enforced before (the field was optional in the schema); it is now.
+- Reuse: the upload picker and the server-side file check existed only inline in the lawyer-consultation flow. Extracted to [FileUpload.tsx](src/components/wizard/FileUpload.tsx) and [lib/uploads.ts](src/lib/uploads.ts) and both flows use them. The server check now also rejects a ".pdf" that does not start with the PDF signature.
+- Bug found and fixed while testing: after a failed "Continue", a radio or checkbox only cleared its error on blur, so the page shifted during the next click and that click was lost. These three controls now re-validate on change.
+- Verified: `npx tsc --noEmit`, eslint on changed files (0 errors) and `npm run build` clean. 19 API cases against a local dev server (valid orders, missing / fake / oversized / too many PDFs, wrong target or home province, bad NAICS, future date, officer and checkbox rules, and another service still posting JSON). Headless Chrome walk through all three steps to a successful submit, in English.
+- Not verified: a real order on production (live Stripe + a real intake email with attachments), the lawyer-consultation upload in a browser after the refactor (type-check and build only), and the FR/ES wording by a native speaker.
+- Not changed: the marketing copy around the form still sells registration in any province (see known-issues.md).
+- Next: owner places or watches for the first live extra-provincial order and confirms the PDFs arrive on the [PENDING] email; decide on the marketing copy.
+
 ### 2026-11-27 - Annual Resolution (Ontario + Federal) removed from the services page
 - Owner asked to remove the two Annual Resolution rows from the Compliance Filings card. Removed both tiles and their EN/FR/ES names from [services/page.tsx](src/app/[locale]/services/page.tsx), and dropped "annual minute-book resolutions" from the card description in all three languages so the card no longer describes something it does not list.
 - Deliberately not touched: the two service pages themselves (`/services/annual-resolution-on`, `/services/annual-resolution-federal`) are still live and orderable, still in [sitemap.ts](src/app/sitemap.ts), and still linked from four guides (annual-returns, minute-book, salary-vs-dividends, incorporating-ontario) and the federal annual return service copy. The request was only about the services list; whether the services are retired entirely is the owner's call (asked 2026-11-27).

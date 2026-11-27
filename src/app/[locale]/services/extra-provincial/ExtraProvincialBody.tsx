@@ -9,28 +9,19 @@ import {
   extraProvincialSchema,
   type ExtraProvincialSubmission,
 } from "@/lib/registrationSchemas";
-import { REGISTRATION_SERVICES } from "@/lib/registrationServices";
+import { EXTRA_PROVINCIAL_DOC_LIMITS, REGISTRATION_SERVICES } from "@/lib/registrationServices";
 import { getTaxRate } from "@/lib/pricing";
 import { Field, BackBtn, NextBtn, WizardStepper, firstErrorStep, iCls, sCls } from "@/components/wizard/WizardUI";
 import AddressFields from "@/components/wizard/AddressFields";
+import FileUpload from "@/components/wizard/FileUpload";
 
 const SERVICE = REGISTRATION_SERVICES["extra-provincial"];
 
 type Lang = "en" | "fr" | "es";
 
-const HOME_JURISDICTIONS = ["federal", "ontario", "bc", "alberta", "quebec", "other"] as const;
-const TARGET_PROVINCES = [
-  "ontario",
-  "quebec",
-  "bc",
-  "alberta",
-  "manitoba",
-  "saskatchewan",
-  "nb",
-  "ns",
-  "pei",
-  "nl",
-] as const;
+// Ontario is the only target province offered, so it is not a home jurisdiction.
+const HOME_JURISDICTIONS = ["federal", "bc", "alberta", "quebec", "other"] as const;
+const DOCS_MAX_MB = EXTRA_PROVINCIAL_DOC_LIMITS.maxTotalBytes / 1024 / 1024;
 
 const COPY = {
   en: {
@@ -41,12 +32,11 @@ const COPY = {
     steps: ["Corporation", "Target & Agent", "Billing"],
     backToServices: "← Back to services",
     corpH2: "Your Corporation",
-    corpIntro: "The corporation that wants to register in another province.",
+    corpIntro: "The corporation that wants to register in Ontario.",
     homeJurisdiction: "Home jurisdiction *",
     homeJurisdictionHint: "Where this corporation is currently incorporated.",
     homeOptions: {
       federal: "Federal (Canada)",
-      ontario: "Ontario",
       bc: "British Columbia",
       alberta: "Alberta",
       quebec: "Quebec",
@@ -60,27 +50,36 @@ const COPY = {
     registeredOffice: "Registered office (home jurisdiction)",
     effective: "Effective date *",
     effectiveHint: "When extra-provincial registration should take effect.",
+    incorporationDate: "Incorporation / amalgamation date *",
+    incorporationDateHint: "The date on the corporation's certificate of incorporation or amalgamation.",
+    naics: "Primary activity (NAICS code) *",
+    naicsHintBefore: "Find the code that matches your business in the ",
+    naicsLink: "Statistics Canada NAICS list",
+    naicsHintAfter: " and enter it here.",
+    naicsUrl: "https://www23.statcan.gc.ca/imdb/p3VD.pl?Function=getVD&TVD=1369825",
+    docsTitle: "Incorporating documents *",
+    docsHint: (max: number, mb: number) =>
+      `Upload the incorporating document and any amendments (Articles of Incorporation, Certificate of Incorporation, Articles of Amendment, etc.). PDF only, up to ${max} files, ${mb} MB total.`,
+    docsRequired: "Upload at least one PDF.",
     targetH2: "Target Province & Agent",
-    targetIntro: "Where you want to register, plus the local agent for service required in that province.",
-    targetProvince: "Target province *",
-    provinces: {
-      ontario: "Ontario",
-      quebec: "Quebec",
-      bc: "British Columbia",
-      alberta: "Alberta",
-      manitoba: "Manitoba",
-      saskatchewan: "Saskatchewan",
-      nb: "New Brunswick",
-      ns: "Nova Scotia",
-      pei: "Prince Edward Island",
-      nl: "Newfoundland and Labrador",
-    },
+    targetIntro: "We currently file extra-provincial registrations in Ontario. Tell us who represents the corporation there.",
+    targetProvince: "Target province",
+    targetOntario: "Ontario",
     agentName: "Agent for service (full name) *",
     agentNameHint:
-      "A person or firm resident in the target province who can accept legal documents on the corporation's behalf.",
-    agentAddress: "Agent address (in target province)",
+      "A person or firm resident in Ontario who can accept legal documents on the corporation's behalf.",
+    agentAddress: "Agent address (in Ontario)",
+    officerQuestion: "Does the corporation have a chief officer or manager in Ontario? *",
+    yes: "Yes",
+    no: "No",
+    officerFirstName: "Officer first name *",
+    officerLastName: "Officer last name *",
+    officerAddress: "Officer's address for service (in Ontario)",
+    certify: "The individual named above has certified that all information set out in this filing is true, correct and complete.",
+    authorize: "I authorize Korporex to file this registration on the corporation's behalf.",
     contactEmail: "Contact email *",
     contactPhone: "Contact phone *",
+    required: "Required",
     billingH2: "Billing & Review",
     billingIntro: "Final step. We'll redirect you to Stripe to complete payment.",
     billingName: "Billing name *",
@@ -91,7 +90,7 @@ const COPY = {
     yourProvince: "your province",
     total: "Total (CAD)",
     govFees:
-      "Provincial government filing fees vary by province and are invoiced separately as a pass-through after submission.",
+      "Ontario government filing fees, where they apply, are invoiced separately as a pass-through after submission.",
     submitting: "Redirecting to Stripe…",
     submit: "Continue to Payment",
     stripe: "Payment is processed securely by Stripe. Card details never touch our server.",
@@ -106,12 +105,11 @@ const COPY = {
     steps: ["Société", "Province et mandataire", "Facturation"],
     backToServices: "← Retour aux services",
     corpH2: "Votre société",
-    corpIntro: "La société qui souhaite s'enregistrer dans une autre province.",
+    corpIntro: "La société qui souhaite s'enregistrer en Ontario.",
     homeJurisdiction: "Territoire de constitution *",
     homeJurisdictionHint: "Le territoire où cette société est actuellement constituée.",
     homeOptions: {
       federal: "Fédéral (Canada)",
-      ontario: "Ontario",
       bc: "Colombie-Britannique",
       alberta: "Alberta",
       quebec: "Québec",
@@ -125,28 +123,37 @@ const COPY = {
     registeredOffice: "Siège social (territoire de constitution)",
     effective: "Date de prise d'effet *",
     effectiveHint: "La date à laquelle l'enregistrement extraprovincial doit prendre effet.",
+    incorporationDate: "Date de constitution ou de fusion *",
+    incorporationDateHint: "La date figurant sur le certificat de constitution ou de fusion de la société.",
+    naics: "Activité principale (code SCIAN) *",
+    naicsHintBefore: "Trouvez le code qui correspond à votre entreprise dans la ",
+    naicsLink: "liste du SCIAN de Statistique Canada",
+    naicsHintAfter: " et inscrivez-le ici.",
+    naicsUrl: "https://www23.statcan.gc.ca/imdb/p3VD_f.pl?Function=getVD&TVD=1369825",
+    docsTitle: "Documents constitutifs *",
+    docsHint: (max: number, mb: number) =>
+      `Téléversez le document constitutif et ses modifications (statuts constitutifs, certificat de constitution, statuts de modification, etc.). PDF seulement, jusqu'à ${max} fichiers, ${mb} Mo au total.`,
+    docsRequired: "Téléversez au moins un fichier PDF.",
     targetH2: "Province visée et mandataire",
     targetIntro:
-      "La province où vous souhaitez vous enregistrer, ainsi que le mandataire aux fins de signification exigé dans cette province.",
-    targetProvince: "Province visée *",
-    provinces: {
-      ontario: "Ontario",
-      quebec: "Québec",
-      bc: "Colombie-Britannique",
-      alberta: "Alberta",
-      manitoba: "Manitoba",
-      saskatchewan: "Saskatchewan",
-      nb: "Nouveau-Brunswick",
-      ns: "Nouvelle-Écosse",
-      pei: "Île-du-Prince-Édouard",
-      nl: "Terre-Neuve-et-Labrador",
-    },
+      "Nous déposons actuellement les enregistrements extraprovinciaux en Ontario. Indiquez qui représente la société dans cette province.",
+    targetProvince: "Province visée",
+    targetOntario: "Ontario",
     agentName: "Mandataire aux fins de signification (nom complet) *",
     agentNameHint:
-      "Une personne ou un cabinet résidant dans la province visée qui peut accepter des documents juridiques au nom de la société.",
-    agentAddress: "Adresse du mandataire (dans la province visée)",
+      "Une personne ou un cabinet résidant en Ontario qui peut accepter des documents juridiques au nom de la société.",
+    agentAddress: "Adresse du mandataire (en Ontario)",
+    officerQuestion: "La société a-t-elle un dirigeant principal ou un gestionnaire en Ontario? *",
+    yes: "Oui",
+    no: "Non",
+    officerFirstName: "Prénom du dirigeant *",
+    officerLastName: "Nom du dirigeant *",
+    officerAddress: "Adresse aux fins de signification du dirigeant (en Ontario)",
+    certify: "La personne nommée ci-dessus a attesté que tous les renseignements figurant dans ce dépôt sont véridiques, exacts et complets.",
+    authorize: "J'autorise Korporex à déposer cet enregistrement au nom de la société.",
     contactEmail: "Courriel de la personne-ressource *",
     contactPhone: "Téléphone de la personne-ressource *",
+    required: "Obligatoire",
     billingH2: "Facturation et vérification",
     billingIntro: "Dernière étape. Nous vous redirigerons vers Stripe pour effectuer le paiement.",
     billingName: "Nom de facturation *",
@@ -157,7 +164,7 @@ const COPY = {
     yourProvince: "votre province",
     total: "Total (CAD)",
     govFees:
-      "Les droits de dépôt gouvernementaux varient selon la province et sont facturés séparément, au prix coûtant, après l'envoi de la demande.",
+      "Les droits de dépôt du gouvernement de l'Ontario, s'il y a lieu, sont facturés séparément, au prix coûtant, après l'envoi de la demande.",
     submitting: "Redirection vers Stripe…",
     submit: "Passer au paiement",
     stripe: "Le paiement est traité de façon sécurisée par Stripe. Les données de votre carte ne transitent jamais par notre serveur.",
@@ -172,12 +179,11 @@ const COPY = {
     steps: ["Sociedad", "Provincia y agente", "Facturación"],
     backToServices: "← Volver a los servicios",
     corpH2: "Su sociedad",
-    corpIntro: "La sociedad que desea registrarse en otra provincia.",
+    corpIntro: "La sociedad que desea registrarse en Ontario.",
     homeJurisdiction: "Jurisdicción de origen *",
     homeJurisdictionHint: "Donde está constituida actualmente esta sociedad.",
     homeOptions: {
       federal: "Federal (Canadá)",
-      ontario: "Ontario",
       bc: "Columbia Británica",
       alberta: "Alberta",
       quebec: "Quebec",
@@ -191,28 +197,37 @@ const COPY = {
     registeredOffice: "Domicilio social (jurisdicción de origen)",
     effective: "Fecha de entrada en vigor *",
     effectiveHint: "Cuándo debe entrar en vigor el registro extraprovincial.",
+    incorporationDate: "Fecha de constitución o fusión *",
+    incorporationDateHint: "La fecha que figura en el certificado de constitución o de fusión de la sociedad.",
+    naics: "Actividad principal (código NAICS) *",
+    naicsHintBefore: "Busque el código que corresponde a su empresa en la ",
+    naicsLink: "lista NAICS de Statistics Canada",
+    naicsHintAfter: " e introdúzcalo aquí.",
+    naicsUrl: "https://www23.statcan.gc.ca/imdb/p3VD.pl?Function=getVD&TVD=1369825",
+    docsTitle: "Documentos constitutivos *",
+    docsHint: (max: number, mb: number) =>
+      `Suba el documento constitutivo y sus modificaciones (Articles of Incorporation, Certificate of Incorporation, Articles of Amendment, etc.). Solo PDF, hasta ${max} archivos, ${mb} MB en total.`,
+    docsRequired: "Suba al menos un archivo PDF.",
     targetH2: "Provincia de destino y agente",
     targetIntro:
-      "Dónde desea registrarse y el agente local para notificaciones que se exige en esa provincia.",
-    targetProvince: "Provincia de destino *",
-    provinces: {
-      ontario: "Ontario",
-      quebec: "Quebec",
-      bc: "Columbia Británica",
-      alberta: "Alberta",
-      manitoba: "Manitoba",
-      saskatchewan: "Saskatchewan",
-      nb: "Nuevo Brunswick",
-      ns: "Nueva Escocia",
-      pei: "Isla del Príncipe Eduardo",
-      nl: "Terranova y Labrador",
-    },
+      "Actualmente presentamos registros extraprovinciales en Ontario. Indique quién representa a la sociedad allí.",
+    targetProvince: "Provincia de destino",
+    targetOntario: "Ontario",
     agentName: "Agente para notificaciones (nombre completo) *",
     agentNameHint:
-      "Una persona o firma residente en la provincia de destino que puede aceptar documentos legales en nombre de la sociedad.",
-    agentAddress: "Dirección del agente (en la provincia de destino)",
+      "Una persona o firma residente en Ontario que puede aceptar documentos legales en nombre de la sociedad.",
+    agentAddress: "Dirección del agente (en Ontario)",
+    officerQuestion: "¿La sociedad tiene un director general o gerente en Ontario? *",
+    yes: "Sí",
+    no: "No",
+    officerFirstName: "Nombre del directivo *",
+    officerLastName: "Apellido del directivo *",
+    officerAddress: "Dirección para notificaciones del directivo (en Ontario)",
+    certify: "La persona indicada anteriormente ha certificado que toda la información contenida en esta presentación es verdadera, correcta y completa.",
+    authorize: "Autorizo a Korporex a presentar este registro en nombre de la sociedad.",
     contactEmail: "Correo electrónico de contacto *",
     contactPhone: "Teléfono de contacto *",
+    required: "Obligatorio",
     billingH2: "Facturación y revisión",
     billingIntro: "Último paso. Lo redirigiremos a Stripe para completar el pago.",
     billingName: "Nombre de facturación *",
@@ -223,7 +238,7 @@ const COPY = {
     yourProvince: "su provincia",
     total: "Total (CAD)",
     govFees:
-      "Las tasas gubernamentales de presentación varían según la provincia y se facturan por separado, al costo, después del envío.",
+      "Las tasas gubernamentales de Ontario, cuando correspondan, se facturan por separado, al costo, después del envío.",
     submitting: "Redirigiendo a Stripe…",
     submit: "Continuar al pago",
     stripe: "El pago se procesa de forma segura a través de Stripe. Los datos de su tarjeta nunca pasan por nuestro servidor.",
@@ -236,11 +251,15 @@ const COPY = {
 const ERROR_TEXT: Record<Exclude<Lang, "en">, Record<string, string>> = {
   fr: {
     "Select your home jurisdiction": "Sélectionnez votre territoire de constitution",
-    "Select a target province": "Sélectionnez une province visée",
+    "Select yes or no": "Sélectionnez oui ou non",
+    "Date cannot be in the future": "La date ne peut pas être dans le futur",
+    "Enter a NAICS code of 2 to 6 digits": "Entrez un code SCIAN de 2 à 6 chiffres",
   },
   es: {
     "Select your home jurisdiction": "Seleccione su jurisdicción de origen",
-    "Select a target province": "Seleccione una provincia de destino",
+    "Select yes or no": "Seleccione sí o no",
+    "Date cannot be in the future": "La fecha no puede ser futura",
+    "Enter a NAICS code of 2 to 6 digits": "Introduzca un código NAICS de 2 a 6 dígitos",
   },
 };
 
@@ -249,9 +268,30 @@ function localizeError(lang: Lang, message: unknown): string | undefined {
   return lang === "en" ? message : (ERROR_TEXT[lang][message] ?? message);
 }
 
-const STEP_FIELDS: string[][] = [
-  ["homeJurisdiction", "homeJurisdictionOther", "corpName", "corpNumber", "corpRegisteredOffice", "effectiveDate"],
-  ["targetProvince", "agentName", "agentAddress", "contactEmail", "contactPhone"],
+const STEP_FIELDS: Array<Array<keyof ExtraProvincialSubmission>> = [
+  [
+    "homeJurisdiction",
+    "homeJurisdictionOther",
+    "corpName",
+    "corpNumber",
+    "incorporationDate",
+    "naicsCode",
+    "corpRegisteredOffice",
+    "effectiveDate",
+  ],
+  [
+    "targetProvince",
+    "agentName",
+    "agentAddress",
+    "hasOntarioOfficer",
+    "officerFirstName",
+    "officerLastName",
+    "officerAddress",
+    "contactEmail",
+    "contactPhone",
+    "certifiedAccurate",
+    "authorizedToFile",
+  ],
   ["billingName", "billingAddress"],
 ];
 
@@ -259,6 +299,8 @@ export default function ExtraProvincialRegistrationPage() {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [documents, setDocuments] = useState<File[]>([]);
+  const [documentsMissing, setDocumentsMissing] = useState(false);
   const router = useRouter();
   const locale = useLocale();
   const lang: Lang = locale === "fr" || locale === "es" ? locale : "en";
@@ -268,17 +310,25 @@ export default function ExtraProvincialRegistrationPage() {
     resolver: zodResolver(extraProvincialSchema),
     mode: "onTouched",
     defaultValues: {
-      homeJurisdiction: "ontario",
+      homeJurisdiction: "federal",
       homeJurisdictionOther: "",
       corpName: "",
       corpNumber: "",
+      incorporationDate: "",
+      naicsCode: "",
       targetProvince: "ontario",
       effectiveDate: "",
       corpRegisteredOffice: { street: "", city: "", region: "", postalCode: "", country: "CA" },
       agentName: "",
       agentAddress: { street: "", city: "", region: "", postalCode: "", country: "CA" },
+      hasOntarioOfficer: "",
+      officerFirstName: "",
+      officerLastName: "",
+      officerAddress: { street: "", city: "", region: "ON", postalCode: "", country: "CA" },
       contactEmail: "",
       contactPhone: "",
+      certifiedAccurate: false,
+      authorizedToFile: false,
       billingName: "",
       billingAddress: { street: "", city: "", region: "", postalCode: "", country: "CA" },
     },
@@ -286,38 +336,41 @@ export default function ExtraProvincialRegistrationPage() {
 
   const { handleSubmit, trigger, watch, register, formState: { errors } } = form;
   const homeJurisdiction = watch("homeJurisdiction");
+  const hasOntarioOfficer = watch("hasOntarioOfficer");
+  // Radios and checkboxes re-validate as soon as they change. With the form's
+  // onTouched mode their error would otherwise clear on blur, i.e. on the
+  // mousedown of the customer's next click, and the resulting layout shift
+  // makes that click miss its target.
+  const revalidateOnChange = (name: "hasOntarioOfficer" | "certifiedAccurate" | "authorizedToFile") => ({
+    onChange: () => void trigger(name),
+  });
+  const today = new Date().toISOString().slice(0, 10);
 
   async function gotoStep(next: number) {
-    const baseStep1: Array<keyof ExtraProvincialSubmission> = [
-      "homeJurisdiction",
-      "corpName",
-      "corpNumber",
-      "corpRegisteredOffice",
-      "effectiveDate",
-    ];
-    if (homeJurisdiction === "other") baseStep1.push("homeJurisdictionOther");
-    const fieldsByStep: Record<number, Array<keyof ExtraProvincialSubmission>> = {
-      1: baseStep1,
-      2: ["targetProvince", "agentName", "agentAddress", "contactEmail", "contactPhone"],
-    };
-    const fields = fieldsByStep[step];
-    if (fields) {
-      const valid = await trigger(fields);
-      if (!valid) return;
-    }
+    const valid = await trigger(STEP_FIELDS[step - 1]);
+    // Uploads live outside react-hook-form, so step 1 checks them separately.
+    const missingDocs = step === 1 && documents.length === 0;
+    if (missingDocs) setDocumentsMissing(true);
+    if (!valid || missingDocs) return;
     setStep(next);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   async function onFinalSubmit(data: ExtraProvincialSubmission) {
+    // The stepper allows jumping ahead, so re-check the uploads here.
+    if (documents.length === 0) {
+      setDocumentsMissing(true);
+      setStep(1);
+      return;
+    }
     setSubmitting(true);
     setSubmitError(null);
     try {
-      const res = await fetch("/api/service-request", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ service: "extra-provincial", payload: data }),
-      });
+      const body = new FormData();
+      body.set("service", "extra-provincial");
+      body.set("payload", JSON.stringify(data));
+      for (const f of documents) body.append("documents", f);
+      const res = await fetch("/api/service-request", { method: "POST", body });
       const json = await res.json();
       if (!res.ok || !json.url) throw new Error(json.error ?? t.failed);
       window.location.href = json.url;
@@ -383,6 +436,39 @@ export default function ExtraProvincialRegistrationPage() {
                   <input type="text" {...register("corpNumber")} className={iCls} placeholder="1234567" />
                 </Field>
 
+                <Field
+                  label={t.incorporationDate}
+                  error={localizeError(lang, errors.incorporationDate?.message)}
+                  hint={t.incorporationDateHint}
+                >
+                  <input type="date" max={today} {...register("incorporationDate")} className={iCls} />
+                </Field>
+
+                <div>
+                  <Field label={t.naics} error={localizeError(lang, errors.naicsCode?.message)}>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={6}
+                      {...register("naicsCode")}
+                      className={iCls}
+                      placeholder="541611"
+                    />
+                  </Field>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {t.naicsHintBefore}
+                    <a
+                      href={t.naicsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-navy-900 underline hover:text-gold-600"
+                    >
+                      {t.naicsLink}
+                    </a>
+                    {t.naicsHintAfter}
+                  </p>
+                </div>
+
                 <div>
                   <p className="text-xs font-bold tracking-[0.1em] uppercase text-black mb-2">
                     {t.registeredOffice} <span className="text-red-500">*</span>
@@ -393,6 +479,20 @@ export default function ExtraProvincialRegistrationPage() {
                 <Field label={t.effective} error={errors.effectiveDate?.message} hint={t.effectiveHint}>
                   <input type="date" {...register("effectiveDate")} className={iCls} />
                 </Field>
+
+                <FileUpload
+                  files={documents}
+                  onChange={(files) => {
+                    setDocuments(files);
+                    if (files.length > 0) setDocumentsMissing(false);
+                  }}
+                  title={t.docsTitle}
+                  hint={t.docsHint(EXTRA_PROVINCIAL_DOC_LIMITS.maxFiles, DOCS_MAX_MB)}
+                  maxFiles={EXTRA_PROVINCIAL_DOC_LIMITS.maxFiles}
+                  maxTotalBytes={EXTRA_PROVINCIAL_DOC_LIMITS.maxTotalBytes}
+                  acceptedMimes={EXTRA_PROVINCIAL_DOC_LIMITS.acceptedMimes}
+                  error={documentsMissing ? t.docsRequired : undefined}
+                />
 
                 <NextBtn />
               </form>
@@ -405,12 +505,8 @@ export default function ExtraProvincialRegistrationPage() {
               <h2 className="font-serif text-3xl font-bold text-navy-900 mb-1">{t.targetH2}</h2>
               <p className="text-gray-500 text-sm mb-8">{t.targetIntro}</p>
               <form onSubmit={(e) => { e.preventDefault(); gotoStep(3); }} className="space-y-5">
-                <Field label={t.targetProvince} error={localizeError(lang, errors.targetProvince?.message)}>
-                  <select {...register("targetProvince")} className={sCls}>
-                    {TARGET_PROVINCES.map((v) => (
-                      <option key={v} value={v}>{t.provinces[v]}</option>
-                    ))}
-                  </select>
+                <Field label={t.targetProvince}>
+                  <input type="text" value={t.targetOntario} readOnly className={`${iCls} bg-gray-50 text-gray-600`} />
                 </Field>
 
                 <Field label={t.agentName} error={errors.agentName?.message} hint={t.agentNameHint}>
@@ -424,12 +520,61 @@ export default function ExtraProvincialRegistrationPage() {
                   <AddressFields name="agentAddress" errors={errors.agentAddress} />
                 </div>
 
+                <div className="border border-gray-200 rounded-lg p-5 bg-cream-50/30">
+                  <Field label={t.officerQuestion} error={localizeError(lang, errors.hasOntarioOfficer?.message)}>
+                    <div className="flex gap-6 mt-1">
+                      <label className="flex items-center gap-2 text-sm text-gray-800 cursor-pointer">
+                        <input type="radio" value="yes" {...register("hasOntarioOfficer", revalidateOnChange("hasOntarioOfficer"))} className="accent-navy-900" />
+                        {t.yes}
+                      </label>
+                      <label className="flex items-center gap-2 text-sm text-gray-800 cursor-pointer">
+                        <input type="radio" value="no" {...register("hasOntarioOfficer", revalidateOnChange("hasOntarioOfficer"))} className="accent-navy-900" />
+                        {t.no}
+                      </label>
+                    </div>
+                  </Field>
+
+                  {hasOntarioOfficer === "yes" && (
+                    <div className="space-y-5 mt-5">
+                      <div className="grid grid-cols-2 gap-3">
+                        <Field label={t.officerFirstName} error={errors.officerFirstName?.message}>
+                          <input type="text" autoComplete="off" {...register("officerFirstName")} className={iCls} />
+                        </Field>
+                        <Field label={t.officerLastName} error={errors.officerLastName?.message}>
+                          <input type="text" autoComplete="off" {...register("officerLastName")} className={iCls} />
+                        </Field>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold tracking-[0.1em] uppercase text-black mb-2">
+                          {t.officerAddress} <span className="text-red-500">*</span>
+                        </p>
+                        <AddressFields name="officerAddress" errors={errors.officerAddress} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 <Field label={t.contactEmail} error={errors.contactEmail?.message}>
                   <input type="email" autoComplete="email" {...register("contactEmail")} className={iCls} />
                 </Field>
                 <Field label={t.contactPhone} error={errors.contactPhone?.message}>
                   <input type="tel" autoComplete="tel" {...register("contactPhone")} className={iCls} placeholder="+1 416 555 0100" />
                 </Field>
+
+                <div className="space-y-3 pt-2">
+                  {(["certifiedAccurate", "authorizedToFile"] as const).map((name) => (
+                    <div key={name}>
+                      <label className="flex items-start gap-3 text-sm text-gray-800 cursor-pointer">
+                        <input type="checkbox" {...register(name, revalidateOnChange(name))} className="mt-1 shrink-0 accent-navy-900" />
+                        <span>
+                          {name === "certifiedAccurate" ? t.certify : t.authorize}
+                          <span className="text-red-500 ml-0.5">*</span>
+                        </span>
+                      </label>
+                      {errors[name] && <p className="text-xs text-red-500 mt-1 ml-7">{t.required}</p>}
+                    </div>
+                  ))}
+                </div>
 
                 <NextBtn />
               </form>
