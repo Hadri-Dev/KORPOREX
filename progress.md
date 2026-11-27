@@ -1,6 +1,11 @@
 # Progress
 
 ## Log
+### 2026-11-27 (later) - Services page tile reads "Extra-Provincial Registration - Ontario"
+- Owner asked for "Ontario" beside the tile name, matching the other Registrations rows. Changed the EN/FR/ES labels in [services/page.tsx](src/app/[locale]/services/page.tsx) (FR/ES use "(Ontario)" like their neighbours).
+- Verified: `npx tsc --noEmit` clean. Not verified: rendered in a browser.
+- Not changed: the service page's own heading, hero and body copy (still the open known issue about all-province wording).
+
 ### 2026-11-27 (latest) - Extra-provincial form step 2: agent address no longer tied to Ontario, new accuracy confirmation
 - Owner asked for two changes to step 2 of [ExtraProvincialBody.tsx](src/app/[locale]/services/extra-provincial/ExtraProvincialBody.tsx).
 - Agent address: label is now "Agent address" (was "Agent address (in Ontario)") and the agent hint no longer says "resident in Ontario", in EN/FR/ES. The schema never required Ontario for the agent, so no validation changed. The address is still Canada-only (`AddressFields` default); the officer's address for service still must be in Ontario.
