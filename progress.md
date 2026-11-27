@@ -1,6 +1,12 @@
 # Progress
 
 ## Log
+### 2026-11-27 - Annual Resolution (Ontario + Federal) removed from the services page
+- Owner asked to remove the two Annual Resolution rows from the Compliance Filings card. Removed both tiles and their EN/FR/ES names from [services/page.tsx](src/app/[locale]/services/page.tsx), and dropped "annual minute-book resolutions" from the card description in all three languages so the card no longer describes something it does not list.
+- Deliberately not touched: the two service pages themselves (`/services/annual-resolution-on`, `/services/annual-resolution-federal`) are still live and orderable, still in [sitemap.ts](src/app/sitemap.ts), and still linked from four guides (annual-returns, minute-book, salary-vs-dividends, incorporating-ontario) and the federal annual return service copy. The request was only about the services list; whether the services are retired entirely is the owner's call (asked 2026-11-27).
+- Verified: `npx tsc --noEmit` clean; no remaining annual-resolution references in the services page. Not verified: the page rendered in a browser.
+- Next: if the owner retires the services, remove the two pages, `AnnualResolutionWizard`, the schemas and `complianceServices` entries, the sitemap/seoMeta/serviceGuides entries and `seo` message keys, re-point the guide links, and add redirects for the two URLs.
+
 ### 2026-11-27 - Every order now carries an explicit traffic source (no more blank attribution)
 - Owner opened paid NUANS order KPX-20261125-YEE7 and found no attribution fields. Cause: [lib/attribution.ts](src/lib/attribution.ts) only wrote the `kpx_attr` cookie when the first page load had a UTM tag or an outside referrer, so a direct visit (typed address, bookmark, untagged email or app link) left the order with nothing, indistinguishable from "tracking not working". Confirmed the capture code is live on korporex.ca and wired into the NUANS checkout, so it was this rule and not a deploy problem.
 - Fix: the cookie is now always written on first load (adds `firstSeen` date), and `attributionStripeMetadata` always emits a `trafficSource` line: `utm_source / utm_medium` if the link was tagged, else the referring site's hostname, else "direct (...)", else "unknown (no tracking cookie)". No route or dashboard changes needed; all 9 checkout routes already spread this helper and the order detail page renders every metadata key.
