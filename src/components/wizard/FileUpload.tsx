@@ -85,10 +85,15 @@ export default function FileUpload({
   }
 
   const shownError = pickError ?? error;
+  // Same convention as Field in WizardUI: a title ending in " *" is mandatory.
+  const required = title.endsWith(" *");
 
   return (
     <div className={`border border-dashed p-4 bg-cream-50 ${shownError ? "border-red-400" : "border-gray-300"}`}>
-      <p className="text-xs font-semibold tracking-[0.1em] uppercase text-gray-500 mb-3">{title}</p>
+      <p className="text-xs font-bold tracking-[0.1em] uppercase text-black mb-3">
+        {required ? title.slice(0, -2) : title}
+        {required && <span className="text-red-500 ml-0.5">*</span>}
+      </p>
       <p className="text-xs text-gray-500 mb-3 leading-relaxed">{hint}</p>
       <label className="inline-flex items-center gap-2 border border-navy-900 px-4 py-2.5 text-sm text-navy-900 cursor-pointer hover:bg-navy-50 transition-colors">
         <Upload size={14} /> {t.chooseFiles}

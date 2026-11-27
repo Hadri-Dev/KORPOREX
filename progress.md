@@ -1,6 +1,11 @@
 # Progress
 
 ## Log
+### 2026-11-27 (later) - Incorporating documents upload now looks mandatory
+- Owner asked to make the upload mandatory. It already was (step 1 will not continue without a PDF, and the API rejects an order without one), but its title showed a grey asterisk on grey text, unlike every other required field. [FileUpload.tsx](src/components/wizard/FileUpload.tsx) now styles the title like `Field` labels and shows a red asterisk when the title ends in " *". The consultation upload ("optional") gets the same label style, no asterisk.
+- Verified: `npx tsc --noEmit` and eslint clean. Not verified: rendered in a browser after this styling change.
+- Next: none.
+
 ### 2026-11-27 - Extra-provincial form: Ontario only, plus the details the Ontario filing needs
 - Owner asked for five changes to [ExtraProvincialBody.tsx](src/app/[locale]/services/extra-provincial/ExtraProvincialBody.tsx), then a sixth mid-task:
   1. Incorporation / amalgamation date (step 1, required, cannot be in the future).
