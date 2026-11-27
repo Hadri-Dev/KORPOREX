@@ -65,8 +65,6 @@ const categoryStructure = [
       { from: "$99", href: "/services/initial-return-on" },
       { from: "$49.99", href: "/services/annual-return-on" },
       { from: "$49.99", href: "/services/annual-return-federal" },
-      { from: "$199.99", href: "/services/annual-resolution-on" },
-      { from: "$199.99", href: "/services/annual-resolution-federal" },
       { from: "$129", href: "/services/notice-of-change" },
     ],
   },
@@ -201,7 +199,7 @@ const COPY: Record<Lang, Copy> = {
       compliance: {
         title: "Compliance Filings",
         description:
-          "Stay in good standing with the required government filings and annual minute-book resolutions for Ontario and federal corporations.",
+          "Stay in good standing with the required government filings for Ontario and federal corporations.",
       },
       updates: {
         title: "Business Updates",
@@ -223,8 +221,6 @@ const COPY: Record<Lang, Copy> = {
       "/services/initial-return-on": "Initial Return (Ontario)",
       "/services/annual-return-on": "Annual Return - Ontario",
       "/services/annual-return-federal": "Annual Return - Federal",
-      "/services/annual-resolution-on": "Annual Resolution - Ontario",
-      "/services/annual-resolution-federal": "Annual Resolution - Federal",
       "/services/notice-of-change": "Notice of Change",
       "/services/initial-minute-book": "Initial Minute Book",
       "/services/dissolve-business": "Dissolve a Business",
@@ -321,7 +317,7 @@ const COPY: Record<Lang, Copy> = {
       compliance: {
         title: "Dépôts de conformité",
         description:
-          "Restez en règle grâce aux dépôts gouvernementaux requis et aux résolutions annuelles du livre de procès-verbaux pour les sociétés ontariennes et fédérales.",
+          "Restez en règle grâce aux dépôts gouvernementaux requis pour les sociétés ontariennes et fédérales.",
       },
       updates: {
         title: "Mises à jour de l'entreprise",
@@ -343,8 +339,6 @@ const COPY: Record<Lang, Copy> = {
       "/services/initial-return-on": "Rapport initial (Ontario)",
       "/services/annual-return-on": "Déclaration annuelle (Ontario)",
       "/services/annual-return-federal": "Rapport annuel (fédéral)",
-      "/services/annual-resolution-on": "Résolutions annuelles (Ontario)",
-      "/services/annual-resolution-federal": "Résolutions annuelles (fédéral)",
       "/services/notice-of-change": "Avis de modification",
       "/services/initial-minute-book": "Livre de procès-verbaux initial",
       "/services/dissolve-business": "Dissoudre une société",
@@ -441,7 +435,7 @@ const COPY: Record<Lang, Copy> = {
       compliance: {
         title: "Trámites de cumplimiento",
         description:
-          "Mantenga su sociedad en regla con los trámites gubernamentales obligatorios y las resoluciones anuales del libro de actas para sociedades de Ontario y federales.",
+          "Mantenga su sociedad en regla con los trámites gubernamentales obligatorios para sociedades de Ontario y federales.",
       },
       updates: {
         title: "Actualizaciones de la empresa",
@@ -463,8 +457,6 @@ const COPY: Record<Lang, Copy> = {
       "/services/initial-return-on": "Declaración inicial (Ontario)",
       "/services/annual-return-on": "Declaración anual (Ontario)",
       "/services/annual-return-federal": "Declaración anual (federal)",
-      "/services/annual-resolution-on": "Resoluciones anuales (Ontario)",
-      "/services/annual-resolution-federal": "Resoluciones anuales (federal)",
       "/services/notice-of-change": "Aviso de cambio",
       "/services/initial-minute-book": "Libro de actas inicial",
       "/services/dissolve-business": "Disolver una sociedad",
