@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AlertCircle, Inbox } from "lucide-react";
 import { getOrders } from "@/lib/dashboardData";
+import { shortTrafficSource } from "@/lib/attribution";
 import { OrdersTable } from "./OrdersTable";
 
 export const dynamic = "force-dynamic";
@@ -23,6 +24,15 @@ export default async function OrdersPage({
   const filter: Filter =
     sp.status === "paid" ? "paid" : sp.status === "open" ? "open" : "all";
   const { configured, orders } = await getOrders(filter);
+
+  // Paid orders in this view, counted by where the customer first came from.
+  const paidBySource = new Map<string, number>();
+  for (const order of orders) {
+    if (order.paymentStatus !== "paid") continue;
+    const label = order.trafficSource ? shortTrafficSource(order.trafficSource) : "not tracked";
+    paidBySource.set(label, (paidBySource.get(label) ?? 0) + 1);
+  }
+  const sourceCounts = Array.from(paidBySource.entries()).sort((a, b) => b[1] - a[1]);
 
   return (
     <div className="space-y-6">
@@ -73,7 +83,30 @@ export default async function OrdersPage({
           <p className="mt-3 text-sm font-medium text-gray-700">No orders match this filter</p>
         </div>
       ) : (
-        <OrdersTable orders={orders} />
+        <>
+          {sourceCounts.length > 0 ? (
+            <div className="rounded-lg border border-gray-200 bg-white px-5 py-4 shadow-sm">
+              <h2 className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                Paid orders by source
+              </h2>
+              <ul className="mt-2 flex flex-wrap gap-2">
+                {sourceCounts.map(([label, count]) => (
+                  <li
+                    key={label}
+                    className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-800"
+                  >
+                    {label} <span className="font-semibold text-navy-900">{count}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-2 text-xs text-gray-500">
+                &ldquo;Not tracked&rdquo; means the order was placed before every visit was
+                being recorded (2026-11-27).
+              </p>
+            </div>
+          ) : null}
+          <OrdersTable orders={orders} />
+        </>
       )}
     </div>
   );

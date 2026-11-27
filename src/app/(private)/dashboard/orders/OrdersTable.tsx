@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { MoreVertical, Trash2, Tag, Loader2 } from "lucide-react";
 import { formatCurrency, formatRelative, type OrderSummary } from "@/lib/dashboardData";
+import { shortTrafficSource } from "@/lib/attribution";
 import {
   ADMIN_ORDER_STATUSES,
   ADMIN_ORDER_STATUS_LABELS,
@@ -24,6 +25,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
             <Th>Order</Th>
             <Th>Customer</Th>
             <Th>Business</Th>
+            <Th>Source</Th>
             <Th>Status</Th>
             <Th align="right">Amount</Th>
             <Th align="right">Created</Th>
@@ -65,7 +67,9 @@ function OrderRow({ order, flipUp }: { order: OrderSummary; flipUp: boolean }) {
         </Link>
         {order.source !== "incorporate" ? (
           <p className="text-xs text-gray-500">
-            {order.source === "legal-consult" ? "Legal consultation" : "Other"}
+            {order.source === "legal-consult"
+              ? "Legal consultation"
+              : (order.serviceLabel ?? "Other")}
           </p>
         ) : null}
       </Td>
@@ -78,6 +82,14 @@ function OrderRow({ order, flipUp }: { order: OrderSummary; flipUp: boolean }) {
         <div className="text-xs text-gray-500">
           {[order.jurisdiction, order.pkg].filter(Boolean).join(" · ")}
         </div>
+      </Td>
+      <Td>
+        <span
+          className="text-sm text-gray-700"
+          title={order.trafficSource ?? "Placed before source tracking"}
+        >
+          {order.trafficSource ? shortTrafficSource(order.trafficSource) : "—"}
+        </span>
       </Td>
       <Td>
         <div className="flex flex-col items-start gap-1">

@@ -99,6 +99,14 @@ export function describeTrafficSource(attribution: Attribution): string {
 }
 
 /**
+ * Compact form for tables and counts: drops the parenthetical explanation,
+ * e.g. "direct (typed address, ...)" becomes "direct".
+ */
+export function shortTrafficSource(trafficSource: string): string {
+  return trafficSource.split(" (")[0];
+}
+
+/**
  * Attribution as Stripe metadata (string values only). `trafficSource` is
  * always present; the other fields only when captured.
  */

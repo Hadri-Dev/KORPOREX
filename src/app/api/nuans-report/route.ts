@@ -10,7 +10,11 @@ import {
 import { stripe, getSiteUrl } from "@/lib/stripe";
 import { generateOrderRef } from "@/lib/orderRef";
 import { CONTACT_ADDRESS, sendMail } from "@/lib/mailer";
-import { attributionStripeMetadata, getAttributionFromCookies } from "@/lib/attribution";
+import {
+  attributionStripeMetadata,
+  describeTrafficSource,
+  getAttributionFromCookies,
+} from "@/lib/attribution";
 import { BUSINESS_COOKIE_NAME, verifyBusinessSession } from "@/lib/businessAuth";
 import { getBusinessAccountById, recordBusinessOrder } from "@/lib/businessAccounts";
 
@@ -63,6 +67,10 @@ export async function POST(req: Request) {
   // invoice. past_due/suspended accounts fall through to the normal
   // pay-now flow below, same as a guest.
   const cookieHeader = req.headers.get("cookie");
+  // Business-account orders never reach Stripe Checkout, so the intake email
+  // is the only place their traffic source is recorded.
+  const attribution = getAttributionFromCookies(cookieHeader);
+  const trafficSource = describeTrafficSource(attribution);
   const bizMatch = cookieHeader?.split("; ").find((c) => c.startsWith(`${BUSINESS_COOKIE_NAME}=`));
   const bizToken = bizMatch?.slice(BUSINESS_COOKIE_NAME.length + 1);
   const bizSession = await verifyBusinessSession(bizToken);
@@ -75,6 +83,7 @@ export async function POST(req: Request) {
       orderRef,
       customerEmail,
       customerName,
+      trafficSource,
       business: { companyName: businessAccount.companyName },
     }).catch((err) => {
       console.error("[nuans-report-api] business intake email failed:", err);
@@ -98,7 +107,7 @@ export async function POST(req: Request) {
   }
 
   // 1. [PENDING PAYMENT] intake email
-  await sendIntakeEmail({ payload: parsed, pricing, orderRef, customerEmail, customerName }).catch(
+  await sendIntakeEmail({ payload: parsed, pricing, orderRef, customerEmail, customerName, trafficSource }).catch(
     (err) => {
       console.error("[nuans-report-api] intake email failed:", err);
     }
@@ -180,7 +189,7 @@ export async function POST(req: Request) {
         productType: "nuans",
         service: "nuans-report",
         orderRef,
-        ...attributionStripeMetadata(getAttributionFromCookies(req.headers.get("cookie"))),
+        ...attributionStripeMetadata(attribution),
         customerEmail,
         customerName,
         billingName: parsed.billingName,
@@ -217,6 +226,7 @@ async function sendIntakeEmail(args: {
   orderRef: string;
   customerEmail: string;
   customerName: string;
+  trafficSource: string;
   business?: { companyName: string };
 }): Promise<void> {
   const { pricing, orderRef, customerEmail, customerName, business } = args;
@@ -265,14 +275,16 @@ function buildHtmlBody(args: {
   orderRef: string;
   customerEmail: string;
   customerName: string;
+  trafficSource: string;
   business?: { companyName: string };
 }): string {
-  const { payload, pricing, orderRef, business } = args;
+  const { payload, pricing, orderRef, trafficSource, business } = args;
 
   const orderRows = [
     row("Order reference", orderRef),
     row("Service", NUANS_REPORT.longLabel),
     row("Names submitted", String(payload.rows.length)),
+    row("Traffic source", trafficSource),
   ].join("");
 
   const namesTable = payload.rows

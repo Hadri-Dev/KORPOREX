@@ -1,6 +1,7 @@
 import type Stripe from "stripe";
 import { stripe } from "./stripe";
 import { listOrderOverrides, type AdminOrderStatus } from "./orderOverrides";
+import { describeTrafficSource } from "./attribution";
 
 // Korporex doesn't have a database — Stripe Checkout sessions ARE the order
 // log. This module wraps the Stripe API into shapes the dashboard pages
@@ -26,6 +27,10 @@ export interface OrderSummary {
   jurisdiction: string | null;
   pkg: string | null;
   businessName: string | null;
+  /** Service name from checkout metadata (non-incorporation orders). */
+  serviceLabel: string | null;
+  /** Where the customer first came from; null for orders placed before tracking. */
+  trafficSource: string | null;
   createdAt: number; // unix seconds
   adminStatus: AdminOrderStatus | null;
 }
@@ -47,6 +52,20 @@ function classifySource(metadata: Stripe.Metadata | null): OrderSource {
   // Legal consult orders set legalConsultRef or have a description hint.
   if (metadata.legalConsultRef || metadata.consultRef) return "legal-consult";
   return "unknown";
+}
+
+// Orders placed between the first attribution release (2026-11-22) and the
+// `trafficSource` field (2026-11-27) carry only the raw UTM/referrer keys, so
+// the label is derived for them. Orders with no attribution keys return null.
+function trafficSourceOf(md: Stripe.Metadata | null): string | null {
+  if (!md) return null;
+  if (md.trafficSource) return md.trafficSource;
+  if (!md.utmSource && !md.referrer) return null;
+  return describeTrafficSource({
+    utmSource: md.utmSource,
+    utmMedium: md.utmMedium,
+    referrer: md.referrer,
+  });
 }
 
 function summarize(
@@ -77,6 +96,8 @@ function summarize(
     jurisdiction: md?.jurisdiction?.toString() ?? null,
     pkg: md?.pkg?.toString() ?? null,
     businessName: md?.businessName?.toString() ?? null,
+    serviceLabel: md?.serviceLabel?.toString() ?? null,
+    trafficSource: trafficSourceOf(md),
     createdAt: session.created,
     adminStatus,
   };
