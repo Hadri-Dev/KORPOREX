@@ -167,9 +167,13 @@ export const extraProvincialSchema = z
     officerAddress: optionalAddressSchema,
     contactEmail: z.string().trim().email("Valid email required").max(320),
     contactPhone: z.string().trim().min(7, "Required").max(30),
-    // Both must be true; enforced in superRefine so an unchecked box does not
-    // stop the other object-level checks from running.
+    // The person completing the form: the "individual named above" in the
+    // certification, and the name shown in the accuracy confirmation.
+    certifierName: z.string().trim().min(1, "Required").max(200),
+    // All three must be true; enforced in superRefine so an unchecked box does
+    // not stop the other object-level checks from running.
     certifiedAccurate: z.boolean(),
+    confirmedAccuracy: z.boolean(),
     authorizedToFile: z.boolean(),
   })
   .merge(billingSchema)
@@ -196,6 +200,7 @@ export const extraProvincialSchema = z
       if (a.postalCode.length < 3) require(["officerAddress", "postalCode"]);
     }
     if (!data.certifiedAccurate) require(["certifiedAccurate"]);
+    if (!data.confirmedAccuracy) require(["confirmedAccuracy"]);
     if (!data.authorizedToFile) require(["authorizedToFile"]);
   });
 

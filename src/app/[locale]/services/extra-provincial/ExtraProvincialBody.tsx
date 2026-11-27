@@ -67,14 +67,17 @@ const COPY = {
     targetOntario: "Ontario",
     agentName: "Agent for service (full name) *",
     agentNameHint:
-      "A person or firm resident in Ontario who can accept legal documents on the corporation's behalf.",
-    agentAddress: "Agent address (in Ontario)",
+      "A person or firm who can accept legal documents on the corporation's behalf.",
+    agentAddress: "Agent address",
     officerQuestion: "Does the corporation have a chief officer or manager in Ontario? *",
     yes: "Yes",
     no: "No",
     officerFirstName: "Officer first name *",
     officerLastName: "Officer last name *",
     officerAddress: "Officer's address for service (in Ontario)",
+    certifierName: "Full name of the person certifying *",
+    namePlaceholder: "[full name]",
+    confirmAccuracy: (name: string) => `I, ${name}, confirm the accuracy of the information submitted.`,
     certify: "The individual named above has certified that all information set out in this filing is true, correct and complete.",
     authorize: "I authorize Korporex to file this registration on the corporation's behalf.",
     contactEmail: "Contact email *",
@@ -141,14 +144,17 @@ const COPY = {
     targetOntario: "Ontario",
     agentName: "Mandataire aux fins de signification (nom complet) *",
     agentNameHint:
-      "Une personne ou un cabinet résidant en Ontario qui peut accepter des documents juridiques au nom de la société.",
-    agentAddress: "Adresse du mandataire (en Ontario)",
+      "Une personne ou un cabinet qui peut accepter des documents juridiques au nom de la société.",
+    agentAddress: "Adresse du mandataire",
     officerQuestion: "La société a-t-elle un dirigeant principal ou un gestionnaire en Ontario? *",
     yes: "Oui",
     no: "Non",
     officerFirstName: "Prénom du dirigeant *",
     officerLastName: "Nom du dirigeant *",
     officerAddress: "Adresse aux fins de signification du dirigeant (en Ontario)",
+    certifierName: "Nom complet de la personne qui atteste *",
+    namePlaceholder: "[nom complet]",
+    confirmAccuracy: (name: string) => `Je, ${name}, confirme l'exactitude des renseignements soumis.`,
     certify: "La personne nommée ci-dessus a attesté que tous les renseignements figurant dans ce dépôt sont véridiques, exacts et complets.",
     authorize: "J'autorise Korporex à déposer cet enregistrement au nom de la société.",
     contactEmail: "Courriel de la personne-ressource *",
@@ -215,14 +221,17 @@ const COPY = {
     targetOntario: "Ontario",
     agentName: "Agente para notificaciones (nombre completo) *",
     agentNameHint:
-      "Una persona o firma residente en Ontario que puede aceptar documentos legales en nombre de la sociedad.",
-    agentAddress: "Dirección del agente (en Ontario)",
+      "Una persona o firma que puede aceptar documentos legales en nombre de la sociedad.",
+    agentAddress: "Dirección del agente",
     officerQuestion: "¿La sociedad tiene un director general o gerente en Ontario? *",
     yes: "Sí",
     no: "No",
     officerFirstName: "Nombre del directivo *",
     officerLastName: "Apellido del directivo *",
     officerAddress: "Dirección para notificaciones del directivo (en Ontario)",
+    certifierName: "Nombre completo de la persona que certifica *",
+    namePlaceholder: "[nombre completo]",
+    confirmAccuracy: (name: string) => `Yo, ${name}, confirmo la exactitud de la información presentada.`,
     certify: "La persona indicada anteriormente ha certificado que toda la información contenida en esta presentación es verdadera, correcta y completa.",
     authorize: "Autorizo a Korporex a presentar este registro en nombre de la sociedad.",
     contactEmail: "Correo electrónico de contacto *",
@@ -289,7 +298,9 @@ const STEP_FIELDS: Array<Array<keyof ExtraProvincialSubmission>> = [
     "officerAddress",
     "contactEmail",
     "contactPhone",
+    "certifierName",
     "certifiedAccurate",
+    "confirmedAccuracy",
     "authorizedToFile",
   ],
   ["billingName", "billingAddress"],
@@ -327,7 +338,9 @@ export default function ExtraProvincialRegistrationPage() {
       officerAddress: { street: "", city: "", region: "ON", postalCode: "", country: "CA" },
       contactEmail: "",
       contactPhone: "",
+      certifierName: "",
       certifiedAccurate: false,
+      confirmedAccuracy: false,
       authorizedToFile: false,
       billingName: "",
       billingAddress: { street: "", city: "", region: "", postalCode: "", country: "CA" },
@@ -341,10 +354,18 @@ export default function ExtraProvincialRegistrationPage() {
   // onTouched mode their error would otherwise clear on blur, i.e. on the
   // mousedown of the customer's next click, and the resulting layout shift
   // makes that click miss its target.
-  const revalidateOnChange = (name: "hasOntarioOfficer" | "certifiedAccurate" | "authorizedToFile") => ({
+  const revalidateOnChange = (
+    name: "hasOntarioOfficer" | "certifiedAccurate" | "confirmedAccuracy" | "authorizedToFile",
+  ) => ({
     onChange: () => void trigger(name),
   });
   const today = new Date().toISOString().slice(0, 10);
+  const certifierName = (watch("certifierName") ?? "").trim();
+  const statements = {
+    certifiedAccurate: t.certify,
+    confirmedAccuracy: t.confirmAccuracy(certifierName ? certifierName.toLocaleUpperCase(locale) : t.namePlaceholder),
+    authorizedToFile: t.authorize,
+  };
 
   async function gotoStep(next: number) {
     const valid = await trigger(STEP_FIELDS[step - 1]);
@@ -561,13 +582,17 @@ export default function ExtraProvincialRegistrationPage() {
                   <input type="tel" autoComplete="tel" {...register("contactPhone")} className={iCls} placeholder="+1 416 555 0100" />
                 </Field>
 
+                <Field label={t.certifierName} error={errors.certifierName?.message}>
+                  <input type="text" autoComplete="name" {...register("certifierName")} className={iCls} />
+                </Field>
+
                 <div className="space-y-3 pt-2">
-                  {(["certifiedAccurate", "authorizedToFile"] as const).map((name) => (
+                  {(["certifiedAccurate", "confirmedAccuracy", "authorizedToFile"] as const).map((name) => (
                     <div key={name}>
                       <label className="flex items-start gap-3 text-sm text-gray-800 cursor-pointer">
                         <input type="checkbox" {...register(name, revalidateOnChange(name))} className="mt-1 shrink-0 accent-navy-900" />
                         <span>
-                          {name === "certifiedAccurate" ? t.certify : t.authorize}
+                          {statements[name]}
                           <span className="text-red-500 ml-0.5">*</span>
                         </span>
                       </label>

@@ -440,7 +440,9 @@ function serviceDetailRows(
         ...officerRows,
         row("Contact email", p.contactEmail),
         row("Contact phone", p.contactPhone),
+        row("Certified by", p.certifierName),
         row("Certified true, correct and complete", p.certifiedAccurate ? "Yes" : "No"),
+        row("Confirmed accuracy of the information", p.confirmedAccuracy ? "Yes" : "No"),
         row("Authorized Korporex to file", p.authorizedToFile ? "Yes" : "No"),
       ].join("");
     }
